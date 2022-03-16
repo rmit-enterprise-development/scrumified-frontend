@@ -2,24 +2,24 @@
 
 ### Branch
 
-Manage branches by `features`, except for those in charge of a whole page.
+Manage branches by `features`, except for those who is in charge of a whole page can create their own branch to work on.
 
-Naming convention: `page`-`feature`.
-Eg: dashboard-navbar | dashboard-projectgrid for 2 developers working on a same pages
+Naming convention: `page`-`feature`
+Eg: dashboard-navbar | dashboard-projectgrid for 2 developers working on a same page
 
 ### Commit
 
-File commits: Try to split pack of commits according to a completion of a functionality.
+File commits: Try to split pack of commits according to a completion of one functionality.
 
 Naming convention: `dev name` - `number` - `content`
 Eg. Minh - 1 - Project Grid skeleton
 
-_Note: Number can be divided further if there's any bug or followed up.
+_Note: Number can be divided further if there's any bug or followed up context.
 Eg. Minh - 1.1 - [Fix] Add margin between items_
 
 ### Pull Request (PR)
 
-Make sure to PR after complete a single function. PR will be reviewed by others but try to make sure there's unannounced bug. If have please include in the PR for other to solve (in case there's an urgent need for that features)
+Make sure to PR after completing a single function. PR will be reviewed by others but try to make sure there is no unannounced bug. If there is, please include in the PR for other to solve (in case there's an urgent need for that feature)
 
 ## Getting Started
 

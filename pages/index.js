@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import { Container } from '@chakra-ui/react';
-import HomeNavBar from '../components/home/NavBar';
+import HomeNavBar from '../components/home/MainNavBar';
 
 export default function Home() {
   return (

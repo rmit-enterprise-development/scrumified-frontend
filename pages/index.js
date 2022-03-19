@@ -5,14 +5,14 @@ import NextImage from 'next/image';
 import {
   Flex,
   Container,
-  Button,
+  Center,
   IconButton,
   Switch,
   useColorMode,
-  useColorModeValue,
   Text,
   Image,
   Spacer,
+  useColorModeValue,
 } from '@chakra-ui/react';
 import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
 import Images from '../assets/images';
@@ -213,9 +213,10 @@ export default function Home() {
           {/* Open menu for Mobile button */}
           <IconButton
             aria-label="Open Menu"
-            size="lg"
-            ml={8}
-            icon={<HamburgerIcon />}
+            ml={6}
+            icon={<HamburgerIcon w="30px" h="30px" color="#4599fe" />}
+            bg="none"
+            _hover={{ backgroundColor: 'none' }}
             onClick={() => changeDisplay('flex')}
             display={['flex', 'flex', 'none', 'none']}
           />
@@ -225,49 +226,127 @@ export default function Home() {
         <Flex
           w="100vw"
           display={display}
-          bgColor="gray.50"
+          bgColor={`${initNavBg}, 1)`}
           zIndex={201}
           h="100vh"
           pos="fixed"
           top="0"
           left="0"
-          overflowY="auto"
+          style={{}}
+          overflowY="hidden"
           flexDir="column"
         >
           <Flex justify="flex-end">
             <IconButton
-              mt={2}
-              mr={2}
+              mt={5}
+              mr={5}
               aria-label="Open Menu"
               size="lg"
-              icon={<CloseIcon />}
+              bg="none"
+              _hover={{ backgroundColor: 'none' }}
+              icon={<CloseIcon color="#4599fe" _hover={{ color: '#eb0546' }} />}
               onClick={() => changeDisplay('none')}
             />
           </Flex>
-
-          <Flex flexDir="column" align="center">
+          <Flex flexDir="column" align="center" mt={5} gap={8}>
             <NextLink href="/" passHref>
-              <Button aria-label="Home" my={5} w="100%">
-                Home
-              </Button>
+              <Center
+                h="60px"
+                w="90%"
+                bg="gray.100"
+                borderRadius="10px"
+                cursor="pointer"
+              >
+                <Text
+                  style={{ transition: 'all 0.5s' }}
+                  color="gray.500"
+                  _hover={{
+                    color: '#eb0546',
+                    textDecoration: 'underline',
+                    textDecorationStyle: 'wavy',
+                    textUnderlineOffset: '8px',
+                    textDecorationThickness: '1.5px',
+                  }}
+                  aria-label="Home"
+                >
+                  Home
+                </Text>
+              </Center>
             </NextLink>
 
-            <NextLink href="/about" passHref>
-              <Button as="a" aria-label="About" my={5} w="100%">
-                Features
-              </Button>
+            <NextLink href="/" passHref>
+              <Center
+                h="60px"
+                w="90%"
+                bg="gray.100"
+                borderRadius="10px"
+                cursor="pointer"
+              >
+                <Text
+                  style={{ transition: 'all 0.5s' }}
+                  color="gray.500"
+                  _hover={{
+                    color: '#eb0546',
+                    textDecoration: 'underline',
+                    textDecorationStyle: 'wavy',
+                    textUnderlineOffset: '8px',
+                    textDecorationThickness: '1.5px',
+                  }}
+                  aria-label="Features"
+                >
+                  Features
+                </Text>
+              </Center>
             </NextLink>
 
-            <NextLink href="/contact" passHref>
-              <Button as="a" aria-label="Contact" my={5} w="100%">
-                Instructions
-              </Button>
+            <NextLink href="/" passHref>
+              <Center
+                h="60px"
+                w="90%"
+                bg="gray.100"
+                borderRadius="10px"
+                cursor="pointer"
+              >
+                <Text
+                  style={{ transition: 'all 0.5s' }}
+                  color="gray.500"
+                  _hover={{
+                    color: '#eb0546',
+                    textDecoration: 'underline',
+                    textDecorationStyle: 'wavy',
+                    textUnderlineOffset: '8px',
+                    textDecorationThickness: '1.5px',
+                  }}
+                  aria-label="Instructions"
+                >
+                  Instructions
+                </Text>
+              </Center>
             </NextLink>
 
-            <NextLink href="/contact" passHref>
-              <Button as="a" aria-label="Contact" my={5} w="100%">
-                Testinomials
-              </Button>
+            <NextLink href="/" passHref>
+              <Center
+                h="60px"
+                w="90%"
+                bg="gray.100"
+                borderRadius="10px"
+                cursor="pointer"
+              >
+                <Text
+                  style={{ transition: 'all 0.5s' }}
+                  color="gray.500"
+                  _hover={{
+                    color: '#eb0546',
+                    textDecoration: 'underline',
+                    textDecorationStyle: 'wavy',
+                    textUnderlineOffset: '8px',
+                    textDecorationThickness: '1.5px',
+                  }}
+                  aria-label="Testinomial"
+                >
+                  Testinomial
+                </Text>
+              </Center>
             </NextLink>
           </Flex>
         </Flex>

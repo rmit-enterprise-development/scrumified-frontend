@@ -10,7 +10,7 @@ import {
   Text,
   Image,
   Spacer,
-  Slide,
+  SlideFade,
   useColorMode,
   useDisclosure,
 } from '@chakra-ui/react';
@@ -223,7 +223,11 @@ export default function Home() {
         </Flex>
 
         {/* Mobile Content */}
-        <Slide in={isOpen} direction="right">
+        <SlideFade
+          in={isOpen}
+          offsetY="-10px"
+          style={{ transition: 'all 0.2s' }}
+        >
           <Flex
             w="100vw"
             bgColor={`${initNavBg}, 1)`}
@@ -352,7 +356,7 @@ export default function Home() {
               </NextLink>
             </Flex>
           </Flex>
-        </Slide>
+        </SlideFade>
       </Flex>
 
       {/* Main content of Home Page */}

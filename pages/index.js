@@ -12,7 +12,7 @@ export default function Home() {
       {/* Nav Bar */}
       <HomeNavBar />
 
-      {/* Main content */}
+      {/* Main content (currently testing only) */}
       <Container
         as="main"
         p={0}

@@ -10,28 +10,35 @@ import {
   Spacer,
   SlideFade,
   useColorMode,
-  useDisclosure
+  useDisclosure,
 } from '@chakra-ui/react';
 import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
 import Images from '../../assets/images';
 import { motion } from 'framer-motion';
 
 const NavBar = () => {
+  // keep track of app's color mode
   const { colorMode, toggleColorMode } = useColorMode();
+
+  // keep track of opening state of Mobile Menu
   const { isOpen, onToggle } = useDisclosure();
 
+  // keep track of initial background color of nav bar
   let initNavBg =
     colorMode === 'light' ? 'rgba(255, 255, 255' : 'rgba(3, 30, 73';
 
+  // use state hooks to kepp track nav bar state on events
   const [navbarBg, setNavbarBg] = useState(`${initNavBg}, 1)`);
   const [navbarFilter, setNavbarFilter] = useState('');
   const [navbarPy, setNavbarPy] = useState(6);
   const [navbarShadow, setNavbarShadow] = useState('');
 
+  // execute changes on events
   useEffect(() => {
     setNavbarBg(`${initNavBg}, 1)`);
 
     const handleScroll = () => {
+      // change style depending on scroll position
       if (window.scrollY > 40) {
         setNavbarBg(`${initNavBg}, 0.8)`);
         setNavbarFilter('saturate(120%) blur(5px)');
@@ -45,14 +52,19 @@ const NavBar = () => {
       }
     };
 
+    // attach listener to window
     window.addEventListener('scroll', handleScroll);
+
+    // clean listener
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, [initNavBg]);
 
+  // render()
   return (
     <Flex>
+      {/* Nav bar content for Middle and Large screens */}
       <Flex
         zIndex={200}
         position="fixed"
@@ -71,6 +83,7 @@ const NavBar = () => {
           scrollBehavior: 'smooth',
         }}
       >
+        {/* Logo and Logo text */}
         <Flex align="center" cursor="pointer">
           <NextLink href="/" passHref>
             <motion.div
@@ -106,6 +119,7 @@ const NavBar = () => {
 
         <Spacer />
 
+        {/* Nav content */}
         <Flex
           display={['none', 'none', 'flex', 'flex']}
           gap={10}
@@ -190,6 +204,7 @@ const NavBar = () => {
 
         <Spacer />
 
+        {/* Color mode switch */}
         <Switch
           isChecked={colorMode === 'dark'}
           onChange={() => {
@@ -199,6 +214,7 @@ const NavBar = () => {
           size="lg"
         />
 
+        {/* Open mobile menu icon */}
         <IconButton
           aria-label="Open Menu"
           ml={6}
@@ -210,6 +226,7 @@ const NavBar = () => {
         />
       </Flex>
 
+      {/* Nav bar content for Small screens */}
       <SlideFade in={isOpen} offsetY="-10px" style={{ transition: 'all 0.2s' }}>
         <Flex
           w="100vw"
@@ -223,6 +240,7 @@ const NavBar = () => {
           overflowY="hidden"
           flexDir="column"
         >
+          {/* Close Mobile Menu icon */}
           <Flex justify="flex-end">
             <IconButton
               mt={5}
@@ -235,6 +253,8 @@ const NavBar = () => {
               icon={<CloseIcon color="#4599fe" _hover={{ color: '#eb0546' }} />}
             />
           </Flex>
+
+          {/* Nav content */}
           <Flex flexDir="column" align="center" mt={5} gap={8}>
             <NextLink href="/" passHref>
               <Center

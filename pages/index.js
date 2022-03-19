@@ -1,18 +1,18 @@
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import NextLink from 'next/link';
-import NextImage from 'next/image';
 import {
   Flex,
   Container,
   Center,
   IconButton,
   Switch,
-  useColorMode,
   Text,
   Image,
   Spacer,
-  useColorModeValue,
+  Slide,
+  useColorMode,
+  useDisclosure,
 } from '@chakra-ui/react';
 import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
 import Images from '../assets/images';
@@ -20,8 +20,7 @@ import { motion } from 'framer-motion';
 
 export default function Home() {
   const { colorMode, toggleColorMode } = useColorMode();
-
-  const [display, changeDisplay] = useState('none');
+  const { isOpen, onToggle } = useDisclosure();
 
   let initNavBg =
     colorMode === 'light' ? 'rgba(255, 255, 255' : 'rgba(3, 30, 73';
@@ -65,6 +64,7 @@ export default function Home() {
         <Flex
           zIndex={200}
           position="fixed"
+          display={isOpen ? 'none' : 'flex'}
           top="0"
           align="center"
           px={[5, 10, 30, 40]}
@@ -217,139 +217,142 @@ export default function Home() {
             icon={<HamburgerIcon w="30px" h="30px" color="#4599fe" />}
             bg="none"
             _hover={{ backgroundColor: 'none' }}
-            onClick={() => changeDisplay('flex')}
+            onClick={onToggle}
             display={['flex', 'flex', 'none', 'none']}
           />
         </Flex>
 
         {/* Mobile Content */}
-        <Flex
-          w="100vw"
-          display={display}
-          bgColor={`${initNavBg}, 1)`}
-          zIndex={201}
-          h="100vh"
-          pos="fixed"
-          top="0"
-          left="0"
-          style={{}}
-          overflowY="hidden"
-          flexDir="column"
-        >
-          <Flex justify="flex-end">
-            <IconButton
-              mt={5}
-              mr={5}
-              aria-label="Open Menu"
-              size="lg"
-              bg="none"
-              _hover={{ backgroundColor: 'none' }}
-              icon={<CloseIcon color="#4599fe" _hover={{ color: '#eb0546' }} />}
-              onClick={() => changeDisplay('none')}
-            />
+        <Slide in={isOpen} direction="right">
+          <Flex
+            w="100vw"
+            bgColor={`${initNavBg}, 1)`}
+            zIndex={201}
+            h="100vh"
+            pos="fixed"
+            top="0"
+            left="0"
+            style={{}}
+            overflowY="hidden"
+            flexDir="column"
+          >
+            <Flex justify="flex-end">
+              <IconButton
+                mt={5}
+                mr={5}
+                aria-label="Open Menu"
+                size="lg"
+                bg="none"
+                _hover={{ backgroundColor: 'none' }}
+                onClick={onToggle}
+                icon={
+                  <CloseIcon color="#4599fe" _hover={{ color: '#eb0546' }} />
+                }
+              />
+            </Flex>
+            <Flex flexDir="column" align="center" mt={5} gap={8}>
+              <NextLink href="/" passHref>
+                <Center
+                  h="60px"
+                  w="90%"
+                  bg="gray.100"
+                  borderRadius="10px"
+                  cursor="pointer"
+                >
+                  <Text
+                    style={{ transition: 'all 0.5s' }}
+                    color="gray.500"
+                    _hover={{
+                      color: '#eb0546',
+                      textDecoration: 'underline',
+                      textDecorationStyle: 'wavy',
+                      textUnderlineOffset: '8px',
+                      textDecorationThickness: '1.5px',
+                    }}
+                    aria-label="Home"
+                  >
+                    Home
+                  </Text>
+                </Center>
+              </NextLink>
+
+              <NextLink href="/" passHref>
+                <Center
+                  h="60px"
+                  w="90%"
+                  bg="gray.100"
+                  borderRadius="10px"
+                  cursor="pointer"
+                >
+                  <Text
+                    style={{ transition: 'all 0.5s' }}
+                    color="gray.500"
+                    _hover={{
+                      color: '#eb0546',
+                      textDecoration: 'underline',
+                      textDecorationStyle: 'wavy',
+                      textUnderlineOffset: '8px',
+                      textDecorationThickness: '1.5px',
+                    }}
+                    aria-label="Features"
+                  >
+                    Features
+                  </Text>
+                </Center>
+              </NextLink>
+
+              <NextLink href="/" passHref>
+                <Center
+                  h="60px"
+                  w="90%"
+                  bg="gray.100"
+                  borderRadius="10px"
+                  cursor="pointer"
+                >
+                  <Text
+                    style={{ transition: 'all 0.5s' }}
+                    color="gray.500"
+                    _hover={{
+                      color: '#eb0546',
+                      textDecoration: 'underline',
+                      textDecorationStyle: 'wavy',
+                      textUnderlineOffset: '8px',
+                      textDecorationThickness: '1.5px',
+                    }}
+                    aria-label="Instructions"
+                  >
+                    Instructions
+                  </Text>
+                </Center>
+              </NextLink>
+
+              <NextLink href="/" passHref>
+                <Center
+                  h="60px"
+                  w="90%"
+                  bg="gray.100"
+                  borderRadius="10px"
+                  cursor="pointer"
+                >
+                  <Text
+                    style={{ transition: 'all 0.5s' }}
+                    color="gray.500"
+                    _hover={{
+                      color: '#eb0546',
+                      textDecoration: 'underline',
+                      textDecorationStyle: 'wavy',
+                      textUnderlineOffset: '8px',
+                      textDecorationThickness: '1.5px',
+                    }}
+                    aria-label="Testinomial"
+                  >
+                    Testinomial
+                  </Text>
+                </Center>
+              </NextLink>
+            </Flex>
           </Flex>
-          <Flex flexDir="column" align="center" mt={5} gap={8}>
-            <NextLink href="/" passHref>
-              <Center
-                h="60px"
-                w="90%"
-                bg="gray.100"
-                borderRadius="10px"
-                cursor="pointer"
-              >
-                <Text
-                  style={{ transition: 'all 0.5s' }}
-                  color="gray.500"
-                  _hover={{
-                    color: '#eb0546',
-                    textDecoration: 'underline',
-                    textDecorationStyle: 'wavy',
-                    textUnderlineOffset: '8px',
-                    textDecorationThickness: '1.5px',
-                  }}
-                  aria-label="Home"
-                >
-                  Home
-                </Text>
-              </Center>
-            </NextLink>
-
-            <NextLink href="/" passHref>
-              <Center
-                h="60px"
-                w="90%"
-                bg="gray.100"
-                borderRadius="10px"
-                cursor="pointer"
-              >
-                <Text
-                  style={{ transition: 'all 0.5s' }}
-                  color="gray.500"
-                  _hover={{
-                    color: '#eb0546',
-                    textDecoration: 'underline',
-                    textDecorationStyle: 'wavy',
-                    textUnderlineOffset: '8px',
-                    textDecorationThickness: '1.5px',
-                  }}
-                  aria-label="Features"
-                >
-                  Features
-                </Text>
-              </Center>
-            </NextLink>
-
-            <NextLink href="/" passHref>
-              <Center
-                h="60px"
-                w="90%"
-                bg="gray.100"
-                borderRadius="10px"
-                cursor="pointer"
-              >
-                <Text
-                  style={{ transition: 'all 0.5s' }}
-                  color="gray.500"
-                  _hover={{
-                    color: '#eb0546',
-                    textDecoration: 'underline',
-                    textDecorationStyle: 'wavy',
-                    textUnderlineOffset: '8px',
-                    textDecorationThickness: '1.5px',
-                  }}
-                  aria-label="Instructions"
-                >
-                  Instructions
-                </Text>
-              </Center>
-            </NextLink>
-
-            <NextLink href="/" passHref>
-              <Center
-                h="60px"
-                w="90%"
-                bg="gray.100"
-                borderRadius="10px"
-                cursor="pointer"
-              >
-                <Text
-                  style={{ transition: 'all 0.5s' }}
-                  color="gray.500"
-                  _hover={{
-                    color: '#eb0546',
-                    textDecoration: 'underline',
-                    textDecorationStyle: 'wavy',
-                    textUnderlineOffset: '8px',
-                    textDecorationThickness: '1.5px',
-                  }}
-                  aria-label="Testinomial"
-                >
-                  Testinomial
-                </Text>
-              </Center>
-            </NextLink>
-          </Flex>
-        </Flex>
+        </Slide>
       </Flex>
 
       {/* Main content of Home Page */}

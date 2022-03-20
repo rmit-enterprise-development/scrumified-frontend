@@ -9,7 +9,7 @@ import {
   Spacer,
 } from '@chakra-ui/react';
 import { HamburgerIcon } from '@chakra-ui/icons';
-import Images from '../../assets/images';
+import Images from '../../../assets/images';
 import { motion } from 'framer-motion';
 
 const AboveMediumNavbar = ({
@@ -117,7 +117,7 @@ const AboveMediumNavbar = ({
       <Flex
         display={['none', 'none', 'flex', 'flex']}
         gap="3rem"
-        px={{ md: 4 }}
+        mx={{ md: '2rem', lg: '1rem' }}
       >
         <NextLink href="/" passHref>
           <Text

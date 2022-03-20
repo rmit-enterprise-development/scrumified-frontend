@@ -11,6 +11,9 @@ import {
 } from '@chakra-ui/react';
 import HomeNavBar from '../components/home/MainNavBar';
 import Images from '../assets/images';
+import { motion } from 'framer-motion';
+
+const MotionFlex = motion(Flex);
 
 export default function Home() {
   return (
@@ -23,28 +26,52 @@ export default function Home() {
       <HomeNavBar />
 
       {/* Main content (currently testing only) */}
-      <Flex as="main" p={0} maxW="full" w="100vw" h="100vh">
-        <Flex
+      <Flex
+        // bg="#031e49"
+        as="main"
+        p={0}
+        maxW="full"
+        w="100vw"
+        h="100vh"
+        style={{
+          '-moz-user-select': 'none',
+          '-khtml-user-select': 'none',
+          '-webkit-user-select': 'none',
+          '-ms-user-select': 'none',
+          'user-select': 'none',
+        }}
+      >
+        <MotionFlex
           flex="1"
           flexDir="column"
           align="flex-end"
           justify="flex-end"
-          pr="1.75rem"
+          pr="1.5rem"
           pb="2.25rem"
+          initial={{ x: -500, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{
+            duration: 1,
+          }}
         >
           <ChakraImage
             src={Images.LeaningBusinessMan.src}
             alt="Leaning business man"
             w="425px"
           />
-        </Flex>
+        </MotionFlex>
 
-        <Flex
+        <MotionFlex
           flex="1.5"
           flexDir="column"
           justify="flex-end"
-          pl="0.75rem"
+          pl="1rem"
           pr="5rem"
+          initial={{ x: 500, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{
+            duration: 1,
+          }}
         >
           <Text
             fontSize="5.75rem"
@@ -138,7 +165,7 @@ export default function Home() {
             <Text color="gray.400">A product of</Text>
             <ChakraImage
               src={Images.RmitSponsorLogo.src}
-              alt="Leaning business man"
+              alt="RMIT sponsor logo"
               w="60px"
             />
             <Text
@@ -150,7 +177,7 @@ export default function Home() {
               RMIT University SGS Engineering Students
             </Text>
           </Flex>
-        </Flex>
+        </MotionFlex>
       </Flex>
 
       <Container

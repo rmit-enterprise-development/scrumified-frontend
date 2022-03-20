@@ -60,7 +60,7 @@ const AboveMediumNavbar = ({
       display={isOpen ? 'none' : 'flex'}
       top="0"
       align="center"
-      px={[5, 10, 30, 40]}
+      px={['1rem', '2rem', '6rem']}
       py={navbarPy}
       w="full"
       backgroundColor={navbarBg}
@@ -109,7 +109,11 @@ const AboveMediumNavbar = ({
       <Spacer />
 
       {/* Nav content */}
-      <Flex display={['none', 'none', 'flex', 'flex']} gap={10} px={{ md: 4 }}>
+      <Flex
+        display={['none', 'none', 'flex', 'flex']}
+        gap="3rem"
+        px={{ md: 4 }}
+      >
         <NextLink href="/" passHref>
           <Text
             style={{ transition: 'all 0.5s' }}
@@ -123,6 +127,7 @@ const AboveMediumNavbar = ({
               textDecorationThickness: '1.5px',
             }}
             aria-label="Home"
+            fontSize="md"
             w="100%"
           >
             Home
@@ -142,6 +147,7 @@ const AboveMediumNavbar = ({
               textDecorationThickness: '1.5px',
             }}
             aria-label="Features"
+            fontSize="md"
             w="100%"
           >
             Features
@@ -161,6 +167,7 @@ const AboveMediumNavbar = ({
               textDecorationThickness: '1.5px',
             }}
             aria-label="Instructions"
+            fontSize="md"
             w="100%"
           >
             Instructions
@@ -180,6 +187,7 @@ const AboveMediumNavbar = ({
               textDecorationThickness: '1.5px',
             }}
             aria-label="Testinomials"
+            fontSize="md"
             w="100%"
           >
             Testinomials
@@ -202,6 +210,7 @@ const AboveMediumNavbar = ({
       {/* Open mobile menu icon */}
       <IconButton
         aria-label="Open Menu"
+        fontSize="md"
         ml={6}
         icon={<HamburgerIcon w="30px" h="30px" color="#4599fe" />}
         bg="none"

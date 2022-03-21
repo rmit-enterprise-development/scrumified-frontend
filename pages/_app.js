@@ -1,7 +1,6 @@
 import {
   ChakraProvider,
   ColorModeProvider,
-  useColorMode,
 } from '@chakra-ui/react';
 import customTheme from '../styles/theme';
 

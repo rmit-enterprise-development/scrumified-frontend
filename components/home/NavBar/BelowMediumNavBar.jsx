@@ -3,7 +3,6 @@ import {
   Flex,
   Center,
   IconButton,
-  Button,
   Text,
   SlideFade,
 } from '@chakra-ui/react';

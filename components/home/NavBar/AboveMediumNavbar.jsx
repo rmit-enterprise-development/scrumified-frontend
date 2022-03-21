@@ -7,6 +7,7 @@ import {
   Text,
   Image,
   Spacer,
+  useColorModeValue,
 } from '@chakra-ui/react';
 import { HamburgerIcon } from '@chakra-ui/icons';
 import Images from '../../../assets/images';
@@ -123,7 +124,7 @@ const AboveMediumNavbar = ({
           <Text
             style={{ transition: 'all 0.5s' }}
             cursor="pointer"
-            color="gray.400"
+            color={useColorModeValue('gray.500', '#fff')}
             _hover={{
               color: '#eb0546',
               textDecoration: 'underline',
@@ -143,7 +144,7 @@ const AboveMediumNavbar = ({
           <Text
             style={{ transition: 'all 0.5s' }}
             cursor="pointer"
-            color="gray.400"
+            color={useColorModeValue('gray.500', '#fff')}
             _hover={{
               color: '#eb0546',
               textDecoration: 'underline',
@@ -163,7 +164,7 @@ const AboveMediumNavbar = ({
           <Text
             style={{ transition: 'all 0.5s' }}
             cursor="pointer"
-            color="gray.400"
+            color={useColorModeValue('gray.500', '#fff')}
             _hover={{
               color: '#eb0546',
               textDecoration: 'underline',
@@ -183,7 +184,7 @@ const AboveMediumNavbar = ({
           <Text
             style={{ transition: 'all 0.5s' }}
             cursor="pointer"
-            color="gray.400"
+            color={useColorModeValue('gray.500', '#fff')}
             _hover={{
               color: '#eb0546',
               textDecoration: 'underline',

@@ -1,4 +1,5 @@
 import NextLink from 'next/link';
+import NextImage from 'next/image';
 import {
   Flex,
   Image as ChakraImage,
@@ -6,9 +7,12 @@ import {
   Button,
   chakra,
   Input,
+  useColorMode,
+  useColorModeValue,
 } from '@chakra-ui/react';
 import Images from '../../../assets/images';
-import { motion } from 'framer-motion';
+import { motion, useAnimation } from 'framer-motion';
+import { useEffect } from 'react';
 
 // integrate Chakra Flex with framer motion
 const MotionFlex = motion(Flex);
@@ -16,7 +20,8 @@ const MotionFlex = motion(Flex);
 const FirstSection = () => {
   return (
     <Flex
-      // bg="#031e49"
+      transition="all 0.4s linear"
+      bg={useColorModeValue('#fff', '#031e49')}
       as="section"
       p={0}
       maxW="full"
@@ -32,33 +37,59 @@ const FirstSection = () => {
     >
       {/* First section: left image container */}
       <LeftPart />
+
       {/* First section: right textual content */}
       <RightPart />
     </Flex>
   );
 };
 
-const LeftPart = () => (
-  <MotionFlex
-    flex="1"
-    flexDir="column"
-    align="flex-end"
-    justify="flex-end"
-    pr="1.5rem"
-    pb="2.25rem"
-    initial={{ x: -500, opacity: 0 }}
-    animate={{ x: 0, opacity: 1 }}
-    transition={{
-      duration: 1,
-    }}
-  >
-    <ChakraImage
-      src={Images.LeaningBusinessMan.src}
-      alt="Leaning business man"
-      w="425px"
-    />
-  </MotionFlex>
-);
+const LeftPart = () => {
+  const { colorMode } = useColorMode();
+  const leftPartControls = useAnimation();
+  const mainImageWidth = useColorModeValue('475px', '380px');
+
+  useEffect(() => {
+    leftPartControls.start({
+      x: 0,
+      opacity: 1,
+      transition: {
+        duration: 1,
+      },
+    });
+  });
+
+  return (
+    <MotionFlex
+      flex="1"
+      flexDir="column"
+      align="flex-end"
+      justify="flex-end"
+      pr={useColorModeValue('1.5rem', '1.75rem')}
+      pb="2.25rem"
+      initial={{ x: -500, opacity: 0 }}
+      animate={leftPartControls}
+    >
+      {colorMode === 'dark' ? (
+        <NextImage
+          src={Images.PairStanding.src}
+          alt="A standing pair"
+          width={mainImageWidth}
+          height="600px"
+          priority
+        />
+      ) : (
+        <NextImage
+          src={Images.LeaningBusinessMan.src}
+          alt="Leaning to right business man"
+          width={mainImageWidth}
+          height="600px"
+          priority
+        />
+      )}
+    </MotionFlex>
+  );
+};
 
 const RightPart = () => (
   <MotionFlex
@@ -78,9 +109,7 @@ const RightPart = () => (
       fontSize="5.75rem"
       fontWeight="bold"
       lineHeight="8rem"
-      // style={{
-      //   textShadow: '4px 2px 2px #eb0546',
-      // }}
+      color={useColorModeValue('#031e49', 'gray.200')}
     >
       Great{' '}
       <chakra.span
@@ -98,7 +127,11 @@ const RightPart = () => (
     </Text>
 
     {/* Secondary title */}
-    <Text fontSize="1.4rem" mt="2rem" color="gray.600">
+    <Text
+      fontSize="1.4rem"
+      mt="2rem"
+      color={useColorModeValue('gray.600', 'gray.200')}
+    >
       We make project management never been so{' '}
       <strong
         style={{
@@ -128,11 +161,12 @@ const RightPart = () => (
         py="1.75rem"
         px="2rem"
         htmlSize={30}
+        color={useColorModeValue('#2d4046', '#fff')}
         width="auto"
         fontSize="1rem"
         _placeholder={{
-          opacity: 1,
-          color: 'gray.500',
+          opacity: 0.6,
+          color: useColorModeValue('gray.600', 'gray.200'),
           fontSize: '1rem',
         }}
         focusBorderColor="#4599fe"

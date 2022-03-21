@@ -1,7 +1,6 @@
 import Head from 'next/head';
 import { Container } from '@chakra-ui/react';
 import HomeNavBar from '../components/home/NavBar/MainNavBar';
-
 import FirstSection from '../components/home/Section/FirstSection';
 
 export default function Home() {

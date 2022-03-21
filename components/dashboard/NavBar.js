@@ -1,12 +1,11 @@
-import React, {useState} from 'react';
+import React from 'react';
 import Avvvatars from 'avvvatars-react';
-import Link from 'next/link';
-import * as Icons from 'react-icons';
+import Link as NextLink} from 'next/link';
+import { Flex, useColorMode, useDisclosure } from '@chakra-ui/react';
+import { NavBarDataUp } from './NavBarDataUp';
+import { NavBarDataDown } from './NavBarDataDown';
 
 function NavBar() {
-    // const {sidebar, setSideBar} = useState(false)
-
-    // const showSidebar = () => setSideBar(!sidebar)
     return (
         <div>
             <div className="navbar">
@@ -15,11 +14,40 @@ function NavBar() {
                 </Link>
             </div>
 
-            <nav className="nav-menu active">
+            <nav className="nav-menu-up">
                 <ul className="nav-menu-items">
-                    <li className="navbar-toggle">
-                        <Link href="#" className="menu-bars">
-                            <h1>Menu 1</h1>
+                    {NavBarDataUp.map((item, index) => {
+                        return (
+                            <li key={index} className={item.name}>
+                                <Link href={item.path} className={item.name}>
+                                    {item.icon}
+                                </Link>
+                                <Link href={item.path} className={item.name}>
+                                    {item.title}
+                                </Link>
+                            </li>
+                        )
+                    })}
+                </ul>
+            </nav>
+
+            <nav className='nav-menu-down'>
+                <ul className="nav-menu-items">
+                    {NavBarDataDown.map((item, index) => {
+                        return (
+                            <li key={index} className={item.name}>
+                                <Link href={item.path} className={item.name}>
+                                    {item.icon}
+                                </Link>
+                                <Link href={item.path} className={item.name}>
+                                    {item.title}
+                                </Link>
+                            </li>
+                        )
+                    })}
+                    <li className="profile">
+                        <Link href="/profile">
+                            <Avvvatars value="Khang Nguyen" />
                         </Link>
                     </li>
                 </ul>

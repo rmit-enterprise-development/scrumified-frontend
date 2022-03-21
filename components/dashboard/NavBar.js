@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import Avvvatars from 'avvvatars-react';
 import Link from 'next/link';
+import * as Icons from 'react-icons';
 
 function NavBar() {
     // const {sidebar, setSideBar} = useState(false)
@@ -10,7 +11,7 @@ function NavBar() {
         <div>
             <div className="navbar">
                 <Link href="#" className="menu-bars">
-                    <Avvvatars style="shape" value="Scrumified" />
+                    <Avvvatars value="Scrumified" />
                 </Link>
             </div>
 

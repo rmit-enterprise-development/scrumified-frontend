@@ -26,7 +26,7 @@ const FirstSection = () => {
       px="2rem"
       maxW="full"
       w="100vw"
-      h={{ base: 0, md: 0, lg: '75vh', xlg: '80vh' }}
+      h={{ base: '100vh', md: '70vh', lg: '75vh', xlg: '80vh' }}
       style={{
         '-moz-user-select': 'none',
         '-khtml-user-select': 'none',
@@ -60,6 +60,7 @@ const LeftPart = () => {
 
   return (
     <MotionFlex
+      display={{ base: 'none', md: 'none', lg: 'flex' }}
       minWidth="40%"
       flexDir="column"
       align="flex-end"
@@ -105,9 +106,14 @@ const RightPart = () => (
   >
     {/* Main title */}
     <Text
-      fontSize={{ base: 0, md: 0, lg: '5rem', xlg: '6rem' }}
+      fontSize={{ base: '3rem', md: '4.5rem', lg: '5rem', xlg: '6rem' }}
       fontWeight="bold"
-      lineHeight={{ base: 0, md: 0, lg: '6.25rem', xlg: '7.75rem' }}
+      lineHeight={{
+        base: '5rem',
+        md: '5.75rem',
+        lg: '6.25rem',
+        xlg: '7.75rem',
+      }}
       color={useColorModeValue('#031e49', 'gray.200')}
     >
       Great{' '}
@@ -125,9 +131,14 @@ const RightPart = () => (
     </Text>
 
     <Text
-      fontSize={{ base: 0, md: 0, lg: '5rem', xlg: '6rem' }}
+      fontSize={{ base: '3rem', md: '4.5rem', lg: '5rem', xlg: '6rem' }}
       fontWeight="bold"
-      lineHeight={{ base: 0, md: 0, lg: '6.25rem', xlg: '7.75rem' }}
+      lineHeight={{
+        base: '5rem',
+        md: '5.75rem',
+        lg: '6.25rem',
+        xlg: '7.75rem',
+      }}
       color={useColorModeValue('#031e49', 'gray.200')}
     >
       Great product
@@ -135,9 +146,13 @@ const RightPart = () => (
 
     {/* Secondary title */}
     <Text
-      fontSize={{ lg: '1rem', xlg: '1.4rem' }}
+      fontSize={{ base: '1.25rem', md: '1.25rem', lg: '1rem', xlg: '1.4rem' }}
       mt="2rem"
       color={useColorModeValue('gray.600', 'gray.200')}
+      lineHeight={{
+        base: '3rem',
+        md: '2rem',
+      }}
     >
       We make project management never been so{' '}
       <strong
@@ -161,7 +176,14 @@ const RightPart = () => (
     </Text>
 
     {/* Register part */}
-    <Flex align="center" justify="flex-start" mt="3rem" gap="1rem" pr="4rem">
+    <Flex
+      align="center"
+      justify="flex-start"
+      flexDir={{ base: 'column', md: 'row' }}
+      mt="3rem"
+      gap={{ base: '2.5rem', md: '1rem' }}
+      pr={{ base: 0, md: '4rem' }}
+    >
       <Input
         variant="outline"
         placeholder="Your lovely email"
@@ -169,7 +191,7 @@ const RightPart = () => (
         px="2rem"
         htmlSize={30}
         color={useColorModeValue('#2d4046', '#fff')}
-        width="auto"
+        width={{ base: 'full', md: 'auto' }}
         fontSize="1rem"
         _placeholder={{
           opacity: 0.8,
@@ -204,18 +226,20 @@ const RightPart = () => (
       align="center"
       mt="12rem"
       mb="1.5rem"
-      width={{ base: 0, md: 0, lg: '100%', xlg: '75%' }}
+      width={{ base: '100%', md: '100%', lg: '100%', xlg: '75%' }}
       borderTop="0.5px solid #d1d2d4"
       justify="center"
     >
-      <Text color="gray.400">A product of</Text>
+      <Text color="gray.400" fontSize={{ base: '0.75rem', md: '1rem' }}>
+        A product of
+      </Text>
       <ChakraImage
         src={Images.RmitSponsorLogo.src}
         alt="RMIT sponsor logo"
         w="60px"
       />
       <Text
-        fontSize="1rem"
+        fontSize={{ base: '0.75rem', md: '1rem' }}
         color="#d1d2d4"
         fontStyle="italic"
         fontWeight="bold"

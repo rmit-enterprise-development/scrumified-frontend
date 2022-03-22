@@ -1,5 +1,4 @@
 import NextLink from 'next/link';
-import NextImage from 'next/image';
 import {
   Flex,
   Image as ChakraImage,
@@ -20,13 +19,14 @@ const MotionFlex = motion(Flex);
 const FirstSection = () => {
   return (
     <Flex
+      justify="center"
       transition="all 0.4s linear"
       bg={useColorModeValue('#fff', '#031e49')}
       as="section"
-      p={0}
+      px="2rem"
       maxW="full"
       w="100vw"
-      h="100vh"
+      h={{ base: 0, md: 0, lg: '75vh', xlg: '80vh' }}
       style={{
         '-moz-user-select': 'none',
         '-khtml-user-select': 'none',
@@ -47,7 +47,6 @@ const FirstSection = () => {
 const LeftPart = () => {
   const { colorMode } = useColorMode();
   const leftPartControls = useAnimation();
-  const mainImageWidth = useColorModeValue('475px', '380px');
 
   useEffect(() => {
     leftPartControls.start({
@@ -61,30 +60,31 @@ const LeftPart = () => {
 
   return (
     <MotionFlex
-      flex="1"
+      minWidth="40%"
       flexDir="column"
       align="flex-end"
       justify="flex-end"
-      pr={useColorModeValue('1.5rem', '1.75rem')}
       pb="2.25rem"
       initial={{ x: -500, opacity: 0 }}
       animate={leftPartControls}
     >
       {colorMode === 'dark' ? (
-        <NextImage
+        <ChakraImage
           src={Images.PairStanding.src}
           alt="A standing pair"
-          width={mainImageWidth}
-          height="600px"
-          priority
+          mr={{ base: 0, md: 0, lg: '1rem', xlg: '2rem' }}
+          width={{ base: 0, md: 0, lg: '380px', xlg: '400px' }}
+          height={{ base: 0, md: 0, lg: '650px', xlg: '650px' }}
+          // priority
         />
       ) : (
-        <NextImage
+        <ChakraImage
           src={Images.LeaningBusinessMan.src}
           alt="Leaning to right business man"
-          width={mainImageWidth}
-          height="600px"
-          priority
+          mr={{ base: 0, md: 0, lg: '1rem', xlg: '2rem' }}
+          width={{ base: 0, md: 0, lg: '450px', xlg: '500px' }}
+          height={{ base: 0, md: 0, lg: '625px', xlg: '650px' }}
+          // priority
         />
       )}
     </MotionFlex>
@@ -93,11 +93,10 @@ const LeftPart = () => {
 
 const RightPart = () => (
   <MotionFlex
-    flex="1.5"
+    minWidth="50%"
     flexDir="column"
     justify="flex-end"
     pl="1rem"
-    pr="5rem"
     initial={{ x: 500, opacity: 0 }}
     animate={{ x: 0, opacity: 1 }}
     transition={{
@@ -106,9 +105,9 @@ const RightPart = () => (
   >
     {/* Main title */}
     <Text
-      fontSize="5.75rem"
+      fontSize={{ base: 0, md: 0, lg: '5rem', xlg: '6rem' }}
       fontWeight="bold"
-      lineHeight="8rem"
+      lineHeight={{ base: 0, md: 0, lg: '6.25rem', xlg: '7.75rem' }}
       color={useColorModeValue('#031e49', 'gray.200')}
     >
       Great{' '}
@@ -123,12 +122,20 @@ const RightPart = () => (
       >
         teamwork
       </chakra.span>{' '}
+    </Text>
+
+    <Text
+      fontSize={{ base: 0, md: 0, lg: '5rem', xlg: '6rem' }}
+      fontWeight="bold"
+      lineHeight={{ base: 0, md: 0, lg: '6.25rem', xlg: '7.75rem' }}
+      color={useColorModeValue('#031e49', 'gray.200')}
+    >
       Great product
     </Text>
 
     {/* Secondary title */}
     <Text
-      fontSize="1.4rem"
+      fontSize={{ lg: '1rem', xlg: '1.4rem' }}
       mt="2rem"
       color={useColorModeValue('gray.600', 'gray.200')}
     >
@@ -165,8 +172,8 @@ const RightPart = () => (
         width="auto"
         fontSize="1rem"
         _placeholder={{
-          opacity: 0.6,
-          color: useColorModeValue('gray.600', 'gray.200'),
+          opacity: 0.8,
+          color: useColorModeValue('gray.600', 'white'),
           fontSize: '1rem',
         }}
         focusBorderColor="#4599fe"
@@ -195,8 +202,9 @@ const RightPart = () => (
     {/* Minor product owner description */}
     <Flex
       align="center"
-      mt="10rem"
+      mt="12rem"
       mb="1.5rem"
+      width={{ base: 0, md: 0, lg: '100%', xlg: '75%' }}
       borderTop="0.5px solid #d1d2d4"
       justify="center"
     >

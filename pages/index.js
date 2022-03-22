@@ -8,16 +8,6 @@ export default function Home() {
     <>
       <Head>
         <title>Home - Scrumified</title>
-        <link
-          rel="preload"
-          href="https://i.imgur.com/9CWMEmQ.png"
-          as="image"
-        ></link>
-        <link
-          rel="preload"
-          href="https://i.imgur.com/711WRvk.png"
-          as="image"
-        ></link>
       </Head>
 
       {/* Nav Bar */}

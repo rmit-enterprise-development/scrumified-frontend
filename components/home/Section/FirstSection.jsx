@@ -7,12 +7,12 @@ import {
   Button,
   chakra,
   Input,
-  Spacer,
   useColorMode,
   useColorModeValue,
 } from '@chakra-ui/react';
 import Images from '../../../assets/images';
-import { motion } from 'framer-motion';
+import { motion, useAnimation } from 'framer-motion';
+import { useEffect } from 'react';
 
 // integrate Chakra Flex with framer motion
 const MotionFlex = motion(Flex);
@@ -27,7 +27,13 @@ const FirstSection = () => {
       maxW="full"
       w="100vw"
       h="100vh"
-      justify="center"
+      style={{
+        '-moz-user-select': 'none',
+        '-khtml-user-select': 'none',
+        '-webkit-user-select': 'none',
+        '-ms-user-select': 'none',
+        'user-select': 'none',
+      }}
     >
       {/* First section: left image container */}
       <LeftPart />
@@ -40,36 +46,45 @@ const FirstSection = () => {
 
 const LeftPart = () => {
   const { colorMode } = useColorMode();
+  const leftPartControls = useAnimation();
+  const mainImageWidth = useColorModeValue('475px', '380px');
+
+  useEffect(() => {
+    leftPartControls.start({
+      x: 0,
+      opacity: 1,
+      transition: {
+        duration: 1,
+      },
+    });
+  });
 
   return (
     <MotionFlex
+      flex="1"
       flexDir="column"
       align="flex-end"
-      justify={{ lg: 'center', xlg: 'flex-end' }}
+      justify="flex-end"
       pr={useColorModeValue('1.5rem', '1.75rem')}
       pb="2.25rem"
       initial={{ x: -500, opacity: 0 }}
-      animate={{
-        x: 0,
-        opacity: 1,
-        transition: {
-          duration: 1,
-        },
-      }}
+      animate={leftPartControls}
     >
       {colorMode === 'dark' ? (
-        <ChakraImage
-          src={'https://i.imgur.com/711WRvk.png'}
+        <NextImage
+          src={Images.PairStanding.src}
           alt="A standing pair"
-          minW={{ lg: '70%', xlg: '70%' }}
-          h={{ sm: 0, lg: '50%', xlg: '75%' }}
+          width={mainImageWidth}
+          height="600px"
+          priority
         />
       ) : (
-        <ChakraImage
-          src={'https://i.imgur.com/9CWMEmQ.png'}
+        <NextImage
+          src={Images.LeaningBusinessMan.src}
           alt="Leaning to right business man"
-          minW={{ lg: '70%', xlg: '70%' }}
-          h={{ sm: 0, lg: '50%', xlg: '75%' }}
+          width={mainImageWidth}
+          height="600px"
+          priority
         />
       )}
     </MotionFlex>
@@ -78,9 +93,11 @@ const LeftPart = () => {
 
 const RightPart = () => (
   <MotionFlex
+    flex="1.5"
     flexDir="column"
-    justify={{ lg: 'center', xlg: 'flex-end' }}
+    justify="flex-end"
     pl="1rem"
+    pr="5rem"
     initial={{ x: 500, opacity: 0 }}
     animate={{ x: 0, opacity: 1 }}
     transition={{
@@ -89,9 +106,9 @@ const RightPart = () => (
   >
     {/* Main title */}
     <Text
-      fontSize={{ lg: '5rem', xlg: '7.5rem' }}
+      fontSize="5.75rem"
       fontWeight="bold"
-      lineHeight={{ lg: '8rem', xlg: '9rem' }}
+      lineHeight="8rem"
       color={useColorModeValue('#031e49', 'gray.200')}
     >
       Great{' '}
@@ -106,13 +123,13 @@ const RightPart = () => (
       >
         teamwork
       </chakra.span>{' '}
-      <Text>Great product</Text>
+      Great product
     </Text>
 
     {/* Secondary title */}
     <Text
       fontSize="1.4rem"
-      mt={{ lg: '2rem', xlg: '3.5rem' }}
+      mt="2rem"
       color={useColorModeValue('gray.600', 'gray.200')}
     >
       We make project management never been so{' '}
@@ -178,7 +195,7 @@ const RightPart = () => (
     {/* Minor product owner description */}
     <Flex
       align="center"
-      mt={{ lg: '10rem', xlg: '18rem' }}
+      mt="10rem"
       mb="1.5rem"
       borderTop="0.5px solid #d1d2d4"
       justify="center"

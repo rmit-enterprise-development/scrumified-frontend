@@ -71,11 +71,6 @@ const AboveMediumNavbar = ({
       style={{
         transition: 'all 0.4s linear',
         scrollBehavior: 'smooth',
-        '-moz-user-select': 'none',
-        '-khtml-user-select': 'none',
-        '-webkit-user-select': 'none',
-        '-ms-user-select': 'none',
-        'user-select': 'none',
       }}
     >
       {/* Logo and Logo text */}

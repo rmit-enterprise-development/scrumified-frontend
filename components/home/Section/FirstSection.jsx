@@ -195,16 +195,9 @@ const RightPart = () => (
           width={{ base: 'full', md: '60%' }}
           fontSize={{ base: '0.75rem', md: '1rem' }}
           _placeholder={{
-            base: {
-              opacity: 0.8,
-              color: useColorModeValue('gray.600', 'white'),
-              fontSize: '0.75rem',
-            },
-            md: {
-              opacity: 0.8,
-              color: useColorModeValue('gray.600', 'white'),
-              fontSize: '1rem',
-            },
+            opacity: 0.8,
+            color: useColorModeValue('gray.600', 'white'),
+            fontSize: { base: '0.75rem', md: '1rem' },
           }}
           focusBorderColor="#4599fe"
         />

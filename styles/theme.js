@@ -19,6 +19,16 @@ const overrides = {
   ...chakraTheme,
   fonts,
   breakpoints,
+  colors: {
+    bmw: {
+      100: '#fffdfe',
+      200: '#ee0405',
+      300: '#2d4046',
+      400: '#4599fe',
+      500: '#031d46',
+      600: '#ee0405',
+    },
+  },
   fontWeights: {
     normal: 300,
     medium: 600,

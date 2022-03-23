@@ -1,24 +1,30 @@
 import Head from 'next/head';
-import { Container, useColorModeValue, useColorMode } from '@chakra-ui/react';
-import HomeNavBar from '../components/home/NavBar';
+import { Container } from '@chakra-ui/react';
+import HomeNavBar from '../components/home/NavBar/MainNavBar';
+import FirstSection from '../components/home/Section/FirstSection';
 
 export default function Home() {
-  const navContent = ['Home', 'Features', 'How it works', 'Testinomial'];
-  const getStartedTextColor = useColorModeValue('white', 'black');
-  const { colorMode } = useColorMode();
-
   return (
     <>
       <Head>
         <title>Home - Scrumified</title>
       </Head>
-      <Container maxW="5xl" p={0}>
-        <HomeNavBar
-          navContent={navContent}
-          getStartedTextColor={getStartedTextColor}
-          colorMode={colorMode}
-        />
-      </Container>
+
+      {/* Nav Bar */}
+      <HomeNavBar />
+
+      {/* Main content (currently testing only) */}
+      {/* First section */}
+      <FirstSection />
+
+      <Container
+        as="main"
+        p={0}
+        bg="red.500"
+        maxW="full"
+        w="100vw"
+        h="100vh"
+      ></Container>
     </>
   );
 }

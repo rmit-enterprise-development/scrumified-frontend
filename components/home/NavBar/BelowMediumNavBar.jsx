@@ -4,10 +4,10 @@ import { CloseIcon } from '@chakra-ui/icons';
 
 const BelowMediumNavBar = ({ isOpen, initNavBg, onToggle }) => {
   return (
-    <SlideFade in={isOpen}>
+    <SlideFade in={isOpen} display={isOpen ? 'flex' : 'none'}>
       <Flex
         w="100vw"
-        display={{ base: 'flex', lg: 'none' }}
+        display={isOpen ? 'flex' : 'none'}
         bg={`${initNavBg}, 1)`}
         zIndex={201}
         h="100vh"

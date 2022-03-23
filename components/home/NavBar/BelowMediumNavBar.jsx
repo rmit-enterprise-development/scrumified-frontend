@@ -1,26 +1,19 @@
 import NextLink from 'next/link';
-import {
-  Flex,
-  Center,
-  IconButton,
-  Text,
-  SlideFade,
-} from '@chakra-ui/react';
+import { Flex, Center, IconButton, Text, SlideFade } from '@chakra-ui/react';
 import { CloseIcon } from '@chakra-ui/icons';
 
 const BelowMediumNavBar = ({ isOpen, initNavBg, onToggle }) => {
   return (
-    <SlideFade in={isOpen} offsetY="-10px" style={{ transition: 'all 0.2s' }}>
+    <SlideFade in={isOpen}>
       <Flex
         w="100vw"
-        display={{ md: 'none' }}
-        bgColor={`${initNavBg}, 1)`}
+        display={{ base: 'flex', lg: 'none' }}
+        bg={`${initNavBg}, 1)`}
         zIndex={201}
         h="100vh"
         pos="fixed"
         top="0"
         left="0"
-        style={{}}
         overflowY="hidden"
         flexDir="column"
       >
@@ -40,7 +33,7 @@ const BelowMediumNavBar = ({ isOpen, initNavBg, onToggle }) => {
         </Flex>
 
         {/* Nav content */}
-        <Flex flexDir="column" align="center" mt={8} gap={8} w="full">
+        <Flex flexDir="column" align="center" mt="6rem" gap={8} w="full">
           <NextLink href="/" passHref>
             <Center
               h="55px"

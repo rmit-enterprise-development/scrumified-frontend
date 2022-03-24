@@ -1,5 +1,13 @@
 import NextLink from 'next/link';
-import { Flex, Center, IconButton, Text, SlideFade } from '@chakra-ui/react';
+import {
+  Flex,
+  Center,
+  IconButton,
+  Text,
+  SlideFade,
+  Container,
+  useColorModeValue,
+} from '@chakra-ui/react';
 import { CloseIcon } from '@chakra-ui/icons';
 
 const BelowMediumNavBar = ({ isOpen, initNavBg, onToggle }) => {
@@ -33,7 +41,7 @@ const BelowMediumNavBar = ({ isOpen, initNavBg, onToggle }) => {
         </Flex>
 
         {/* Nav content */}
-        <Flex flexDir="column" align="center" mt="6rem" gap={8} w="full">
+        <Flex flexDir="column" align="center" mt="4rem" gap={8} w="full">
           <NextLink href="/" passHref>
             <Center
               h="55px"
@@ -137,6 +145,73 @@ const BelowMediumNavBar = ({ isOpen, initNavBg, onToggle }) => {
               </Text>
             </Center>
           </NextLink>
+
+          <Flex h="50px" w="full" align="center" px="5rem">
+            <Container
+              flex="1"
+              p={0}
+              h="50%"
+              borderTop="2px solid #CBD5E0"
+              alignSelf="end"
+            />
+            <Text mx="10px" color="#718096">
+              OR
+            </Text>
+            <Container
+              flex="1"
+              p={0}
+              h="50%"
+              borderTop="2px solid #CBD5E0"
+              alignSelf="end"
+            />
+          </Flex>
+
+          <Flex
+            flexDir="column"
+            w="full"
+            align="center"
+            justify="center"
+            gap="1.5rem"
+          >
+            <NextLink href="/" passHref>
+              <Center
+                h="45px"
+                w="50%"
+                bg="#eb0546"
+                borderRadius="40px"
+                cursor="pointer"
+              >
+                <Text
+                  fontWeight="bold"
+                  color="#fff"
+                  aria-label="Sign in"
+                  fontSize="md"
+                >
+                  Sign In
+                </Text>
+              </Center>
+            </NextLink>
+
+            <NextLink href="/" passHref>
+              <Center
+                h="45px"
+                w="50%"
+                bg="#fff"
+                borderRadius="40px"
+                cursor="pointer"
+                border={useColorModeValue('2px solid #eb0546', '')}
+              >
+                <Text
+                  fontWeight="bold"
+                  color="#eb0546"
+                  aria-label="Register Now"
+                  fontSize="md"
+                >
+                  Register Now
+                </Text>
+              </Center>
+            </NextLink>
+          </Flex>
         </Flex>
       </Flex>
     </SlideFade>

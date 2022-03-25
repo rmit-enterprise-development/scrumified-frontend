@@ -23,7 +23,6 @@ const MainNavBar = ({ setIsRegistering }) => {
         initNavBg={initNavBg}
         toggleColorMode={toggleColorMode}
         colorMode={colorMode}
-        setIsRegistering={setIsRegistering}
       />
 
       {/* Nav bar content for Small screens */}

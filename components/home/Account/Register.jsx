@@ -83,7 +83,7 @@ const AccountPopUp = ({ isRegistering, setIsRegistering, typedEmail }) => {
       await formControls.start({
         height: '600px',
         width: '600px',
-        padding: '3.5rem',
+        padding: '2rem 3.5rem',
         backgroundImage: '#E2E8F0',
         boxShadow: '30px 30px 50px #c5cad1, -30px -30px 50px #ffffff',
         transition: {
@@ -116,9 +116,9 @@ const AccountPopUp = ({ isRegistering, setIsRegistering, typedEmail }) => {
       w="full"
       justify="center"
       align="center"
-      onClick={closePopUp}
       display={isRegistering ? 'flex' : 'none'}
       animate={popUpControls}
+      flexDir="column"
     >
       {/* Form container */}
       <MotionFlex
@@ -128,7 +128,7 @@ const AccountPopUp = ({ isRegistering, setIsRegistering, typedEmail }) => {
         initial={{
           height: '600px',
           width: '600px',
-          padding: '2rem',
+          padding: '0 0',
           backgroundImage: '#E2E8F0',
           boxShadow: '0 0 0 #c5cad1, 0 0 0 #ffffff',
         }}
@@ -336,23 +336,43 @@ const AccountPopUp = ({ isRegistering, setIsRegistering, typedEmail }) => {
             mt="2.5rem"
             initial={{ opacity: 0 }}
             animate={inputControls}
+            gap="2rem"
           >
             <Button
-              py="1.25rem"
+              cursor="pointer"
+              w="10rem"
+              py="1.5rem"
               px="2rem"
               as="submit"
               bg="#eb0546"
               color="#fff"
-              border="2px solid #eb0546"
+              // border="2px solid #eb0546"
               transition="all 0.4s linear"
               _hover={{
-                backgroundColor: '#fff',
-                color: '#eb0546',
-                border: '2px solid #eb0546',
-                shadow: '0 5px 5px 2px #eb0546',
+                backgroundColor: '#c70038',
+                boxShadow: '10px 10px 15px #c5cad1, -10px -10px 15px #ffffff',
               }}
             >
               <Text fontSize="1rem">Register</Text>
+            </Button>
+
+            <Button
+              cursor="pointer"
+              onClick={closePopUp}
+              w="10rem"
+              py="1.5rem"
+              px="2rem"
+              as="submit"
+              bg="#fff"
+              color="#eb0546"
+              // border="2px solid #eb0546"
+              transition="all 0.4s linear"
+              _hover={{
+                backgroundColor: 'rgba(255, 255, 255, 0.8)',
+                boxShadow: '6px 6px 12px #c5cad1, -6px -6px 12px #ffffff',
+              }}
+            >
+              <Text fontSize="1rem">Back Home</Text>
             </Button>
           </MotionFlex>
         </form>

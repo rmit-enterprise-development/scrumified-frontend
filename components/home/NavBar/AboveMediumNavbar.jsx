@@ -20,7 +20,6 @@ const AboveMediumNavbar = ({
   initNavBg,
   colorMode,
   toggleColorMode,
-  setIsRegistering,
 }) => {
   // use state hooks to kepp track nav bar state on events
   const [navbarBg, setNavbarBg] = useState(`${initNavBg}, 1)`);
@@ -217,9 +216,7 @@ const AboveMediumNavbar = ({
 
       <Button
         as="button"
-        onClick={() => {
-          setIsRegistering(true);
-        }}
+        onClick={() => {}}
         display={{ base: 'none', lg: 'flex' }}
         justify={{ lg: 'center' }}
         align={{ lg: 'center' }}

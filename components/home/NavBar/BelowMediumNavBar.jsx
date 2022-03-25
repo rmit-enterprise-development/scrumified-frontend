@@ -30,7 +30,7 @@ const BelowMediumNavBar = ({ isOpen, initNavBg, onToggle }) => {
           <IconButton
             mt={5}
             mr={5}
-            aria-label="Open Menu"
+            aria-label="Close Menu"
             fontSize="lg"
             size="lg"
             bg="none"

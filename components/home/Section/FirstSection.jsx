@@ -75,9 +75,9 @@ const LeftPart = () => {
         <ChakraImage
           src={Images.PairStanding.src}
           alt="A standing pair"
-          mr={{ base: 0, md: 0, lg: '1rem', xlg: '2rem' }}
-          width={{ base: 0, md: 0, lg: '350px', xlg: '400px' }}
-          height={{ base: 0, md: 0, lg: '500px', xlg: '650px' }}
+          mr={{ base: 0, md: 0, lg: '2rem', xlg: '2rem' }}
+          width={{ base: 0, md: 0, lg: '310px', xlg: '400px' }}
+          height={{ base: 0, md: 0, lg: '520px', xlg: '650px' }}
           // priority
         />
       ) : (

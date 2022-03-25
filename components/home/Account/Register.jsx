@@ -20,7 +20,7 @@ const MotionFormLabel = motion(FormLabel);
 const MotionInput = motion(Input);
 const MotionInputGroup = motion(InputGroup);
 
-const AccountPopUp = ({ isSigningIn, setIsSigningIn }) => {
+const AccountPopUp = ({ isRegistering, setIsRegistering }) => {
   // control animation object
   const popUpControls = useAnimation();
   const formControls = useAnimation();
@@ -66,7 +66,7 @@ const AccountPopUp = ({ isSigningIn, setIsSigningIn }) => {
       },
     });
 
-    await setIsSigningIn(false);
+    await setIsRegistering(false);
   };
 
   // start animation when sign in is clicked
@@ -99,10 +99,10 @@ const AccountPopUp = ({ isSigningIn, setIsSigningIn }) => {
       });
     };
 
-    if (isSigningIn) {
+    if (isRegistering) {
       openPopUp();
     }
-  }, [isSigningIn, popUpControls, formControls, inputControls]);
+  }, [isRegistering, popUpControls, formControls, inputControls]);
 
   // render account pop up
   return (
@@ -117,7 +117,7 @@ const AccountPopUp = ({ isSigningIn, setIsSigningIn }) => {
       justify="center"
       align="center"
       onClick={closePopUp}
-      display={isSigningIn ? 'flex' : 'none'}
+      display={isRegistering ? 'flex' : 'none'}
       animate={popUpControls}
     >
       {/* Form container */}
@@ -328,6 +328,32 @@ const AccountPopUp = ({ isSigningIn, setIsSigningIn }) => {
               </InputRightElement>
             </MotionInputGroup>
           </FormControl>
+
+          <MotionFlex
+            justify="center"
+            align="center"
+            mt="2.5rem"
+            initial={{ opacity: 0 }}
+            animate={inputControls}
+          >
+            <Button
+              py="1.25rem"
+              px="2rem"
+              as="submit"
+              bg="#eb0546"
+              color="#fff"
+              border="2px solid #eb0546"
+              transition="all 0.4s linear"
+              _hover={{
+                backgroundColor: '#fff',
+                color: '#eb0546',
+                border: '2px solid #eb0546',
+                shadow: '0 5px 5px 2px #eb0546',
+              }}
+            >
+              <Text fontSize="1rem">Register</Text>
+            </Button>
+          </MotionFlex>
         </form>
       </MotionFlex>
     </MotionFlex>

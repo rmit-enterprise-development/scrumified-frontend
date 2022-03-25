@@ -16,7 +16,7 @@ import { useEffect } from 'react';
 // integrate Chakra Flex with framer motion
 const MotionFlex = motion(Flex);
 
-const FirstSection = () => {
+const FirstSection = ({ setIsRegistering }) => {
   return (
     <Flex
       justify="center"
@@ -38,7 +38,7 @@ const FirstSection = () => {
       <LeftPart />
 
       {/* First section: right textual content */}
-      <RightPart />
+      <RightPart setIsRegistering={setIsRegistering} />
     </Flex>
   );
 };
@@ -91,7 +91,7 @@ const LeftPart = () => {
   );
 };
 
-const RightPart = () => (
+const RightPart = ({ setIsRegistering }) => (
   <MotionFlex
     minWidth="50%"
     flexDir="column"
@@ -203,6 +203,9 @@ const RightPart = () => (
         />
 
         <Button
+          onClick={() => {
+            setIsRegistering(true);
+          }}
           py={{ base: '1.25rem', md: '1.75rem' }}
           w={{ base: '10rem', md: '12rem' }}
           bg="#eb0546"
@@ -216,9 +219,7 @@ const RightPart = () => (
             shadow: '0 5px 5px 2px #eb0546',
           }}
         >
-          <NextLink href="/" passHref>
-            <Text fontSize={{ base: '0.75rem', md: '1rem' }}>Register Now</Text>
-          </NextLink>
+          <Text fontSize={{ base: '0.75rem', md: '1rem' }}>Register Now</Text>
         </Button>
       </Flex>
     </chakra.div>

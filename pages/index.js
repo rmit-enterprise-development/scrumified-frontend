@@ -2,11 +2,11 @@ import Head from 'next/head';
 import HomeNavBar from '../components/home/NavBar/MainNavBar';
 import FirstSection from '../components/home/Section/FirstSection';
 import { useState } from 'react';
-import AccountPopUp from '../components/home/Account/AccountPopUp';
+import AccountRegister from '../components/home/Account/Register';
 import { Container } from '@chakra-ui/react';
 
 export default function Home() {
-  const [isSigningIn, setIsSigningIn] = useState(false);
+  const [isRegistering, setIsRegistering] = useState(false);
 
   return (
     <>
@@ -15,14 +15,17 @@ export default function Home() {
       </Head>
 
       {/* Nav Bar */}
-      <HomeNavBar setIsSigningIn={setIsSigningIn} />
+      <HomeNavBar setIsRegistering={setIsRegistering} />
 
       {/* Pop up when sign in button is clicked */}
-      <AccountPopUp isSigningIn={isSigningIn} setIsSigningIn={setIsSigningIn} />
+      <AccountRegister
+        isRegistering={isRegistering}
+        setIsRegistering={setIsRegistering}
+      />
 
       {/* Main content (currently testing only) */}
       {/* First section */}
-      <FirstSection />
+      <FirstSection setIsRegistering={setIsRegistering}/>
 
       {/* Dummy section */}
       <Container

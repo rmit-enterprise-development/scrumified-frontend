@@ -30,6 +30,7 @@ const MainNavBar = ({ setIsRegistering }) => {
         isOpen={isOpen}
         onToggle={onToggle}
         initNavBg={initNavBg}
+        setIsRegistering={setIsRegistering}
       />
     </Flex>
   );

@@ -10,7 +10,12 @@ import {
 } from '@chakra-ui/react';
 import { CloseIcon } from '@chakra-ui/icons';
 
-const BelowMediumNavBar = ({ isOpen, initNavBg, onToggle }) => {
+const BelowMediumNavBar = ({
+  isOpen,
+  initNavBg,
+  onToggle,
+  setIsRegistering,
+}) => {
   return (
     <SlideFade in={isOpen} display={isOpen ? 'flex' : 'none'}>
       <Flex
@@ -41,7 +46,7 @@ const BelowMediumNavBar = ({ isOpen, initNavBg, onToggle }) => {
         </Flex>
 
         {/* Nav content */}
-        <Flex flexDir="column" align="center" mt="4rem" gap={8} w="full">
+        <Flex flexDir="column" align="center" mt="1rem" gap={8} w="full">
           {/* Page sections */}
           <NextLink href="/" passHref>
             <Center
@@ -195,25 +200,27 @@ const BelowMediumNavBar = ({ isOpen, initNavBg, onToggle }) => {
               </Center>
             </NextLink>
 
-            <NextLink href="/" passHref>
-              <Center
-                h="45px"
-                w="50%"
-                bg="#fff"
-                borderRadius="40px"
-                cursor="pointer"
-                border={useColorModeValue('2px solid #eb0546', '')}
+            <Center
+              onClick={() => {
+                setIsRegistering(true);
+                onToggle();
+              }}
+              h="45px"
+              w="50%"
+              bg="#fff"
+              borderRadius="40px"
+              cursor="pointer"
+              border={useColorModeValue('2px solid #eb0546', '')}
+            >
+              <Text
+                fontWeight="bold"
+                color="#eb0546"
+                aria-label="Register Now"
+                fontSize="md"
               >
-                <Text
-                  fontWeight="bold"
-                  color="#eb0546"
-                  aria-label="Register Now"
-                  fontSize="md"
-                >
-                  Register Now
-                </Text>
-              </Center>
-            </NextLink>
+                Register Now
+              </Text>
+            </Center>
           </Flex>
         </Flex>
       </Flex>

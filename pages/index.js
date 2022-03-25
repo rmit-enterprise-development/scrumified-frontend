@@ -16,7 +16,7 @@ export default function Home() {
       </Head>
 
       {/* Nav Bar */}
-      <HomeNavBar />
+      <HomeNavBar setIsRegistering={setIsRegistering}/>
 
       {/* Pop up when sign in button is clicked */}
       <AccountRegister

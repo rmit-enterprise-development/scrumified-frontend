@@ -11,12 +11,12 @@ import {
 } from '@chakra-ui/react';
 import Images from '../../../assets/images';
 import { motion, useAnimation } from 'framer-motion';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 // integrate Chakra Flex with framer motion
 const MotionFlex = motion(Flex);
 
-const FirstSection = ({ setIsRegistering }) => {
+const FirstSection = ({ setIsRegistering, setTypedEmail }) => {
   return (
     <Flex
       justify="center"
@@ -38,7 +38,10 @@ const FirstSection = ({ setIsRegistering }) => {
       <LeftPart />
 
       {/* First section: right textual content */}
-      <RightPart setIsRegistering={setIsRegistering} />
+      <RightPart
+        setIsRegistering={setIsRegistering}
+        setTypedEmail={setTypedEmail}
+      />
     </Flex>
   );
 };
@@ -91,7 +94,7 @@ const LeftPart = () => {
   );
 };
 
-const RightPart = ({ setIsRegistering }) => (
+const RightPart = ({ setIsRegistering, setTypedEmail }) => (
   <MotionFlex
     minWidth="50%"
     flexDir="column"
@@ -187,6 +190,9 @@ const RightPart = ({ setIsRegistering }) => (
         pr={{ base: 0, md: '4rem' }}
       >
         <Input
+          onChange={(e) => {
+            setTypedEmail(e.target.value);
+          }}
           variant="outline"
           placeholder="Your lovely email"
           py={{ base: '1.25rem', md: '1.75rem' }}

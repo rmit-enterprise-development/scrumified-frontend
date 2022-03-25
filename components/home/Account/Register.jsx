@@ -20,7 +20,7 @@ const MotionFormLabel = motion(FormLabel);
 const MotionInput = motion(Input);
 const MotionInputGroup = motion(InputGroup);
 
-const AccountPopUp = ({ isRegistering, setIsRegistering }) => {
+const AccountPopUp = ({ isRegistering, setIsRegistering, typedEmail }) => {
   // control animation object
   const popUpControls = useAnimation();
   const formControls = useAnimation();
@@ -248,6 +248,7 @@ const AccountPopUp = ({ isRegistering, setIsRegistering }) => {
               EMAIL
             </MotionFormLabel>
             <MotionInput
+              value={typedEmail}
               px="1.5rem"
               py="1.4rem"
               mt="0.25rem"

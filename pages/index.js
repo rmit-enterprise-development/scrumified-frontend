@@ -7,6 +7,7 @@ import { Container } from '@chakra-ui/react';
 
 export default function Home() {
   const [isRegistering, setIsRegistering] = useState(false);
+  const [typedEmail, setTypedEmail] = useState('');
 
   return (
     <>
@@ -21,11 +22,15 @@ export default function Home() {
       <AccountRegister
         isRegistering={isRegistering}
         setIsRegistering={setIsRegistering}
+        typedEmail={typedEmail}
       />
 
       {/* Main content (currently testing only) */}
       {/* First section */}
-      <FirstSection setIsRegistering={setIsRegistering}/>
+      <FirstSection
+        setIsRegistering={setIsRegistering}
+        setTypedEmail={setTypedEmail}
+      />
 
       {/* Dummy section */}
       <Container

@@ -42,6 +42,7 @@ const BelowMediumNavBar = ({ isOpen, initNavBg, onToggle }) => {
 
         {/* Nav content */}
         <Flex flexDir="column" align="center" mt="4rem" gap={8} w="full">
+          {/* Page sections */}
           <NextLink href="/" passHref>
             <Center
               h="55px"
@@ -146,6 +147,7 @@ const BelowMediumNavBar = ({ isOpen, initNavBg, onToggle }) => {
             </Center>
           </NextLink>
 
+          {/* 'Or' Divider */}
           <Flex h="50px" w="full" align="center" px="5rem">
             <Container
               flex="1"
@@ -166,6 +168,7 @@ const BelowMediumNavBar = ({ isOpen, initNavBg, onToggle }) => {
             />
           </Flex>
 
+          {/* Sign In and Register Buttons */}
           <Flex
             flexDir="column"
             w="full"

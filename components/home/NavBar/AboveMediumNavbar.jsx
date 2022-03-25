@@ -20,6 +20,7 @@ const AboveMediumNavbar = ({
   initNavBg,
   colorMode,
   toggleColorMode,
+  setIsSigningIn,
 }) => {
   // use state hooks to kepp track nav bar state on events
   const [navbarBg, setNavbarBg] = useState(`${initNavBg}, 1)`);
@@ -216,9 +217,12 @@ const AboveMediumNavbar = ({
 
       <Button
         as="button"
+        onClick={() => {
+          setIsSigningIn(true);
+        }}
         display={{ base: 'none', lg: 'flex' }}
-        justify={{lg: "center"}}
-        align={{lg: "center"}}
+        justify={{ lg: 'center' }}
+        align={{ lg: 'center' }}
         py="1.5rem"
         w="8rem"
         ml="2rem"
@@ -233,9 +237,7 @@ const AboveMediumNavbar = ({
           shadow: '7px 7px 0 0 #4599fe',
         }}
       >
-        <NextLink href="/" passHref>
-          <Text fontSize={{ base: '0.75rem', md: '1rem' }}>Sign In</Text>
-        </NextLink>
+        <Text fontSize={{ base: '0.75rem', md: '1rem' }}>Sign In</Text>
       </Button>
 
       {/* Open mobile menu icon */}

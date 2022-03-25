@@ -2,7 +2,7 @@ import { Flex, useColorMode, useDisclosure } from '@chakra-ui/react';
 import AboveMediumNavbar from './AboveMediumNavbar';
 import BelowMediumNavbar from './BelowMediumNavbar';
 
-const MainNavBar = () => {
+const MainNavBar = ({ setIsSigningIn }) => {
   // keep track of app's color mode
   const { colorMode, toggleColorMode } = useColorMode();
 
@@ -23,6 +23,7 @@ const MainNavBar = () => {
         initNavBg={initNavBg}
         toggleColorMode={toggleColorMode}
         colorMode={colorMode}
+        setIsSigningIn={setIsSigningIn}
       />
 
       {/* Nav bar content for Small screens */}

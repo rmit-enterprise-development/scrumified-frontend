@@ -22,6 +22,7 @@ export default function Home() {
       <AccountRegister
         isRegistering={isRegistering}
         setIsRegistering={setIsRegistering}
+        setTypedEmail={setTypedEmail}
         typedEmail={typedEmail}
       />
 

@@ -1,5 +1,6 @@
 import {
   Button,
+  Container,
   Flex,
   FormControl,
   FormLabel,
@@ -8,6 +9,7 @@ import {
   InputGroup,
   InputRightElement,
   Text,
+  useBreakpointValue,
 } from '@chakra-ui/react';
 import { motion, useAnimation } from 'framer-motion';
 import { useEffect, useState } from 'react';
@@ -20,7 +22,12 @@ const MotionFormLabel = motion(FormLabel);
 const MotionInput = motion(Input);
 const MotionInputGroup = motion(InputGroup);
 
-const AccountPopUp = ({ isRegistering, setIsRegistering, typedEmail }) => {
+const AccountPopUp = ({
+  isRegistering,
+  setIsRegistering,
+  typedEmail,
+  setTypedEmail,
+}) => {
   // control animation object
   const popUpControls = useAnimation();
   const formControls = useAnimation();
@@ -37,6 +44,12 @@ const AccountPopUp = ({ isRegistering, setIsRegistering, typedEmail }) => {
   // handle password toggle
   const [show, setShow] = useState(false);
   const handlePwdToggleClick = () => setShow(!show);
+
+  const formAnimWidth = useBreakpointValue({ base: '100%', md: '600px' });
+  const formAnimPadding = useBreakpointValue({
+    base: '1.5rem',
+    md: '2rem 3.5rem',
+  });
 
   // async functions to toggle pop up display
   const closePopUp = async () => {
@@ -81,9 +94,9 @@ const AccountPopUp = ({ isRegistering, setIsRegistering, typedEmail }) => {
       });
 
       await formControls.start({
-        height: '600px',
-        width: '600px',
-        padding: '2rem 3.5rem',
+        height: '100%',
+        width: formAnimWidth,
+        padding: formAnimPadding,
         backgroundImage: '#E2E8F0',
         boxShadow: '30px 30px 50px #c5cad1, -30px -30px 50px #ffffff',
         transition: {
@@ -102,12 +115,19 @@ const AccountPopUp = ({ isRegistering, setIsRegistering, typedEmail }) => {
     if (isRegistering) {
       openPopUp();
     }
-  }, [isRegistering, popUpControls, formControls, inputControls]);
+  }, [
+    isRegistering,
+    popUpControls,
+    formControls,
+    inputControls,
+    formAnimWidth,
+    formAnimPadding,
+  ]);
 
   // render account pop up
   return (
     <MotionFlex
-      p={0}
+      p={{ base: '2rem', md: '3rem' }}
       zIndex="400"
       position="fixed"
       top="0"
@@ -125,9 +145,8 @@ const AccountPopUp = ({ isRegistering, setIsRegistering, typedEmail }) => {
         borderRadius="1rem"
         flexDir="column"
         align="center"
+        overflow="scroll"
         initial={{
-          height: '600px',
-          width: '600px',
           padding: '0 0',
           backgroundImage: '#E2E8F0',
           boxShadow: '0 0 0 #c5cad1, 0 0 0 #ffffff',
@@ -136,7 +155,7 @@ const AccountPopUp = ({ isRegistering, setIsRegistering, typedEmail }) => {
       >
         {/* Form title */}
         <MotionText
-          fontSize="1.2rem"
+          fontSize={{ base: '0.75rem', md: '1.2rem' }}
           fontWeight="bold"
           color="#031e49"
           mb="2rem"
@@ -155,7 +174,12 @@ const AccountPopUp = ({ isRegistering, setIsRegistering, typedEmail }) => {
           }}
         >
           {/* First name and last name */}
-          <Flex w="full" gap="1.75rem" mb="2.5rem">
+          <Flex
+            w="full"
+            gap="2.5rem"
+            mb="2.5rem"
+            flexDir={{ base: 'column', md: 'row' }}
+          >
             <MotionFlex
               initial={{ opacity: 0 }}
               animate={inputControls}
@@ -166,7 +190,8 @@ const AccountPopUp = ({ isRegistering, setIsRegistering, typedEmail }) => {
                 <FormLabel
                   htmlFor="firstName"
                   color="#031e49"
-                  style={{ fontSize: '0.75rem', letterSpacing: '3px' }}
+                  fontSize={{ base: '0.6rem', md: '0.75rem' }}
+                  style={{ letterSpacing: '3px' }}
                   pl="1.5rem"
                 >
                   FIRST NAME
@@ -205,7 +230,8 @@ const AccountPopUp = ({ isRegistering, setIsRegistering, typedEmail }) => {
                 <FormLabel
                   htmlFor="lastName"
                   color="#031e49"
-                  style={{ fontSize: '0.75rem', letterSpacing: '3px' }}
+                  fontSize={{ base: '0.6rem', md: '0.75rem' }}
+                  style={{ letterSpacing: '3px' }}
                   pl="1.5rem"
                 >
                   LAST NAME
@@ -240,7 +266,8 @@ const AccountPopUp = ({ isRegistering, setIsRegistering, typedEmail }) => {
             <MotionFormLabel
               htmlFor="email"
               color="#031e49"
-              style={{ fontSize: '0.75rem', letterSpacing: '3px' }}
+              fontSize={{ base: '0.6rem', md: '0.75rem' }}
+              style={{ letterSpacing: '3px' }}
               initial={{ opacity: 0 }}
               animate={inputControls}
               pl="1.5rem"
@@ -249,6 +276,9 @@ const AccountPopUp = ({ isRegistering, setIsRegistering, typedEmail }) => {
             </MotionFormLabel>
             <MotionInput
               value={typedEmail}
+              onChange={(e) => {
+                setTypedEmail(e.target.value);
+              }}
               px="1.5rem"
               py="1.4rem"
               mt="0.25rem"
@@ -279,7 +309,8 @@ const AccountPopUp = ({ isRegistering, setIsRegistering, typedEmail }) => {
             <MotionFormLabel
               htmlFor="password"
               color="#031e49"
-              style={{ fontSize: '0.75rem', letterSpacing: '3px' }}
+              fontSize={{ base: '0.6rem', md: '0.75rem' }}
+              style={{ letterSpacing: '3px' }}
               initial={{ opacity: 0 }}
               animate={inputControls}
               pl="1.5rem"
@@ -330,6 +361,7 @@ const AccountPopUp = ({ isRegistering, setIsRegistering, typedEmail }) => {
             </MotionInputGroup>
           </FormControl>
 
+          {/* Buttons */}
           <MotionFlex
             justify="center"
             align="center"
@@ -341,7 +373,7 @@ const AccountPopUp = ({ isRegistering, setIsRegistering, typedEmail }) => {
             <Button
               cursor="pointer"
               w="10rem"
-              py="1.5rem"
+              py={{ base: '1.25rem', md: '1.5rem' }}
               px="2rem"
               as="submit"
               bg="#eb0546"
@@ -353,14 +385,14 @@ const AccountPopUp = ({ isRegistering, setIsRegistering, typedEmail }) => {
                 boxShadow: '10px 10px 15px #c5cad1, -10px -10px 15px #ffffff',
               }}
             >
-              <Text fontSize="1rem">Register</Text>
+              <Text fontSize={{ base: '0.75rem', md: '1rem' }}>Register</Text>
             </Button>
 
             <Button
               cursor="pointer"
               onClick={closePopUp}
               w="10rem"
-              py="1.5rem"
+              py={{ base: '1.25rem', md: '1.5rem' }}
               px="2rem"
               as="submit"
               bg="#fff"
@@ -372,8 +404,55 @@ const AccountPopUp = ({ isRegistering, setIsRegistering, typedEmail }) => {
                 boxShadow: '6px 6px 12px #c5cad1, -6px -6px 12px #ffffff',
               }}
             >
-              <Text fontSize="1rem">Back Home</Text>
+              <Text fontSize={{ base: '0.75rem', md: '1rem' }}>Back Home</Text>
             </Button>
+          </MotionFlex>
+
+          {/* 'Or' Divider */}
+          <MotionFlex
+            h="100px"
+            w="full"
+            align="center"
+            initial={{ opacity: 0 }}
+            animate={inputControls}
+          >
+            <Container
+              flex="1"
+              p={0}
+              h="50%"
+              borderTop="2px solid #CBD5E0"
+              alignSelf="end"
+            />
+            <Text mx="10px" color="#718096">
+              OR
+            </Text>
+            <Container
+              flex="1"
+              p={0}
+              h="50%"
+              borderTop="2px solid #CBD5E0"
+              alignSelf="end"
+            />
+          </MotionFlex>
+
+          {/* Already have an account? */}
+          <MotionFlex
+            justify="center"
+            w="full"
+            align="center"
+            pb="2rem"
+            initial={{ opacity: 0 }}
+            animate={inputControls}
+          >
+            <MotionText
+              fontWeight="bold"
+              fontSize="sm"
+              cursor="pointer"
+              style={{ transition: 'all 0.4s linear' }}
+              _hover={{ color: '#4599fe' }}
+            >
+              Already have an account?
+            </MotionText>
           </MotionFlex>
         </form>
       </MotionFlex>

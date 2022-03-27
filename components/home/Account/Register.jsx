@@ -455,6 +455,10 @@ const AccountPopUp = ({
                   backgroundImage: '#f2f8ff',
                   boxShadow: '6px 6px 12px #c5cad1, -6px -6px 12px #ffffff',
                 }}
+                placeholder="Make sure it's a good one!"
+                _placeholder={{
+                  fontStyle: 'italic',
+                }}
                 value={registerData.password}
                 onChange={(e) => {
                   setRegisterData({

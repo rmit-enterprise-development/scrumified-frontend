@@ -1,5 +1,6 @@
 import {
   Button,
+  chakra,
   Container,
   Flex,
   FormControl,
@@ -20,6 +21,7 @@ const MotionText = motion(Text);
 const MotionFormLabel = motion(FormLabel);
 const MotionInput = motion(Input);
 const MotionInputGroup = motion(InputGroup);
+const MotionChakraDiv = motion(chakra.div);
 
 const AccountPopUp = ({
   isRegistering,
@@ -138,8 +140,51 @@ const AccountPopUp = ({
         password: '',
       });
       setTypedEmail('');
+      setFirstNameValidate(true);
+      setLastNameValidate(true);
     }, 1000);
   };
+
+  // errors validation methods
+  const validateNames = (name) => {
+    let rs = [];
+    rs.push({
+      value: name !== '',
+      msg: 'Required',
+    });
+    rs.push({
+      value: name.length >= 2,
+      msg: 'At least 2 characters',
+    });
+    rs.push({
+      value: /^[A-Z]+[a-z]+$/.test(name),
+      msg: 'Only letters, capitalize first letter (only)',
+    });
+
+    let errorFilter = rs.filter((item) => item.value === false);
+
+    return errorFilter.length > 0
+      ? errorFilter[0]
+      : { value: true, msg: 'Perfect ✅' };
+  };
+
+  // error state Container
+  const [firstNameValidate, setFirstNameValidate] = useState(true);
+  const [lastNameValidate, setLastNameValidate] = useState(true);
+
+  // error message component
+  const CustomErrorMsg = ({ children }) => (
+    <MotionChakraDiv mt="0.75rem">
+      <Text
+        color="crimson"
+        fontSize="0.7rem"
+        fontWeight="bold"
+        fontStyle="italic"
+      >
+        {children}
+      </Text>
+    </MotionChakraDiv>
+  );
 
   // render account pop up
   return (
@@ -195,9 +240,10 @@ const AccountPopUp = ({
           <Flex
             w="full"
             gap="2.5rem"
-            mb="2.5rem"
+            mb="1.75rem"
             flexDir={{ base: 'column', md: 'row' }}
           >
+            {/* First name */}
             <MotionFlex
               initial={{ opacity: 0 }}
               animate={inputControls}
@@ -220,7 +266,6 @@ const AccountPopUp = ({
                   mt="0.25rem"
                   id="firstName"
                   type="text"
-                  _hover={{ border: 'none' }}
                   placeholder="John"
                   _placeholder={{
                     fontStyle: 'italic',
@@ -238,11 +283,19 @@ const AccountPopUp = ({
                       ...registerData,
                       firstName: e.target.value,
                     });
+
+                    setFirstNameValidate(validateNames(e.target.value).value);
                   }}
                 />
               </FormControl>
+              {!firstNameValidate && (
+                <CustomErrorMsg>
+                  {validateNames(registerData.firstName).msg}
+                </CustomErrorMsg>
+              )}
             </MotionFlex>
 
+            {/* Last name */}
             <MotionFlex
               initial={{ opacity: 0 }}
               animate={inputControls}
@@ -265,7 +318,6 @@ const AccountPopUp = ({
                   mt="0.25rem"
                   id="lastName"
                   type="text"
-                  _hover={{ border: 'none' }}
                   placeholder="Doe"
                   _placeholder={{
                     fontStyle: 'italic',
@@ -283,9 +335,16 @@ const AccountPopUp = ({
                       ...registerData,
                       lastName: e.target.value,
                     });
+
+                    setLastNameValidate(validateNames(e.target.value).value);
                   }}
                 />
               </FormControl>
+              {!lastNameValidate && (
+                <CustomErrorMsg>
+                  {validateNames(registerData.lastName).msg}
+                </CustomErrorMsg>
+              )}
             </MotionFlex>
           </Flex>
 
@@ -437,6 +496,8 @@ const AccountPopUp = ({
                     password: '',
                   });
                   setTypedEmail('');
+                  setFirstNameValidate(true);
+                  setLastNameValidate(true);
                 });
               }}
               w="10rem"

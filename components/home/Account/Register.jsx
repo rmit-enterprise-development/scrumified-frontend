@@ -75,76 +75,41 @@ const AccountPopUp = ({
 
     await setIsRegistering(false);
   };
+  const openPopUp = async () => {
+    await popUpControls.start({
+      height: '100vh',
+      backgroundColor: 'rgba(226, 232, 240, 1)',
+      transition: {
+        duration: 0.75,
+      },
+    });
 
-  // start animation when sign in is clicked
+    await formControls.start({
+      height: '100%',
+      width: formAnimWidth,
+      padding: formAnimPadding,
+      backgroundImage: '#E2E8F0',
+      boxShadow: '30px 30px 50px #c5cad1, -30px -30px 50px #ffffff',
+      transition: {
+        duration: 0.75,
+      },
+    });
+
+    await inputControls.start({
+      opacity: 1,
+      transition: {
+        duration: 0.75,
+      },
+    });
+  };
+
+  // start open animation when Register Now  is clicked
   useEffect(() => {
-    const openPopUp = async () => {
-      await popUpControls.start({
-        height: '100vh',
-        backgroundColor: 'rgba(226, 232, 240, 1)',
-        transition: {
-          duration: 0.75,
-        },
-      });
-
-      await formControls.start({
-        height: '100%',
-        width: formAnimWidth,
-        padding: formAnimPadding,
-        backgroundImage: '#E2E8F0',
-        boxShadow: '30px 30px 50px #c5cad1, -30px -30px 50px #ffffff',
-        transition: {
-          duration: 0.75,
-        },
-      });
-
-      await inputControls.start({
-        opacity: 1,
-        transition: {
-          duration: 0.75,
-        },
-      });
-    };
-
+    // if Register Now is clicked
     if (isRegistering) {
       openPopUp();
     }
-  }, [
-    isRegistering,
-    popUpControls,
-    formControls,
-    inputControls,
-    formAnimWidth,
-    formAnimPadding,
-    typedEmail,
-  ]);
-
-  // handle submit
-  const [registerData, setRegisterData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
-  });
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    // do something with the submit data here
-    alert(JSON.stringify(registerData));
-
-    setTimeout(() => {
-      setRegisterData({
-        firstName: '',
-        lastName: '',
-        email: '',
-        password: '',
-      });
-      setTypedEmail('');
-      setFirstNameValidate(true);
-      setLastNameValidate(true);
-      setEmailValidate(true);
-    }, 1000);
-  };
+  }, [isRegistering, openPopUp]);
 
   // errors validation methods
   const validateNames = (name) => {
@@ -168,13 +133,11 @@ const AccountPopUp = ({
       ? errorFilter[0]
       : { value: true, msg: 'Perfect ✅' };
   };
-
   const validateEmail = (email) => {
     return email === ''
       ? { value: false, msg: 'Required' }
       : { value: true, msg: 'Perfect ✅' };
   };
-
   const validatePassword = (pwd) => {
     let rs = [];
     rs.push({
@@ -219,6 +182,64 @@ const AccountPopUp = ({
       </Text>
     </MotionChakraDiv>
   );
+
+  // method to fetch POST API and create new user on database
+  const createUserOnDatabase = (submitData) => {
+    // POST request using fetch with async/await
+    const requestOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(submitData),
+    };
+
+    fetch('http://localhost:8080/register', requestOptions)
+      .then(async (response) => {
+        const isJson = response.headers
+          .get('content-type')
+          ?.includes('application/json');
+        const data = isJson && (await response.json());
+
+        // check for error response
+        if (!response.ok) {
+          // get error message from body or default to response status
+          const error = (data && data.message) || response.status;
+          return Promise.reject(error);
+        }
+      })
+      .catch((error) => {
+        console.error('There was an error: ', error);
+      });
+  };
+
+  // handle submit
+  const [registerData, setRegisterData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+  });
+  const handleSubmit = (e) => {
+    // prevent default nature of html form
+    e.preventDefault();
+
+    // call method to fetch POST API and create new user on database
+    createUserOnDatabase(registerData);
+
+    // reset form's state
+    setTimeout(() => {
+      setRegisterData({
+        firstName: '',
+        lastName: '',
+        email: '',
+        password: '',
+      });
+      setTypedEmail('');
+      setFirstNameValidate(true);
+      setLastNameValidate(true);
+      setEmailValidate(true);
+      setPwdValidate(true);
+    }, 1000);
+  };
 
   // render account pop up
   return (

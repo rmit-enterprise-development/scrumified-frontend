@@ -5,7 +5,6 @@ import {
   Flex,
   FormControl,
   FormLabel,
-  FormErrorMessage,
   Input,
   InputGroup,
   InputRightElement,
@@ -130,7 +129,8 @@ const AccountPopUp = ({
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    console.log(registerData);
+    // do something with the submit data here
+    alert(JSON.stringify(registerData));
 
     setTimeout(() => {
       setRegisterData({
@@ -142,6 +142,7 @@ const AccountPopUp = ({
       setTypedEmail('');
       setFirstNameValidate(true);
       setLastNameValidate(true);
+      setEmailValidate(true);
     }, 1000);
   };
 
@@ -174,10 +175,36 @@ const AccountPopUp = ({
       : { value: true, msg: 'Perfect ✅' };
   };
 
-  // error state Container
+  const validatePassword = (pwd) => {
+    let rs = [];
+    rs.push({
+      value: pwd !== '',
+      msg: 'Required',
+    });
+    rs.push({
+      value: pwd.length >= 8,
+      msg: 'At least 8 characters',
+    });
+    rs.push({
+      value:
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
+          pwd
+        ),
+      msg: 'At least 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character',
+    });
+
+    let errorFilter = rs.filter((item) => item.value === false);
+
+    return errorFilter.length > 0
+      ? errorFilter[0]
+      : { value: true, msg: 'Perfect ✅' };
+  };
+
+  // error state containers
   const [firstNameValidate, setFirstNameValidate] = useState(true);
   const [lastNameValidate, setLastNameValidate] = useState(true);
   const [emailValidate, setEmailValidate] = useState(true);
+  const [pwdValidate, setPwdValidate] = useState(true);
 
   // error message component
   const CustomErrorMsg = ({ children }) => (
@@ -434,6 +461,7 @@ const AccountPopUp = ({
                     ...registerData,
                     password: e.target.value,
                   });
+                  setPwdValidate(validatePassword(e.target.value).value);
                 }}
               />
 
@@ -460,6 +488,12 @@ const AccountPopUp = ({
                 </Button>
               </InputRightElement>
             </MotionInputGroup>
+
+            {!pwdValidate && (
+              <CustomErrorMsg>
+                {validatePassword(registerData.password).msg}
+              </CustomErrorMsg>
+            )}
           </FormControl>
 
           {/* Buttons */}

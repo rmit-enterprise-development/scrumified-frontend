@@ -4,10 +4,11 @@ import FirstSection from '../components/home/Section/FirstSection';
 import { useState } from 'react';
 import AccountRegister from '../components/home/Account/Register';
 import { Container } from '@chakra-ui/react';
+import useStateRef from 'react-usestateref';
 
 export default function Home() {
   const [isRegistering, setIsRegistering] = useState(false);
-  const [typedEmail, setTypedEmail] = useState('');
+  const [typedEmail, setTypedEmail, typedEmailRef] = useStateRef('');
 
   return (
     <>
@@ -16,7 +17,7 @@ export default function Home() {
       </Head>
 
       {/* Nav Bar */}
-      <HomeNavBar setIsRegistering={setIsRegistering}/>
+      <HomeNavBar setIsRegistering={setIsRegistering} />
 
       {/* Pop up when sign in button is clicked */}
       <AccountRegister
@@ -24,11 +25,13 @@ export default function Home() {
         setIsRegistering={setIsRegistering}
         setTypedEmail={setTypedEmail}
         typedEmail={typedEmail}
+        typedEmailRef={typedEmailRef}
       />
 
       {/* Main content (currently testing only) */}
       {/* First section */}
       <FirstSection
+        typedEmail={typedEmail}
         setIsRegistering={setIsRegistering}
         setTypedEmail={setTypedEmail}
       />

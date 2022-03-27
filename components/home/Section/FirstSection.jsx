@@ -16,7 +16,7 @@ import { useEffect, useState } from 'react';
 // integrate Chakra Flex with framer motion
 const MotionFlex = motion(Flex);
 
-const FirstSection = ({ setIsRegistering, setTypedEmail }) => {
+const FirstSection = ({ setIsRegistering, setTypedEmail, typedEmail }) => {
   return (
     <Flex
       justify="center"
@@ -41,6 +41,7 @@ const FirstSection = ({ setIsRegistering, setTypedEmail }) => {
       <RightPart
         setIsRegistering={setIsRegistering}
         setTypedEmail={setTypedEmail}
+        typedEmail={typedEmail}
       />
     </Flex>
   );
@@ -94,7 +95,7 @@ const LeftPart = () => {
   );
 };
 
-const RightPart = ({ setIsRegistering, setTypedEmail }) => (
+const RightPart = ({ setIsRegistering, setTypedEmail, typedEmail }) => (
   <MotionFlex
     minWidth="50%"
     flexDir="column"
@@ -190,6 +191,7 @@ const RightPart = ({ setIsRegistering, setTypedEmail }) => (
         pr={{ base: 0, md: '4rem' }}
       >
         <Input
+          value={typedEmail}
           onChange={(e) => {
             setTypedEmail(e.target.value);
           }}

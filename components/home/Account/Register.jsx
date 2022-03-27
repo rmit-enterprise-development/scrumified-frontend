@@ -13,7 +13,6 @@ import {
 } from '@chakra-ui/react';
 import { motion, useAnimation } from 'framer-motion';
 import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
 
 // integrate Chakra Flex with framer motion
 const MotionFlex = motion(Flex);
@@ -27,24 +26,18 @@ const AccountPopUp = ({
   setIsRegistering,
   typedEmail,
   setTypedEmail,
+  typedEmailRef,
 }) => {
   // control animation object
   const popUpControls = useAnimation();
   const formControls = useAnimation();
   const inputControls = useAnimation();
 
-  // useForm hook from react hook form
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
-  const [isSubmitted, setIsSubmitted] = useState(false);
-
   // handle password toggle
   const [show, setShow] = useState(false);
   const handlePwdToggleClick = () => setShow(!show);
 
+  // handle form anim changes based on screen breakpoints
   const formAnimWidth = useBreakpointValue({ base: '100%', md: '600px' });
   const formAnimPadding = useBreakpointValue({
     base: '1.5rem',
@@ -122,7 +115,31 @@ const AccountPopUp = ({
     inputControls,
     formAnimWidth,
     formAnimPadding,
+    typedEmail,
   ]);
+
+  // handle submit
+  const [registerData, setRegisterData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+  });
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    console.log(registerData);
+
+    setTimeout(() => {
+      setRegisterData({
+        firstName: '',
+        lastName: '',
+        email: '',
+        password: '',
+      });
+      setTypedEmail('');
+    }, 1000);
+  };
 
   // render account pop up
   return (
@@ -172,6 +189,7 @@ const AccountPopUp = ({
             height: '100%',
             width: '100%',
           }}
+          onSubmit={handleSubmit}
         >
           {/* First name and last name */}
           <Flex
@@ -214,8 +232,13 @@ const AccountPopUp = ({
                     backgroundImage: '#f2f8ff',
                     boxShadow: '6px 6px 12px #c5cad1, -6px -6px 12px #ffffff',
                   }}
-                  // value={input}
-                  // onChange={handleInputChange}
+                  value={registerData.firstName}
+                  onChange={(e) => {
+                    setRegisterData({
+                      ...registerData,
+                      firstName: e.target.value,
+                    });
+                  }}
                 />
               </FormControl>
             </MotionFlex>
@@ -254,8 +277,13 @@ const AccountPopUp = ({
                     backgroundImage: '#f2f8ff',
                     boxShadow: '6px 6px 12px #c5cad1, -6px -6px 12px #ffffff',
                   }}
-                  // value={input}
-                  // onChange={handleInputChange}
+                  value={registerData.lastName}
+                  onChange={(e) => {
+                    setRegisterData({
+                      ...registerData,
+                      lastName: e.target.value,
+                    });
+                  }}
                 />
               </FormControl>
             </MotionFlex>
@@ -299,8 +327,6 @@ const AccountPopUp = ({
               _placeholder={{
                 fontStyle: 'italic',
               }}
-              // value={input}
-              // onChange={handleInputChange}
             />
           </FormControl>
 
@@ -332,8 +358,13 @@ const AccountPopUp = ({
                   backgroundImage: '#f2f8ff',
                   boxShadow: '6px 6px 12px #c5cad1, -6px -6px 12px #ffffff',
                 }}
-                // value={input}
-                // onChange={handleInputChange}
+                value={registerData.password}
+                onChange={(e) => {
+                  setRegisterData({
+                    ...registerData,
+                    password: e.target.value,
+                  });
+                }}
               />
 
               <InputRightElement
@@ -371,11 +402,18 @@ const AccountPopUp = ({
             gap="2rem"
           >
             <Button
+              onClick={() => {
+                setRegisterData({
+                  ...registerData,
+                  email: typedEmailRef.current,
+                });
+              }}
               cursor="pointer"
               w="10rem"
               py={{ base: '1.25rem', md: '1.5rem' }}
               px="2rem"
-              as="submit"
+              type="submit"
+              value="Register"
               bg="#eb0546"
               color="#fff"
               // border="2px solid #eb0546"
@@ -390,7 +428,17 @@ const AccountPopUp = ({
 
             <Button
               cursor="pointer"
-              onClick={closePopUp}
+              onClick={() => {
+                closePopUp().then((res) => {
+                  setRegisterData({
+                    firstName: '',
+                    lastName: '',
+                    email: '',
+                    password: '',
+                  });
+                  setTypedEmail('');
+                });
+              }}
               w="10rem"
               py={{ base: '1.25rem', md: '1.5rem' }}
               px="2rem"

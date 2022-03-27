@@ -11,12 +11,12 @@ import {
 } from '@chakra-ui/react';
 import Images from '../../../assets/images';
 import { motion, useAnimation } from 'framer-motion';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 // integrate Chakra Flex with framer motion
 const MotionFlex = motion(Flex);
 
-const FirstSection = () => {
+const FirstSection = ({ setIsRegistering, setTypedEmail, typedEmail }) => {
   return (
     <Flex
       justify="center"
@@ -38,7 +38,11 @@ const FirstSection = () => {
       <LeftPart />
 
       {/* First section: right textual content */}
-      <RightPart />
+      <RightPart
+        setIsRegistering={setIsRegistering}
+        setTypedEmail={setTypedEmail}
+        typedEmail={typedEmail}
+      />
     </Flex>
   );
 };
@@ -72,9 +76,9 @@ const LeftPart = () => {
         <ChakraImage
           src={Images.PairStanding.src}
           alt="A standing pair"
-          mr={{ base: 0, md: 0, lg: '1rem', xlg: '2rem' }}
-          width={{ base: 0, md: 0, lg: '350px', xlg: '400px' }}
-          height={{ base: 0, md: 0, lg: '500px', xlg: '650px' }}
+          mr={{ base: 0, md: 0, lg: '2rem', xlg: '2rem' }}
+          width={{ base: 0, md: 0, lg: '310px', xlg: '400px' }}
+          height={{ base: 0, md: 0, lg: '520px', xlg: '650px' }}
           // priority
         />
       ) : (
@@ -91,7 +95,7 @@ const LeftPart = () => {
   );
 };
 
-const RightPart = () => (
+const RightPart = ({ setIsRegistering, setTypedEmail, typedEmail }) => (
   <MotionFlex
     minWidth="50%"
     flexDir="column"
@@ -187,6 +191,10 @@ const RightPart = () => (
         pr={{ base: 0, md: '4rem' }}
       >
         <Input
+          value={typedEmail}
+          onChange={(e) => {
+            setTypedEmail(e.target.value);
+          }}
           variant="outline"
           placeholder="Your lovely email"
           py={{ base: '1.25rem', md: '1.75rem' }}
@@ -195,21 +203,17 @@ const RightPart = () => (
           width={{ base: 'full', md: '60%' }}
           fontSize={{ base: '0.75rem', md: '1rem' }}
           _placeholder={{
-            base: {
-              opacity: 0.8,
-              color: useColorModeValue('gray.600', 'white'),
-              fontSize: '0.75rem',
-            },
-            md: {
-              opacity: 0.8,
-              color: useColorModeValue('gray.600', 'white'),
-              fontSize: '1rem',
-            },
+            opacity: 0.8,
+            color: useColorModeValue('gray.600', 'white'),
+            fontSize: { base: '0.75rem', md: '1rem' },
           }}
           focusBorderColor="#4599fe"
         />
 
         <Button
+          onClick={() => {
+            setIsRegistering(true);
+          }}
           py={{ base: '1.25rem', md: '1.75rem' }}
           w={{ base: '10rem', md: '12rem' }}
           bg="#eb0546"
@@ -223,9 +227,7 @@ const RightPart = () => (
             shadow: '0 5px 5px 2px #eb0546',
           }}
         >
-          <NextLink href="/" passHref>
-            <Text fontSize={{ base: '0.75rem', md: '1rem' }}>Register Now</Text>
-          </NextLink>
+          <Text fontSize={{ base: '0.75rem', md: '1rem' }}>Register Now</Text>
         </Button>
       </Flex>
     </chakra.div>

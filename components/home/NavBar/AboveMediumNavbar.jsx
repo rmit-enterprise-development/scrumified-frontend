@@ -3,6 +3,7 @@ import NextLink from 'next/link';
 import {
   Flex,
   IconButton,
+  Button,
   Switch,
   Text,
   Image,
@@ -212,6 +213,29 @@ const AboveMediumNavbar = ({
         colorScheme="green"
         size="lg"
       />
+
+      <Button
+        as="button"
+        onClick={() => {}}
+        display={{ base: 'none', lg: 'flex' }}
+        justify={{ lg: 'center' }}
+        align={{ lg: 'center' }}
+        py="1.5rem"
+        w="8rem"
+        ml="2rem"
+        bg="none"
+        color={useColorModeValue('#eb0546', '#fff')}
+        border="2px solid #eb0546"
+        transition="all 0.4s linear"
+        _hover={{
+          backgroundColor: '#eb0546',
+          color: '#fff',
+          border: '2px solid #eb0546',
+          shadow: '7px 7px 0 0 #4599fe',
+        }}
+      >
+        <Text fontSize={{ base: '0.75rem', md: '1rem' }}>Sign In</Text>
+      </Button>
 
       {/* Open mobile menu icon */}
       <IconButton

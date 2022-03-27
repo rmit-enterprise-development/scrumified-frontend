@@ -2,7 +2,7 @@ import { Flex, useColorMode, useDisclosure } from '@chakra-ui/react';
 import AboveMediumNavbar from './AboveMediumNavbar';
 import BelowMediumNavbar from './BelowMediumNavbar';
 
-const MainNavBar = () => {
+const MainNavBar = ({ setIsRegistering }) => {
   // keep track of app's color mode
   const { colorMode, toggleColorMode } = useColorMode();
 
@@ -30,6 +30,7 @@ const MainNavBar = () => {
         isOpen={isOpen}
         onToggle={onToggle}
         initNavBg={initNavBg}
+        setIsRegistering={setIsRegistering}
       />
     </Flex>
   );

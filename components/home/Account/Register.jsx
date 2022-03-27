@@ -15,7 +15,7 @@ import {
 import { motion, useAnimation } from 'framer-motion';
 import { useEffect, useState } from 'react';
 
-// integrate Chakra Flex with framer motion
+// integrate Chakra Components with framer motion
 const MotionFlex = motion(Flex);
 const MotionText = motion(Text);
 const MotionFormLabel = motion(FormLabel);
@@ -168,9 +168,16 @@ const AccountPopUp = ({
       : { value: true, msg: 'Perfect ✅' };
   };
 
+  const validateEmail = (email) => {
+    return email === ''
+      ? { value: false, msg: 'Required' }
+      : { value: true, msg: 'Perfect ✅' };
+  };
+
   // error state Container
   const [firstNameValidate, setFirstNameValidate] = useState(true);
   const [lastNameValidate, setLastNameValidate] = useState(true);
+  const [emailValidate, setEmailValidate] = useState(true);
 
   // error message component
   const CustomErrorMsg = ({ children }) => (
@@ -239,7 +246,7 @@ const AccountPopUp = ({
           {/* First name and last name */}
           <Flex
             w="full"
-            gap="2.5rem"
+            gap="2rem"
             mb="1.75rem"
             flexDir={{ base: 'column', md: 'row' }}
           >
@@ -365,13 +372,13 @@ const AccountPopUp = ({
               value={typedEmail}
               onChange={(e) => {
                 setTypedEmail(e.target.value);
+                setEmailValidate(validateEmail(e.target.value).value);
               }}
               px="1.5rem"
               py="1.4rem"
               mt="0.25rem"
-              mb="2.5rem"
               id="email"
-              type="text"
+              type="email"
               _hover={{ border: 'none' }}
               style={{
                 fontSize: '0.95rem',
@@ -387,11 +394,15 @@ const AccountPopUp = ({
                 fontStyle: 'italic',
               }}
             />
+            {!emailValidate && (
+              <CustomErrorMsg>{validateEmail(typedEmail).msg}</CustomErrorMsg>
+            )}
           </FormControl>
 
           {/* Password */}
           <FormControl isRequired>
             <MotionFormLabel
+              mt="2rem"
               htmlFor="password"
               color="#031e49"
               fontSize={{ base: '0.6rem', md: '0.75rem' }}

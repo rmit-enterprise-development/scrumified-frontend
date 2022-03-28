@@ -1,6 +1,15 @@
 import { Box, SimpleGrid, Text } from "@chakra-ui/react";
+import Avvvatars from "avvvatars-react";
+import Router from "next/router";
+import { RouterPage } from "../../../../config/router";
 
-const ProjectItem = ({ name, author, createdTime, color }) => {
+const ProjectItem = ({ id, name, author, createdTime, color }) => {
+  const handlePushProjectDetail = () => {
+    Router.push({
+      pathname: `${RouterPage.PROJECT}/${id}`,
+    });
+  };
+
   return (
     <Box
       boxSizing="border-box"
@@ -11,12 +20,16 @@ const ProjectItem = ({ name, author, createdTime, color }) => {
       borderColor="grey"
       w={200}
       h={200}
+      onClick={handlePushProjectDetail}
     >
       <Box boxSizing="border-box" bgColor={color} w={5} />
       <Box p={2}>
-        <Text fontSize="xl" fontWeight="bold">
-          {name}
-        </Text>
+        <Box>
+          <Avvvatars style="shape" value={id} />
+          <Text fontSize="xl" fontWeight="bold">
+            {name}
+          </Text>
+        </Box>
         <Text as="i" fontSize="sm">
           {author}
           <br />

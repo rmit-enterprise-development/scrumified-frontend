@@ -1,17 +1,23 @@
 import { Box } from "@chakra-ui/react";
 import ProjectGrid from "../components/dashboard/ProjectGrid";
 import SectionHeader from "../components/dashboard/SectionHeader";
-import NavBar from "../components/dashboard/NavBar"
+import Sidebar from "../components/dashboard/SideBar/SideBar";
 
 const Dashboard = () => {
   return (
-    <Box m={10}>
-      <NavBar />
-      <SectionHeader>Hello</SectionHeader>
+    <Box display="flex">
+      <Box>
+        <Sidebar />
+      </Box>
+      <Box m={10}>
+        <Box>
+          <SectionHeader>Hello</SectionHeader>
 
-      <ProjectGrid />
+          <ProjectGrid />
 
-      <SectionHeader>Assigned to me</SectionHeader>
+          <SectionHeader>Assigned to me</SectionHeader>
+        </Box>
+      </Box>
     </Box>
   );
 };

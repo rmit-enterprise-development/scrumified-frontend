@@ -1,5 +1,4 @@
 import React from 'react';
-import { Icon } from '@chakra-ui/react'
 import { AiFillHome,AiFillNotification,AiFillSetting } from 'react-icons/ai';
 import { MdTimeline,MdOutlineHelp } from 'react-icons/md';
 import { VscTasklist } from 'react-icons/vsc';
@@ -10,49 +9,49 @@ export const NavBarData = [
     {
         title: 'Home',
         path: './index',
-        icon: <Icon as={AiFillHome} />,
+        icon: { AiFillHome },
         name: 'nav-text'
     },
     {
         title: 'Roadmap',
-        path: '/roadmap',
-        icon: <Icon as={MdTimeline} />,
+        path: './roadmap',
+        icon: { MdTimeline },
         name: 'nav-text'
     },
     {
         title: 'Backlog',
-        path: '/backlog',
-        icon: <Icon as={VscTasklist} />,
+        path: './backlog',
+        icon: { VscTasklist },
         name: 'nav-text'
     },
     {
         title: 'Active Sprint',
-        path: '/activesprint',
-        icon: <Icon as={GiSprint} />,
+        path: './activesprint',
+        icon: { GiSprint },
         name: 'nav-text'
     },
     {
         title: 'Report',
-        path: '/report',
-        icon: <Icon as={FaClipboard} />,
+        path: './report',
+        icon: { FaClipboard },
         name: 'nav-text'
     },
     {
         title: 'Notification',
         path: './notification',
-        icon: <Icon as={AiFillNotification} />,
+        icon: { AiFillNotification },
         name: 'nav-text'
     },
     {
         title: 'Help',
-        path: '/help',
-        icon: <Icon as={MdOutlineHelp} />,
+        path: './help',
+        icon: { MdOutlineHelp },
         name: 'nav-text'
     },
     {
         title: 'Setting',
-        path: '/setting',
-        icon: <Icon as={AiFillSetting} />,
+        path: './setting',
+        icon: {AiFillSetting},
         name: 'nav-text'
     }
 ]

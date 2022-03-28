@@ -19,6 +19,7 @@
     "package": "^1.0.1",
     "react": "17.0.2",
     "react-dom": "17.0.2",
+    "react-icons": "^4.3.1",
     "react-usestateref": "^1.0.8"
   },
   "devDependencies": {

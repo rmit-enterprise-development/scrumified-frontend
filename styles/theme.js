@@ -10,15 +10,25 @@ const fonts = {
 
 const breakpoints = createBreakpoints({
   sm: '40em',
-  md: '52em',
+  md: '54em',
   lg: '64em',
-  lg: '62em',
+  xlg: '80em',
 });
 
 const overrides = {
   ...chakraTheme,
   fonts,
   breakpoints,
+  colors: {
+    bmw: {
+      100: '#fffdfe',
+      200: '#ee0405',
+      300: '#2d4046',
+      400: '#4599fe',
+      500: '#031d46',
+      600: '#ee0405',
+    },
+  },
   fontWeights: {
     normal: 300,
     medium: 600,

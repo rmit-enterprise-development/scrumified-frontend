@@ -15,20 +15,11 @@
     "@emotion/styled": "^11.8.1",
     "avvvatars-react": "^0.4.2",
     "framer-motion": "^6.2.8",
-<<<<<<< Updated upstream
-    "next": "^12.1.0",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-icon": "^1.0.0",
-    "react-icons": "^4.3.1",
-    "react-router-dom": "^6.2.2"
-=======
     "next": "12.1.0",
     "package": "^1.0.1",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-usestateref": "^1.0.8"
->>>>>>> Stashed changes
   },
   "devDependencies": {
     "eslint": "8.11.0",

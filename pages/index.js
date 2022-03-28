@@ -1,76 +1,50 @@
-import Image from 'next/image';
-import NextLink from 'next/link';
 import Head from 'next/head';
-
-// import { Container, Flex, Text, Button, Link } from '@chakra-ui/react';
-import NavBar from '../components/dashboard/NavBar';
-// import { BrowserRouter as Router, Switch, Route} from 'react-router-dom';
+import HomeNavBar from '../components/home/NavBar/MainNavBar';
+import FirstSection from '../components/home/Section/FirstSection';
+import { useState } from 'react';
+import AccountRegister from '../components/home/Account/Register';
+import { Container } from '@chakra-ui/react';
+import useStateRef from 'react-usestateref';
 
 export default function Home() {
-  // const navContent = ['Home', 'Features', 'How it works', 'Testinomial'];
+  const [isRegistering, setIsRegistering] = useState(false);
+  const [typedEmail, setTypedEmail, typedEmailRef] = useStateRef('');
 
   return (
     <>
       <Head>
         <title>Home - Scrumified</title>
       </Head>
-      <NavBar />
+
+      {/* Nav Bar */}
+      <HomeNavBar setIsRegistering={setIsRegistering} />
+
+      {/* Pop up when sign in button is clicked */}
+      <AccountRegister
+        isRegistering={isRegistering}
+        setIsRegistering={setIsRegistering}
+        setTypedEmail={setTypedEmail}
+        typedEmail={typedEmail}
+        typedEmailRef={typedEmailRef}
+      />
+
+      {/* Main content (currently testing only) */}
+      {/* First section */}
+      <FirstSection
+        typedEmail={typedEmail}
+        setIsRegistering={setIsRegistering}
+        setTypedEmail={setTypedEmail}
+      />
+
+      {/* Dummy section */}
+      <Container
+        as="main"
+        p={0}
+        bg="red.500"
+        maxW="full"
+        w="100vw"
+        h="100vh"
+      ></Container>
     </>
   );
 }
-
-// const NavBar = ({ navContent }) => (
-//   <Flex
-//     alignItems="center"
-//     justifyContent="space-between"
-//     px={5}
-//     py={3}
-//     borderBottom="1px"
-//     borderColor="gray.200"
-//   >
-//     {/* logo */}
-//     <NextLink href="/" passHref>
-//       <Link
-//         _hover={{
-//           color: '#4599fe',
-//         }}
-//         style={{ textDecoration: 'none' }}
-//       >
-//         <Flex alignItems="center">
-//           <Image
-//             src={ImageResrouces.MainLogo}
-//             alt="App main logo"
-//             width="50%"
-//             height="50%"
-//           />
-
-//           <Text fontSize="3xl" fontWeight="bold" color="#031e49">
-//             Scrumified
-//           </Text>
-//         </Flex>
-//       </Link>
-//     </NextLink>
-
-//     {/* nav content */}
-//     <Flex alignItems="center" gap="12">
-//       {navContent.map((textContent) => (
-//         <Link
-//           key={textContent}
-//           _hover={{
-//             color: '#4599fe',
-//           }}
-//           style={{ textDecoration: 'none' }}
-//         >
-//           <Text fontSize="sm">{textContent}</Text>
-//         </Link>
-//       ))}
-//     </Flex>
-
-//     {/* buttons */}
-//     <Flex alignItems="center" gap="5">
-//       <DarkModeSwitch />
-
-//       <Button>GET STARTED</Button>
-//     </Flex>
-//   </Flex>
-// );

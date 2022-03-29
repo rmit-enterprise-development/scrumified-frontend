@@ -67,7 +67,7 @@ const LeftPart = () => {
       minWidth="40%"
       flexDir="column"
       align="flex-end"
-      justify="flex-end"
+      justify="center"
       pb="2.25rem"
       initial={{ x: -500, opacity: 0 }}
       animate={leftPartControls}
@@ -99,7 +99,7 @@ const RightPart = ({ setIsRegistering, setTypedEmail, typedEmail }) => (
   <MotionFlex
     minWidth="50%"
     flexDir="column"
-    justify={{ base: 'center', lg: 'flex-end' }}
+    justify={{ base: 'center' }}
     pl={{ base: 0, md: '1rem' }}
     initial={{ x: 500, opacity: 0 }}
     animate={{ x: 0, opacity: 1 }}

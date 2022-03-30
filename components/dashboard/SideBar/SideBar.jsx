@@ -13,20 +13,27 @@ import {
   Heading,
   Image,
   Box,
+  Switch,
   IconButton,
+  useColorMode,
+  toggleColorMode
 } from "@chakra-ui/react";
 import SideBarItem from "./SideBarItem";
 import { motion } from "framer-motion";
 import Images from "../../../assets/images";
 
 export default function SideBar() {
+  const { colorMode, toggleColorMode } = useColorMode();
+  let initNavBg =
+    colorMode === 'light' ? 'rgba(255, 255, 255' : 'rgba(3, 30, 73';
+
   return (
     <Flex
       h="100vh"
       w="100px"
       boxShadow="0 4px 12px 0 rgba(0, 0, , 0.05)"
       flexDir="column"
-      bg="#031e49"
+      bg= '#031e49'
     >
       <Flex p="0%" justifyContent="center" mt={5} cursor="pointer">
         <NextLink href="/" passHref>
@@ -51,21 +58,12 @@ export default function SideBar() {
       </Flex>
 
       <Flex flexDir="column" alignItems="flex-start" as="nav">
-        <SideBarItem
-          icon={AiFillHome}
-          title="Dashboard"
-          href="./index"
-          current
-        />
+        <SideBarItem icon={AiFillHome} title="Dashboard" href="./index" current />
         <SideBarItem icon={MdTimeline} title="Roadmap" href="./roadmap" inactive />
-        <SideBarItem icon={VscTasklist} title="Backlog" href="backlog" inactive />
-        <SideBarItem icon={GiSprint} title="Active Sprint" href="activesprint" inactive />
+        <SideBarItem icon={VscTasklist} title="Backlog" href="./backlog" inactive />
+        <SideBarItem icon={GiSprint} title="Active Sprint" href="./activesprint" inactive />
         <SideBarItem icon={FaClipboard} title="Reports" href="./report" inactive />
-        <SideBarItem
-          icon={AiFillNotification}
-          title="Notifications"
-          href="./notification"
-        />
+        <SideBarItem icon={AiFillNotification} title="Notifications" href="./notification" />
         <SideBarItem icon={MdOutlineHelp} title="Help" href="./help" />
         <SideBarItem icon={AiFillSetting} title="Settings" href="./setting" />
       </Flex>
@@ -75,9 +73,19 @@ export default function SideBar() {
             aria-label="Profile"
             isRound={true}
             variant="outline"
-            icon={<Avvvatars shadow={true} size="sm" value="Khang Nguyen" />}
+            icon={<Avvvatars shadow={true} size="md" value="Khang Nguyen" />}
           />
         </NextLink>
+      </Flex>
+      <Flex mt={20} flexDir="column" w="100%" alignItems="center">
+        <Switch
+          isChecked={colorMode === 'dark'}
+          onChange={() => {
+            toggleColorMode();
+          }}
+          colorScheme="green"
+          size="lg"
+        />
       </Flex>
     </Flex>
   );

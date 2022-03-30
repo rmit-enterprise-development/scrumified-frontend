@@ -4,6 +4,7 @@ import SectionHeader from "../components/dashboard/SectionHeader";
 import Sidebar from "../components/dashboard/SideBar/SideBar";
 
 const Dashboard = () => {
+
   return (
     <Box display="flex">
       <Box>

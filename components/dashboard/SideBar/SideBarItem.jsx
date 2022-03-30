@@ -19,25 +19,25 @@ export default function SideBarItem({ icon, title, inactive, href, current }) {
       <Menu placement="right" isOpen={isOpen} onClose={onClose}>
         <Link
           as={Link}
-          backgroundColor={current && "#AEC8CA"}
-          p={3}                                             
+          p={3}                  
+          border={current ? '2px' : 'none'}
           borderRadius={6}
-          _hover={{ textDecor: "none", backgroundColor: "#AEC8CA" }}
+          borderColor={current ? "#EE0405" : "none"}
+          _hover={{ textDecor: "none", backgroundColor: "#EE0405" }}
           href={href}
         >
-          <MenuButton w="100%" onMouseEnter={onOpen} onMouseLeave={onClose} >
+          <MenuButton w="100%" onMouseEnter={onOpen} onMouseLeave={onClose} alignItems="center" >
             <Flex>
               <Icon
                 as={icon}
                 fontSize="xl"
-                color={current ? "#82AAAD" : "gray.500"}
+                color='#fffdfe'
               />
             </Flex>
           </MenuButton>
         </Link>
         <MenuList
           py={0}
-          w={200}
           h={50}
           border="none"
           borderRadius="10px"

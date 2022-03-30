@@ -9,12 +9,12 @@ export default function SideBarHoverBox({ title }) {
       flexDir="column"
       alignItems="center"
       justify="center"
-      backgroundColor="#82AAAD"
+      backgroundColor="#EE0405"
       borderRadius="10px"
       color="#fff"
       textAlign="center"
     >
-      <Heading size="md" fontWeight="normal">
+      <Heading size="sm" fontWeight="normal">
         {title}
       </Heading>
     </Flex>

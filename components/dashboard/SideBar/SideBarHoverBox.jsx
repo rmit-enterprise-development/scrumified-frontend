@@ -4,8 +4,8 @@ import { Flex, Heading } from "@chakra-ui/react";
 export default function SideBarHoverBox({ title }) {
   return (
     <Flex
-      h={50}
-      w={200}
+      h="100%"
+      w="100%"
       flexDir="column"
       alignItems="center"
       justify="center"

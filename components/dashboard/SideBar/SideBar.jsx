@@ -26,11 +26,27 @@ export default function SideBar() {
       w="100px"
       boxShadow="0 4px 12px 0 rgba(0, 0, , 0.05)"
       flexDir="column"
-      bg="pink.100"
+      bg="#031e49"
     >
-      <Flex p="0%" justifyContent="center" mt={5}>
+      <Flex p="0%" justifyContent="center" mt={5} cursor="pointer">
         <NextLink href="/" passHref>
-          <Image src={Images.MainLogo.src} alt="Main logo" width="70%" />
+          <motion.div
+            style={{ height: '50px', width: '50px' }}
+            animate={{ rotate: 360 }}
+            transition={{
+              repeat: Infinity,
+              loop: Infinity,
+              ease: 'linear',
+              duration: 6,
+            }}
+          > 
+            <Image
+              src={Images.MainLogo.src}
+              alt="Main logo"
+              width="100%"
+              height="100%"
+            />
+          </motion.div>
         </NextLink>
       </Flex>
 
@@ -39,16 +55,12 @@ export default function SideBar() {
           icon={AiFillHome}
           title="Dashboard"
           href="./index"
-          active
+          current
         />
-        <SideBarItem icon={MdTimeline} title="Roadmap" href="./roadmap" />
-        <SideBarItem icon={VscTasklist} title="Backlog" href="backlog" />
-        <SideBarItem
-          icon={GiSprint}
-          title="Active Sprint"
-          href="activesprint"
-        />
-        <SideBarItem icon={FaClipboard} title="Reports" href="./report" />
+        <SideBarItem icon={MdTimeline} title="Roadmap" href="./roadmap" inactive />
+        <SideBarItem icon={VscTasklist} title="Backlog" href="backlog" inactive />
+        <SideBarItem icon={GiSprint} title="Active Sprint" href="activesprint" inactive />
+        <SideBarItem icon={FaClipboard} title="Reports" href="./report" inactive />
         <SideBarItem
           icon={AiFillNotification}
           title="Notifications"

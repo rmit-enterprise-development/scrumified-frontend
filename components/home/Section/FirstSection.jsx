@@ -24,9 +24,10 @@ const FirstSection = ({ setIsRegistering, setTypedEmail, typedEmail }) => {
       bg={useColorModeValue('#fff', '#031e49')}
       as="section"
       px="2rem"
+      pt="4.5rem"
       maxW="full"
       w="100vw"
-      h="100vh"
+      minH="115vh"
       style={{
         '-moz-user-select': 'none',
         '-khtml-user-select': 'none',

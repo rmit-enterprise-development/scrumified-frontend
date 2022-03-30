@@ -495,7 +495,7 @@ const AccountPopUp = ({
                   backgroundImage: '#f2f8ff',
                   boxShadow: '6px 6px 12px #c5cad1, -6px -6px 12px #ffffff',
                 }}
-                placeholder="Make sure it's a good one!"
+                placeholder="Make a good one!"
                 _placeholder={{
                   fontStyle: 'italic',
                 }}

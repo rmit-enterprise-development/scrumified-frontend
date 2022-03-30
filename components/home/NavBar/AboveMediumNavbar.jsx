@@ -62,7 +62,7 @@ const AboveMediumNavbar = ({
       display={isOpen ? 'none' : 'flex'}
       top="0"
       align="center"
-      px={['1rem', '2rem', '6rem']}
+      px={{ base: '1rem', md: '2rem', lg: '5rem' }}
       py={navbarPy}
       w="full"
       backgroundColor={navbarBg}
@@ -215,13 +215,13 @@ const AboveMediumNavbar = ({
       />
 
       <Button
-        as="button"
         onClick={() => {}}
-        display={{ base: 'none', lg: 'flex' }}
+        as="button"
+        display={{ base: 'none', md: 'flex' }}
         justify={{ lg: 'center' }}
         align={{ lg: 'center' }}
         py="1.5rem"
-        w="8rem"
+        minW={{ md: '6rem', lg: '7rem' }}
         ml="2rem"
         bg="none"
         color={useColorModeValue('#eb0546', '#fff')}
@@ -234,7 +234,7 @@ const AboveMediumNavbar = ({
           shadow: '7px 7px 0 0 #4599fe',
         }}
       >
-        <Text fontSize={{ base: '0.75rem', md: '1rem' }}>Sign In</Text>
+        <Text fontSize={{ base: '0.75rem', lg: '1rem' }}>Sign In</Text>
       </Button>
 
       {/* Open mobile menu icon */}

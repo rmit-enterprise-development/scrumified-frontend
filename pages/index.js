@@ -8,6 +8,7 @@ import useStateRef from 'react-usestateref';
 
 export default function Home() {
   const [isRegistering, setIsRegistering] = useState(false);
+  const [isSigningIn, setIsSigningIn] = useState(false);
   const [typedEmail, setTypedEmail, typedEmailRef] = useStateRef('');
 
   return (

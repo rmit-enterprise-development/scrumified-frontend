@@ -2,7 +2,7 @@ import Head from 'next/head';
 import HomeNavBar from '../components/home/NavBar/MainNavBar';
 import FirstSection from '../components/home/Section/FirstSection';
 import { useState } from 'react';
-import AccountRegister from '../components/home/Account/Register';
+import RegisterForm from '../components/home/Account/Register/RegisterForm';
 import { Container } from '@chakra-ui/react';
 import useStateRef from 'react-usestateref';
 
@@ -21,7 +21,7 @@ export default function Home() {
       <HomeNavBar setIsRegistering={setIsRegistering} />
 
       {/* Pop up when sign in button is clicked */}
-      <AccountRegister
+      <RegisterForm
         isRegistering={isRegistering}
         setIsRegistering={setIsRegistering}
         setTypedEmail={setTypedEmail}

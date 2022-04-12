@@ -1,7 +1,14 @@
 import React from 'react';
 import { Button, Text } from '@chakra-ui/react';
 
-const FormButton = ({ handleOnClick, btnType, hoverStylesContent, textContent, btnBg, btnTextColor }) => {
+const FormButton = ({
+    handleOnClick,
+    btnType,
+    hoverStylesContent,
+    textContent,
+    btnBg,
+    btnTextColor,
+}) => {
     return (
         <Button
             cursor="pointer"
@@ -14,7 +21,7 @@ const FormButton = ({ handleOnClick, btnType, hoverStylesContent, textContent, b
             color={btnTextColor}
             transition="all 0.4s linear"
             _hover={hoverStylesContent}
-            type={btnType}
+            type={btnType ? btnType : null}
         >
             <Text fontSize={{ base: '0.75rem', md: '1rem' }}>
                 {textContent}

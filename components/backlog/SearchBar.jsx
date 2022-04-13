@@ -25,7 +25,7 @@ import {
 
 import CardModal from './CardModal';
 
-const SearchBar = () => {
+const SearchBar = ({cardList, setCardList}) => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
 	return (
@@ -56,7 +56,7 @@ const SearchBar = () => {
 					</Button>
 				</HStack>
 			</Flex>
-			<CardModal isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
+			<CardModal isOpen={isOpen} onOpen={onOpen} onClose={onClose} cardList={cardList} setCardList={setCardList} />
 		</FormControl>
 	);
 };

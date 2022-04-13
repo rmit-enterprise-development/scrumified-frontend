@@ -151,6 +151,7 @@ const CardModal = ({ isOpen, onOpen, onClose, cardList, setCardList }) => {
 								setCardList([
 									...cardList,
 									{
+										id: Math.random() * 10000,
 										story:
 											'As a ' +
 											card.asA +
@@ -171,11 +172,11 @@ const CardModal = ({ isOpen, onOpen, onClose, cardList, setCardList }) => {
 									category: '',
 									def: '',
 								});
-									setIsValidAsA(false);
-									setIsValidINeed(false);
-									setIsValidSoThat(false);
-									setIsValidPoints(false);
-									setIsValidDef(false);
+								setIsValidAsA(false);
+								setIsValidINeed(false);
+								setIsValidSoThat(false);
+								setIsValidPoints(false);
+								setIsValidDef(false);
 								onClose();
 							}
 						}}

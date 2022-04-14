@@ -1,8 +1,8 @@
-import { Box } from "@chakra-ui/react";
+import { Box, Button, Divider, Flex } from "@chakra-ui/react";
 import ProjectGrid from "../components/dashboard/ProjectGrid";
 import SectionHeader from "../components/dashboard/SectionHeader";
-import Sidebar from "../components/dashboard/SideBar/SideBar";
-
+import Sidebar from "../components/dashboard/SideBar";
+import { HiOutlinePlusSm } from "react-icons/hi";
 const Dashboard = () => {
   return (
     <Box display="flex">
@@ -11,7 +11,12 @@ const Dashboard = () => {
       </Box>
       <Box m={10}>
         <Box>
-          <SectionHeader>Hello</SectionHeader>
+          <Flex justifyContent="space-between" alignItems="center">
+            <SectionHeader>My Projects</SectionHeader>
+            <Button leftIcon={<HiOutlinePlusSm />} size="sm" colorScheme="teal">
+              Create Project
+            </Button>
+          </Flex>
 
           <ProjectGrid />
 

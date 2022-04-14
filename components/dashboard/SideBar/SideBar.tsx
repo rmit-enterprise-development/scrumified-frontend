@@ -4,15 +4,15 @@ import {
   Drawer,DrawerContent,Text,useDisclosure,FlexProps,Switch
 } from '@chakra-ui/react';
 import { FiMenu } from 'react-icons/fi';
-import { SideBarContent } from './SideBarContent.tsx';
+import { SidebarContent } from './SidebarContent.tsx';
 
-export default function SideBar({ children }: { children: ReactNode }) {
+export default function Sidebar({ children }: { children: ReactNode }) {
   const { isOpen, onOpen, onClose } = useDisclosure();    
   const { colorMode, toggleColorMode } = useColorMode();
 
   return (
     <Box minH="100vh" >
-      <SideBarContent
+      <SidebarContent
         onClose={() => onClose}
         display={{ base: 'none', md: 'block' }}
       />
@@ -26,7 +26,7 @@ export default function SideBar({ children }: { children: ReactNode }) {
         bg={useColorModeValue('#fffdfe', '#031d46')}
         size='full'>
         <DrawerContent>
-          <SideBarContent onClose={onClose} />
+          <SidebarContent onClose={onClose} />
         </DrawerContent>
       </Drawer>
       <Switch

@@ -9,7 +9,7 @@ interface ItemProps extends FlexProps {
     href: string;
 }
 
-export const SideBarItem = ({ icon, children, href, ...rest }: ItemProps) => {
+export const SidebarItem = ({ icon, children, href, ...rest }: ItemProps) => {
     return (
         <Link href={href} style={{ textDecoration: 'none' }} _focus={{ boxShadow: 'none' }}>
             <Flex

@@ -2,7 +2,7 @@ import { Box } from "@chakra-ui/react";
 import React from "react";
 import Board from "../components/backlog/Board";
 import SectionHeader from "../components/dashboard/SectionHeader";
-import Sidebar from "../components/dashboard/Sidebar";
+import Sidebar from "../components/dashboard/SideBar/Sidebar.tsx";
 
 const Backlog = () => {
   return (

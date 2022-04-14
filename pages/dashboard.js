@@ -1,7 +1,7 @@
 import { Box, Button, Divider, Flex } from "@chakra-ui/react";
 import ProjectGrid from "../components/dashboard/ProjectGrid";
 import SectionHeader from "../components/dashboard/SectionHeader";
-import Sidebar from "../components/dashboard/SideBar/SideBar.tsx";
+import Sidebar from "../components/dashboard/SideBar/Sidebar.tsx";
 import {HiOutlinePlusSm} from 'react-icons/hi'
 const Dashboard = () => {
 

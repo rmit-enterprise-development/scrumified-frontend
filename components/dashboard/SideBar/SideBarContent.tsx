@@ -6,10 +6,10 @@ import NextLink from "next/link";
 import Avvvatars from "avvvatars-react";
 import { motion } from "framer-motion";
 import Images from "../../../assets/images";
-import { SideBarItem } from './SideBarItem.tsx';
+import { SidebarItem } from './SidebarItem.tsx';
 import { LinkItems } from './LinkItems.tsx';
 
-export function SideBarContent ({ onClose, ...rest }: SideBarProps) {
+export function SidebarContent ({ onClose, ...rest }: SidebarProps) {
     return (
       <Box
         bg={useColorModeValue('#fffdfe', '#031d46')}
@@ -21,7 +21,7 @@ export function SideBarContent ({ onClose, ...rest }: SideBarProps) {
         {...rest}>
         <Flex h="20" alignItems="center" mx="8" justifyContent="center">
             <Flex justifyContent="center" mt={5} cursor="pointer">
-                <NextLink href="/" passHref>
+                <NextLink href="./dashboard" passHref>
                     <motion.div
                         style={{ height: '50px', width: '50px' }}
                         animate={{ rotate: 360 }}
@@ -45,9 +45,9 @@ export function SideBarContent ({ onClose, ...rest }: SideBarProps) {
             <CloseButton display={{ base: 'flex', md: 'none' }} onClick={onClose} />
         </Flex>
         {LinkItems.map((link) => (
-          <SideBarItem key={link.name} icon={link.icon} href={link.href}>
+          <SidebarItem key={link.name} icon={link.icon} href={link.href}>
             {link.name}
-          </SideBarItem>
+          </SidebarItem>
         ))}
 
         <Flex p={5} flexDir="row" justifyContent='space-around' w="100%" alignItems="center">
@@ -72,6 +72,6 @@ export function SideBarContent ({ onClose, ...rest }: SideBarProps) {
     );
 };
 
-interface SideBarProps extends BoxProps {
+interface SidebarProps extends BoxProps {
     onClose: () => void;
 }

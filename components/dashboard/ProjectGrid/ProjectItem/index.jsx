@@ -2,6 +2,8 @@ import { Box, SimpleGrid, Text } from "@chakra-ui/react";
 import Avvvatars from "avvvatars-react";
 import Router from "next/router";
 import { RouterPage } from "../../../../config/router";
+import { truncate } from "../../../../utils/truncate";
+import NumberButton from "./NumberButton";
 
 const ProjectItem = ({ id, name, author, createdTime, color, openTasks }) => {
   const handlePushProjectDetail = () => {
@@ -10,6 +12,10 @@ const ProjectItem = ({ id, name, author, createdTime, color, openTasks }) => {
     });
   };
 
+  const colorScheme = color + ".500";
+  if (name.length > 20) {
+    name = truncate(name);
+  }
   return (
     <Box
       boxSizing="border-box"
@@ -18,11 +24,12 @@ const ProjectItem = ({ id, name, author, createdTime, color, openTasks }) => {
       display="flex"
       overflow="hidden"
       borderColor="grey"
-      w={200}
+      w={250}
       h={200}
+      cursor="pointer"
       onClick={handlePushProjectDetail}
     >
-      <Box boxSizing="border-box" bgColor={color} w={5} />
+      <Box boxSizing="border-box" bgColor={colorScheme} w={5} />
       <Box p={2}>
         <Box pb={2}>
           <Avvvatars style="shape" value={id} />
@@ -35,12 +42,18 @@ const ProjectItem = ({ id, name, author, createdTime, color, openTasks }) => {
           Owned by: {author}
           <br />
         </Text>
+
         <Text as="i" fontSize="sm">
           Created at: {createdTime}
+          <br />
         </Text>
-        <Text as="i" fontSize="sm">
-          My opened task: 2
-        </Text>
+
+        <Box display="flex" justifyContent="space-between" alignItems="center">
+          <Text as="i" fontSize="sm">
+            My opened task:
+          </Text>
+          <NumberButton bgColor={color}>{openTasks}</NumberButton>
+        </Box>
       </Box>
     </Box>
   );

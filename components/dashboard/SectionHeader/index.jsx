@@ -1,4 +1,5 @@
-import { Divider, Text } from "@chakra-ui/react";
+import { Button, Divider, Flex, Text } from "@chakra-ui/react";
+import { HiOutlinePlusSm } from "react-icons/hi";
 
 const SectionHeader = ({ children }) => {
   return (
@@ -6,8 +7,6 @@ const SectionHeader = ({ children }) => {
       <Text as="h3" fontWeight="bold">
         {children}
       </Text>
-
-      <Divider mb={5} />
     </>
   );
 };

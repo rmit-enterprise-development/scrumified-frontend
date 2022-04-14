@@ -11,7 +11,7 @@ const Dashboard = () => {
       </Box>
       <Box m={10}>
         <Box>
-          <SectionHeader>Hello</SectionHeader>
+          <SectionHeader>My Projects</SectionHeader>
 
           <ProjectGrid />
 

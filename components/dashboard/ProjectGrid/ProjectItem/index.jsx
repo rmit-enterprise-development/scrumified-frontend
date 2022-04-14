@@ -3,7 +3,7 @@ import Avvvatars from "avvvatars-react";
 import Router from "next/router";
 import { RouterPage } from "../../../../config/router";
 
-const ProjectItem = ({ id, name, author, createdTime, color }) => {
+const ProjectItem = ({ id, name, author, createdTime, color, openTasks }) => {
   const handlePushProjectDetail = () => {
     Router.push({
       pathname: `${RouterPage.PROJECT}/${id}`,
@@ -24,18 +24,22 @@ const ProjectItem = ({ id, name, author, createdTime, color }) => {
     >
       <Box boxSizing="border-box" bgColor={color} w={5} />
       <Box p={2}>
-        <Box>
+        <Box pb={2}>
           <Avvvatars style="shape" value={id} />
           <Text fontSize="xl" fontWeight="bold">
             {name}
           </Text>
         </Box>
+
         <Text as="i" fontSize="sm">
-          {author}
+          Owned by: {author}
           <br />
         </Text>
         <Text as="i" fontSize="sm">
-          {createdTime}
+          Created at: {createdTime}
+        </Text>
+        <Text as="i" fontSize="sm">
+          My opened task: 2
         </Text>
       </Box>
     </Box>

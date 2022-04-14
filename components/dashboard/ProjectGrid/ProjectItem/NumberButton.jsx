@@ -1,4 +1,4 @@
-import { Button, ButtonProps, Flex } from "@chakra-ui/react";
+import { Button } from "@chakra-ui/react";
 
 export default function NumberButton({ bgColor, children }) {
   return (

@@ -1,4 +1,3 @@
-import NextLink from 'next/link';
 import {
   Flex,
   Image as ChakraImage,
@@ -11,7 +10,7 @@ import {
 } from '@chakra-ui/react';
 import Images from '../../../assets/images';
 import { motion, useAnimation } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 // integrate Chakra Flex with framer motion
 const MotionFlex = motion(Flex);
@@ -24,9 +23,10 @@ const FirstSection = ({ setIsRegistering, setTypedEmail, typedEmail }) => {
       bg={useColorModeValue('#fff', '#031e49')}
       as="section"
       px="2rem"
+      pt={{ base: 0, lg: '4.5rem' }}
       maxW="full"
       w="100vw"
-      h="100vh"
+      minH={{ base: '100vh', lg: '115vh' }}
       style={{
         '-moz-user-select': 'none',
         '-khtml-user-select': 'none',
@@ -67,7 +67,7 @@ const LeftPart = () => {
       minWidth="40%"
       flexDir="column"
       align="flex-end"
-      justify="flex-end"
+      justify="center"
       pb="2.25rem"
       initial={{ x: -500, opacity: 0 }}
       animate={leftPartControls}
@@ -77,8 +77,8 @@ const LeftPart = () => {
           src={Images.PairStanding.src}
           alt="A standing pair"
           mr={{ base: 0, md: 0, lg: '2rem', xlg: '2rem' }}
-          width={{ base: 0, md: 0, lg: '310px', xlg: '400px' }}
-          height={{ base: 0, md: 0, lg: '520px', xlg: '650px' }}
+          width={{ base: 0, md: 0, lg: '310px', xlg: '350px' }}
+          height={{ base: 0, md: 0, lg: '520px', xlg: '580px' }}
           // priority
         />
       ) : (
@@ -86,8 +86,8 @@ const LeftPart = () => {
           src={Images.LeaningBusinessMan.src}
           alt="Leaning to right business man"
           mr={{ base: 0, md: 0, lg: '1rem', xlg: '2rem' }}
-          width={{ base: 0, md: 0, lg: '375px', xlg: '500px' }}
-          height={{ base: 0, md: 0, lg: '500px', xlg: '650px' }}
+          width={{ base: 0, md: 0, lg: '375px', xlg: '400px' }}
+          height={{ base: 0, md: 0, lg: '500px', xlg: '560px' }}
           // priority
         />
       )}
@@ -99,7 +99,7 @@ const RightPart = ({ setIsRegistering, setTypedEmail, typedEmail }) => (
   <MotionFlex
     minWidth="50%"
     flexDir="column"
-    justify={{ base: 'center', lg: 'flex-end' }}
+    justify={{ base: 'center' }}
     pl={{ base: 0, md: '1rem' }}
     initial={{ x: 500, opacity: 0 }}
     animate={{ x: 0, opacity: 1 }}

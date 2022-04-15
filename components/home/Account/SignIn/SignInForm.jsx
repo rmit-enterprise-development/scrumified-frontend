@@ -35,7 +35,7 @@ const SignInForm = ({
         <>
             {/* Form title */}
             <MotionText
-                fontSize={{ base: '0.75rem', md: '1.5rem' }}
+                fontSize={{ base: '1rem', md: '1.5rem' }}
                 fontWeight="bold"
                 color="#031e49"
                 mb="2rem"
@@ -120,12 +120,13 @@ const SignInForm = ({
 
             {/* Buttons */}
             <MotionFlex
+                direction={{ base: 'column', md: 'row' }}
                 justify="center"
                 align="center"
                 mt="2.5rem"
                 initial={{ opacity: 0 }}
                 animate={inputControls}
-                gap="2rem"
+                gap={{ base: '1rem', md: '2rem' }}
             >
                 <FormButton
                     handleOnClick={() => {}}

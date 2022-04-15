@@ -166,9 +166,10 @@ const RegisterForm = ({
         <>
             {/* Form title */}
             <MotionText
-                fontSize={{ base: '0.75rem', md: '1.2rem' }}
+                fontSize={{ base: '0.9rem', md: '1.2rem' }}
                 fontWeight="bold"
                 color="#031e49"
+                mt="2rem"
                 mb="2rem"
                 letterSpacing="2px"
                 initial={{ opacity: 0 }}
@@ -179,7 +180,8 @@ const RegisterForm = ({
 
             {/* Form content */}
             <form
-            onSubmit={handleSubmit}
+                style={{ height: '100%', width: '100%' }}
+                onSubmit={handleSubmit}
             >
                 {/* First name and last name */}
                 <Flex
@@ -344,12 +346,13 @@ const RegisterForm = ({
 
                 {/* Buttons */}
                 <MotionFlex
+                    direction={{ base: 'column', md: 'row' }}
                     justify="center"
                     align="center"
                     mt="2.5rem"
                     initial={{ opacity: 0 }}
                     animate={inputControls}
-                    gap="2rem"
+                    gap={{ base: '1rem', md: '2rem' }}
                 >
                     <FormButton
                         handleOnClick={() => {

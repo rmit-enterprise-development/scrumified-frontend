@@ -1,8 +1,8 @@
 import { Box, Button, Flex } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { HiOutlinePlusSm } from "react-icons/hi";
-import ProjectGrid from "../components/dashboard/ProjectGrid";
-import SectionHeader from "../components/dashboard/SectionHeader";
+import ProjectGrid from "../components/dashboard/ProjectGrid/ProjectGrid";
+import SectionHeader from "../components/dashboard/SectionHeader/SectionHeader";
 import Sidebar from "../components/dashboard/SideBar/SideBar.tsx";
 import userAPI from "../api/services/userAPI";
 

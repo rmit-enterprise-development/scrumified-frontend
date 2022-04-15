@@ -1,5 +1,5 @@
 import { Box, SimpleGrid } from "@chakra-ui/react";
-import ProjectItem from "./ProjectItem";
+import ProjectItem from "./ProjectItem/ProjectItem";
 
 const ProjectGrid = () => {
   const randomColor = ["tomato", "grey", "gold", "teal", "deepskyblue"];

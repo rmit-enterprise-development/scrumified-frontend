@@ -1,12 +1,31 @@
-import { Box, Button, Divider, Flex } from "@chakra-ui/react";
-import ProjectGrid from "../components/dashboard/ProjectGrid";
-import SectionHeader from "../components/dashboard/SectionHeader";
-import Sidebar from "../components/dashboard/SideBar/Sidebar.tsx";
-import {HiOutlinePlusSm} from 'react-icons/hi'
+import { Box, Button, Flex } from "@chakra-ui/react";
+import { useState, useEffect } from "react";
+import { HiOutlinePlusSm } from "react-icons/hi";
+import ProjectGrid from "../components/dashboard/ProjectGrid/ProjectGrid";
+import SectionHeader from "../components/dashboard/SectionHeader/SectionHeader";
+import Sidebar from "../components/dashboard/SideBar/SideBar.tsx";
+import userAPI from "../api/services/userAPI";
+
 const Dashboard = () => {
+  const [userList, setUserList] = useState([]);
+
+  useEffect(() => {
+    const fetchUserList = async () => {
+      try {
+        const response = await userAPI.getAll();
+        setUserList(response);
+      } catch (error) {
+        console.log("Fail to fetch: ", error);
+      }
+    };
+
+    fetchUserList();
+  }, []);
+
+  console.log("userList: ", userList);
 
   return (
-    <Box display="flex" >
+    <Box display="flex">
       <Sidebar />
       <Box m={10}>
         <Box>

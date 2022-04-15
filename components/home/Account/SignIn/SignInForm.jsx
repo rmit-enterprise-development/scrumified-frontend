@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
     Button,
+    chakra,
     FormControl,
     Text,
     InputRightElement,
@@ -16,6 +17,7 @@ import FormButton from '../Register/FormButton';
 const MotionText = motion(Text);
 const MotionFlex = motion(Flex);
 const MotionInputGroup = motion(InputGroup);
+const MotionChakraDiv = motion(chakra.div);
 
 const SignInForm = ({
     inputControls,
@@ -26,10 +28,60 @@ const SignInForm = ({
 }) => {
     const [signInEmail, setSignInEmail] = useState('');
     const [signInPwd, setSignInPwd] = useState('');
+    const [emailValidate, setEmailValidate] = useState(true);
+    const [pwdValidate, setPwdValidate] = useState(true);
 
     // handle password toggle
     const [show, setShow] = useState(false);
     const handlePwdToggleClick = () => setShow(!show);
+
+    const validateEmail = (email) => {
+        return email === ''
+            ? { value: false, msg: 'Required' }
+            : { value: true, msg: 'Perfect ✅' };
+    };
+
+    const validatePassword = (pwd) => {
+        let rs = [];
+        rs.push({
+            value: pwd !== '',
+            msg: 'Required',
+        });
+        rs.push({
+            value: pwd.length >= 8,
+            msg: 'At least 8 characters',
+        });
+        rs.push({
+            value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
+                pwd
+            ),
+            msg: 'At least 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character',
+        });
+
+        let errorFilter = rs.filter((item) => item.value === false);
+
+        return errorFilter.length > 0
+            ? errorFilter[0]
+            : { value: true, msg: 'Perfect ✅' };
+    };
+
+    // error message component
+    const CustomErrorMsg = ({ children }) => (
+        <MotionChakraDiv
+            mt="0.75rem"
+            initial={{ opacity: 0 }}
+            animate={inputControls}
+        >
+            <Text
+                color="crimson"
+                fontSize="0.7rem"
+                fontWeight="bold"
+                fontStyle="italic"
+            >
+                {children}
+            </Text>
+        </MotionChakraDiv>
+    );
 
     return (
         <>
@@ -65,8 +117,14 @@ const SignInForm = ({
                     inputValue={signInEmail}
                     handleInput={(e) => {
                         setSignInEmail(e.target.value);
+                        setEmailValidate(validateEmail(e.target.value).value);
                     }}
                 />
+                {!emailValidate && (
+                    <CustomErrorMsg>
+                        {validateEmail(signInEmail).msg}
+                    </CustomErrorMsg>
+                )}
             </FormControl>
 
             <FormControl isRequired>
@@ -90,6 +148,9 @@ const SignInForm = ({
                         inputValue={signInPwd}
                         handleInput={(e) => {
                             setSignInPwd(e.target.value);
+                            setPwdValidate(
+                                validatePassword(e.target.value).value
+                            );
                         }}
                     />
 
@@ -116,6 +177,10 @@ const SignInForm = ({
                         </Button>
                     </InputRightElement>
                 </MotionInputGroup>
+
+                <CustomErrorMsg>
+                    {validatePassword(signInPwd).msg}
+                </CustomErrorMsg>
             </FormControl>
 
             {/* Buttons */}

@@ -38,8 +38,8 @@ const MainForm = ({
         });
 
         await formControls.start({
-            backgroundImage: '',
-            boxShadow: '',
+            backgroundImage: 'rgba(255,255,255,0)',
+            boxShadow: '0 0 0 rgba(255,255,255,0), 0 0 0 rgba(255,255,255,0)',
             transition: {
                 duration: 0.75,
             },
@@ -114,8 +114,9 @@ const MainForm = ({
                 w={formAnimWidth}
                 p={formAnimPadding}
                 initial={{
-                    backgroundImage: '',
-                    boxShadow: '',
+                    backgroundImage: 'rgba(255,255,255,0)',
+                    boxShadow:
+                        '0 0 0 rgba(255,255,255,0), 0 0 0 rgba(255,255,255,0)',
                 }}
                 animate={formControls}
                 css={{

@@ -218,7 +218,6 @@ const AboveMediumNavbar = ({
 
             <Button
                 onClick={() => {
-                    console.log("Above Medium")
                     setIsRegistering(false);
                     setIsSigningIn(true);
                 }}

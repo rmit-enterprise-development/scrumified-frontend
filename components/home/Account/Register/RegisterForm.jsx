@@ -20,27 +20,15 @@ const MotionFlex = motion(Flex);
 const MotionInputGroup = motion(InputGroup);
 const MotionChakraDiv = motion(chakra.div);
 
-// error message component
-const CustomErrorMsg = ({ children }) => (
-    <MotionChakraDiv mt="0.75rem">
-        <Text
-            color="crimson"
-            fontSize="0.7rem"
-            fontWeight="bold"
-            fontStyle="italic"
-        >
-            {children}
-        </Text>
-    </MotionChakraDiv>
-);
-
 const RegisterForm = ({
     inputControls,
     setTypedEmail,
     typedEmail,
     typedEmailRef,
+    openPopUp,
     closePopUp,
     setIsSigningIn,
+    setIsRegistering,
 }) => {
     // handle submit
     const [registerData, setRegisterData] = useState({
@@ -160,6 +148,20 @@ const RegisterForm = ({
             ? errorFilter[0]
             : { value: true, msg: 'Perfect ✅' };
     };
+
+    // error message component
+    const CustomErrorMsg = ({ children }) => (
+        <MotionChakraDiv mt="0.75rem" animate={inputControls}>
+            <Text
+                color="crimson"
+                fontSize="0.7rem"
+                fontWeight="bold"
+                fontStyle="italic"
+            >
+                {children}
+            </Text>
+        </MotionChakraDiv>
+    );
     return (
         <>
             {/* Form title */}
@@ -172,16 +174,12 @@ const RegisterForm = ({
                 initial={{ opacity: 0 }}
                 animate={inputControls}
             >
-                CREATING AN ACCOUNT
+                CREATE AN ACCOUNT
             </MotionText>
 
             {/* Form content */}
             <form
-                style={{
-                    height: '100%',
-                    width: '100%',
-                }}
-                onSubmit={handleSubmit}
+            onSubmit={handleSubmit}
             >
                 {/* First name and last name */}
                 <Flex
@@ -429,7 +427,12 @@ const RegisterForm = ({
                 {/* Already have an account? */}
                 <MotionFlex
                     onClick={() => {
-                        setIsSigningIn(true);
+                        closePopUp()
+                            .then(() => {
+                                setIsRegistering(false);
+                                openPopUp();
+                            })
+                            .then(() => setIsSigningIn(true));
                     }}
                     justify="center"
                     w="full"
@@ -437,11 +440,11 @@ const RegisterForm = ({
                     pb="2rem"
                     initial={{ opacity: 0 }}
                     animate={inputControls}
+                    cursor="pointer"
                 >
                     <MotionText
                         fontWeight="bold"
                         fontSize="sm"
-                        cursor="pointer"
                         style={{ transition: 'all 0.4s linear' }}
                         _hover={{ color: '#4599fe' }}
                     >

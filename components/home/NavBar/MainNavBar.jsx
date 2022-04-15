@@ -24,6 +24,7 @@ const MainNavBar = ({ setIsRegistering, setIsSigningIn }) => {
                 toggleColorMode={toggleColorMode}
                 colorMode={colorMode}
                 setIsSigningIn={setIsSigningIn}
+                setIsRegistering={setIsRegistering}
             />
 
             {/* Nav bar content for Small screens */}

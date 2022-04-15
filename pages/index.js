@@ -25,6 +25,7 @@ export default function Home() {
 
             {/* Pop up when Register button is clicked */}
             <MainForm
+                isSigningIn={isSigningIn}
                 setIsSigningIn={setIsSigningIn}
                 isRegistering={isRegistering}
                 setIsRegistering={setIsRegistering}
@@ -33,14 +34,12 @@ export default function Home() {
                 typedEmailRef={typedEmailRef}
             />
 
-        {/* Pop up when Sign In button is clicked */}
-        
-
             {/* Main content (currently testing only) */}
             {/* First section */}
             <FirstSection
                 typedEmail={typedEmail}
                 setIsRegistering={setIsRegistering}
+                setIsSigningIn={setIsSigningIn}
                 setTypedEmail={setTypedEmail}
             />
 

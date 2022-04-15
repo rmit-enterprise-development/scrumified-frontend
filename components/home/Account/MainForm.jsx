@@ -2,6 +2,7 @@ import { Flex, useBreakpointValue } from '@chakra-ui/react';
 import { motion, useAnimation } from 'framer-motion';
 import { useEffect } from 'react';
 import RegisterForm from './Register/RegisterForm';
+import SignInForm from './SignIn/SignInForm';
 
 // integrate Chakra Components with framer motion
 const MotionFlex = motion(Flex);
@@ -13,6 +14,7 @@ const MainForm = ({
     setTypedEmail,
     typedEmailRef,
     setIsSigningIn,
+    isSigningIn,
 }) => {
     // control animation object
     const popUpControls = useAnimation();
@@ -36,13 +38,10 @@ const MainForm = ({
         });
 
         await formControls.start({
-            height: 0,
-            width: 0,
-            padding: 0,
-            backgroundImage: '#E2E8F0',
-            boxShadow: '0 0 0 #c5cad1, 0 0 0 #ffffff',
+            backgroundImage: '',
+            boxShadow: '',
             transition: {
-                duration: 0.6,
+                duration: 0.75,
             },
         });
 
@@ -50,55 +49,44 @@ const MainForm = ({
             height: 0,
             backgroundColor: 'rgba(226, 232, 240, 0)',
             transition: {
-                duration: 0.4,
+                duration: 0.75,
             },
         });
 
         await setIsRegistering(false);
+        await setIsSigningIn(false);
+    };
+
+    const openPopUp = async () => {
+        await popUpControls.start({
+            height: '100vh',
+            backgroundColor: 'rgba(226, 232, 240, 1)',
+            transition: {
+                duration: 0.75,
+            },
+        });
+
+        await formControls.start({
+            backgroundImage: '#E2E8F0',
+            boxShadow: '30px 30px 50px #c5cad1, -30px -30px 50px #ffffff',
+            transition: {
+                duration: 0.75,
+            },
+        });
+
+        await inputControls.start({
+            opacity: 1,
+            transition: {
+                duration: 0.4,
+            },
+        });
     };
 
     // start open animation when Register Now  is clicked
     useEffect(() => {
-        const openPopUp = async () => {
-            await popUpControls.start({
-                height: '100vh',
-                backgroundColor: 'rgba(226, 232, 240, 1)',
-                transition: {
-                    duration: 0.75,
-                },
-            });
-
-            await formControls.start({
-                height: '100%',
-                width: formAnimWidth,
-                padding: formAnimPadding,
-                backgroundImage: '#E2E8F0',
-                boxShadow: '30px 30px 50px #c5cad1, -30px -30px 50px #ffffff',
-                transition: {
-                    duration: 0.75,
-                },
-            });
-
-            await inputControls.start({
-                opacity: 1,
-                transition: {
-                    duration: 0.75,
-                },
-            });
-        };
-
-        // if Register Now is clicked
-        if (isRegistering) {
-            openPopUp();
-        }
-    }, [
-        isRegistering,
-        popUpControls,
-        formControls,
-        inputControls,
-        formAnimWidth,
-        formAnimPadding,
-    ]);
+        // if Register is clicked
+        if (isRegistering || isSigningIn) openPopUp();
+    }, [isSigningIn, isRegistering]);
 
     // render account pop up
     return (
@@ -112,7 +100,7 @@ const MainForm = ({
             w="full"
             justify="center"
             align="center"
-            display={isRegistering ? 'flex' : 'none'}
+            display={isRegistering || isSigningIn ? 'flex' : 'none'}
             animate={popUpControls}
             flexDir="column"
         >
@@ -121,11 +109,13 @@ const MainForm = ({
                 borderRadius="1rem"
                 flexDir="column"
                 align="center"
+                justify="center"
                 overflow="scroll"
+                w={formAnimWidth}
+                p={formAnimPadding}
                 initial={{
-                    padding: '0 0',
-                    backgroundImage: '#E2E8F0',
-                    boxShadow: '0 0 0 #c5cad1, 0 0 0 #ffffff',
+                    backgroundImage: '',
+                    boxShadow: '',
                 }}
                 animate={formControls}
                 css={{
@@ -140,14 +130,26 @@ const MainForm = ({
                     },
                 }}
             >
-                <RegisterForm
-                    inputControls={inputControls}
-                    setIsSigningIn={setIsSigningIn}
-                    setTypedEmail={setTypedEmail}
-                    typedEmail={typedEmail}
-                    typedEmailRef={typedEmailRef}
-                    closePopUp={closePopUp}
-                />
+                {isSigningIn ? (
+                    <SignInForm
+                        setIsRegistering={setIsRegistering}
+                        setIsSigningIn={setIsSigningIn}
+                        inputControls={inputControls}
+                        openPopUp={openPopUp}
+                        closePopUp={closePopUp}
+                    />
+                ) : (
+                    <RegisterForm
+                        setIsRegistering={setIsRegistering}
+                        setIsSigningIn={setIsSigningIn}
+                        inputControls={inputControls}
+                        openPopUp={openPopUp}
+                        closePopUp={closePopUp}
+                        setTypedEmail={setTypedEmail}
+                        typedEmail={typedEmail}
+                        typedEmailRef={typedEmailRef}
+                    />
+                )}
             </MotionFlex>
         </MotionFlex>
     );

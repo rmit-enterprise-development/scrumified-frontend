@@ -12,15 +12,15 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { FiMenu } from "react-icons/fi";
-import { SideBarContent } from "./SideBarContent";
+import { SidebarContent } from "./SidebarContent";
 
-export default function SideBar({ children }) {
+export default function Sidebar({ children }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { colorMode, toggleColorMode } = useColorMode();
 
   return (
     <Box minH="100vh">
-      <SideBarContent
+      <SidebarContent
         onClose={() => onClose}
         display={{ base: "none", md: "block" }}
       />
@@ -35,17 +35,10 @@ export default function SideBar({ children }) {
         size="full"
       >
         <DrawerContent>
-          <SideBarContent onClose={onClose} />
+          <SidebarContent onClose={onClose} />
         </DrawerContent>
       </Drawer>
-      <Switch
-        isChecked={colorMode === "dark"}
-        onChange={() => {
-          toggleColorMode();
-        }}
-        colorScheme="green"
-        size="lg"
-      />
+      
       {/* mobilenav */}
       <MobileNav display={{ base: "flex", md: "none" }} onOpen={onOpen} />
       <Box ml={{ base: 0, md: 60 }} p="4">

@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { HiOutlinePlusSm } from "react-icons/hi";
 import ProjectGrid from "../components/dashboard/ProjectGrid/ProjectGrid";
 import SectionHeader from "../components/dashboard/SectionHeader/SectionHeader";
-import Sidebar from "../components/dashboard/SideBar/SideBar.jsx";
+import Sidebar from "../components/dashboard/SideBar/Sidebar.jsx";
 import userAPI from "../api/services/userAPI";
 
 const Dashboard = () => {

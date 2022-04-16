@@ -2,7 +2,7 @@ import NextLink from "next/link";
 import { Flex, Icon, useColorModeValue } from "@chakra-ui/react";
 import React from "react";
 
-export const SideBarItem = ({ icon, children, href, ...rest }) => {
+export const SidebarItem = ({ icon, children, href, ...rest }) => {
   return (
     <NextLink href={href} passHref>
       <Flex

@@ -6,6 +6,8 @@ import {
   Image,
   Text,
   useColorModeValue,
+  useColorMode,
+  Switch,
 } from "@chakra-ui/react";
 import Avvvatars from "avvvatars-react";
 import { motion } from "framer-motion";
@@ -13,9 +15,10 @@ import NextLink from "next/link";
 import React from "react";
 import Images from "../../../assets/images";
 import { LinkItems } from "./LinkItems";
-import { SideBarItem } from "./SideBarItem";
+import { SidebarItem } from "./SidebarItem";
 
-export function SideBarContent({ onClose, ...rest }) {
+export function SidebarContent({ onClose, ...rest }) {
+  const { colorMode, toggleColorMode } = useColorMode();
   return (
     <Box
       bg={useColorModeValue("#fffdfe", "#031d46")}
@@ -25,10 +28,13 @@ export function SideBarContent({ onClose, ...rest }) {
       pos="fixed"
       h="full"
       {...rest}
+      display="flex"
+      flexDir="column"
+      justifyContent="space-between"
     >
-      <Flex h="20" alignItems="center" mx="8" justifyContent="center">
+      <Flex h="20" alignItems="center" flexDir='column' w='full'>
         <Flex justifyContent="center" mt={5} cursor="pointer">
-          <NextLink href="./dashboard" passHref>
+          <NextLink href="/dashboard" passHref>
             <motion.div
               style={{ height: "50px", width: "50px" }}
               animate={{ rotate: 360 }}
@@ -49,18 +55,22 @@ export function SideBarContent({ onClose, ...rest }) {
           </NextLink>
         </Flex>
 
+        <Flex flexDir='column' mt={5}>
+          {LinkItems.map((link) => (
+            <SidebarItem key={link.name} icon={link.icon} href={link.href}>
+              {link.name}
+            </SidebarItem>
+          ))}
+        </Flex>
+
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
-      {LinkItems.map((link) => (
-        <SideBarItem key={link.name} icon={link.icon} href={link.href}>
-          {link.name}
-        </SideBarItem>
-      ))}
+
 
       <Flex
         p={5}
         flexDir="row"
-        justifyContent="space-around"
+        justifyContent="flex-start"
         w="100%"
         alignItems="center"
       >
@@ -80,6 +90,14 @@ export function SideBarContent({ onClose, ...rest }) {
             Khang Nguyen
           </Text>
         </NextLink>
+        <Switch
+          isChecked={colorMode === "dark"}
+          onChange={() => {
+            toggleColorMode();
+          }}
+          colorScheme="green"
+          size="lg"
+        />
       </Flex>
     </Box>
   );

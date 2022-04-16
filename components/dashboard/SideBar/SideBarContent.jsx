@@ -102,6 +102,7 @@ export function SidebarContent({ onClose, ...rest }) {
           bg={useColorModeValue("#031d46", "#fffdfe")}
           onClick={toggleColorMode}
           marginLeft="5"
+          fontSize="lg"
           icon= {<SwitchIcon />}
           _hover={{
             textDecoration:"none",

@@ -6,41 +6,44 @@ import BacklogController from '../components/workspace/BacklogController';
 import Board from '../components/workspace/Board';
 import Column from '../components/workspace/Column';
 
-const Backlog = () => {
-	const initData = [
-		{
-			id: '1',
-			story: 'Card1',
-			category: 'Hello',
-			point: '12',
-			position: 2,
-			status: 'backlog',
-		},
-		{
-			id: '2',
-			story: 'Card2',
-			category: 'Hello',
-			point: '12',
-			position: 0,
-			status: 'backlog',
-		},
-		{
-			id: '3',
-			story: 'Card3',
-			category: 'Hello',
-			point: '12',
-			position: 1,
-			status: 'backlog',
-		},
-	];
+const Backlog = ({cards}) => {
+	console.log('object');
+	// const initData = [
+	// 	{
+	// 		id: '1',
+	// 		userStory: 'Card1',
+	// 		category: 'Hello',
+	// 		point: '12',
+	// 		position: 2,
+	// 		status: 'backlog',
+	// 	},
+	// 	{
+	// 		id: '2',
+	// 		userStory: 'Card2',
+	// 		category: 'Hello',
+	// 		point: '12',
+	// 		position: 0,
+	// 		status: 'backlog',
+	// 	},
+	// 	{
+	// 		id: '3',
+	// 		userStory: 'Card3',
+	// 		category: 'Hello',
+	// 		point: '12',
+	// 		position: 1,
+	// 		status: 'backlog',
+	// 	},
+	// ];
 
-	const [data, setData] = useState(initData);
+	const [data, setData] = useState(cards);
 
 	const filterCards = (s) => {
 		const cards = data.filter((card) => card.status === s);
 		cards = cards.sort((a, b) => a.position - b.position);
 		return cards;
 	};
+
+	console.log(data);
 	const [winReady, setwinReady] = useState(false);
 	useEffect(() => {
 		setwinReady(true);
@@ -72,3 +75,14 @@ const Backlog = () => {
 };
 
 export default Backlog;
+
+export async function getStaticProps() {
+	const res = await fetch('http://127.0.0.1:8989/projects/1/stories');
+	const cards = await res.json();
+	return {
+		props: {
+			cards: cards['_embedded'].storyDtoList,
+		},
+		revalidate: 30,
+	};
+}

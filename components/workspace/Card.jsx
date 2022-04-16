@@ -4,7 +4,7 @@ import { Draggable } from 'react-beautiful-dnd';
 
 const Card = (props) => {
 	return (
-		<Draggable draggableId={props.card.id} index={props.index}>
+		<Draggable draggableId={'' + props.card.id} index={props.index}>
 			{(provided) => (
 				<Box
 					p={5}
@@ -15,7 +15,7 @@ const Card = (props) => {
 					ref={provided.innerRef}
 				>
 					<Heading fontSize="xl" isTruncated>
-						{props.card.story}
+						{props.card.userStory}
 					</Heading>
 					<Flex mt={4}>
 						<Text>Category: {props.card.category}</Text>

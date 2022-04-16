@@ -3,10 +3,8 @@ import {
 	ModalOverlay,
 	ModalContent,
 	ModalHeader,
-	ModalCloseButton,
 	ModalBody,
 	ModalFooter,
-	Text,
 	Button,
 	FormControl,
 	FormLabel,
@@ -22,7 +20,7 @@ const CardModal = ({ isOpen, onOpen, onClose, data, setData }) => {
 		asA: '',
 		iNeed: '',
 		soThat: '',
-		points: '',
+		point: '',
 		category: '',
 		def: '',
 	});
@@ -30,7 +28,7 @@ const CardModal = ({ isOpen, onOpen, onClose, data, setData }) => {
 	const [isValidAsA, setIsValidAsA] = useState(false);
 	const [isValidINeed, setIsValidINeed] = useState(false);
 	const [isValidSoThat, setIsValidSoThat] = useState(false);
-	const [isValidPoints, setIsValidPoints] = useState(false);
+	const [isValidPoint, setIsValidPoint] = useState(false);
 	const [isValidDef, setIsValidDef] = useState(false);
 
 	const isValidInput = (value) => value.length > 0;
@@ -118,20 +116,20 @@ const CardModal = ({ isOpen, onOpen, onClose, data, setData }) => {
 					</FormControl>
 
 					<FormControl mt={4}>
-						<FormLabel htmlFor="points" fontSize={'2xl'}>
-							Story points:
+						<FormLabel htmlFor="point" fontSize={'2xl'}>
+							Story point:
 						</FormLabel>
 						<Select
-							id="points"
-							placeholder="Select points"
+							id="point"
+							placeholder="Select point"
 							onChange={(e) => {
-								setCard({ ...card, points: e.target.value });
-								setIsValidPoints(isValidInput(e.target.value));
+								setCard({ ...card, point: e.target.value });
+								setIsValidPoint(isValidInput(e.target.value));
 							}}
 						>
-							<option value="1">1 points</option>
-							<option value="3">3 points</option>
-							<option value="5">5 points</option>
+							<option value="1">1 point</option>
+							<option value="3">3 point</option>
+							<option value="5">5 point</option>
 						</Select>
 					</FormControl>
 				</ModalBody>
@@ -146,43 +144,40 @@ const CardModal = ({ isOpen, onOpen, onClose, data, setData }) => {
 								isValidINeed &&
 								isValidSoThat &&
 								isValidDef &&
-								isValidPoints
+								isValidPoint
 							) {
 								setData([
 									...data,
 									{
-										id: '' + Math.floor(Math.random() * 10000),
-										story:
+										id: Math.floor(Math.random() * 10000),
+										userStory:
 											'As a ' +
 											card.asA +
 											', I need ' +
 											card.iNeed +
 											'. So that, ' +
 											card.soThat,
-										point: card.points,
+										point: card.point,
 										category: 'abc',
 										def: card.def,
 										status: 'backlog',
-										position: data
-											.filter(
-												(card) =>
-													card.status === 'backlog'
-											)
-											.length,
+										position: data.filter(
+											(card) => card.status === 'backlog'
+										).length,
 									},
 								]);
 								setCard({
 									asA: '',
 									iNeed: '',
 									soThat: '',
-									points: '',
+									point: '',
 									category: '',
 									def: '',
 								});
 								setIsValidAsA(false);
 								setIsValidINeed(false);
 								setIsValidSoThat(false);
-								setIsValidPoints(false);
+								setIsValidPoint(false);
 								setIsValidDef(false);
 								onClose();
 							}

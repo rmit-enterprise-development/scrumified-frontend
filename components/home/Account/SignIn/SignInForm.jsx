@@ -14,6 +14,7 @@ import OthersInput from '../Register/OthersInput';
 import FormButton from '../Register/FormButton';
 import { motion } from 'framer-motion';
 import { digFind } from '../../../../utils/object';
+import userAPI from '../../../../api/services/userAPI';
 
 // integrate Chakra Components with framer motion
 const MotionText = motion(Text);
@@ -33,7 +34,6 @@ const SignInForm = ({
     const [signInPwd, setSignInPwd] = useState('');
     const [emailValidate, setEmailValidate] = useState(true);
     const [pwdValidate, setPwdValidate] = useState(true);
-    const [usersList, setUsersList] = useState([]);
 
     // handle password toggle
     const [show, setShow] = useState(false);
@@ -84,57 +84,36 @@ const SignInForm = ({
         </MotionChakraDiv>
     );
 
-    const logUserIn = ({ email, password }) => {
-        console.log(usersList);
-        return (
-            usersList.filter(
-                (user) => user.email === email && user.password === password
-            ).length > 0
-        );
-    };
-
     // method to fetch GET API and check if user exist on database
-    const login = ({ email, password }) => {
-        // GET request using fetch with async/await
-        const requestOptions = {
-            headers: { 'Content-Type': 'application/json' },
-        };
+    const login = async ({ email, password }) => {
+        try {
+            // get all users from database
+            const response = await userAPI.getAll();
+            console.log(response);
 
-        fetch('https://scrumified-api.herokuapp.com/users', requestOptions)
-            .then(async (response) => {
-                // response dissection
-                const isJson = response.headers
-                    .get('content-type')
-                    ?.includes('application/json');
-                const data = await response.json();
-                const dataStatus = isJson && data;
+            // response dissection
+            const data = await response.data;
 
-                // check for error response
-                if (!response.ok) {
-                    // get error message from body or default to response status
-                    const error =
-                        (dataStatus && dataStatus.message) || response.status;
-                    return Promise.reject(error);
-                }
+            // check for error response
+            if (response.status !== 200)
+                return Promise.reject(response.statusText);
 
-                // check user existence
-                const isUserExist =
-                    (await digFind(data, 'userDtoList').filter(
-                        (user) =>
-                            user.email === email && user.password === password
-                    ).length) > 0;
+            // check user existence
+            const isUserExist =
+                (await digFind(data, 'userDtoList').filter(
+                    (user) => user.email === email && user.password === password
+                ).length) > 0;
 
-                // TEMP: alert base on response
-                alert(isUserExist ? 'Log in sucessfully' : 'Log in failed');
-            })
-            .catch((error) => {
-                console.error('There was an error: ', error);
-            });
+            // TEMP: alert base on response
+            alert(isUserExist ? 'Log in sucessfully' : 'Log in failed');
+        } catch (error) {
+            console.error('There was an error: ', error);
+        }
     };
 
     // form subsmission handler
     const handleSubmit = async (e) => {
-        // prevent default nature of html form
+        // prevent default nature of html forms
         e.preventDefault();
 
         // sign in data container
@@ -144,7 +123,7 @@ const SignInForm = ({
         await login(finalData);
 
         // reset form's state
-        await setTimeout(() => {
+        setTimeout(() => {
             setSignInEmail('');
             setSignInPwd('');
             setEmailValidate(true);

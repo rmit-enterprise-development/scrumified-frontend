@@ -21,6 +21,7 @@ const AboveMediumNavbar = ({
     colorMode,
     toggleColorMode,
     setIsSigningIn,
+    setIsRegistering
 }) => {
     // use state hooks to kepp track nav bar state on events
     const [navbarBg, setNavbarBg] = useState(`${initNavBg}, 1)`);
@@ -217,6 +218,7 @@ const AboveMediumNavbar = ({
 
             <Button
                 onClick={() => {
+                    setIsRegistering(false);
                     setIsSigningIn(true);
                 }}
                 as="button"

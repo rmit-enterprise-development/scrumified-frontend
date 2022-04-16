@@ -1,7 +1,6 @@
 import { Flex } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { DragDropContext } from 'react-beautiful-dnd';
-import Column from './Column';
 
 const Board = ({ data, setData, children }) => {
 	const onDragEnd = (result) => {

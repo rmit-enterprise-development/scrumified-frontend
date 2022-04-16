@@ -1,8 +1,8 @@
 import { Box } from '@chakra-ui/react';
 import React, { useState, useEffect } from 'react';
-// import Board from "../components/backlog/Board";
 import SectionHeader from '../components/dashboard/SectionHeader';
 import Sidebar from '../components/dashboard/SideBar/Sidebar.tsx';
+import BacklogController from '../components/workspace/BacklogController';
 import Board from '../components/workspace/Board';
 import Column from '../components/workspace/Column';
 
@@ -41,7 +41,6 @@ const Backlog = () => {
 		cards = cards.sort((a, b) => a.position - b.position);
 		return cards;
 	};
-
 	const [winReady, setwinReady] = useState(false);
 	useEffect(() => {
 		setwinReady(true);
@@ -55,6 +54,7 @@ const Backlog = () => {
 			<Box m={10} w="100%">
 				<Box>
 					<SectionHeader>Backlog</SectionHeader>
+					<BacklogController data={data} setData={setData} />
 					{winReady ? (
 						<Board data={data} setData={setData}>
 							<Column

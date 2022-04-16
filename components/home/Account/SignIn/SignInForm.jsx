@@ -67,11 +67,7 @@ const SignInForm = ({
 
     // error message component
     const CustomErrorMsg = ({ children }) => (
-        <MotionChakraDiv
-            mt="0.75rem"
-            initial={{ opacity: 0 }}
-            animate={inputControls}
-        >
+        <MotionChakraDiv mt="0.75rem" animate={inputControls}>
             <Text
                 color="crimson"
                 fontSize="0.7rem"
@@ -178,9 +174,11 @@ const SignInForm = ({
                     </InputRightElement>
                 </MotionInputGroup>
 
-                <CustomErrorMsg>
-                    {validatePassword(signInPwd).msg}
-                </CustomErrorMsg>
+                {!pwdValidate && (
+                    <CustomErrorMsg>
+                        {validatePassword(signInPwd).msg}
+                    </CustomErrorMsg>
+                )}
             </FormControl>
 
             {/* Buttons */}

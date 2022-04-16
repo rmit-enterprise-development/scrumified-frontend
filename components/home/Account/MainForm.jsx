@@ -38,8 +38,8 @@ const MainForm = ({
         });
 
         await formControls.start({
-            backgroundImage: 'rgba(255,255,255,0)',
-            boxShadow: '0 0 0 rgba(255,255,255,0), 0 0 0 rgba(255,255,255,0)',
+            backgroundImage: '#E2E8F0',
+            boxShadow: '0px 0px 0px #c5cad1, 0px -0px 0px #ffffff',
             transition: {
                 duration: 0.75,
             },

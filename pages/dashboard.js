@@ -1,28 +1,82 @@
 import { Box, Button, Flex } from "@chakra-ui/react";
-import { useState, useEffect } from "react";
-import { HiOutlinePlusSm } from "react-icons/hi";
+import { useEffect, useState } from "react";
+import userAPI from "../api/services/userAPI";
+import CreateProjectModal from "../components/dashboard/CreateProjectModal/CreateProjectModal";
 import ProjectGrid from "../components/dashboard/ProjectGrid/ProjectGrid";
 import SectionHeader from "../components/dashboard/SectionHeader/SectionHeader";
 import Sidebar from "../components/dashboard/SideBar/Sidebar.jsx";
 import userAPI from "../api/services/userAPI";
 
 const Dashboard = () => {
-  const [userList, setUserList] = useState([]);
+  const [userList, setUserList] = useState([
+    {
+      id: "1",
+      name: "Minh Pham",
+      email: "pcminh0505@gmail.com",
+    },
+    {
+      id: "3",
+      name: "Thach Ho",
+      email: "thachho@123@gmail.com",
+    },
+    {
+      id: "2",
+      name: "Khang Nguyen",
+      email: "khangnguyen111101@gmail.com",
+    },
+    {
+      id: "5",
+      name: "Duong Nguyen",
+      email: "duongnguyen123@gmail.com",
+    },
+    {
+      id: "4",
+      name: "An Le",
+      email: "andrew123@gmail.com",
+    },
+    {
+      id: "4",
+      name: "An Le",
+      email: "andrew123@gmail.com",
+    },
+    {
+      id: "4",
+      name: "An Le",
+      email: "andrew123@gmail.com",
+    },
+    {
+      id: "4",
+      name: "An Le",
+      email: "andrew123@gmail.com",
+    },
+    {
+      id: "4",
+      name: "An Le",
+      email: "andrew123@gmail.com",
+    },
+    {
+      id: "4",
+      name: "An Le",
+      email: "andrew123@gmail.com",
+    },
+  ]);
 
-  useEffect(() => {
-    const fetchUserList = async () => {
-      try {
-        const response = await userAPI.getAll();
-        setUserList(response);
-      } catch (error) {
-        console.log("Fail to fetch: ", error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchUserList = async () => {
+  //     try {
+  //       const response = await userAPI.getAll();
+  //       console.log("response: ", response);
 
-    fetchUserList();
-  }, []);
+  //       setUserList(response);
+  //     } catch (error) {
+  //       console.log("Fail to fetch: ", error);
+  //     }
+  //   };
 
-  console.log("userList: ", userList);
+  //   fetchUserList();
+  // }, []);
+
+  // console.log("userList: ", userList);
 
   return (
     <Box display="flex">
@@ -31,9 +85,12 @@ const Dashboard = () => {
         <Box>
           <Flex justifyContent="space-between" alignItems="center">
             <SectionHeader>My Projects</SectionHeader>
-            <Button leftIcon={<HiOutlinePlusSm />} size="sm" colorScheme="teal">
-              Create Project
-            </Button>
+            <CreateProjectModal
+              participantList={userList.map((a) => {
+                const userInfo = a.name + " (" + a.email + ")";
+                return { value: a.id, label: userInfo };
+              })}
+            />
           </Flex>
 
           <ProjectGrid />

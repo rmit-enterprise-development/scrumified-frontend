@@ -23,7 +23,7 @@ const FormButton = ({
             _hover={hoverStylesContent}
             type={btnType ? btnType : null}
         >
-            <Text fontSize={{ base: '0.75rem', md: '1rem' }}>
+            <Text fontSize={{ base: '0.9rem', md: '1rem' }}>
                 {textContent}
             </Text>
         </Button>

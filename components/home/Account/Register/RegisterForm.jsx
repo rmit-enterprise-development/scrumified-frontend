@@ -21,27 +21,15 @@ const MotionFlex = motion(Flex);
 const MotionInputGroup = motion(InputGroup);
 const MotionChakraDiv = motion(chakra.div);
 
-// error message component
-const CustomErrorMsg = ({ children }) => (
-  <MotionChakraDiv mt="0.75rem">
-    <Text
-      color="crimson"
-      fontSize="0.7rem"
-      fontWeight="bold"
-      fontStyle="italic"
-    >
-      {children}
-    </Text>
-  </MotionChakraDiv>
-);
-
 const RegisterForm = ({
-  inputControls,
-  setTypedEmail,
-  typedEmail,
-  typedEmailRef,
-  closePopUp,
-  setIsSigningIn,
+    inputControls,
+    setTypedEmail,
+    typedEmail,
+    typedEmailRef,
+    openPopUp,
+    closePopUp,
+    setIsSigningIn,
+    setIsRegistering,
 }) => {
   // handle submit
   const [registerData, setRegisterData] = useState({
@@ -139,55 +127,66 @@ const RegisterForm = ({
     });
 
     let errorFilter = rs.filter((item) => item.value === false);
+    
+        return errorFilter.length > 0
+            ? errorFilter[0]
+            : { value: true, msg: 'Perfect ✅' };
+    };
 
-    return errorFilter.length > 0
-      ? errorFilter[0]
-      : { value: true, msg: "Perfect ✅" };
-  };
-  return (
-    <>
-      {/* Form title */}
-      <MotionText
-        fontSize={{ base: "0.75rem", md: "1.2rem" }}
-        fontWeight="bold"
-        color="#031e49"
-        mb="2rem"
-        letterSpacing="2px"
-        initial={{ opacity: 0 }}
-        animate={inputControls}
-      >
-        CREATING AN ACCOUNT
-      </MotionText>
+    // error message component
+    const CustomErrorMsg = ({ children }) => (
+        <MotionChakraDiv mt="0.75rem" animate={inputControls}>
+            <Text
+                color="crimson"
+                fontSize="0.7rem"
+                fontWeight="bold"
+                fontStyle="italic"
+            >
+                {children}
+            </Text>
+        </MotionChakraDiv>
+    );
+    return (
+        <>
+            {/* Form title */}
+            <MotionText
+                fontSize={{ base: '0.9rem', md: '1.2rem' }}
+                fontWeight="bold"
+                color="#031e49"
+                mt="2rem"
+                mb="2rem"
+                letterSpacing="2px"
+                initial={{ opacity: 0 }}
+                animate={inputControls}
+            >
+                CREATE AN ACCOUNT
+            </MotionText>
 
-      {/* Form content */}
-      <form
-        style={{
-          height: "100%",
-          width: "100%",
-        }}
-        onSubmit={handleSubmit}
-      >
-        {/* First name and last name */}
-        <Flex
-          w="full"
-          gap="2rem"
-          mb="1.75rem"
-          flexDir={{ base: "column", md: "row" }}
-        >
-          {/* First name */}
-          <NameInput
-            inputAnimateControls={inputControls}
-            htmlForContent="firstName"
-            labelText="FIRST NAME"
-            inputId="firstName"
-            placeholderContent="John"
-            inputValue={registerData.firstName}
-            handleInput={(e) => {
-              setRegisterData({
-                ...registerData,
-                firstName: e.target.value,
-              });
-
+            {/* Form content */}
+            <form
+                style={{ height: '100%', width: '100%' }}
+                onSubmit={handleSubmit}
+            >
+                {/* First name and last name */}
+                <Flex
+                    w="full"
+                    gap="2rem"
+                    mb="1.75rem"
+                    flexDir={{ base: 'column', md: 'row' }}
+                >
+                    {/* First name */}
+                    <NameInput
+                        inputAnimateControls={inputControls}
+                        htmlForContent="firstName"
+                        labelText="FIRST NAME"
+                        inputId="firstName"
+                        placeholderContent="John"
+                        inputValue={registerData.firstName}
+                        handleInput={(e) => {
+                            setRegisterData({
+                                ...registerData,
+                                firstName: e.target.value,
+                            });
               setFirstNameValidate(validateNames(e.target.value).value);
             }}
             msgComponent={
@@ -310,32 +309,33 @@ const RegisterForm = ({
             </CustomErrorMsg>
           )}
         </FormControl>
-
-        {/* Buttons */}
-        <MotionFlex
-          justify="center"
-          align="center"
-          mt="2.5rem"
-          initial={{ opacity: 0 }}
-          animate={inputControls}
-          gap="2rem"
-        >
-          <FormButton
-            handleOnClick={() => {
-              setRegisterData({
-                ...registerData,
-                email: typedEmailRef.current,
-              });
-            }}
-            btnType="submit"
-            btnBg="#eb0546"
-            btnTextColor="#fff"
-            hoverStylesContent={{
-              backgroundColor: "#c70038",
-              boxShadow: "10px 10px 15px #c5cad1, -10px -10px 15px #ffffff",
-            }}
-            textContent="Register"
-          />
+                {/* Buttons */}
+                <MotionFlex
+                    direction={{ base: 'column', md: 'row' }}
+                    justify="center"
+                    align="center"
+                    mt="2.5rem"
+                    initial={{ opacity: 0 }}
+                    animate={inputControls}
+                    gap={{ base: '1rem', md: '2rem' }}
+                >
+                    <FormButton
+                        handleOnClick={() => {
+                            setRegisterData({
+                                ...registerData,
+                                email: typedEmailRef.current,
+                            });
+                        }}
+                        btnType="submit"
+                        btnBg="#eb0546"
+                        btnTextColor="#fff"
+                        hoverStylesContent={{
+                            backgroundColor: '#c70038',
+                            boxShadow:
+                                '10px 10px 15px #c5cad1, -10px -10px 15px #ffffff',
+                        }}
+                        textContent="Register"
+                    />
 
           <FormButton
             handleOnClick={() => {
@@ -390,32 +390,36 @@ const RegisterForm = ({
             alignSelf="end"
           />
         </MotionFlex>
-
-        {/* Already have an account? */}
-        <MotionFlex
-          onClick={() => {
-            setIsSigningIn(true);
-          }}
-          justify="center"
-          w="full"
-          align="center"
-          pb="2rem"
-          initial={{ opacity: 0 }}
-          animate={inputControls}
-        >
-          <MotionText
-            fontWeight="bold"
-            fontSize="sm"
-            cursor="pointer"
-            style={{ transition: "all 0.4s linear" }}
-            _hover={{ color: "#4599fe" }}
-          >
-            Already have an account?
-          </MotionText>
-        </MotionFlex>
-      </form>
-    </>
-  );
+                {/* Already have an account? */}
+                <MotionFlex
+                    onClick={() => {
+                        closePopUp()
+                            .then(() => {
+                                setIsRegistering(false);
+                                openPopUp();
+                            })
+                            .then(() => setIsSigningIn(true));
+                    }}
+                    justify="center"
+                    w="full"
+                    align="center"
+                    pb="2rem"
+                    initial={{ opacity: 0 }}
+                    animate={inputControls}
+                    cursor="pointer"
+                >
+                    <MotionText
+                        fontWeight="bold"
+                        fontSize="sm"
+                        style={{ transition: 'all 0.4s linear' }}
+                        _hover={{ color: '#4599fe' }}
+                    >
+                        Already have an account?
+                    </MotionText>
+                </MotionFlex>
+            </form>
+        </>
+    );
 };
 
 export default RegisterForm;

@@ -16,9 +16,13 @@ import React from "react";
 import Images from "../../../assets/images";
 import { LinkItems } from "./LinkItems";
 import { SidebarItem } from "./SidebarItem";
+import { FaMoon, FaSun } from "react-icons/fa"
 
 export function SidebarContent({ onClose, ...rest }) {
   const { colorMode, toggleColorMode } = useColorMode();
+  const text = useColorModeValue("dark", "light");
+  const SwitchIcon = useColorModeValue(FaSun, FaMoon);
+
   return (
     <Box
       bg={useColorModeValue("#fffdfe", "#031d46")}
@@ -33,7 +37,7 @@ export function SidebarContent({ onClose, ...rest }) {
       justifyContent="space-between"
     >
       <Flex h="20" alignItems="center" flexDir='column' w='full'>
-        <Flex justifyContent="center" mt={5} cursor="pointer">
+        <Flex justifyContent="center" mt={6} cursor="pointer">
           <NextLink href="/dashboard" passHref>
             <motion.div
               style={{ height: "50px", width: "50px" }}
@@ -55,7 +59,7 @@ export function SidebarContent({ onClose, ...rest }) {
           </NextLink>
         </Flex>
 
-        <Flex flexDir='column' mt={5}>
+        <Flex flexDir='column' mt={5} w='full'>
           {LinkItems.map((link) => (
             <SidebarItem key={link.name} icon={link.icon} href={link.href}>
               {link.name}
@@ -68,10 +72,10 @@ export function SidebarContent({ onClose, ...rest }) {
 
 
       <Flex
-        p={5}
+        p='4'
         flexDir="row"
-        justifyContent="flex-start"
-        w="100%"
+        justifyContent="space-between"
+        w="full"
         alignItems="center"
       >
         <NextLink href="/profile" passHref>
@@ -84,19 +88,25 @@ export function SidebarContent({ onClose, ...rest }) {
         </NextLink>
         <NextLink href="/profile" passHref>
           <Text
+            marginLeft='1'
             cursor="pointer"
             color={useColorModeValue("#031d46", "#fffdfe")}
           >
             Khang Nguyen
           </Text>
         </NextLink>
-        <Switch
-          isChecked={colorMode === "dark"}
-          onChange={() => {
-            toggleColorMode();
+
+        <IconButton
+          variant="ghost"
+          color={useColorModeValue("yellow", "#031d46")}
+          bg={useColorModeValue("#031d46", "#fffdfe")}
+          onClick={toggleColorMode}
+          marginLeft="5"
+          icon= {<SwitchIcon />}
+          _hover={{
+            textDecoration:"none",
+            bg: useColorModeValue("gray.600", "gray.400")
           }}
-          colorScheme="green"
-          size="lg"
         />
       </Flex>
     </Box>

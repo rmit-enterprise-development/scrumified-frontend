@@ -1,6 +1,5 @@
 import { Box, Button, Flex } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import userAPI from "../api/services/userAPI";
 import CreateProjectModal from "../components/dashboard/CreateProjectModal/CreateProjectModal";
 import ProjectGrid from "../components/dashboard/ProjectGrid/ProjectGrid";
 import SectionHeader from "../components/dashboard/SectionHeader/SectionHeader";

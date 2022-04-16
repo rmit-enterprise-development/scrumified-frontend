@@ -6,20 +6,6 @@ import Board from '../components/workspace/Board';
 import Column from '../components/workspace/Column';
 
 const Sprint = () => {
-	// const initData = {
-	// 	cards: {
-	// 		1: { id: '1', story: 'card1', category: 'abc', point: '1' },
-	// 		2: { id: '2', story: 'card2', category: 'abc', point: '1' },
-	// 		3: { id: '3', story: 'card3', category: 'abc', point: '1' },
-	// 	},
-
-	// 	columns: {
-	// 		todo: { id: 'todo', title: 'todo', order: ['1', '2', '3'] },
-	// 	},
-
-	// 	columnOrder: ['todo'],
-	// };
-
 	const initData = [
 		{
 			id: '1',

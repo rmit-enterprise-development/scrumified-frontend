@@ -7,28 +7,40 @@ import Board from '../components/workspace/Board';
 import Column from '../components/workspace/Column';
 
 const Backlog = () => {
-	const [backlog, setBacklog] = useState({
-		backlog: [
-			{
-				id: '1',
-				story: 'I am on top of the world',
-				category: 'Hello',
-				point: '12',
-			},
-			{
-				id: '2',
-				story: 'I am on top of the world',
-				category: 'Hello',
-				point: '12',
-			},
-			{
-				id: '3',
-				story: 'I am on top of the world',
-				category: 'Hello',
-				point: '12',
-			},
-		],
-	});
+	const initData = [
+		{
+			id: '1',
+			story: 'Card1',
+			category: 'Hello',
+			point: '12',
+			position: 2,
+			status: 'backlog',
+		},
+		{
+			id: '2',
+			story: 'Card2',
+			category: 'Hello',
+			point: '12',
+			position: 0,
+			status: 'backlog',
+		},
+		{
+			id: '3',
+			story: 'Card3',
+			category: 'Hello',
+			point: '12',
+			position: 1,
+			status: 'backlog',
+		},
+	];
+
+	const [data, setData] = useState(initData);
+
+	const filterCards = (s) => {
+		const cards = data.filter((card) => card.status === s);
+		cards = cards.sort((a, b) => a.position - b.position);
+		return cards;
+	};
 
 	const [winReady, setwinReady] = useState(false);
 	useEffect(() => {
@@ -44,11 +56,12 @@ const Backlog = () => {
 				<Box>
 					<SectionHeader>Backlog</SectionHeader>
 					{winReady ? (
-						<Board backlog={backlog} setBacklog={setBacklog}>
+						<Board data={data} setData={setData}>
 							<Column
+								key={0}
 								title={'Backlog'}
-								id={backlog.backlog.id}
-								cards={backlog.backlog}
+								id={'backlog'}
+								cards={filterCards('backlog')}
 							/>
 						</Board>
 					) : null}

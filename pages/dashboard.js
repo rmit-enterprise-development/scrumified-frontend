@@ -86,7 +86,10 @@ const Dashboard = () => {
           <Flex justifyContent="space-between" alignItems="center">
             <SectionHeader>My Projects</SectionHeader>
             <CreateProjectModal
-              participantList={objectUtils.getListForAutoComplete(userList)}
+              participantList={userList.map((a) => {
+                const userInfo = a.name + " (" + a.email + ")";
+                return { value: a.id, label: userInfo };
+              })}
             />
           </Flex>
 

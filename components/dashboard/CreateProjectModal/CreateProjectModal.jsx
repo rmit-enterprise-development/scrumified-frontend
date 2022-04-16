@@ -99,7 +99,7 @@ const CreateProjectModal = ({ participantList }) => {
                   handleSelectedItemsChange(changes.selectedItems)
                 }
                 hideToggleButton={true}
-                listStyleProps={{ height: "200", overflow: "auto" }}
+                listStyleProps={{ maxHeight: "200", overflow: "auto" }}
                 listItemStyleProps={{ cursor: "pointer" }}
               />
             </FormControl>

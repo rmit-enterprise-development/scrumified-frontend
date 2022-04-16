@@ -11,9 +11,11 @@ import {
 } from '@chakra-ui/react';
 import InputLabel from '../Register/InputLabel';
 import OthersInput from '../Register/OthersInput';
-import { motion } from 'framer-motion';
 import FormButton from '../Register/FormButton';
+import { motion } from 'framer-motion';
+import { digFind } from '../../../../utils/object';
 
+// integrate Chakra Components with framer motion
 const MotionText = motion(Text);
 const MotionFlex = motion(Flex);
 const MotionInputGroup = motion(InputGroup);
@@ -26,15 +28,18 @@ const SignInForm = ({
     setIsRegistering,
     setIsSigningIn,
 }) => {
+    // state to track sign in email and password
     const [signInEmail, setSignInEmail] = useState('');
     const [signInPwd, setSignInPwd] = useState('');
     const [emailValidate, setEmailValidate] = useState(true);
     const [pwdValidate, setPwdValidate] = useState(true);
+    const [usersList, setUsersList] = useState([]);
 
     // handle password toggle
     const [show, setShow] = useState(false);
     const handlePwdToggleClick = () => setShow(!show);
 
+    // methods to validate email and password input
     const validateEmail = (email) => {
         return email === ''
             ? { value: false, msg: 'Required' }
@@ -79,14 +84,83 @@ const SignInForm = ({
         </MotionChakraDiv>
     );
 
+    const logUserIn = ({ email, password }) => {
+        console.log(usersList);
+        return (
+            usersList.filter(
+                (user) => user.email === email && user.password === password
+            ).length > 0
+        );
+    };
+
+    // method to fetch GET API and check if user exist on database
+    const login = ({ email, password }) => {
+        // GET request using fetch with async/await
+        const requestOptions = {
+            headers: { 'Content-Type': 'application/json' },
+        };
+
+        fetch('https://scrumified-api.herokuapp.com/users', requestOptions)
+            .then(async (response) => {
+                // response dissection
+                const isJson = response.headers
+                    .get('content-type')
+                    ?.includes('application/json');
+                const data = await response.json();
+                const dataStatus = isJson && data;
+
+                // check for error response
+                if (!response.ok) {
+                    // get error message from body or default to response status
+                    const error =
+                        (dataStatus && dataStatus.message) || response.status;
+                    return Promise.reject(error);
+                }
+
+                // check user existence
+                const isUserExist =
+                    (await digFind(data, 'userDtoList').filter(
+                        (user) =>
+                            user.email === email && user.password === password
+                    ).length) > 0;
+
+                // TEMP: alert base on response
+                alert(isUserExist ? 'Log in sucessfully' : 'Log in failed');
+            })
+            .catch((error) => {
+                console.error('There was an error: ', error);
+            });
+    };
+
+    // form subsmission handler
+    const handleSubmit = async (e) => {
+        // prevent default nature of html form
+        e.preventDefault();
+
+        // sign in data container
+        const finalData = { email: signInEmail, password: signInPwd };
+
+        // login with current sign in data
+        await login(finalData);
+
+        // reset form's state
+        await setTimeout(() => {
+            setSignInEmail('');
+            setSignInPwd('');
+            setEmailValidate(true);
+            setPwdValidate(true);
+        }, 1000);
+    };
+
     return (
-        <>
+        <form style={{ height: '100%', width: '100%' }} onSubmit={handleSubmit}>
             {/* Form title */}
             <MotionText
                 fontSize={{ base: '1rem', md: '1.5rem' }}
                 fontWeight="bold"
                 color="#031e49"
                 mb="2rem"
+                align="center"
                 letterSpacing="2px"
                 initial={{ opacity: 0 }}
                 animate={inputControls}
@@ -94,6 +168,7 @@ const SignInForm = ({
                 SIGN IN
             </MotionText>
 
+            {/* Email */}
             <FormControl isRequired>
                 <InputLabel
                     htmlForContent="signInEmail"
@@ -123,6 +198,7 @@ const SignInForm = ({
                 )}
             </FormControl>
 
+            {/* Password */}
             <FormControl isRequired>
                 <InputLabel
                     htmlForContent="signInPassword"
@@ -192,7 +268,6 @@ const SignInForm = ({
                 gap={{ base: '1rem', md: '2rem' }}
             >
                 <FormButton
-                    handleOnClick={() => {}}
                     btnType="submit"
                     btnBg="#eb0546"
                     btnTextColor="#fff"
@@ -274,7 +349,7 @@ const SignInForm = ({
                     Not having an account yet?
                 </MotionText>
             </MotionFlex>
-        </>
+        </form>
     );
 };
 

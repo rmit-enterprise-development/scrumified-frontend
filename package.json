@@ -15,6 +15,7 @@
     "@emotion/styled": "^11.8.1",
     "avvvatars-react": "^0.4.2",
     "axios": "^0.26.1",
+    "chakra-ui-autocomplete": "^1.4.5",
     "framer-motion": "^6.2.8",
     "next": "12.1.0",
     "package": "^1.0.1",

@@ -2,8 +2,8 @@ import { Box, SimpleGrid, Text } from "@chakra-ui/react";
 import Avvvatars from "avvvatars-react";
 import Router from "next/router";
 import { RouterPage } from "../../../../config/router";
-import { truncate } from "../../../../utils/truncate";
 import NumberButton from "./NumberButton";
+import textUtils from "../../../../utils/text";
 
 const ProjectItem = ({ id, name, author, createdTime, color, openTasks }) => {
   const handlePushProjectDetail = () => {
@@ -14,7 +14,7 @@ const ProjectItem = ({ id, name, author, createdTime, color, openTasks }) => {
 
   const colorScheme = color + ".500";
   if (name.length > 20) {
-    name = truncate(name);
+    name = textUtils.truncate(name);
   }
   return (
     <Box

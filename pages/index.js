@@ -17,31 +17,29 @@ export default function Home() {
         <title>Home - Scrumified</title>
       </Head>
 
-      {/* Nav Bar */}
       <HomeNavBar
         setIsSigningIn={setIsSigningIn}
         setIsRegistering={setIsRegistering}
       />
+            {/* Pop up when Register button is clicked */}
+            <MainForm
+                isSigningIn={isSigningIn}
+                setIsSigningIn={setIsSigningIn}
+                isRegistering={isRegistering}
+                setIsRegistering={setIsRegistering}
+                setTypedEmail={setTypedEmail}
+                typedEmail={typedEmail}
+                typedEmailRef={typedEmailRef}
+            />
 
-      {/* Pop up when Register button is clicked */}
-      <MainForm
-        setIsSigningIn={setIsSigningIn}
-        isRegistering={isRegistering}
-        setIsRegistering={setIsRegistering}
-        setTypedEmail={setTypedEmail}
-        typedEmail={typedEmail}
-        typedEmailRef={typedEmailRef}
-      />
-
-      {/* Pop up when Sign In button is clicked */}
-
-      {/* Main content (currently testing only) */}
-      {/* First section */}
-      <FirstSection
-        typedEmail={typedEmail}
-        setIsRegistering={setIsRegistering}
-        setTypedEmail={setTypedEmail}
-      />
+            {/* Main content (currently testing only) */}
+            {/* First section */}
+            <FirstSection
+                typedEmail={typedEmail}
+                setIsRegistering={setIsRegistering}
+                setIsSigningIn={setIsSigningIn}
+                setTypedEmail={setTypedEmail}
+            />
 
       {/* Dummy section */}
       <Container

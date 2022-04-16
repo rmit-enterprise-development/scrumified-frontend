@@ -32,6 +32,30 @@ const CardModal = ({ isOpen, onOpen, onClose, data, setData }) => {
 	const [isValidDef, setIsValidDef] = useState(false);
 
 	const isValidInput = (value) => value.length > 0;
+
+	const createCard = (submitData) => {
+		const requestOptions = {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(submitData),
+		};
+
+		fetch('http://127.0.0.1:8989/projects/1/stories', requestOptions)
+			.then(async (response) => {
+				const isJson = response.headers
+					.get('content-Type')
+					?.includes('application/json');
+				const data = isJson && (await response.json());
+
+				if (!response.ok) {
+					const error = (data && data.message) || response.status;
+					return Promise.reject(error);
+				}
+			})
+			.catch((error) => {
+				console.error(error);
+			});
+	};
 	return (
 		<Modal isCentered isOpen={isOpen} onClose={onClose}>
 			<ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px)" />
@@ -146,26 +170,26 @@ const CardModal = ({ isOpen, onOpen, onClose, data, setData }) => {
 								isValidDef &&
 								isValidPoint
 							) {
-								setData([
-									...data,
-									{
-										id: Math.floor(Math.random() * 10000),
-										userStory:
-											'As a ' +
-											card.asA +
-											', I need ' +
-											card.iNeed +
-											'. So that, ' +
-											card.soThat,
-										point: card.point,
-										category: 'abc',
-										def: card.def,
-										status: 'backlog',
-										position: data.filter(
-											(card) => card.status === 'backlog'
-										).length,
-									},
-								]);
+								const result = {
+									// id: Math.floor(Math.random() * 10000),
+									userStory:
+										'As a ' +
+										card.asA +
+										', I need ' +
+										card.iNeed +
+										'. So that, ' +
+										card.soThat,
+									point: card.point,
+									category: 'abc',
+									def: card.def,
+									status: 'backlog',
+									position: data.filter(
+										(card) => card.status === 'backlog'
+									).length,
+									assignId: 1,
+								};
+								setData([...data, result]);
+								createCard(result);
 								setCard({
 									asA: '',
 									iNeed: '',

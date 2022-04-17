@@ -1,37 +1,41 @@
+import { Flex, Icon, Box } from "@chakra-ui/react";
 import NextLink from "next/link";
-import { Flex, Icon, useColorModeValue } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 import React from "react";
+import { RouterPage } from "../../../config/router";
 
 export const SidebarItem = ({ icon, children, href, ...rest }) => {
+  const router = useRouter();
+  console.log("router: ", router.route);
+  const active = router.route === href;
+
   return (
-    <NextLink href={href} passHref disabled='true'>
-      <Flex
-        align="center"
-        p="4"
-        mx="4"
-        borderRadius="lg"
-        role="group"
-        color={useColorModeValue("#031d46", "#fffdfe")}
-        cursor="pointer"
-        _hover={{
-          bg: useColorModeValue("#031d46", "#ee0405"),
-          color: useColorModeValue("#fffdfe", "#fffdfe"),
-        }}
-        {...rest}
-      >
-        {/* {icon && ( */}
-        <Icon
-          mr="4"
-          fontSize="lg"
-          color={useColorModeValue("#031d46", "#fffdfe")}
-          _groupHover={{
-            color: useColorModeValue("#fffdfe", "#fffdfe"),
+    <Box pb={3}>
+      <NextLink href={href} passHref disabled="true">
+        <Flex
+          align="center"
+          p="4"
+          mx="4"
+          borderRadius="lg"
+          role="group"
+          color="#fffdfe"
+          pointerEvents={
+            router.route === RouterPage.DASHBOARD &&
+            href !== RouterPage.DASHBOARD
+              ? "none"
+              : "auto"
+          }
+          cursor="pointer"
+          bg={active && "#ee0405"}
+          _hover={{
+            bg: "#ee0405",
           }}
-          as={icon}
-        />
-        {/* )} */}
-        {children}
-      </Flex>
-    </NextLink>
+          {...rest}
+        >
+          <Icon mr="4" fontSize="lg" color="#fffdfe" as={icon} />
+          {children}
+        </Flex>
+      </NextLink>
+    </Box>
   );
 };

@@ -4,8 +4,6 @@ import {
   DrawerContent,
   Flex,
   IconButton,
-  Switch,
-  Text,
   useColorMode,
   useColorModeValue,
   useDisclosure,
@@ -16,12 +14,13 @@ import { SidebarContent } from "./SidebarContent";
 
 export default function Sidebar({ children }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { colorMode, toggleColorMode } = useColorMode();
+  const { toggleColorMode } = useColorMode();
 
   return (
     <Box minH="100vh">
       <SidebarContent
         onClose={() => onClose}
+        toggleColorMode={toggleColorMode}
         display={{ base: "none", md: "block" }}
       />
       <Drawer
@@ -31,14 +30,14 @@ export default function Sidebar({ children }) {
         onClose={onClose}
         returnFocusOnClose={false}
         onOverlayClick={onClose}
-        bg={useColorModeValue("#fffdfe", "#031d46")}
+        bg="#031d46"
         size="full"
       >
         <DrawerContent>
-          <SidebarContent onClose={onClose} />
+          <SidebarContent toggleColorMode={toggleColorMode} onClose={onClose} />
         </DrawerContent>
       </Drawer>
-      
+
       {/* mobilenav */}
       <MobileNav display={{ base: "flex", md: "none" }} onOpen={onOpen} />
       <Box ml={{ base: 0, md: 60 }} p="4">
@@ -55,7 +54,7 @@ const MobileNav = ({ onOpen, ...rest }) => {
       px={{ base: 4, md: 24 }}
       height="20"
       alignItems="center"
-      bg={useColorModeValue("#fffdfe", "#031d46")}
+      bg="#031d46"
       borderBottomWidth="1px"
       borderBottomColor={useColorModeValue("gray.200", "gray.700")}
       justifyContent="flex-start"
@@ -67,10 +66,6 @@ const MobileNav = ({ onOpen, ...rest }) => {
         aria-label="open menu"
         icon={<FiMenu />}
       />
-
-      {/* <Text fontSize="2xl" ml="8" fontFamily="monospace" fontWeight="bold">
-        Scrumified
-      </Text> */}
     </Flex>
   );
 };

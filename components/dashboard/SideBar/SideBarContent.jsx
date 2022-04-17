@@ -6,26 +6,22 @@ import {
   Image,
   Text,
   useColorModeValue,
-  useColorMode,
-  Switch,
 } from "@chakra-ui/react";
 import Avvvatars from "avvvatars-react";
 import { motion } from "framer-motion";
 import NextLink from "next/link";
 import React from "react";
+import { FaMoon, FaSun } from "react-icons/fa";
 import Images from "../../../assets/images";
 import { LinkItems } from "./LinkItems";
 import { SidebarItem } from "./SidebarItem";
-import { FaMoon, FaSun } from "react-icons/fa"
 
-export function SidebarContent({ onClose, ...rest }) {
-  const { colorMode, toggleColorMode } = useColorMode();
-  const text = useColorModeValue("dark", "light");
+export function SidebarContent({ onClose, toggleColorMode, ...rest }) {
   const SwitchIcon = useColorModeValue(FaSun, FaMoon);
 
   return (
     <Box
-      bg={useColorModeValue("#fffdfe", "#031d46")}
+      bg="#031d46"
       borderRight="1px"
       borderRightColor="gray.600"
       w={{ base: "full", md: 60 }}
@@ -36,7 +32,7 @@ export function SidebarContent({ onClose, ...rest }) {
       flexDir="column"
       justifyContent="space-between"
     >
-      <Flex h="20" alignItems="center" flexDir='column' w='full'>
+      <Flex h="20" alignItems="center" flexDir="column" w="full">
         <Flex justifyContent="center" mt={6} cursor="pointer">
           <NextLink href="/dashboard" passHref>
             <motion.div
@@ -59,9 +55,9 @@ export function SidebarContent({ onClose, ...rest }) {
           </NextLink>
         </Flex>
 
-        <Flex flexDir='column' mt={5} w='full'>
+        <Flex flexDir="column" mt={5} w="full">
           {LinkItems.map((link) => (
-            <SidebarItem key={link.name} icon={link.icon} href={link.href} >
+            <SidebarItem key={link.name} icon={link.icon} href={link.href}>
               {link.name}
             </SidebarItem>
           ))}
@@ -71,42 +67,34 @@ export function SidebarContent({ onClose, ...rest }) {
       </Flex>
 
       <Flex
-        p='4'
+        p="4"
         flexDir="row"
         justifyContent="space-between"
         w="full"
         alignItems="center"
       >
         <NextLink href="/profile" passHref>
-          <IconButton
-            aria-label="Profile"
-            isRound={true}
-            variant="outline"
-            icon={<Avvvatars shadow={true} size="md" value="Khang Nguyen" />}
-          />
-        </NextLink>
-        <NextLink href="/profile" passHref>
-          <Text
-            marginLeft='1'
-            cursor="pointer"
-            color={useColorModeValue("#031d46", "#fffdfe")}
-          >
-            Khang Nguyen
-          </Text>
+          <Flex alignItems="center">
+            <IconButton
+              aria-label="Profile"
+              isRound={true}
+              variant="outline"
+              icon={<Avvvatars shadow={true} size="md" value="Khang Nguyen" />}
+            />
+            <Text pl={2} cursor="pointer" color="#FFFDEF">
+              Khang
+            </Text>
+          </Flex>
         </NextLink>
 
         <IconButton
           variant="ghost"
-          color={useColorModeValue("#031d46", "#fffdfe")}
-          // bg={useColorModeValue("#031d46", "#fffdfe")}
+          color="#FFFDEF"
           onClick={toggleColorMode}
           marginLeft="5"
           fontSize="lg"
-          icon= {<SwitchIcon />}
-          // _hover={{
-          //   textDecoration:"none",
-          //   bg: useColorModeValue("gray.200", "gray.400")
-          // }}
+          _hover={{ bg: "#ee0405" }}
+          icon={<SwitchIcon />}
         />
       </Flex>
     </Box>

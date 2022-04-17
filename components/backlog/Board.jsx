@@ -5,40 +5,16 @@ import Column from './Column';
 import SearchBar from './SearchBar';
 import dynamic from 'next/dynamic';
 
-const Board = () => {
-	const [cardList, setCardList] = useState([
-		{
-			id: 1,
-			story: 'As a user I want to do something important to show the world how good I am.',
-			category: 'def',
-			points: 1,
-		},
-		{
-			id: 2,
-			story: 'As a user I want to do something important to show the world how good I am.',
-			category: 'abc',
-			points: 11,
-		},
-		{
-			id: 3,
-			story: 'As a user I want to do something important to show the world how good I am.',
-			category: 'ghj',
-			points: 12,
-		},
-	]);
-
+const Board = ({ children }) => {
 	const [winReady, setwinReady] = useState(false);
 	useEffect(() => {
 		setwinReady(true);
 	}, []);
 
 	return (
-		<Box>
-			<SearchBar cardList={cardList} setCardList={setCardList} />
-			{winReady ? (
-				<Column cardList={cardList} setCardList={setCardList} />
-			) : null}
-		</Box>
+		<Flex direction="row" w="full">
+			{React.Children.map(children, (child) => child)}
+		</Flex>
 	);
 };
 

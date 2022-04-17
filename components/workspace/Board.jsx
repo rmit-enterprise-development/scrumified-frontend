@@ -46,7 +46,7 @@ const Board = ({ data, setData, children }) => {
 		} else {
 			const newData = Array.from(data);
 			const sourceCard = newData.filter(
-				(card) => card.id === draggableId
+				(card) => card.id == draggableId
 			)[0];
 
 			newData.map((card) => {

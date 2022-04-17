@@ -85,13 +85,13 @@ export async function getStaticProps() {
 			props: {
 				cards: cards['_embedded'].storyDtoList,
 			},
-			revalidate: 30,
+			revalidate: 5,
 		};
 	}
 	return {
 		props: {
 			cards: [],
 		},
-		revalidate: 30,
+		revalidate: 5,
 	};
 }

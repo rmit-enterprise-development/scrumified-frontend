@@ -4,7 +4,7 @@ import React from "react";
 
 export const SidebarItem = ({ icon, children, href, ...rest }) => {
   return (
-    <NextLink href={href} passHref>
+    <NextLink href={href} passHref disabled='true'>
       <Flex
         align="center"
         p="4"

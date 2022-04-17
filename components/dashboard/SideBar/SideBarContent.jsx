@@ -27,7 +27,7 @@ export function SidebarContent({ onClose, ...rest }) {
     <Box
       bg={useColorModeValue("#fffdfe", "#031d46")}
       borderRight="1px"
-      borderRightColor={useColorModeValue("gray.200", "gray.700")}
+      borderRightColor="gray.600"
       w={{ base: "full", md: 60 }}
       pos="fixed"
       h="full"
@@ -61,7 +61,7 @@ export function SidebarContent({ onClose, ...rest }) {
 
         <Flex flexDir='column' mt={5} w='full'>
           {LinkItems.map((link) => (
-            <SidebarItem key={link.name} icon={link.icon} href={link.href}>
+            <SidebarItem key={link.name} icon={link.icon} href={link.href} >
               {link.name}
             </SidebarItem>
           ))}
@@ -69,7 +69,6 @@ export function SidebarContent({ onClose, ...rest }) {
 
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
-
 
       <Flex
         p='4'
@@ -98,16 +97,16 @@ export function SidebarContent({ onClose, ...rest }) {
 
         <IconButton
           variant="ghost"
-          color={useColorModeValue("yellow", "#031d46")}
-          bg={useColorModeValue("#031d46", "#fffdfe")}
+          color={useColorModeValue("#031d46", "#fffdfe")}
+          // bg={useColorModeValue("#031d46", "#fffdfe")}
           onClick={toggleColorMode}
           marginLeft="5"
           fontSize="lg"
           icon= {<SwitchIcon />}
-          _hover={{
-            textDecoration:"none",
-            bg: useColorModeValue("gray.600", "gray.400")
-          }}
+          // _hover={{
+          //   textDecoration:"none",
+          //   bg: useColorModeValue("gray.200", "gray.400")
+          // }}
         />
       </Flex>
     </Box>

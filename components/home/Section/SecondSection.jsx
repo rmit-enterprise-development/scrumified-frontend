@@ -1,26 +1,31 @@
 import React from 'react';
-import { Flex, Box, Text, SimpleGrid, Center } from '@chakra-ui/react';
+import {
+    Flex,
+    Box,
+    Text,
+    SimpleGrid,
+    Center,
+    useColorModeValue,
+} from '@chakra-ui/react';
 import { BsListCheck } from 'react-icons/bs';
 import { FaRegChartBar, FaHammer, FaFire } from 'react-icons/fa';
 
 const SecondSection = () => {
     const FeatureComponent = ({ title, description, icon }) => (
-        <Box bg="#fff" height="18rem">
+        <Box bg="transparent" height="18rem">
             <Flex
-                borderRadius="15px"
                 p="15px"
-                transition="all 0.4s linear"
-                bg="#fff"
                 h="full"
                 w="full"
                 direction="column"
                 gap="1.25rem"
+                justifyContent="center"
+                transition="all 0.4s linear"
                 _hover={{
                     transform: 'scale(1.08)',
                 }}
             >
                 <Center
-                    transition="all 0.2s linear"
                     style={{
                         boxShadow: '0 8px 20px 2px rgba(255,0,93, 0.35)',
                         background: 'rgb(235,5,70)',
@@ -35,11 +40,15 @@ const SecondSection = () => {
                         {icon}
                     </Text>
                 </Center>
-                <Text fontSize="xl" fontWeight="bold" color="#031e49">
+                <Text
+                    fontSize="xl"
+                    fontWeight="bold"
+                    color={useColorModeValue('#031e49', 'gray.200')}
+                >
                     {title}
                 </Text>
                 <Text
-                    color="gray.600"
+                    color={useColorModeValue('gray.600', 'gray.200')}
                     fontSize="sm"
                     style={{ textAlign: 'justify' }}
                 >
@@ -50,6 +59,8 @@ const SecondSection = () => {
     );
     return (
         <Flex
+            transition="all 0.4s linear"
+            bg={useColorModeValue('#fff', '#031e49')}
             direction="column"
             alignItems="center"
             justifyContent="center"
@@ -65,16 +76,30 @@ const SecondSection = () => {
             <Text
                 fontWeight="bold"
                 fontSize="lg"
-                color="rgba(235,5,70,0.8)"
+                color={useColorModeValue(
+                    'rgba(235, 5, 70, 0.8)',
+                    'rgba(247, 59, 112, 1)'
+                )}
                 letterSpacing="2px"
             >
                 WHATS THE FUNCTION
             </Text>
-            <Text color="#031e49" fontSize="2.6rem" mb="5rem" fontWeight="bold">
+            <Text
+                color={useColorModeValue('#031e49', 'gray.200')}
+                fontSize="2.6rem"
+                mb="5rem"
+                fontWeight="bold"
+            >
                 Meet the features of the product
             </Text>
 
-            <SimpleGrid columns={4} spacing="2rem" bg="#fff" px="9rem">
+            <SimpleGrid
+                columns={4}
+                spacing="2rem"
+                px="9rem"
+                bg={useColorModeValue('#fff', '#031e49')}
+                transition="all 0.4s linear"
+            >
                 <FeatureComponent
                     title="Overall Principle"
                     description="Beginner learning curve project manangement with discipline, 

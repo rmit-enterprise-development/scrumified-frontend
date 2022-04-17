@@ -5,6 +5,8 @@ import Sidebar from "../components/dashboard/SideBar/SideBar";
 import BacklogController from "../components/workspace/BacklogController";
 import Board from "../components/workspace/Board";
 import Column from "../components/workspace/Column";
+import projectAPI from "../api/services/projectAPI";
+import { digFind } from "../utils/object";
 
 const Backlog = ({ cards }) => {
   // const initData = [
@@ -78,12 +80,18 @@ const Backlog = ({ cards }) => {
 export default Backlog;
 
 export async function getStaticProps() {
-  const res = await fetch("http://127.0.0.1:8989/projects/1/stories");
-  const cards = await res.json();
-  if (cards["_embedded"]) {
+  const response = await projectAPI.getAllStories(1);
+  // response dissection
+  const data = await response.data;
+  console.log("data: ", data);
+
+  const cards = await digFind(data, "storyDtoList");
+  console.log("cards: ", cards);
+
+  if (cards) {
     return {
       props: {
-        cards: cards["_embedded"].storyDtoList,
+        cards, //ES6: Can use only "cards" for "cards : cards"
       },
       revalidate: 5,
     };

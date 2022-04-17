@@ -1,7 +1,7 @@
 import { AddIcon } from "@chakra-ui/icons";
-import matchSorter from "match-sorter";
 import {
   Button,
+  Flex,
   FormControl,
   FormLabel,
   Input,
@@ -12,14 +12,13 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  useDisclosure,
-  Flex,
-  Box,
   Text,
+  useDisclosure,
+  useColorModeValue,
 } from "@chakra-ui/react";
-import { useRef, useState } from "react";
-import { CUIAutoComplete } from "chakra-ui-autocomplete";
 import Avvvatars from "avvvatars-react";
+import { CUIAutoComplete } from "chakra-ui-autocomplete";
+import { useRef, useState } from "react";
 
 const CreateProjectModal = ({ participantList }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -30,7 +29,7 @@ const CreateProjectModal = ({ participantList }) => {
   const [pickerItems, setPickerItems] = useState(
     participantList.sort((a, b) => a.label.localeCompare(b.label))
   );
-  console.log("pickerItems: ", pickerItems);
+
   const [selectedItems, setSelectedItems] = useState([]);
 
   const handleSelectedItemsChange = (selectedItems) => {
@@ -75,11 +74,15 @@ const CreateProjectModal = ({ participantList }) => {
       >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Create your project</ModalHeader>
+          <ModalHeader color={useColorModeValue("#031e49", "gray.200")}>
+            Create your project
+          </ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
             <FormControl isRequired>
-              <FormLabel>Project name</FormLabel>
+              <FormLabel color={useColorModeValue("#031e49", "gray.200")}>
+                Project name
+              </FormLabel>
               <Input ref={initialRef} placeholder="Project name" />
             </FormControl>
 
@@ -101,6 +104,9 @@ const CreateProjectModal = ({ participantList }) => {
                 hideToggleButton={true}
                 listStyleProps={{ maxHeight: "200", overflow: "auto" }}
                 listItemStyleProps={{ cursor: "pointer" }}
+                labelStyleProps={{
+                  color: useColorModeValue("#031e49", "gray.200"),
+                }}
               />
             </FormControl>
           </ModalBody>

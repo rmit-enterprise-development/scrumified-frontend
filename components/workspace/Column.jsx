@@ -4,7 +4,6 @@ import { Droppable } from "react-beautiful-dnd";
 import Card from "./Card";
 
 const Column = ({ title, id, cards }) => {
-  console.log(cards);
   return (
     <Flex
       flexDir={"column"}

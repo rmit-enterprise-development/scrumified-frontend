@@ -31,7 +31,6 @@ export default function Sidebar({ children }) {
         returnFocusOnClose={false}
         onOverlayClick={onClose}
         bg="#031d46"
-        size="full"
       >
         <DrawerContent>
           <SidebarContent toggleColorMode={toggleColorMode} onClose={onClose} />
@@ -54,16 +53,15 @@ const MobileNav = ({ onOpen, ...rest }) => {
       px={{ base: 4, md: 24 }}
       height="20"
       alignItems="center"
-      bg="#031d46"
-      borderBottomWidth="1px"
       borderBottomColor={useColorModeValue("gray.200", "gray.700")}
       justifyContent="flex-start"
       {...rest}
     >
       <IconButton
-        variant="outline"
+        // variant="outline"
         onClick={onOpen}
         aria-label="open menu"
+        color="grey"
         icon={<FiMenu />}
       />
     </Flex>

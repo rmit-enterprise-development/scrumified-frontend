@@ -28,74 +28,73 @@ export function SidebarContent({ onClose, toggleColorMode, ...rest }) {
       pos="fixed"
       h="full"
       {...rest}
-      display="flex"
-      flexDir="column"
-      justifyContent="space-between"
     >
-      <Flex h="20" alignItems="center" flexDir="column" w="full">
-        <Flex justifyContent="center" mt={6} cursor="pointer">
-          <NextLink href="/dashboard" passHref>
-            <motion.div
-              style={{ height: "50px", width: "50px" }}
-              animate={{ rotate: 360 }}
-              transition={{
-                repeat: Infinity,
-                loop: Infinity,
-                ease: "linear",
-                duration: 6,
-              }}
-            >
-              <Image
-                src={Images.MainLogo.src}
-                alt="Main logo"
-                width="100%"
-                height="100%"
-              />
-            </motion.div>
-          </NextLink>
-        </Flex>
-
-        <Flex flexDir="column" mt={5} w="full">
-          {LinkItems.map((link) => (
-            <SidebarItem key={link.name} icon={link.icon} href={link.href}>
-              {link.name}
-            </SidebarItem>
-          ))}
-        </Flex>
-
-        <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
-      </Flex>
-
-      <Flex
-        p="4"
-        flexDir="row"
-        justifyContent="space-between"
-        w="full"
-        alignItems="center"
-      >
-        <NextLink href="/profile" passHref>
-          <Flex alignItems="center">
-            <IconButton
-              aria-label="Profile"
-              isRound={true}
-              variant="outline"
-              icon={<Avvvatars shadow={true} size="md" value="Khang Nguyen" />}
-            />
-            <Text pl={2} cursor="pointer" color="#FFFDEF">
-              Khang
-            </Text>
+      <Flex flexDir="column" justifyContent="space-between" h="full">
+        <Flex h="20" alignItems="center" flexDir="column" w="full">
+          <Flex justifyContent="center" mt={6} cursor="pointer">
+            <NextLink href="/dashboard" passHref>
+              <motion.div
+                style={{ height: "50px", width: "50px" }}
+                animate={{ rotate: 360 }}
+                transition={{
+                  repeat: Infinity,
+                  loop: Infinity,
+                  ease: "linear",
+                  duration: 6,
+                }}
+              >
+                <Image
+                  src={Images.MainLogo.src}
+                  alt="Main logo"
+                  width="100%"
+                  height="100%"
+                />
+              </motion.div>
+            </NextLink>
           </Flex>
-        </NextLink>
 
-        <IconButton
-          variant="ghost"
-          color="#FFFDEF"
-          onClick={toggleColorMode}
-          marginLeft="5"
-          fontSize="lg"
-          _hover={{ bg: "#ee0405" }}
-          icon={<SwitchIcon />}
-        />
+          <Flex flexDir="column" mt={5} w="full">
+            {LinkItems.map((link) => (
+              <SidebarItem key={link.name} icon={link.icon} href={link.href}>
+                {link.name}
+              </SidebarItem>
+            ))}
+          </Flex>
+        </Flex>
+
+        <Flex
+          p="4"
+          flexDir="row"
+          justifyContent="space-between"
+          w="full"
+          alignItems="center"
+        >
+          <NextLink href="/profile" passHref>
+            <Flex alignItems="center">
+              <IconButton
+                aria-label="Profile"
+                isRound={true}
+                variant="outline"
+                icon={
+                  <Avvvatars shadow={true} size="md" value="Khang Nguyen" />
+                }
+              />
+              <Text pl={2} cursor="pointer" color="#FFFDEF">
+                Khang
+              </Text>
+            </Flex>
+          </NextLink>
+
+          <IconButton
+            variant="ghost"
+            color="#FFFDEF"
+            onClick={toggleColorMode}
+            marginLeft="5"
+            fontSize="lg"
+            _hover={{ bg: "#ee0405" }}
+            icon={<SwitchIcon />}
+          />
+        </Flex>
       </Flex>
     </Box>
   );

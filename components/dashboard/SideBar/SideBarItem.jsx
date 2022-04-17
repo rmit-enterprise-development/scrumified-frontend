@@ -6,7 +6,6 @@ import { RouterPage } from "../../../config/router";
 
 export const SidebarItem = ({ icon, children, href, ...rest }) => {
   const router = useRouter();
-  console.log("router: ", router.route);
   const active = router.route === href;
 
   return (

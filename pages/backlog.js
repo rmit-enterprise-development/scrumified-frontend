@@ -1,7 +1,7 @@
 import { Box } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
-import SectionHeader from "../components/dashboard/SectionHeader";
-import Sidebar from "../components/dashboard/SideBar/Sidebar.tsx";
+import SectionHeader from "../components/dashboard/SectionHeader/SectionHeader";
+import Sidebar from "../components/dashboard/SideBar/SideBar";
 import BacklogController from "../components/workspace/BacklogController";
 import Board from "../components/workspace/Board";
 import Column from "../components/workspace/Column";

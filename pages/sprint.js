@@ -9,7 +9,7 @@ const Sprint = () => {
 	const initData = [
 		{
 			id: '1',
-			story: 'Card1',
+			userStory: 'Card1',
 			category: 'Hello',
 			point: '12',
 			position: 2,
@@ -17,7 +17,7 @@ const Sprint = () => {
 		},
 		{
 			id: '2',
-			story: 'Card2',
+			userStory: 'Card2',
 			category: 'Hello',
 			point: '12',
 			position: 0,
@@ -25,7 +25,7 @@ const Sprint = () => {
 		},
 		{
 			id: '3',
-			story: 'Card3',
+			userStory: 'Card3',
 			category: 'Hello',
 			point: '12',
 			position: 0,
@@ -33,7 +33,7 @@ const Sprint = () => {
 		},
 		{
 			id: '4',
-			story: 'Card4',
+			userStory: 'Card4',
 			category: 'Hello',
 			point: '12',
 			position: 1,
@@ -41,7 +41,7 @@ const Sprint = () => {
 		},
 		{
 			id: '5',
-			story: 'Card5',
+			userStory: 'Card5',
 			category: 'Hello',
 			point: '12',
 			position: 1,
@@ -49,7 +49,7 @@ const Sprint = () => {
 		},
 		{
 			id: '6',
-			story: 'Card6',
+			userStory: 'Card6',
 			category: 'Hello',
 			point: '12',
 			position: 0,

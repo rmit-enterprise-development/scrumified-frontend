@@ -22,15 +22,26 @@ const Board = ({ data, setData, children }) => {
 			const sourceCard = newData.filter(
 				(card) => card.id == draggableId
 			)[0];
-			const destinationCard = newData.filter(
-				(card) =>
-					card.position === destination.index &&
-					card.status === destination.droppableId
-			)[0];
-			[sourceCard.position, destinationCard.position] = [
-				destinationCard.position,
-				sourceCard.position,
-			];
+			console.log(sourceCard);
+			newData.map((card) => {
+				if (card.status === destination.droppableId) {
+					if (source.index > destination.index) {
+						source.index >= card.position &&
+						card.position >= destination.index
+							? card.position++
+							: card.position;
+					} else {
+						source.index <= card.position &&
+						card.position <= destination.index
+							? card.position--
+							: card.position;
+					}
+				}
+			});
+
+			sourceCard.position = destination.index;
+			sourceCard.status = destination.droppableId;
+
 			setData(newData);
 		} else {
 			const newData = Array.from(data);
@@ -39,10 +50,17 @@ const Board = ({ data, setData, children }) => {
 			)[0];
 
 			newData.map((card) => {
-				card.position >= destination.index &&
-				card.status === destination.droppableId
-					? card.position++
-					: card.position;
+				if (
+					card.status === destination.droppableId &&
+					card.position >= destination.index
+				) {
+					card.position++;
+				} else if (
+					card.status === source.droppableId &&
+					card.position >= source.index
+				) {
+					card.position--;
+				}
 			});
 
 			sourceCard.position = destination.index;

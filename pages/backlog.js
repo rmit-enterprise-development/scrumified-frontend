@@ -6,8 +6,7 @@ import BacklogController from '../components/workspace/BacklogController';
 import Board from '../components/workspace/Board';
 import Column from '../components/workspace/Column';
 
-const Backlog = ({cards}) => {
-	console.log('object');
+const Backlog = ({ cards }) => {
 	// const initData = [
 	// 	{
 	// 		id: '1',
@@ -49,6 +48,8 @@ const Backlog = ({cards}) => {
 		setwinReady(true);
 	}, []);
 
+	console.log(data);
+
 	return (
 		<Box display="flex">
 			<Box>
@@ -79,9 +80,17 @@ export default Backlog;
 export async function getStaticProps() {
 	const res = await fetch('http://127.0.0.1:8989/projects/1/stories');
 	const cards = await res.json();
+	if (cards['_embedded']) {
+		return {
+			props: {
+				cards: cards['_embedded'].storyDtoList,
+			},
+			revalidate: 30,
+		};
+	}
 	return {
 		props: {
-			cards: cards['_embedded'].storyDtoList,
+			cards: [],
 		},
 		revalidate: 30,
 	};

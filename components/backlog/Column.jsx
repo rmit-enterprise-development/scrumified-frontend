@@ -21,7 +21,6 @@ const Column = ({ cardList, setCardList }) => {
 		setCardList(items);
 	};
 	return (
-		// direction={'column'} rowGap={5}
 		<Box>
 			<DragDropContext onDragEnd={handleOnDragEnd}>
 				<Droppable droppableId="abc">
@@ -47,7 +46,7 @@ const Column = ({ cardList, setCardList }) => {
 													<Card
 														story={card.story}
 														category={card.category}
-														points={card.points}
+														points={card.point}
 													/>
 												</Box>
 											)}

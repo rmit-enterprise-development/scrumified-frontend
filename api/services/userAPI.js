@@ -8,7 +8,7 @@ const userAPI = {
 
   getOne: (id) => {
     const url = `/users/${id}`;
-    return url;
+    return axiosClient.get(url);
   },
 
   getProjects: (id) => {

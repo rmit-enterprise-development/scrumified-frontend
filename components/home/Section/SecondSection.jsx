@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 import {
     Flex,
     Box,
@@ -11,8 +13,16 @@ import { BsListCheck } from 'react-icons/bs';
 import { FaRegChartBar, FaHammer, FaFire } from 'react-icons/fa';
 
 const SecondSection = () => {
-    const FeatureComponent = ({ title, description, icon }) => (
-        <Box bg="transparent" height={{ md: '14rem', lg: '22rem' }}>
+    useEffect(() => {
+        AOS.init({ duration: 1200 });
+    }, []);
+
+    const FeatureComponent = ({ title, description, icon, aosAnim }) => (
+        <Box
+            data-aos={aosAnim}
+            bg="transparent"
+            height={{ md: '14rem', lg: '22rem' }}
+        >
             <Flex
                 p={{ base: '25px', md: '15px' }}
                 h="full"
@@ -102,24 +112,28 @@ const SecondSection = () => {
                 transition="all 0.4s linear"
             >
                 <FeatureComponent
+                    aosAnim="fade-left"
                     title="Core Principle"
                     description="Beginner learning curve project manangement with discipline, 
                     flexibility, and customization"
                     icon={<FaFire />}
                 />
                 <FeatureComponent
+                    aosAnim="fade-down"
                     title="Backlog"
                     description=" Easy user stories management with drag and drop
                     functionalities and objective project scale points"
                     icon={<BsListCheck />}
                 />
                 <FeatureComponent
+                    aosAnim="fade-up"
                     title="Roadmap"
                     description="Comprehensive timeline in Gnatt Chart style to keep
                     track of sprints overal duration"
                     icon={<FaRegChartBar />}
                 />
                 <FeatureComponent
+                    aosAnim="fade-right"
                     title="Active Sprints"
                     description="Easy and disciplined sprints life cycle management
                     with drag and drop functionalities"

@@ -19,18 +19,16 @@ const Profile = () => {
         <Flex>
             <Sidebar />
 
-            <Box>
-                <Flex flexDir="column" m={10}>
-                    <Text fontSize='2xl' color={useColorModeValue('#031d46', '#fffdfe')}>Profile</Text>
+            <Flex flexDir="column" m={10} w='full' h='full'>
+                <Text fontSize='2xl' color={useColorModeValue('#031d46', '#fffdfe')}>Profile</Text>
 
-                    <Flex justifyContent="center" mt={10} ml={5}>
-                        <ProfileCard fname={user.fname} lname={user.lname} email={user.email} bio={user.bio}/>
-                        <EditProfileModal id={user.id} fname={user.fname} lname={user.lname} email={user.email} bio={user.bio}/>
-                    </Flex>
-
-                    <Text fontSize='2xl' mt={10}>My Projects</Text>
+                <Flex justifyContent="space-around" mt={10} >
+                    <ProfileCard fname={user.fname} lname={user.lname} email={user.email} bio={user.bio}/>
+                    <EditProfileModal id={user.id} fname={user.fname} lname={user.lname} email={user.email} bio={user.bio}/>
                 </Flex>
-            </Box>
+
+                <Text fontSize='2xl' mt={10}>My Projects</Text>
+            </Flex>
         </Flex>
     );
 };

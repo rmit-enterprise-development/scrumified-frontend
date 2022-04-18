@@ -1,45 +1,35 @@
 import { Box, Flex, Button, Text, IconButton, useColorModeValue, Icon } from "@chakra-ui/react";
-import { useState } from "react";
+import { React, useState } from "react";
 import Sidebar from "../components/dashboard/SideBar/SideBar";
-import Avvvatars from "avvvatars-react";
+import ProfileCard from "../components/profile/ProfileCard";
 
 const Profile = () => {
-  return (
-    <Flex>
-      <Sidebar />
+    const user = useState(
+        {
+          id: "1",
+          name: "Minh Pham",
+          email: "pcminh0505@gmail.com",
+          bio: "I am Minh"
+        }
+    );
 
-      <Box>
-        <Flex flexDir="column" m={10}>
-            <Text fontSize='2xl' color={useColorModeValue('#031d46', '#fffdfe')}>Profile</Text>
+    return (
+        <Flex>
+            <Sidebar />
 
-            <Flex flexDir='row' justifyContent='center' alignItem='center' mt={10} ml={5}>
-                <IconButton
-                    aria-label="Profile"
-                    isRound={true}
-                    variant="outline"
-                    size='150'
-                    icon={
-                    <Avvvatars shadow={true} size='150' value="Khang Nguyen" />
-                    }
-                />
-                <Flex flexDir='row' ml={10} justifyContent="space-between" alignItem='center' w='full'>
-                    <Flex flexDir='column'>
-                        <Text fontWeight='medium' fontSize='lg'>Khang Nguyen</Text>
-                        <Text >khangnguyen111101@gmail.com</Text>
+            <Box>
+                <Flex flexDir="column" m={10}>
+                    <Text fontSize='2xl' color={useColorModeValue('#031d46', '#fffdfe')}>Profile</Text>
 
-                        <Flex mt={10} flexDir='column'>
-                            <Text>My biography</Text>
-                        </Flex>
+                    <Flex flexDir='row' justifyContent='center' mt={10} ml={5}>
+                        <ProfileCard name={user.name} email={user.email} bio={user.bio}/>
                     </Flex>
-                    <Button>Edit profile</Button>
-                </Flex>
-            </Flex>
 
-            <Text fontSize='2xl' mt={5}>My Projects</Text>
+                    <Text fontSize='2xl' mt={5}>My Projects</Text>
+                </Flex>
+            </Box>
         </Flex>
-      </Box>
-    </Flex>
-  );
+    );
 };
 
 export default Profile;

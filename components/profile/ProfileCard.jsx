@@ -2,7 +2,7 @@ import { Box, Flex, Button, Text, IconButton, useColorModeValue, Icon } from "@c
 import { useState } from "react";
 import Avvvatars from "avvvatars-react";
 
-const ProfileCard = ({name, email, bio}) => {
+const ProfileCard = ({id, fname, lname, email, bio}) => {
     return (
         <Flex>
             <IconButton
@@ -10,20 +10,18 @@ const ProfileCard = ({name, email, bio}) => {
             isRound={true}
             variant="outline"
             size='150'
-            icon={<Avvvatars shadow={true} size='150' value="Khang Nguyen" />}
+            icon={<Avvvatars shadow={true} size='150' value={fname + " " + lname} />}
             />
             
             <Flex flexDir='row' ml={10} justifyContent="space-between">
-            
-            <Flex flexDir='column'>
-                {console.log(name)}
-                <Text fontWeight='medium' fontSize='lg'>{name}</Text>
-                <Text >{email}</Text>
+                <Flex flexDir='column'>
+                    <Text fontWeight='medium' fontSize='lg'>{fname + " " + lname}</Text>
+                    <Text >{email}</Text>
 
-                <Flex mt={10} flexDir='column'>
-                    <Text>{bio}</Text>
+                    <Flex mt={10} flexDir='column'>
+                        <Text>{bio}</Text>
+                    </Flex>
                 </Flex>
-            </Flex>
             </Flex>
         </Flex>
     );

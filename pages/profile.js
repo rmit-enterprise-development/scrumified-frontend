@@ -1,15 +1,17 @@
 import { Box, Flex, Button, Text, IconButton, useColorModeValue, Icon } from "@chakra-ui/react";
 import { React, useState } from "react";
 import Sidebar from "../components/dashboard/SideBar/SideBar";
+import EditProfileModal from "../components/profile/EditProfileModal";
 import ProfileCard from "../components/profile/ProfileCard";
 
 const Profile = () => {
-    const user = useState(
+    const [user, setUser] = useState(
         {
           id: "1",
-          name: "Minh Pham",
+          fname: "Minh",
+          lname: "Pham",
           email: "pcminh0505@gmail.com",
-          bio: "I am Minh"
+          bio: "Minh dep dzai"
         }
     );
 
@@ -21,11 +23,12 @@ const Profile = () => {
                 <Flex flexDir="column" m={10}>
                     <Text fontSize='2xl' color={useColorModeValue('#031d46', '#fffdfe')}>Profile</Text>
 
-                    <Flex flexDir='row' justifyContent='center' mt={10} ml={5}>
-                        <ProfileCard name={user.name} email={user.email} bio={user.bio}/>
+                    <Flex justifyContent="center" mt={10} ml={5}>
+                        <ProfileCard fname={user.fname} lname={user.lname} email={user.email} bio={user.bio}/>
+                        <EditProfileModal id={user.id} fname={user.fname} lname={user.lname} email={user.email} bio={user.bio}/>
                     </Flex>
 
-                    <Text fontSize='2xl' mt={5}>My Projects</Text>
+                    <Text fontSize='2xl' mt={10}>My Projects</Text>
                 </Flex>
             </Box>
         </Flex>

@@ -123,7 +123,6 @@ const AboveMediumNavbar = ({
                 gap="3rem"
                 mx={{ md: '2rem', lg: '1rem' }}
             >
-                <NextLink href="/" passHref>
                     <Text
                         style={{ transition: 'all 0.5s' }}
                         cursor="pointer"
@@ -141,7 +140,6 @@ const AboveMediumNavbar = ({
                     >
                         Home
                     </Text>
-                </NextLink>
 
                 <NextLink href="/" passHref>
                     <Text
@@ -180,26 +178,6 @@ const AboveMediumNavbar = ({
                         w="100%"
                     >
                         Instructions
-                    </Text>
-                </NextLink>
-
-                <NextLink href="/" passHref>
-                    <Text
-                        style={{ transition: 'all 0.5s' }}
-                        cursor="pointer"
-                        color={useColorModeValue('gray.500', '#fff')}
-                        _hover={{
-                            color: '#eb0546',
-                            textDecoration: 'underline',
-                            textDecorationStyle: 'wavy',
-                            textUnderlineOffset: '8px',
-                            textDecorationThickness: '1.5px',
-                        }}
-                        aria-label="Testinomials"
-                        fontSize="md"
-                        w="100%"
-                    >
-                        Testinomials
                     </Text>
                 </NextLink>
             </Flex>

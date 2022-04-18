@@ -12,14 +12,13 @@ import { FaRegChartBar, FaHammer, FaFire } from 'react-icons/fa';
 
 const SecondSection = () => {
     const FeatureComponent = ({ title, description, icon }) => (
-        <Box bg="transparent" height="18rem">
+        <Box bg="transparent" height={{ md: '14rem', lg: '22rem' }}>
             <Flex
-                p="15px"
+                p={{ base: '25px', md: '15px' }}
                 h="full"
                 w="full"
                 direction="column"
                 gap="1.25rem"
-                justifyContent="center"
                 transition="all 0.4s linear"
                 _hover={{
                     transform: 'scale(1.08)',
@@ -35,6 +34,7 @@ const SecondSection = () => {
                     h="4.5rem"
                     w="4.5rem"
                     borderRadius="30px"
+                    alignSelf={{ base: 'center', md: 'start' }}
                 >
                     <Text color="#fff" fontSize="2.75rem">
                         {icon}
@@ -44,13 +44,14 @@ const SecondSection = () => {
                     fontSize="xl"
                     fontWeight="bold"
                     color={useColorModeValue('#031e49', 'gray.200')}
+                    textAlign={{ base: 'center', md: 'justify' }}
                 >
                     {title}
                 </Text>
                 <Text
                     color={useColorModeValue('gray.600', 'gray.200')}
                     fontSize="sm"
-                    style={{ textAlign: 'justify' }}
+                    textAlign={{ base: 'center', md: 'justify' }}
                 >
                     {description}
                 </Text>
@@ -75,7 +76,7 @@ const SecondSection = () => {
         >
             <Text
                 fontWeight="bold"
-                fontSize="lg"
+                fontSize={{ base: '1rem', md: 'lg' }}
                 color={useColorModeValue(
                     'rgba(235, 5, 70, 0.8)',
                     'rgba(247, 59, 112, 1)'
@@ -86,7 +87,7 @@ const SecondSection = () => {
             </Text>
             <Text
                 color={useColorModeValue('#031e49', 'gray.200')}
-                fontSize="2.6rem"
+                fontSize={{ base: '1.25rem', md: '2rem', lg: '2.6rem' }}
                 mb="5rem"
                 fontWeight="bold"
             >
@@ -94,14 +95,14 @@ const SecondSection = () => {
             </Text>
 
             <SimpleGrid
-                columns={4}
-                spacing="2rem"
-                px="9rem"
+                columns={{ base: 1, md: 2, lg: 4 }}
+                spacing={{ md: '3rem', lg: '2rem' }}
+                px={{ base: 0, md: '2rem', lg: '6rem' }}
                 bg={useColorModeValue('#fff', '#031e49')}
                 transition="all 0.4s linear"
             >
                 <FeatureComponent
-                    title="Overall Principle"
+                    title="Core Principle"
                     description="Beginner learning curve project manangement with discipline, 
                     flexibility, and customization"
                     icon={<FaFire />}

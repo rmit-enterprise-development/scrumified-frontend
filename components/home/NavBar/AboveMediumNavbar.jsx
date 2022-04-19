@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import NextLink from 'next/link';
 import {
     Flex,
+    chakra,
     IconButton,
     Button,
     Switch,
@@ -21,7 +22,7 @@ const AboveMediumNavbar = ({
     colorMode,
     toggleColorMode,
     setIsSigningIn,
-    setIsRegistering
+    setIsRegistering,
 }) => {
     // use state hooks to kepp track nav bar state on events
     const [navbarBg, setNavbarBg] = useState(`${initNavBg}, 1)`);
@@ -56,6 +57,16 @@ const AboveMediumNavbar = ({
             window.removeEventListener('scroll', handleScroll);
         };
     }, [initNavBg]);
+
+    const handleSectionClick = (e) => {
+        e.preventDefault();
+        const targetHref = e.target.hash;
+        const location = document.querySelector(targetHref).offsetTop;
+        window.scrollTo({
+            left: 0,
+            top: location - 64,
+        });
+    };
 
     return (
         <Flex
@@ -123,43 +134,43 @@ const AboveMediumNavbar = ({
                 gap="3rem"
                 mx={{ md: '2rem', lg: '1rem' }}
             >
-                    <Text
-                        style={{ transition: 'all 0.5s' }}
-                        cursor="pointer"
-                        color={useColorModeValue('gray.500', '#fff')}
-                        _hover={{
-                            color: '#eb0546',
-                            textDecoration: 'underline',
-                            textDecorationStyle: 'wavy',
-                            textUnderlineOffset: '8px',
-                            textDecorationThickness: '1.5px',
-                        }}
-                        aria-label="Home"
-                        fontSize="md"
-                        w="100%"
-                    >
-                        Home
-                    </Text>
+                <Text
+                    style={{ transition: 'all 0.5s' }}
+                    cursor="pointer"
+                    color={useColorModeValue('gray.500', '#fff')}
+                    _hover={{
+                        color: '#eb0546',
+                        textDecoration: 'underline',
+                        textDecorationStyle: 'wavy',
+                        textUnderlineOffset: '8px',
+                        textDecorationThickness: '1.5px',
+                    }}
+                    aria-label="Home"
+                    fontSize="md"
+                    w="100%"
+                >
+                    Home
+                </Text>
 
-                <NextLink href="/" passHref>
-                    <Text
-                        style={{ transition: 'all 0.5s' }}
-                        cursor="pointer"
-                        color={useColorModeValue('gray.500', '#fff')}
-                        _hover={{
-                            color: '#eb0546',
-                            textDecoration: 'underline',
-                            textDecorationStyle: 'wavy',
-                            textUnderlineOffset: '8px',
-                            textDecorationThickness: '1.5px',
-                        }}
-                        aria-label="Features"
-                        fontSize="md"
-                        w="100%"
-                    >
-                        Features
-                    </Text>
-                </NextLink>
+                <chakra.a
+                    href="#features"
+                    onClick={handleSectionClick}
+                    style={{ transition: 'all 0.5s' }}
+                    cursor="pointer"
+                    color={useColorModeValue('gray.500', '#fff')}
+                    _hover={{
+                        color: '#eb0546',
+                        textDecoration: 'underline',
+                        textDecorationStyle: 'wavy',
+                        textUnderlineOffset: '8px',
+                        textDecorationThickness: '1.5px',
+                    }}
+                    aria-label="Features"
+                    fontSize="md"
+                    w="100%"
+                >
+                    Features
+                </chakra.a>
 
                 <NextLink href="/" passHref>
                     <Text

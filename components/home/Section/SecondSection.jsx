@@ -8,18 +8,25 @@ import {
     SimpleGrid,
     Center,
     useColorModeValue,
+    useBreakpointValue,
 } from '@chakra-ui/react';
 import { BsListCheck } from 'react-icons/bs';
 import { FaRegChartBar, FaHammer, FaFire } from 'react-icons/fa';
 
 const SecondSection = () => {
     useEffect(() => {
-        AOS.init({ duration: 1200 });
+        AOS.init({ duration: 1200, mirror: true });
     }, []);
 
-    const FeatureComponent = ({ title, description, icon, aosAnim }) => (
+    // handle aos value responsively
+    const responsiceAos = useBreakpointValue({
+        base: 'fade-up',
+        md: 'fade-down',
+    });
+
+    const FeatureComponent = ({ title, description, icon }) => (
         <Box
-            data-aos={aosAnim}
+            data-aos={responsiceAos}
             bg="transparent"
             height={{ md: '14rem', lg: '22rem' }}
         >
@@ -59,6 +66,7 @@ const SecondSection = () => {
                     {title}
                 </Text>
                 <Text
+                    px={{ base: '10px', md: 0 }}
                     color={useColorModeValue('gray.600', 'gray.200')}
                     fontSize="sm"
                     textAlign={{ base: 'center', md: 'justify' }}
@@ -70,6 +78,7 @@ const SecondSection = () => {
     );
     return (
         <Flex
+            id="features"
             transition="all 0.4s linear"
             bg={useColorModeValue('#fff', '#031e49')}
             direction="column"
@@ -112,28 +121,24 @@ const SecondSection = () => {
                 transition="all 0.4s linear"
             >
                 <FeatureComponent
-                    aosAnim="fade-left"
                     title="Core Principle"
                     description="Beginner learning curve project manangement with discipline, 
                     flexibility, and customization"
                     icon={<FaFire />}
                 />
                 <FeatureComponent
-                    aosAnim="fade-down"
                     title="Backlog"
                     description=" Easy user stories management with drag and drop
                     functionalities and objective project scale points"
                     icon={<BsListCheck />}
                 />
                 <FeatureComponent
-                    aosAnim="fade-up"
                     title="Roadmap"
                     description="Comprehensive timeline in Gnatt Chart style to keep
                     track of sprints overal duration"
                     icon={<FaRegChartBar />}
                 />
                 <FeatureComponent
-                    aosAnim="fade-right"
                     title="Active Sprints"
                     description="Easy and disciplined sprints life cycle management
                     with drag and drop functionalities"

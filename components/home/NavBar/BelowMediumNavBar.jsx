@@ -1,5 +1,6 @@
 import NextLink from 'next/link';
 import {
+    chakra,
     Flex,
     Center,
     IconButton,
@@ -37,6 +38,17 @@ const BelowMediumNavBar = ({
                 duration: 0.4,
             },
         });
+    };
+
+    const handleSectionClick = (e) => {
+        e.preventDefault();
+        const targetHref = e.target.hash;
+        const location = document.querySelector(targetHref).offsetTop;
+        window.scrollTo({
+            left: 0,
+            top: location - 64,
+        });
+        onToggle();
     };
 
     const closeHidNav = async () => {
@@ -124,31 +136,31 @@ const BelowMediumNavBar = ({
                     </Center>
                 </NextLink>
 
-                <NextLink href="/" passHref>
-                    <Center
-                        h="55px"
-                        w="90%"
-                        bg="gray.100"
-                        borderRadius="40px"
-                        cursor="pointer"
+                <Center
+                    h="55px"
+                    w="90%"
+                    bg="gray.100"
+                    borderRadius="40px"
+                    cursor="pointer"
+                >
+                    <chakra.a
+                        href="#features"
+                        onClick={handleSectionClick}
+                        style={{ transition: 'all 0.5s' }}
+                        color="gray.500"
+                        _hover={{
+                            color: '#eb0546',
+                            textDecoration: 'underline',
+                            textDecorationStyle: 'wavy',
+                            textUnderlineOffset: '8px',
+                            textDecorationThickness: '1.5px',
+                        }}
+                        aria-label="Features"
+                        fontSize="lg"
                     >
-                        <Text
-                            style={{ transition: 'all 0.5s' }}
-                            color="gray.500"
-                            _hover={{
-                                color: '#eb0546',
-                                textDecoration: 'underline',
-                                textDecorationStyle: 'wavy',
-                                textUnderlineOffset: '8px',
-                                textDecorationThickness: '1.5px',
-                            }}
-                            aria-label="Features"
-                            fontSize="lg"
-                        >
-                            Features
-                        </Text>
-                    </Center>
-                </NextLink>
+                        Features
+                    </chakra.a>
+                </Center>
 
                 <NextLink href="/" passHref>
                     <Center

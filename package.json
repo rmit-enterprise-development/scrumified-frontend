@@ -17,6 +17,8 @@
     "avvvatars-react": "^0.4.2",
     "axios": "^0.26.1",
     "chakra-ui-autocomplete": "^1.4.5",
+    "formik": "^2.2.9",
+    "formik-chakra-ui": "^1.6.0",
     "framer-motion": "^6.2.8",
     "match-sorter": "^6.3.1",
     "next": "12.1.0",

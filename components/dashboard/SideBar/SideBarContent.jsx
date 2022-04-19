@@ -71,14 +71,15 @@ export function SidebarContent({ onClose, toggleColorMode, ...rest }) {
         >
           <NextLink href="/profile" passHref>
             <Flex alignItems="center">
-              <IconButton
+              {/* <IconButton
                 aria-label="Profile"
                 isRound={true}
-                variant="outline"
+                // variant="outline"
                 icon={
                   <Avvvatars shadow={true} value="Khang Nguyen" />
                 }
-              />
+              /> */}
+              <Avvvatars size={40} color="purple" shadow={true} value="Khang Nguyen" />
               <Text pl={2} cursor="pointer" color="#FFFDEF">
                 Khang
               </Text>

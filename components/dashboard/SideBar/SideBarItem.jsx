@@ -11,48 +11,49 @@ export const SidebarItem = ({ icon, children, href, ...rest }) => {
   return (
     <Box pb={3}>
       <NextLink href={href} passHref >
-        <Tooltip 
-          hasArrow
-          placement='right'
-          isDisabled={router.route === RouterPage.DASHBOARD &&
+        <Flex
+          align="center"
+          p="4"
+          mx="4"
+          borderRadius="lg"
+          role="group"
+          cursor='pointer'
+          color= {
+            router.route === RouterPage.DASHBOARD &&
             href !== RouterPage.DASHBOARD
-            ? false
-            : true}
-          label="Please choose a project first"
-          >
-          <Flex
-            align="center"
-            p="4"
-            mx="4"
-            borderRadius="lg"
-            role="group"
-            pointerEvents="auto"
+            ? "grey"
+            : "#fffdfe"
+          }
+          pointerEvents={
+            router.route === RouterPage.DASHBOARD &&
+            href !== RouterPage.DASHBOARD
+            ? "none"
+            : "auto"
+          }
+
+          bg={active && "#ee0405"}
+          _hover={{
+            // color: '#fffdfe',
+            textDecoration: 'underline',
+            textDecorationStyle: 'wavy',
+            textUnderlineOffset: '4px',
+            textDecorationThickness: '1.5px',
+          }}
+          {...rest}
+        >
+          <Icon 
+            mr="4" 
+            fontSize="lg" 
             color= {
-              router.route === RouterPage.DASHBOARD &&
-              href !== RouterPage.DASHBOARD
-              ? "grey"
-              : "#fffdfe"
-            }
-            cursor={
-              router.route === RouterPage.DASHBOARD &&
-              href !== RouterPage.DASHBOARD
-                ? "not-allowed"
-                : "pointer"
-            }
-            bg={active && "#ee0405"}
-            _hover={{
-              // color: '#fffdfe',
-              textDecoration: 'underline',
-              textDecorationStyle: 'wavy',
-              textUnderlineOffset: '4px',
-              textDecorationThickness: '1.5px',
-            }}
-            {...rest}
-          >
-            <Icon mr="4" fontSize="lg" color="#fffdfe" as={icon} />
+            router.route === RouterPage.DASHBOARD &&
+            href !== RouterPage.DASHBOARD
+            ? "grey"
+            : "#fffdfe"
+            } 
+            as={icon} 
+          />
             {children}
-          </Flex>
-        </Tooltip>
+        </Flex>
       </NextLink>
     </Box>
   );

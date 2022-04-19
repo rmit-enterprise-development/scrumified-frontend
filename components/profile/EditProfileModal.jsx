@@ -52,28 +52,28 @@ const EditProfileModal = ({id, fname, lname, email, bio }) => {
                 <FormLabel color={useColorModeValue("#031e49", "gray.200")}>
                     First Name
                 </FormLabel>
-              <Input name="fname" placeholder="First Name" value={fname}/>
+              <Input name="fname" placeholder="First Name" defaultValue={fname}/>
             </FormControl>
 
             <FormControl mt={4} isRequired>
                 <FormLabel color={useColorModeValue("#031e49", "gray.200")}>
                     Last Name
                 </FormLabel>
-                <Input name="lname" placeholder="Last Name" value={lname}/>
+                <Input name="lname" placeholder="Last Name" defaultValue={lname}/>
             </FormControl>
 
             <FormControl mt={4} isRequired>
                 <FormLabel color={useColorModeValue("#031e49", "gray.200")}>
                     Email
                 </FormLabel>
-                <Input name="email" type="email" placeholder="Email" value={email}/>
+                <Input name="email" type="email" placeholder="Email" defaultValue={email}/>
             </FormControl>
 
             <FormControl mt={4}>
                 <FormLabel color={useColorModeValue("#031e49", "gray.200")}>
                     Biography
                 </FormLabel>
-                <Input name="bio" placeholder="Biography" value={bio}/>
+                <Input name="bio" placeholder="Biography" defaultValue={bio}/>
             </FormControl>
 
             

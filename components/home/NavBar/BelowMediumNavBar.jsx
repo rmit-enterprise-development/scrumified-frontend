@@ -44,9 +44,10 @@ const BelowMediumNavBar = ({
     e.preventDefault();
     const targetHref = e.target.firstChild.hash || e.target.hash;
     const location = document.querySelector(targetHref).offsetTop;
+    const offsetFinal = targetHref === '#features' ? 120 : 64;
     window.scrollTo({
       left: 0,
-      top: location - 64,
+      top: location - offsetFinal,
     });
     onToggle();
   };

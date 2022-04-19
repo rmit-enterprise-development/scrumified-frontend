@@ -3,6 +3,7 @@ import Head from 'next/head';
 import HomeNavBar from '../components/home/NavBar/MainNavBar';
 import FirstSection from '../components/home/Section/FirstSection';
 import SecondSection from '../components/home/Section/SecondSection';
+import ThirdSection from '../components/home/Section/ThirdSection';
 import MainForm from '../components/home/Account/MainForm';
 import { Container, Flex, useColorModeValue } from '@chakra-ui/react';
 import useStateRef from 'react-usestateref';
@@ -39,7 +40,6 @@ export default function Home() {
         typedEmailRef={typedEmailRef}
       />
 
-      {/* Main content (currently testing only) */}
       {/* First section */}
       <FirstSection
         typedEmail={typedEmail}
@@ -48,17 +48,12 @@ export default function Home() {
         setTypedEmail={setTypedEmail}
       />
 
+      {/* Second section */}
       <SecondSection />
 
-      {/* Dummy section */}
-      <Container
-        as="main"
-        p={0}
-        bg="red.500"
-        maxW="full"
-        w="100vw"
-        h="100vh"
-      ></Container>
+      {/* Third section */}
+      <ThirdSection />
+
     </Flex>
   );
 }

@@ -28,7 +28,7 @@ const SecondSection = () => {
     <Box
       data-aos={responsiceAos}
       bg="transparent"
-      height={{ md: '14rem', lg: '20rem' }}
+      height={{ md: '16rem', lg: '22rem', xlg: "20rem" }}
     >
       <Flex
         p={{ base: '25px', md: '15px' }}
@@ -83,12 +83,15 @@ const SecondSection = () => {
       direction="column"
       alignItems="center"
       justifyContent="center"
-      py="2rem"
-      borderTopRadius="25px"
+      py="3rem"
+      overflow="hidden"
+      borderRadius="25px"
       boxShadow={useColorModeValue(
-        '1px -5px 20px -3px rgba(0,0,0,0.53)',
-        '1px -5px 20px -3px rgba(255,255,255,0.53)'
+        '0px 0px 19px 2px rgba(184, 202, 209,0.6)',
+        '0px 0px 19px 2px rgba(255,255,255,0.53)'
       )}
+      mx={{ base: '1rem', md: '6rem' }}
+      mb="10rem"
       data-aos="fade-up"
       style={{
         '-moz-user-select': 'none',
@@ -99,10 +102,9 @@ const SecondSection = () => {
       }}
     >
       <Text
-        borderTopRadius="40px"
         bg="transparent"
         fontWeight="bold"
-        fontSize={{ base: '1rem', md: 'lg' }}
+        fontSize={{ base: '0.8rem', md: 'lg' }}
         color={useColorModeValue(
           'rgba(235, 5, 70, 0.8)',
           'rgba(247, 59, 112, 1)'
@@ -112,10 +114,9 @@ const SecondSection = () => {
         WHATS THE FUNCTION
       </Text>
       <Text
-        borderTopRadius="40px"
         bg="transparent"
         color={useColorModeValue('#031e49', 'gray.200')}
-        fontSize={{ base: '1.25rem', md: '2rem', lg: '2.6rem' }}
+        fontSize={{ base: '1rem', md: '2rem', lg: '2.6rem' }}
         mb={{ base: '2rem', md: '5rem' }}
         fontWeight="bold"
       >

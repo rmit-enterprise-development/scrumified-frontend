@@ -134,7 +134,9 @@ const AboveMediumNavbar = ({
                 gap="3rem"
                 mx={{ md: '2rem', lg: '1rem' }}
             >
-                <Text
+                <chakra.a
+                    href="#home"
+                    onClick={handleSectionClick}
                     style={{ transition: 'all 0.5s' }}
                     cursor="pointer"
                     color={useColorModeValue('gray.500', '#fff')}
@@ -150,7 +152,7 @@ const AboveMediumNavbar = ({
                     w="100%"
                 >
                     Home
-                </Text>
+                </chakra.a>
 
                 <chakra.a
                     href="#features"

@@ -1,13 +1,10 @@
 import { Box } from "@chakra-ui/react";
-import Head from "next/head";
-import React, { useEffect, useState } from "react";
-import projectAPI from "../api/services/projectAPI";
-import SectionHeader from "../components/common/SectionHeader/SectionHeader";
-import MainContainer from "../components/layout/MainContainer";
+import React, { useState, useEffect } from "react";
+import SectionHeader from "../components/dashboard/SectionHeader/SectionHeader";
+import Sidebar from "../components/dashboard/SideBar/SideBar";
 import BacklogController from "../components/workspace/BacklogController";
 import Board from "../components/workspace/Board";
 import Column from "../components/workspace/Column";
-import { digFind } from "../utils/object";
 
 const Backlog = ({ cards }) => {
   const initData = [
@@ -45,62 +42,55 @@ const Backlog = ({ cards }) => {
     return cards;
   };
 
-  console.log(data);
   const [winReady, setwinReady] = useState(false);
   useEffect(() => {
     setwinReady(true);
   }, []);
 
-  console.log(data);
-
   return (
-    <>
-      <Head>
-        <title>Backlog</title>
-      </Head>
-      <MainContainer>
-        <Box>
-          <SectionHeader>Backlog</SectionHeader>
-          <BacklogController data={data} setData={setData} />
-          {winReady ? (
-            <Board data={data} setData={setData}>
-              <Column
-                key={0}
-                title={"Backlog"}
-                id={"backlog"}
-                cards={filterCards("backlog")}
-              />
-            </Board>
-          ) : null}
-        </Box>
-      </MainContainer>
-    </>
+    <Box display="flex">
+      <Box>
+        <Sidebar />
+      </Box>
+      <Box m={10} w="100%">
+        <SectionHeader>Backlog</SectionHeader>
+        <BacklogController
+          data={data}
+          setData={setData}
+          templateColumns="1fr"
+        />
+        {winReady ? (
+          <Board data={data} setData={setData}>
+            <Column
+              key={0}
+              title={"Backlog"}
+              id={"backlog"}
+              cards={filterCards("backlog")}
+            />
+          </Board>
+        ) : null}
+      </Box>
+    </Box>
   );
 };
 
 export default Backlog;
 
 // export async function getStaticProps() {
-//   const response = await projectAPI.getAllStories(1);
-//   // response dissection
-//   const data = await response.data;
-//   console.log("data: ", data);
-
-//   const cards = await digFind(data, "storyDtoList");
-//   console.log("cards: ", cards);
-
-//   if (cards) {
-//     return {
-//       props: {
-//         cards, //ES6: Can use only "cards" for "cards : cards"
-//       },
-//       revalidate: 5,
-//     };
-//   }
-//   return {
-//     props: {
-//       cards: [],
-//     },
-//     revalidate: 5,
-//   };
+// 	const res = await fetch('http://127.0.0.1:8989/projects/1/stories');
+// 	const cards = await res.json();
+// 	if (cards['_embedded']) {
+// 		return {
+// 			props: {
+// 				cards: cards['_embedded'].storyDtoList,
+// 			},
+// 			revalidate: 5,
+// 		};
+// 	}
+// 	return {
+// 		props: {
+// 			cards: [],
+// 		},
+// 		revalidate: 5,
+// 	};
 // }

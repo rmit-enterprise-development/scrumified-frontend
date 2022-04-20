@@ -8,20 +8,27 @@ import {
     SimpleGrid,
     Center,
     useColorModeValue,
+    useBreakpointValue,
 } from '@chakra-ui/react';
 import { BsListCheck } from 'react-icons/bs';
 import { FaRegChartBar, FaHammer, FaFire } from 'react-icons/fa';
 
 const SecondSection = () => {
     useEffect(() => {
-        AOS.init({ duration: 1200 });
+        AOS.init({ duration: 1200, mirror: true });
     }, []);
 
-    const FeatureComponent = ({ title, description, icon, aosAnim }) => (
+    // handle aos value responsively
+    const responsiceAos = useBreakpointValue({
+        base: 'fade-up',
+        md: 'fade-down',
+    });
+
+    const FeatureComponent = ({ title, description, icon }) => (
         <Box
-            data-aos={aosAnim}
+            data-aos={responsiceAos}
             bg="transparent"
-            height={{ md: '14rem', lg: '22rem' }}
+            height={{ md: '16rem', lg: '22rem', xlg: '20rem' }}
         >
             <Flex
                 p={{ base: '25px', md: '15px' }}
@@ -44,7 +51,7 @@ const SecondSection = () => {
                     h="4.5rem"
                     w="4.5rem"
                     borderRadius="30px"
-                    alignSelf={{ base: 'center', md: 'start' }}
+                    alignSelf="center"
                 >
                     <Text color="#fff" fontSize="2.75rem">
                         {icon}
@@ -54,28 +61,38 @@ const SecondSection = () => {
                     fontSize="xl"
                     fontWeight="bold"
                     color={useColorModeValue('#031e49', 'gray.200')}
-                    textAlign={{ base: 'center', md: 'justify' }}
+                    textAlign="center"
                 >
                     {title}
                 </Text>
                 <Text
+                    px={{ base: '10px', md: 0 }}
                     color={useColorModeValue('gray.600', 'gray.200')}
                     fontSize="sm"
-                    textAlign={{ base: 'center', md: 'justify' }}
+                    textAlign="center"
                 >
-                    {description}
+                    {description.trim().split(/\s+/).join(' ')}
                 </Text>
             </Flex>
         </Box>
     );
     return (
         <Flex
+            id="features"
             transition="all 0.4s linear"
-            bg={useColorModeValue('#fff', '#031e49')}
             direction="column"
             alignItems="center"
             justifyContent="center"
-            py="2rem"
+            py="3rem"
+            overflow="hidden"
+            borderRadius="25px"
+            boxShadow={useColorModeValue(
+                '0px 31px 56px -22px rgba(184, 202, 209,0.51)',
+                '0px 31px 56px -22px rgba(255,255,255,0.51)'
+            )}
+            mx={{ base: '1rem', md: '6rem' }}
+            mb="10rem"
+            data-aos="fade-up"
             style={{
                 '-moz-user-select': 'none',
                 '-khtml-user-select': 'none',
@@ -85,8 +102,9 @@ const SecondSection = () => {
             }}
         >
             <Text
+                bg="transparent"
                 fontWeight="bold"
-                fontSize={{ base: '1rem', md: 'lg' }}
+                fontSize={{ base: '0.8rem', md: 'lg' }}
                 color={useColorModeValue(
                     'rgba(235, 5, 70, 0.8)',
                     'rgba(247, 59, 112, 1)'
@@ -96,9 +114,10 @@ const SecondSection = () => {
                 WHATS THE FUNCTION
             </Text>
             <Text
+                bg="transparent"
                 color={useColorModeValue('#031e49', 'gray.200')}
-                fontSize={{ base: '1.25rem', md: '2rem', lg: '2.6rem' }}
-                mb="5rem"
+                fontSize={{ base: '1rem', md: '2rem', lg: '2.6rem' }}
+                mb={{ base: '2rem', md: '5rem' }}
                 fontWeight="bold"
             >
                 Meet the features of the product
@@ -108,35 +127,27 @@ const SecondSection = () => {
                 columns={{ base: 1, md: 2, lg: 4 }}
                 spacing={{ md: '3rem', lg: '2rem' }}
                 px={{ base: 0, md: '2rem', lg: '6rem' }}
-                bg={useColorModeValue('#fff', '#031e49')}
+                bg="transparent"
                 transition="all 0.4s linear"
             >
                 <FeatureComponent
-                    aosAnim="fade-left"
                     title="Core Principle"
-                    description="Beginner learning curve project manangement with discipline, 
-                    flexibility, and customization"
+                    description="Beginner learning curve project manangement with discipline, flexibility, and customization"
                     icon={<FaFire />}
                 />
                 <FeatureComponent
-                    aosAnim="fade-down"
-                    title="Backlog"
-                    description=" Easy user stories management with drag and drop
-                    functionalities and objective project scale points"
+                    title="Backlog Board"
+                    description="Ease stories management with drag-and-drop and Agile-strict project scale points"
                     icon={<BsListCheck />}
                 />
                 <FeatureComponent
-                    aosAnim="fade-up"
-                    title="Roadmap"
-                    description="Comprehensive timeline in Gnatt Chart style to keep
-                    track of sprints overal duration"
+                    title="Roadmap Board"
+                    description="Comprehensive timeline in Gnatt Chart style to keep track of sprints overal duration"
                     icon={<FaRegChartBar />}
                 />
                 <FeatureComponent
-                    aosAnim="fade-right"
                     title="Active Sprints"
-                    description="Easy and disciplined sprints life cycle management
-                    with drag and drop functionalities"
+                    description="Easy and disciplined sprints life cycle management with drag and drop functionalities"
                     icon={<FaHammer />}
                 />
             </SimpleGrid>

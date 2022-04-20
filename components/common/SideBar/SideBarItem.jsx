@@ -18,6 +18,12 @@ export const SideBarItem = ({ icon, children, href, ...rest }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.isReady]);
 
+  const featureTabs = [
+    RouterPage.BACKLOG,
+    RouterPage.ROADMAP,
+    RouterPage.SPRINT,
+  ];
+
   return (
     <Box pb={3}>
       <NextLink
@@ -41,14 +47,16 @@ export const SideBarItem = ({ icon, children, href, ...rest }) => {
           role="group"
           cursor="pointer"
           color={
-            router.route === RouterPage.DASHBOARD &&
+            (router.route.includes(RouterPage.DASHBOARD) ||
+              router.route.includes(RouterPage.PROFILE)) &&
             href !== RouterPage.DASHBOARD
               ? "grey"
               : "#fffdfe"
           }
           pointerEvents={
-            router.route === RouterPage.DASHBOARD &&
-            href !== RouterPage.DASHBOARD
+            router.route.includes(RouterPage.DASHBOARD) ||
+            (router.route.includes(RouterPage.PROFILE) &&
+              href !== RouterPage.DASHBOARD)
               ? "none"
               : "auto"
           }
@@ -65,7 +73,8 @@ export const SideBarItem = ({ icon, children, href, ...rest }) => {
             mr="4"
             fontSize="lg"
             color={
-              router.route === RouterPage.DASHBOARD &&
+              (router.route.includes(RouterPage.DASHBOARD) ||
+                router.route.includes(RouterPage.PROFILE)) &&
               href !== RouterPage.DASHBOARD
                 ? "grey"
                 : "#fffdfe"

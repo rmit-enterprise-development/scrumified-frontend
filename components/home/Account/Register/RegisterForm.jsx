@@ -120,7 +120,7 @@ const RegisterForm = ({
     });
     rs.push({
       value:
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[_@$!%*?&])[A-Za-z\d_@$!%*?&]{8,}$/.test(
           pwd
         ),
       msg: "At least 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character",

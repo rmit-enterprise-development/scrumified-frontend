@@ -19,61 +19,37 @@ import {
   FormErrorMessage,
 } from "@chakra-ui/react";
 import { useRef, useState } from "react";
+import * as Yup from 'yup';
 
 const EditProfileModal = ({id, fname, lname, email, bio }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const initialRef = useRef();
   const finalRef = useRef();
+  const initialValues = { 
+    fname: fname, 
+    lname:lname, 
+    email:email,
+    password: "",
+    confirmPassword: ""
+  };
 
-  function validateFname(value) {
-    let error
-    if (!value) {
-      error = 'First name is required'
-    } 
-    return error
+  const onSubmit = (values, actions) => {
+    setTimeout(() => {
+      alert(JSON.stringify(values, null, 2))
+      actions.setSubmitting(false)
+    }, 1000)
+    console.log(values);
   }
 
-  function validateLname(value) {
-    let error
-    if (!value) {
-      error = 'Last name is required'
-    } 
-    return error
-  }
-
-  function validateEmail(value) {
-    let error
-    if (!value) {
-      error = 'Email is required'
-    } 
-    return error
-  }
-
-  function validatePassword(value) {
-    let error = "";
-    const passwordRegex = /(?=.*[0-9])/;
-    if (!value) {
-      error = "Password is required";
-    } else if (value.length < 8) {
-      error = "*Password must be 8 characters long.";
-    } else if (!passwordRegex.test(value)) {
-      error = "*Invalid password. Must contain one number.";
-    }
-    return error;
-  }
-
-  function confirmPassword(value, confirmValue) {
-    let error = "";
-    if (confirmValue && value) {
-      if (confirmValue !== value) {
-        error = "Password not matched";
-      }
-    } else {
-      error = "Please confirm password";
-    }
-    return error;
-  }
+  const validationSchema = Yup.object({
+    fname: Yup.string().min(2, "Must be more than 1 character").required("Required"),
+    lname: Yup.string().min(2, "Must be more than 1 character").required("Required"),
+    email: Yup.string().min(2, "Must be more than 1 character").required("Required").email("Invalid email"),
+    password: Yup.string().min(8, "Must be more than 8 characters").required("Required")
+      .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[_@$!%*?&])[A-Za-z\d_@$!%*?&]{8,}$/, "At least 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character"),
+    confirmPassword: Yup.string().required("Please confirm your password").oneOf([Yup.ref('password'), null], "Passwords do not match")
+  })
 
   return (
     <>
@@ -100,18 +76,13 @@ const EditProfileModal = ({id, fname, lname, email, bio }) => {
           <ModalCloseButton />
           <ModalBody pb={6}>
             <Formik
-              initialValues={{ fname: fname, lname:lname, email:email}}
-              onSubmit={(values, actions) => {
-                setTimeout(() => {
-                  // alert(JSON.stringify(values, null, 2))
-                  actions.setSubmitting(false)
-                }, 1000)
-                console.log(values);
-              }}
+              initialValues={initialValues}
+              onSubmit={onSubmit}
+              validationSchema={validationSchema}
             >
               {(props) => (
                 <Form>
-                  <Field name='fname' validate={validateFname}>
+                  <Field name='fname' >
                     {({ field, form }) => (
                       <FormControl isInvalid={form.errors.fname && form.touched.fname}>
                         <FormLabel htmlFor='fname'>First name</FormLabel>
@@ -121,7 +92,7 @@ const EditProfileModal = ({id, fname, lname, email, bio }) => {
                     )}
                   </Field>
 
-                  <Field name='lname' validate={validateLname}>
+                  <Field name='lname' >
                     {({ field, form }) => (
                       <FormControl isInvalid={form.errors.lname && form.touched.lname}>
                         <FormLabel htmlFor='lname'>Last name</FormLabel>
@@ -131,7 +102,7 @@ const EditProfileModal = ({id, fname, lname, email, bio }) => {
                     )}
                   </Field>
 
-                  <Field name='email' validate={validateEmail}>
+                  <Field name='email' >
                     {({ field, form }) => (
                       <FormControl isInvalid={form.errors.email && form.touched.email}>
                         <FormLabel htmlFor='email'>Email</FormLabel>
@@ -141,7 +112,7 @@ const EditProfileModal = ({id, fname, lname, email, bio }) => {
                     )}
                   </Field>
 
-                  <Field name='password' validate={validatePassword}>
+                  <Field name='password' >
                     {({ field, form }) => (
                       <FormControl isInvalid={form.errors.password && form.touched.password}>
                         <FormLabel>Password</FormLabel>
@@ -151,10 +122,10 @@ const EditProfileModal = ({id, fname, lname, email, bio }) => {
                     )}
                   </Field>
 
-                  <Field name='confirmPassword' validate={value => confirmPassword(value.password, value)}>
+                  <Field name='confirmPassword' >
                     {({ field, form }) => (
                       <FormControl isInvalid={form.errors.confirmPassword && form.touched.confirmPassword}>
-                        <FormLabel>Password</FormLabel>
+                        <FormLabel>Confirm Password</FormLabel>
                         <Input {...field} type="password" id='confirmPassword' placeholder='Password' />
                         <FormErrorMessage>{form.errors.confirmPassword}</FormErrorMessage>
                       </FormControl>
@@ -169,55 +140,11 @@ const EditProfileModal = ({id, fname, lname, email, bio }) => {
                   >
                     Submit
                   </Button>
+
                 </Form>
               )}
             </Formik>
           </ModalBody>
-{/*       
-            <FormControl isRequired>
-                <FormLabel color={useColorModeValue("#031e49", "gray.200")}>
-                    First Name
-                </FormLabel>
-              <Input name="fname" placeholder="First Name" defaultValue={fname}/>
-            </FormControl>
-
-            <FormControl mt={4} isRequired>
-                <FormLabel color={useColorModeValue("#031e49", "gray.200")}>
-                    Last Name
-                </FormLabel>
-                <Input name="lname" placeholder="Last Name" defaultValue={lname}/>
-            </FormControl>
-
-            <FormControl mt={4} isRequired>
-                <FormLabel color={useColorModeValue("#031e49", "gray.200")}>
-                    Email
-                </FormLabel>
-                <Input name="email" type="email" placeholder="Email" defaultValue={email}/>
-            </FormControl>
-
-            <FormControl mt={4}>
-                <FormLabel color={useColorModeValue("#031e49", "gray.200")}>
-                    Biography
-                </FormLabel>
-                <Input name="bio" placeholder="Biography" defaultValue={bio}/>
-            </FormControl>
-
-            
-            <FormControl mt={4} isRequired>
-                <FormLabel color={useColorModeValue("#031e49", "gray.200")}>
-                    Password
-                </FormLabel>
-                <Input name="password" type="password" placeholder="Password" />
-            </FormControl>
-
-            <FormControl mt={4} isRequired>
-                <FormLabel color={useColorModeValue("#031e49", "gray.200")}>
-                    Reconfirm Password
-                </FormLabel>
-                <Input name="re-password" type="password" placeholder="Password" />
-            </FormControl>
-          </ModalBody> */}
-
         </ModalContent>
       </Modal>
     </>

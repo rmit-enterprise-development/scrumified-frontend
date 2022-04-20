@@ -6,7 +6,7 @@ export default function MainContainer({ children }) {
     <Flex>
       <SideBar />
       <Box flexGrow="1" bg={useColorModeValue("#FFFDFE", "#031E49")}>
-        <Box my={10} mr={10}>
+        <Box my={5} mr={10}>
           {children}
         </Box>
       </Box>

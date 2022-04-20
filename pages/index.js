@@ -1,4 +1,4 @@
-import { Flex } from "@chakra-ui/react";
+import { Flex, useColorModeValue } from "@chakra-ui/react";
 import Head from "next/head";
 import { useState } from "react";
 import useStateRef from "react-usestateref";

@@ -1,4 +1,5 @@
 import { Box } from "@chakra-ui/react";
+import Head from "next/head";
 import React, { useEffect, useState } from "react";
 import SectionHeader from "../components/common/SectionHeader/SectionHeader";
 import MainContainer from "../components/layout/MainContainer";
@@ -71,33 +72,39 @@ const Sprint = () => {
   };
 
   return (
-    <MainContainer>
-      <Box>
-        <SectionHeader>Active Sprint</SectionHeader>
-        {winReady ? (
-          <Board data={data} setData={setData}>
-            <Column
-              key={0}
-              title={"todo"}
-              id={"todo"}
-              cards={filterCards("todo")}
-            />
-            <Column
-              key={1}
-              title={"In Progress"}
-              id={"inProgress"}
-              cards={filterCards("inProgress")}
-            />
-            <Column
-              key={2}
-              title={"done"}
-              id={"done"}
-              cards={filterCards("done")}
-            />
-          </Board>
-        ) : null}
-      </Box>
-    </MainContainer>
+    <>
+      <Head>
+        <title>Active Sprint</title>
+      </Head>
+
+      <MainContainer>
+        <Box>
+          <SectionHeader>Active Sprint</SectionHeader>
+          {winReady ? (
+            <Board data={data} setData={setData}>
+              <Column
+                key={0}
+                title={"todo"}
+                id={"todo"}
+                cards={filterCards("todo")}
+              />
+              <Column
+                key={1}
+                title={"In Progress"}
+                id={"inProgress"}
+                cards={filterCards("inProgress")}
+              />
+              <Column
+                key={2}
+                title={"done"}
+                id={"done"}
+                cards={filterCards("done")}
+              />
+            </Board>
+          ) : null}
+        </Box>
+      </MainContainer>
+    </>
   );
 };
 

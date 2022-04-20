@@ -1,4 +1,5 @@
 import { Box } from "@chakra-ui/react";
+import Head from "next/head";
 import React, { useEffect, useState } from "react";
 import projectAPI from "../api/services/projectAPI";
 import SectionHeader from "../components/common/SectionHeader/SectionHeader";
@@ -53,22 +54,27 @@ const Backlog = ({ cards }) => {
   console.log(data);
 
   return (
-    <MainContainer>
-      <Box>
-        <SectionHeader>Backlog</SectionHeader>
-        <BacklogController data={data} setData={setData} />
-        {winReady ? (
-          <Board data={data} setData={setData}>
-            <Column
-              key={0}
-              title={"Backlog"}
-              id={"backlog"}
-              cards={filterCards("backlog")}
-            />
-          </Board>
-        ) : null}
-      </Box>
-    </MainContainer>
+    <>
+      <Head>
+        <title>Backlog</title>
+      </Head>
+      <MainContainer>
+        <Box>
+          <SectionHeader>Backlog</SectionHeader>
+          <BacklogController data={data} setData={setData} />
+          {winReady ? (
+            <Board data={data} setData={setData}>
+              <Column
+                key={0}
+                title={"Backlog"}
+                id={"backlog"}
+                cards={filterCards("backlog")}
+              />
+            </Board>
+          ) : null}
+        </Box>
+      </MainContainer>
+    </>
   );
 };
 

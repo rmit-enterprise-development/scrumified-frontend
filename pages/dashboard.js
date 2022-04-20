@@ -1,4 +1,5 @@
 import { Box, Flex } from "@chakra-ui/react";
+import Head from "next/head";
 import { useState } from "react";
 import SectionHeader from "../components/common/SectionHeader/SectionHeader";
 import CreateProjectModal from "../components/dashboard/CreateProjectModal/CreateProjectModal";
@@ -77,22 +78,27 @@ const Dashboard = () => {
   // console.log("userList: ", userList);
 
   return (
-    <MainContainer>
-      <Flex justifyContent="space-between" alignItems="center">
-        <SectionHeader>My Projects</SectionHeader>
+    <>
+      <Head>
+        <title>Dashboard</title>
+      </Head>
+      <MainContainer>
+        <Flex justifyContent="space-between" alignItems="center">
+          <SectionHeader>My Projects</SectionHeader>
 
-        <CreateProjectModal
-          participantList={userList.map((a) => {
-            const userInfo = a.name + " (" + a.email + ")";
-            return { value: a.id, label: userInfo };
-          })}
-        />
-      </Flex>
+          <CreateProjectModal
+            participantList={userList.map((a) => {
+              const userInfo = a.name + " (" + a.email + ")";
+              return { value: a.id, label: userInfo };
+            })}
+          />
+        </Flex>
 
-      <ProjectGrid />
+        <ProjectGrid />
 
-      <SectionHeader>Assigned to me</SectionHeader>
-    </MainContainer>
+        <SectionHeader>Assigned to me</SectionHeader>
+      </MainContainer>
+    </>
   );
 };
 

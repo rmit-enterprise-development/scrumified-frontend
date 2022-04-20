@@ -1,4 +1,5 @@
 import { Flex } from "@chakra-ui/react";
+import Head from "next/head";
 import { useState } from "react";
 import SectionHeader from "../components/common/SectionHeader/SectionHeader";
 import MainContainer from "../components/layout/MainContainer";
@@ -15,27 +16,33 @@ const Profile = () => {
   });
 
   return (
-    <MainContainer>
-      <SectionHeader>Profile</SectionHeader>
+    <>
+      <Head>
+        <title>Profile</title>
+      </Head>
 
-      <Flex justifyContent="space-around" mt={10}>
-        <ProfileCard
-          fname={user.fname}
-          lname={user.lname}
-          email={user.email}
-          bio={user.bio}
-        />
-        <EditProfileModal
-          id={user.id}
-          fname={user.fname}
-          lname={user.lname}
-          email={user.email}
-          bio={user.bio}
-        />
-      </Flex>
+      <MainContainer>
+        <SectionHeader>Profile</SectionHeader>
 
-      <SectionHeader>My Projects</SectionHeader>
-    </MainContainer>
+        <Flex justifyContent="space-around" mt={10}>
+          <ProfileCard
+            fname={user.fname}
+            lname={user.lname}
+            email={user.email}
+            bio={user.bio}
+          />
+          <EditProfileModal
+            id={user.id}
+            fname={user.fname}
+            lname={user.lname}
+            email={user.email}
+            bio={user.bio}
+          />
+        </Flex>
+
+        <SectionHeader>My Projects</SectionHeader>
+      </MainContainer>
+    </>
   );
 };
 

@@ -4,24 +4,23 @@ import {
   DrawerContent,
   Flex,
   IconButton,
-  Switch,
-  Text,
   useColorMode,
   useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
 import React from "react";
 import { FiMenu } from "react-icons/fi";
-import { SideBarContent } from "./SideBarContent";
+import { SidebarContent } from "./SidebarContent";
 
-export default function SideBar({ children }) {
+export default function Sidebar({ children }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { colorMode, toggleColorMode } = useColorMode();
+  const { toggleColorMode } = useColorMode();
 
   return (
     <Box minH="100vh">
-      <SideBarContent
+      <SidebarContent
         onClose={() => onClose}
+        toggleColorMode={toggleColorMode}
         display={{ base: "none", md: "block" }}
       />
       <Drawer
@@ -31,21 +30,13 @@ export default function SideBar({ children }) {
         onClose={onClose}
         returnFocusOnClose={false}
         onOverlayClick={onClose}
-        bg={useColorModeValue("#fffdfe", "#031d46")}
-        size="full"
+        bg="#031d46"
       >
         <DrawerContent>
-          <SideBarContent onClose={onClose} />
+          <SidebarContent toggleColorMode={toggleColorMode} onClose={onClose} />
         </DrawerContent>
       </Drawer>
-      <Switch
-        isChecked={colorMode === "dark"}
-        onChange={() => {
-          toggleColorMode();
-        }}
-        colorScheme="green"
-        size="lg"
-      />
+
       {/* mobilenav */}
       <MobileNav display={{ base: "flex", md: "none" }} onOpen={onOpen} />
       <Box ml={{ base: 0, md: 60 }} p="4">
@@ -62,22 +53,17 @@ const MobileNav = ({ onOpen, ...rest }) => {
       px={{ base: 4, md: 24 }}
       height="20"
       alignItems="center"
-      bg={useColorModeValue("#fffdfe", "#031d46")}
-      borderBottomWidth="1px"
       borderBottomColor={useColorModeValue("gray.200", "gray.700")}
       justifyContent="flex-start"
       {...rest}
     >
       <IconButton
-        variant="outline"
+        // variant="outline"
         onClick={onOpen}
         aria-label="open menu"
+        color="grey"
         icon={<FiMenu />}
       />
-
-      {/* <Text fontSize="2xl" ml="8" fontFamily="monospace" fontWeight="bold">
-        Scrumified
-      </Text> */}
     </Flex>
   );
 };

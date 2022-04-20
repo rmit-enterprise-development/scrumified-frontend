@@ -1,11 +1,9 @@
-import { Box, Button, Flex } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import userAPI from "../api/services/userAPI";
+import { Box, Flex } from "@chakra-ui/react";
+import { useState } from "react";
 import CreateProjectModal from "../components/dashboard/CreateProjectModal/CreateProjectModal";
+import Sidebar from "../components/dashboard/SideBar/SideBar";
 import ProjectGrid from "../components/dashboard/ProjectGrid/ProjectGrid";
 import SectionHeader from "../components/dashboard/SectionHeader/SectionHeader";
-import Sidebar from "../components/dashboard/SideBar/SideBar.jsx";
-import objectUtils from "../utils/object";
 
 const Dashboard = () => {
   const [userList, setUserList] = useState([
@@ -79,12 +77,14 @@ const Dashboard = () => {
   // console.log("userList: ", userList);
 
   return (
-    <Box display="flex">
+    <Flex>
       <Sidebar />
-      <Box m={10}>
+
+      <Box m={10} flexGrow="1">
         <Box>
           <Flex justifyContent="space-between" alignItems="center">
             <SectionHeader>My Projects</SectionHeader>
+
             <CreateProjectModal
               participantList={userList.map((a) => {
                 const userInfo = a.name + " (" + a.email + ")";
@@ -98,7 +98,7 @@ const Dashboard = () => {
           <SectionHeader>Assigned to me</SectionHeader>
         </Box>
       </Box>
-    </Box>
+    </Flex>
   );
 };
 

@@ -14,7 +14,7 @@ const Column = ({ title, id, cards }) => {
 			overflow="hidden"
 			// bg={'white'}
 			boxShadow="base"
-			borderRadius={"1rem"}
+			borderRadius={'1rem'}
 		>
 			<Box padding={'4'}>
 				<Text

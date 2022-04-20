@@ -23,6 +23,7 @@ const FirstSection = ({
 }) => {
     return (
         <Flex
+            id="home"
             justify="center"
             transition="all 0.4s linear"
             bg={useColorModeValue('#fff', '#031e49')}

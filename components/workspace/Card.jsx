@@ -1,17 +1,13 @@
 import {
+	Badge,
 	Box,
-	Button,
-	Heading,
+	Circle,
 	Flex,
+	Heading,
 	Text,
-	Spacer,
 	useDisclosure,
-	IconButton,
-	Grid,
 } from '@chakra-ui/react';
-
-import { EditIcon } from '@chakra-ui/icons';
-
+import Avvvatars from 'avvvatars-react';
 import React from 'react';
 import { Draggable } from 'react-beautiful-dnd';
 import CardModal from './CardModal';

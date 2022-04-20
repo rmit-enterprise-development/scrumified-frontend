@@ -11,75 +11,90 @@ import Avvvatars from "avvvatars-react";
 import { motion } from "framer-motion";
 import NextLink from "next/link";
 import React from "react";
+import { FaMoon, FaSun } from "react-icons/fa";
 import Images from "../../../assets/images";
 import { LinkItems } from "./LinkItems";
-import { SideBarItem } from "./SideBarItem";
+import { SidebarItem } from "./SidebarItem";
 
-export function SideBarContent({ onClose, ...rest }) {
+export function SidebarContent({ onClose, toggleColorMode, ...rest }) {
+  const SwitchIcon = useColorModeValue(FaSun, FaMoon);
+
   return (
     <Box
-      bg={useColorModeValue("#fffdfe", "#031d46")}
+      bg="#031d46"
       borderRight="1px"
-      borderRightColor={useColorModeValue("gray.200", "gray.700")}
+      borderRightColor="gray.600"
       w={{ base: "full", md: 60 }}
       pos="fixed"
       h="full"
       {...rest}
     >
-      <Flex h="20" alignItems="center" mx="8" justifyContent="center">
-        <Flex justifyContent="center" mt={5} cursor="pointer">
-          <NextLink href="./dashboard" passHref>
-            <motion.div
-              style={{ height: "50px", width: "50px" }}
-              animate={{ rotate: 360 }}
-              transition={{
-                repeat: Infinity,
-                loop: Infinity,
-                ease: "linear",
-                duration: 6,
-              }}
-            >
-              <Image
-                src={Images.MainLogo.src}
-                alt="Main logo"
-                width="100%"
-                height="100%"
-              />
-            </motion.div>
-          </NextLink>
+      <Flex flexDir="column" justifyContent="space-between" h="full">
+        <Flex h="20" alignItems="center" flexDir="column" w="full">
+          <Flex justifyContent="center" mt={6} cursor="pointer">
+            <NextLink href="/dashboard" passHref>
+              <motion.div
+                style={{ height: "50px", width: "50px" }}
+                animate={{ rotate: 360 }}
+                transition={{
+                  repeat: Infinity,
+                  loop: Infinity,
+                  ease: "linear",
+                  duration: 6,
+                }}
+              >
+                <Image
+                  src={Images.MainLogo.src}
+                  alt="Main logo"
+                  width="100%"
+                  height="100%"
+                />
+              </motion.div>
+            </NextLink>
+          </Flex>
+
+          <Flex flexDir="column" mt={5} w="full">
+            {LinkItems.map((link) => (
+              <SidebarItem key={link.name} icon={link.icon} href={link.href}>
+                {link.name}
+              </SidebarItem>
+            ))}
+          </Flex>
         </Flex>
 
-        <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
-      </Flex>
-      {LinkItems.map((link) => (
-        <SideBarItem key={link.name} icon={link.icon} href={link.href}>
-          {link.name}
-        </SideBarItem>
-      ))}
+        <Flex
+          p="4"
+          flexDir="row"
+          justifyContent="space-between"
+          w="full"
+          alignItems="center"
+        >
+          <NextLink href="/profile" passHref>
+            <Flex alignItems="center">
+              <IconButton
+                aria-label="Profile"
+                isRound={true}
+                variant="outline"
+                icon={
+                  <Avvvatars shadow={true} size="md" value="Khang Nguyen" />
+                }
+              />
+              <Text pl={2} cursor="pointer" color="#FFFDEF">
+                Khang
+              </Text>
+            </Flex>
+          </NextLink>
 
-      <Flex
-        p={5}
-        flexDir="row"
-        justifyContent="space-around"
-        w="100%"
-        alignItems="center"
-      >
-        <NextLink href="/profile" passHref>
           <IconButton
-            aria-label="Profile"
-            isRound={true}
-            variant="outline"
-            icon={<Avvvatars shadow={true} size="md" value="Khang Nguyen" />}
+            variant="ghost"
+            color="#FFFDEF"
+            onClick={toggleColorMode}
+            marginLeft="5"
+            fontSize="lg"
+            _hover={{ bg: "#ee0405" }}
+            icon={<SwitchIcon />}
           />
-        </NextLink>
-        <NextLink href="/profile" passHref>
-          <Text
-            cursor="pointer"
-            color={useColorModeValue("#031d46", "#fffdfe")}
-          >
-            Khang Nguyen
-          </Text>
-        </NextLink>
+        </Flex>
       </Flex>
     </Box>
   );

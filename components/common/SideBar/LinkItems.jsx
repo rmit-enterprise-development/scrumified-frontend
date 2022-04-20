@@ -1,8 +1,7 @@
-import { AiFillHome, AiFillNotification, AiFillSetting } from "react-icons/ai";
-import { MdTimeline, MdOutlineHelp } from "react-icons/md";
-import { VscTasklist } from "react-icons/vsc";
+import { AiFillHome } from "react-icons/ai";
 import { GiSprint } from "react-icons/gi";
-import { FaClipboard } from "react-icons/fa";
+import { MdTimeline } from "react-icons/md";
+import { VscTasklist } from "react-icons/vsc";
 import { RouterPage } from "../../../config/router";
 
 export const LinkItems = [

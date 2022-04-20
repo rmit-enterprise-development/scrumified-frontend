@@ -1,4 +1,4 @@
-import { Box, SimpleGrid } from "@chakra-ui/react";
+import { Box, Flex, SimpleGrid } from "@chakra-ui/react";
 import ProjectItem from "./ProjectItem/ProjectItem";
 
 const ProjectGrid = () => {
@@ -39,12 +39,12 @@ const ProjectGrid = () => {
     },
   ];
   return (
-    <SimpleGrid columns={[1, 2, 4]} gap={5} p={5}>
+    <Flex flexWrap="wrap" gap={5}>
       <ProjectItem {...data[0]} />
       <ProjectItem {...data[1]} />
       <ProjectItem {...data[2]} />
       <ProjectItem {...data[3]} />
-    </SimpleGrid>
+    </Flex>
   );
 };
 

@@ -1,11 +1,11 @@
 import { Box } from "@chakra-ui/react";
-import React, { useState, useEffect } from "react";
-import SectionHeader from "../components/dashboard/SectionHeader/SectionHeader";
-import Sidebar from "../components/dashboard/SideBar/SideBar";
+import React, { useEffect, useState } from "react";
+import projectAPI from "../api/services/projectAPI";
+import SectionHeader from "../components/common/SectionHeader/SectionHeader";
+import MainContainer from "../components/layout/MainContainer";
 import BacklogController from "../components/workspace/BacklogController";
 import Board from "../components/workspace/Board";
 import Column from "../components/workspace/Column";
-import projectAPI from "../api/services/projectAPI";
 import { digFind } from "../utils/object";
 
 const Backlog = ({ cards }) => {
@@ -53,27 +53,22 @@ const Backlog = ({ cards }) => {
   console.log(data);
 
   return (
-    <Box display="flex">
+    <MainContainer>
       <Box>
-        <Sidebar />
+        <SectionHeader>Backlog</SectionHeader>
+        <BacklogController data={data} setData={setData} />
+        {winReady ? (
+          <Board data={data} setData={setData}>
+            <Column
+              key={0}
+              title={"Backlog"}
+              id={"backlog"}
+              cards={filterCards("backlog")}
+            />
+          </Board>
+        ) : null}
       </Box>
-      <Box m={10} flexGrow="1">
-        <Box>
-          <SectionHeader>Backlog</SectionHeader>
-          <BacklogController data={data} setData={setData} />
-          {winReady ? (
-            <Board data={data} setData={setData}>
-              <Column
-                key={0}
-                title={"Backlog"}
-                id={"backlog"}
-                cards={filterCards("backlog")}
-              />
-            </Board>
-          ) : null}
-        </Box>
-      </Box>
-    </Box>
+    </MainContainer>
   );
 };
 

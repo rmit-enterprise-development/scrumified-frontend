@@ -1,4 +1,4 @@
-import { Flex, Icon, Box, Tooltip } from "@chakra-ui/react";
+import { Box, Flex, Icon } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
@@ -10,49 +10,48 @@ export const SidebarItem = ({ icon, children, href, ...rest }) => {
 
   return (
     <Box pb={3}>
-      <NextLink href={href} passHref >
+      <NextLink href={href} passHref>
         <Flex
           align="center"
           p="4"
           mx="4"
           borderRadius="lg"
           role="group"
-          cursor='pointer'
-          color= {
+          cursor="pointer"
+          color={
             router.route === RouterPage.DASHBOARD &&
             href !== RouterPage.DASHBOARD
-            ? "grey"
-            : "#fffdfe"
+              ? "grey"
+              : "#fffdfe"
           }
           pointerEvents={
             router.route === RouterPage.DASHBOARD &&
             href !== RouterPage.DASHBOARD
-            ? "none"
-            : "auto"
+              ? "none"
+              : "auto"
           }
-
           bg={active && "#ee0405"}
           _hover={{
             // color: '#fffdfe',
-            textDecoration: 'underline',
-            textDecorationStyle: 'wavy',
-            textUnderlineOffset: '4px',
-            textDecorationThickness: '1.5px',
+            textDecoration: "underline",
+            textDecorationStyle: "wavy",
+            textUnderlineOffset: "4px",
+            textDecorationThickness: "1.5px",
           }}
           {...rest}
         >
-          <Icon 
-            mr="4" 
-            fontSize="lg" 
-            color= {
-            router.route === RouterPage.DASHBOARD &&
-            href !== RouterPage.DASHBOARD
-            ? "grey"
-            : "#fffdfe"
-            } 
-            as={icon} 
+          <Icon
+            mr="4"
+            fontSize="lg"
+            color={
+              router.route === RouterPage.DASHBOARD &&
+              href !== RouterPage.DASHBOARD
+                ? "grey"
+                : "#fffdfe"
+            }
+            as={icon}
           />
-            {children}
+          {children}
         </Flex>
       </NextLink>
     </Box>

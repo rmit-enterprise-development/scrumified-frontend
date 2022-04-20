@@ -13,8 +13,8 @@ import {
   ModalHeader,
   ModalOverlay,
   Text,
-  useDisclosure,
   useColorModeValue,
+  useDisclosure,
 } from "@chakra-ui/react";
 import Avvvatars from "avvvatars-react";
 import { CUIAutoComplete } from "chakra-ui-autocomplete";

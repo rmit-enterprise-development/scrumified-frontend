@@ -1,7 +1,7 @@
 import { Box } from "@chakra-ui/react";
-import React, { useState, useEffect } from "react";
-import SectionHeader from "../components/dashboard/SectionHeader/SectionHeader";
-import SideBar from "../components/dashboard/SideBar/SideBar";
+import React, { useEffect, useState } from "react";
+import SectionHeader from "../components/common/SectionHeader/SectionHeader";
+import MainContainer from "../components/layout/MainContainer";
 import Board from "../components/workspace/Board";
 import Column from "../components/workspace/Column";
 
@@ -71,37 +71,33 @@ const Sprint = () => {
   };
 
   return (
-    <Box display="flex">
-      <SideBar />
-
-      <Box m={10} flexGrow="1">
-        <Box>
-          <SectionHeader>Active Sprint</SectionHeader>
-          {winReady ? (
-            <Board data={data} setData={setData}>
-              <Column
-                key={0}
-                title={"todo"}
-                id={"todo"}
-                cards={filterCards("todo")}
-              />
-              <Column
-                key={1}
-                title={"In Progress"}
-                id={"inProgress"}
-                cards={filterCards("inProgress")}
-              />
-              <Column
-                key={2}
-                title={"done"}
-                id={"done"}
-                cards={filterCards("done")}
-              />
-            </Board>
-          ) : null}
-        </Box>
+    <MainContainer>
+      <Box>
+        <SectionHeader>Active Sprint</SectionHeader>
+        {winReady ? (
+          <Board data={data} setData={setData}>
+            <Column
+              key={0}
+              title={"todo"}
+              id={"todo"}
+              cards={filterCards("todo")}
+            />
+            <Column
+              key={1}
+              title={"In Progress"}
+              id={"inProgress"}
+              cards={filterCards("inProgress")}
+            />
+            <Column
+              key={2}
+              title={"done"}
+              id={"done"}
+              cards={filterCards("done")}
+            />
+          </Board>
+        ) : null}
       </Box>
-    </Box>
+    </MainContainer>
   );
 };
 

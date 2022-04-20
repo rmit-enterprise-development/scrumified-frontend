@@ -1,6 +1,5 @@
 import {
   Box,
-  CloseButton,
   Flex,
   IconButton,
   Image,
@@ -10,7 +9,6 @@ import {
 import Avvvatars from "avvvatars-react";
 import { motion } from "framer-motion";
 import NextLink from "next/link";
-import React from "react";
 import { FaMoon, FaSun } from "react-icons/fa";
 import Images from "../../../assets/images";
 import { LinkItems } from "./LinkItems";
@@ -21,11 +19,10 @@ export function SidebarContent({ onClose, toggleColorMode, ...rest }) {
 
   return (
     <Box
-      bg="#031d46"
+      bg="#1C345B"
       borderRight="1px"
-      borderRightColor="gray.600"
       w={{ base: "full", md: 60 }}
-      pos="fixed"
+      position="absolute"
       h="full"
       {...rest}
     >
@@ -79,7 +76,12 @@ export function SidebarContent({ onClose, toggleColorMode, ...rest }) {
                   <Avvvatars shadow={true} value="Khang Nguyen" />
                 }
               /> */}
-              <Avvvatars size={40} color="purple" shadow={true} value="Khang Nguyen" />
+              <Avvvatars
+                size={40}
+                color="purple"
+                shadow={true}
+                value="Khang Nguyen"
+              />
               <Text pl={2} cursor="pointer" color="#FFFDEF">
                 Khang
               </Text>

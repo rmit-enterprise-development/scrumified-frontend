@@ -1,9 +1,9 @@
-import { Box, SimpleGrid, Text } from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/react";
 import Avvvatars from "avvvatars-react";
 import Router from "next/router";
 import { RouterPage } from "../../../../config/router";
-import NumberButton from "./NumberButton";
 import textUtils from "../../../../utils/text";
+import NumberButton from "./NumberButton";
 
 const ProjectItem = ({ id, name, author, createdTime, color, openTasks }) => {
   const handlePushProjectDetail = () => {
@@ -18,42 +18,32 @@ const ProjectItem = ({ id, name, author, createdTime, color, openTasks }) => {
   }
   return (
     <Box
-      boxSizing="border-box"
-      borderWidth="2px"
-      borderRadius="5%"
+      borderWidth="1px"
+      borderRadius="10%"
+      boxShadow="xl"
       display="flex"
       overflow="hidden"
-      borderColor="grey"
       w={250}
-      h={200}
+      h={150}
       cursor="pointer"
       onClick={handlePushProjectDetail}
     >
-      <Box boxSizing="border-box" bgColor={colorScheme} w={5} />
+      <Box w={5} bg={colorScheme} />
       <Box p={2}>
-        <Box pb={2}>
+        <Flex pb={2} alignItems="center">
           <Avvvatars style="shape" value={id} />
-          <Text fontSize="xl" fontWeight="bold">
+          <Text fontWeight="bold" pl={2}>
             {name}
           </Text>
-        </Box>
+        </Flex>
 
-        <Text as="i" fontSize="sm">
-          Owned by: {author}
-          <br />
-        </Text>
+        <Text>Created at: {createdTime}</Text>
+        <Text>Owned by: {author}</Text>
 
-        <Text as="i" fontSize="sm">
-          Created at: {createdTime}
-          <br />
-        </Text>
-
-        <Box display="flex" justifyContent="space-between" alignItems="center">
-          <Text as="i" fontSize="sm">
-            My opened task:
-          </Text>
+        <Flex alignItems="center" pt={5}>
+          <Text pr={2}>My task</Text>
           <NumberButton bgColor={color}>{openTasks}</NumberButton>
-        </Box>
+        </Flex>
       </Box>
     </Box>
   );

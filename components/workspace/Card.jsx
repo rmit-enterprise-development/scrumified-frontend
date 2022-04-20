@@ -1,7 +1,9 @@
+import { EditIcon } from '@chakra-ui/icons';
 import {
 	Badge,
 	Box,
-	Circle,
+	IconButton,
+	Spacer,
 	Flex,
 	Heading,
 	Text,

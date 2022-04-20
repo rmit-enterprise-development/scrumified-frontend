@@ -1,16 +1,38 @@
 import { Box, Flex, Icon } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
-import React from "react";
+import { useState, useEffect } from "react";
 import { RouterPage } from "../../../config/router";
 
-export const SidebarItem = ({ icon, children, href, ...rest }) => {
+export const SideBarItem = ({ icon, children, href, ...rest }) => {
   const router = useRouter();
-  const active = router.route === href;
+  const active = router.route.includes(href);
+
+  // Can't get value from first render -> Need to useEffect
+  const [id, setId] = useState();
+  useEffect(() => {
+    if (router.isReady) {
+      const { id } = router.query;
+      setId(id);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router.isReady]);
 
   return (
     <Box pb={3}>
-      <NextLink href={href} passHref>
+      <NextLink
+        href={
+          href === RouterPage.DASHBOARD
+            ? {
+                pathname: href,
+              }
+            : {
+                pathname: `/project/[id]${href}`,
+                query: { id },
+              }
+        }
+        passHref
+      >
         <Flex
           align="center"
           p="4"
@@ -32,7 +54,6 @@ export const SidebarItem = ({ icon, children, href, ...rest }) => {
           }
           bg={active && "#ee0405"}
           _hover={{
-            // color: '#fffdfe',
             textDecoration: "underline",
             textDecorationStyle: "wavy",
             textUnderlineOffset: "4px",

@@ -1,9 +1,9 @@
 import Head from "next/head";
 import { useEffect, useState } from "react";
-import SectionHeader from "../components/common/SectionHeader/SectionHeader";
-import MainContainer from "../components/layout/MainContainer";
-import Board from "../components/workspace/Board";
-import Column from "../components/workspace/Column";
+import SectionHeader from "../../../components/common/SectionHeader/SectionHeader";
+import MainContainer from "../../../components/layout/MainContainer";
+import Board from "../../../components/workspace/Board";
+import Column from "../../../components/workspace/Column";
 
 const Sprint = () => {
   const initData = [

@@ -1,7 +1,7 @@
 import { Box } from '@chakra-ui/react';
 import React, { useState, useEffect } from 'react';
-import SectionHeader from '../components/dashboard/SectionHeader';
-import Sidebar from '../components/dashboard/SideBar/Sidebar.tsx';
+import SectionHeader from '../components/dashboard/SectionHeader/SectionHeader';
+import Sidebar from '../components/dashboard/SideBar/SideBar';
 import Board from '../components/workspace/Board';
 import Column from '../components/workspace/Column';
 
@@ -76,31 +76,33 @@ const Sprint = () => {
 				<Sidebar />
 			</Box>
 			<Box m={10} w="100%">
-				<Box>
-					<SectionHeader>Active Sprint</SectionHeader>
-					{winReady ? (
-						<Board data={data} setData={setData}>
-							<Column
-								key={0}
-								title={'todo'}
-								id={'todo'}
-								cards={filterCards('todo')}
-							/>
-							<Column
-								key={1}
-								title={'In Progress'}
-								id={'inProgress'}
-								cards={filterCards('inProgress')}
-							/>
-							<Column
-								key={2}
-								title={'done'}
-								id={'done'}
-								cards={filterCards('done')}
-							/>
-						</Board>
-					) : null}
-				</Box>
+				<SectionHeader>Active Sprint</SectionHeader>
+				{winReady ? (
+					<Board
+						data={data}
+						setData={setData}
+						templateColumns="repeat(3, 1fr)"
+					>
+						<Column
+							key={0}
+							title={'Todo'}
+							id={'todo'}
+							cards={filterCards('todo')}
+						/>
+						<Column
+							key={1}
+							title={'In Progress'}
+							id={'inProgress'}
+							cards={filterCards('inProgress')}
+						/>
+						<Column
+							key={2}
+							title={'Done'}
+							id={'done'}
+							cards={filterCards('done')}
+						/>
+					</Board>
+				) : null}
 			</Box>
 		</Box>
 	);

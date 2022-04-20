@@ -57,9 +57,9 @@ const CardModal = ({ isOpen, onOpen, onClose, data, setData }) => {
 			});
 	};
 	return (
-		<Modal isCentered isOpen={isOpen} onClose={onClose}>
+		<Modal isCentered isOpen={isOpen} onClose={onClose} width={'100%'} height={'100%'}>
 			<ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px)" />
-			<ModalContent>
+			<ModalContent borderRadius={'1rem'} padding={'1rem'}>
 				<ModalHeader>Create User Story</ModalHeader>
 				<ModalBody>
 					<FormControl>

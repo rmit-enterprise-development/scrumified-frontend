@@ -31,13 +31,11 @@ const Card = (props) => {
 						onOpen();
 					}}
 					boxSizing="border-box"
-					borderWidth="2px"
 					borderRadius="1rem"
-					borderColor="grey"
 					overflow="hidden"
-					// shadow="md"
 					bg={'white'}
 					mb={4}
+					boxShadow="base"
 				>
 					<Flex bgColor={'red.500'} padding={'2px'}>
 						<IconButton

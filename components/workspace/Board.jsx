@@ -1,8 +1,8 @@
-import { Flex } from '@chakra-ui/react';
+import { Flex, Grid } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { DragDropContext } from 'react-beautiful-dnd';
 
-const Board = ({ data, setData, children }) => {
+const Board = ({ data, setData, children, templateColumns }) => {
 	const onDragEnd = (result) => {
 		const { destination, source, draggableId } = result;
 		if (!destination) {
@@ -71,9 +71,9 @@ const Board = ({ data, setData, children }) => {
 	};
 	return (
 		<DragDropContext onDragEnd={onDragEnd}>
-			<Flex columnGap={4}>
+			<Grid columnGap={'5'} templateColumns={templateColumns}>
 				{React.Children.map(children, (child) => child)}
-			</Flex>
+			</Grid>
 		</DragDropContext>
 	);
 };

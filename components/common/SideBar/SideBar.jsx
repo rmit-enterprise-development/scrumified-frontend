@@ -17,7 +17,7 @@ export default function Sidebar({ children }) {
   const { toggleColorMode } = useColorMode();
 
   return (
-    <Box minH="100vh">
+    <Box minH="100vh" bg={useColorModeValue("#FFFDFE", "#031E49")}>
       <SidebarContent
         onClose={() => onClose}
         toggleColorMode={toggleColorMode}
@@ -37,10 +37,12 @@ export default function Sidebar({ children }) {
         </DrawerContent>
       </Drawer>
 
-      {/* mobilenav */}
-      <MobileNav display={{ base: "flex", md: "none" }} onOpen={onOpen} />
-      <Box ml={{ base: 0, md: 60 }} p="4">
-        {children}
+      <Box>
+        {/* mobilenav */}
+        <MobileNav display={{ base: "flex", md: "none" }} onOpen={onOpen} />
+        <Box ml={{ base: 0, md: 60 }} p="4">
+          {children}
+        </Box>
       </Box>
     </Box>
   );

@@ -1,9 +1,9 @@
-import { Box, SimpleGrid, Text } from "@chakra-ui/react";
+import { Box, Flex, Text, useColorModeValue } from "@chakra-ui/react";
 import Avvvatars from "avvvatars-react";
 import Router from "next/router";
 import { RouterPage } from "../../../../config/router";
-import NumberButton from "./NumberButton";
 import textUtils from "../../../../utils/text";
+import NumberButton from "./NumberButton";
 
 const ProjectItem = ({ id, name, author, createdTime, color, openTasks }) => {
   const handlePushProjectDetail = () => {
@@ -18,42 +18,43 @@ const ProjectItem = ({ id, name, author, createdTime, color, openTasks }) => {
   }
   return (
     <Box
-      boxSizing="border-box"
-      borderWidth="2px"
-      borderRadius="5%"
+      borderColor={useColorModeValue("#fffdfe", "#2d4046")}
+      borderWidth="1px"
+      borderRadius="10%"
+      boxShadow="xl"
       display="flex"
       overflow="hidden"
-      borderColor="grey"
       w={250}
-      h={200}
+      h={150}
       cursor="pointer"
       onClick={handlePushProjectDetail}
     >
-      <Box boxSizing="border-box" bgColor={colorScheme} w={5} />
+      <Box w={5} bg={colorScheme} />
       <Box p={2}>
-        <Box pb={2}>
+        <Flex pb={2} alignItems="center">
           <Avvvatars style="shape" value={id} />
-          <Text fontSize="xl" fontWeight="bold">
+          <Text
+            fontWeight="bold"
+            pl={2}
+            color={useColorModeValue("#031d46", "#fffdfe")}
+          >
             {name}
           </Text>
-        </Box>
+        </Flex>
 
-        <Text as="i" fontSize="sm">
-          Owned by: {author}
-          <br />
-        </Text>
-
-        <Text as="i" fontSize="sm">
+        <Text color={useColorModeValue("#031d46", "#fffdfe")}>
           Created at: {createdTime}
-          <br />
+        </Text>
+        <Text color={useColorModeValue("#031d46", "#fffdfe")}>
+          Owned by: {author}
         </Text>
 
-        <Box display="flex" justifyContent="space-between" alignItems="center">
-          <Text as="i" fontSize="sm">
-            My opened task:
+        <Flex alignItems="center" pt={4}>
+          <Text pr={2} color={useColorModeValue("#031d46", "#fffdfe")}>
+            My task
           </Text>
           <NumberButton bgColor={color}>{openTasks}</NumberButton>
-        </Box>
+        </Flex>
       </Box>
     </Box>
   );

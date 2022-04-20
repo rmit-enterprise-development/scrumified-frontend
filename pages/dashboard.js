@@ -1,9 +1,10 @@
 import { Box, Flex } from "@chakra-ui/react";
+import Head from "next/head";
 import { useState } from "react";
+import SectionHeader from "../components/common/SectionHeader/SectionHeader";
 import CreateProjectModal from "../components/dashboard/CreateProjectModal/CreateProjectModal";
-import Sidebar from "../components/dashboard/SideBar/SideBar";
 import ProjectGrid from "../components/dashboard/ProjectGrid/ProjectGrid";
-import SectionHeader from "../components/dashboard/SectionHeader/SectionHeader";
+import MainContainer from "../components/layout/MainContainer";
 
 const Dashboard = () => {
   const [userList, setUserList] = useState([
@@ -77,28 +78,27 @@ const Dashboard = () => {
   // console.log("userList: ", userList);
 
   return (
-    <Flex>
-      <Sidebar />
+    <>
+      <Head>
+        <title>Dashboard</title>
+      </Head>
+      <MainContainer>
+        <Flex justifyContent="space-between" alignItems="center">
+          <SectionHeader>My Projects</SectionHeader>
 
-      <Box m={10} flexGrow="1">
-        <Box>
-          <Flex justifyContent="space-between" alignItems="center">
-            <SectionHeader>My Projects</SectionHeader>
+          <CreateProjectModal
+            participantList={userList.map((a) => {
+              const userInfo = a.name + " (" + a.email + ")";
+              return { value: a.id, label: userInfo };
+            })}
+          />
+        </Flex>
 
-            <CreateProjectModal
-              participantList={userList.map((a) => {
-                const userInfo = a.name + " (" + a.email + ")";
-                return { value: a.id, label: userInfo };
-              })}
-            />
-          </Flex>
+        <ProjectGrid />
 
-          <ProjectGrid />
-
-          <SectionHeader>Assigned to me</SectionHeader>
-        </Box>
-      </Box>
-    </Flex>
+        <SectionHeader>Assigned to me</SectionHeader>
+      </MainContainer>
+    </>
   );
 };
 

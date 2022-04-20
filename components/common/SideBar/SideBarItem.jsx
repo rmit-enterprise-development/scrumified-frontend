@@ -1,4 +1,4 @@
-import { Flex, Icon, Box } from "@chakra-ui/react";
+import { Box, Flex, Icon } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
@@ -10,28 +10,47 @@ export const SidebarItem = ({ icon, children, href, ...rest }) => {
 
   return (
     <Box pb={3}>
-      <NextLink href={href} passHref disabled="true">
+      <NextLink href={href} passHref>
         <Flex
           align="center"
           p="4"
           mx="4"
           borderRadius="lg"
           role="group"
-          color="#fffdfe"
+          cursor="pointer"
+          color={
+            router.route === RouterPage.DASHBOARD &&
+            href !== RouterPage.DASHBOARD
+              ? "grey"
+              : "#fffdfe"
+          }
           pointerEvents={
             router.route === RouterPage.DASHBOARD &&
             href !== RouterPage.DASHBOARD
               ? "none"
               : "auto"
           }
-          cursor="pointer"
           bg={active && "#ee0405"}
           _hover={{
-            bg: "#ee0405",
+            // color: '#fffdfe',
+            textDecoration: "underline",
+            textDecorationStyle: "wavy",
+            textUnderlineOffset: "4px",
+            textDecorationThickness: "1.5px",
           }}
           {...rest}
         >
-          <Icon mr="4" fontSize="lg" color="#fffdfe" as={icon} />
+          <Icon
+            mr="4"
+            fontSize="lg"
+            color={
+              router.route === RouterPage.DASHBOARD &&
+              href !== RouterPage.DASHBOARD
+                ? "grey"
+                : "#fffdfe"
+            }
+            as={icon}
+          />
           {children}
         </Flex>
       </NextLink>

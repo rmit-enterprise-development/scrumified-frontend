@@ -1,4 +1,4 @@
-import { Flex, Text } from "@chakra-ui/react";
+import { Flex, Text, useColorModeValue } from "@chakra-ui/react";
 import Avvvatars from "avvvatars-react";
 
 const ProfileCard = ({ id, fname, lname, email, bio }) => {
@@ -8,13 +8,17 @@ const ProfileCard = ({ id, fname, lname, email, bio }) => {
 
       <Flex flexDir="row" ml={10} justifyContent="space-between">
         <Flex flexDir="column">
-          <Text fontWeight="medium" fontSize="lg">
+          <Text
+            fontWeight="medium"
+            fontSize="lg"
+            color={useColorModeValue("#031d46", "#fffdfe")}
+          >
             {fname + " " + lname}
           </Text>
-          <Text>{email}</Text>
+          <Text color={useColorModeValue("#031d46", "#fffdfe")}>{email}</Text>
 
           <Flex mt={10} flexDir="column">
-            <Text>{bio}</Text>
+            <Text color={useColorModeValue("#031d46", "#fffdfe")}>{bio}</Text>
           </Flex>
         </Flex>
       </Flex>

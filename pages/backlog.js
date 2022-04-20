@@ -9,34 +9,34 @@ import Column from "../components/workspace/Column";
 import { digFind } from "../utils/object";
 
 const Backlog = ({ cards }) => {
-  // const initData = [
-  // 	{
-  // 		id: '1',
-  // 		userStory: 'Card1',
-  // 		category: 'Hello',
-  // 		point: '12',
-  // 		position: 2,
-  // 		status: 'backlog',
-  // 	},
-  // 	{
-  // 		id: '2',
-  // 		userStory: 'Card2',
-  // 		category: 'Hello',
-  // 		point: '12',
-  // 		position: 0,
-  // 		status: 'backlog',
-  // 	},
-  // 	{
-  // 		id: '3',
-  // 		userStory: 'Card3',
-  // 		category: 'Hello',
-  // 		point: '12',
-  // 		position: 1,
-  // 		status: 'backlog',
-  // 	},
-  // ];
+  const initData = [
+    {
+      id: "1",
+      userStory: "Card1",
+      category: "Hello",
+      point: "12",
+      position: 2,
+      status: "backlog",
+    },
+    {
+      id: "2",
+      userStory: "Card2",
+      category: "Hello",
+      point: "12",
+      position: 0,
+      status: "backlog",
+    },
+    {
+      id: "3",
+      userStory: "Card3",
+      category: "Hello",
+      point: "12",
+      position: 1,
+      status: "backlog",
+    },
+  ];
 
-  const [data, setData] = useState(cards);
+  const [data, setData] = useState(initData);
 
   const filterCards = (s) => {
     const cards = data.filter((card) => card.status === s);
@@ -74,27 +74,27 @@ const Backlog = ({ cards }) => {
 
 export default Backlog;
 
-export async function getStaticProps() {
-  const response = await projectAPI.getAllStories(1);
-  // response dissection
-  const data = await response.data;
-  console.log("data: ", data);
+// export async function getStaticProps() {
+//   const response = await projectAPI.getAllStories(1);
+//   // response dissection
+//   const data = await response.data;
+//   console.log("data: ", data);
 
-  const cards = await digFind(data, "storyDtoList");
-  console.log("cards: ", cards);
+//   const cards = await digFind(data, "storyDtoList");
+//   console.log("cards: ", cards);
 
-  if (cards) {
-    return {
-      props: {
-        cards, //ES6: Can use only "cards" for "cards : cards"
-      },
-      revalidate: 5,
-    };
-  }
-  return {
-    props: {
-      cards: [],
-    },
-    revalidate: 5,
-  };
-}
+//   if (cards) {
+//     return {
+//       props: {
+//         cards, //ES6: Can use only "cards" for "cards : cards"
+//       },
+//       revalidate: 5,
+//     };
+//   }
+//   return {
+//     props: {
+//       cards: [],
+//     },
+//     revalidate: 5,
+//   };
+// }

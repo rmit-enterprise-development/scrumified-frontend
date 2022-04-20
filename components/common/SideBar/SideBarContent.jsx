@@ -82,7 +82,7 @@ export function SidebarContent({ onClose, toggleColorMode, ...rest }) {
                 shadow={true}
                 value="Khang Nguyen"
               />
-              <Text pl={2} cursor="pointer" color="#FFFDEF">
+              <Text pl={3} cursor="pointer" color="#FFFDEF">
                 Khang
               </Text>
             </Flex>

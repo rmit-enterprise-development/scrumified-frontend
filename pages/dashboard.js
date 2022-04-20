@@ -78,22 +78,20 @@ const Dashboard = () => {
 
   return (
     <MainContainer>
-      <Box>
-        <Flex justifyContent="space-between" alignItems="center">
-          <SectionHeader>My Projects</SectionHeader>
+      <Flex justifyContent="space-between" alignItems="center">
+        <SectionHeader>My Projects</SectionHeader>
 
-          <CreateProjectModal
-            participantList={userList.map((a) => {
-              const userInfo = a.name + " (" + a.email + ")";
-              return { value: a.id, label: userInfo };
-            })}
-          />
-        </Flex>
+        <CreateProjectModal
+          participantList={userList.map((a) => {
+            const userInfo = a.name + " (" + a.email + ")";
+            return { value: a.id, label: userInfo };
+          })}
+        />
+      </Flex>
 
-        <ProjectGrid />
+      <ProjectGrid />
 
-        <SectionHeader>Assigned to me</SectionHeader>
-      </Box>
+      <SectionHeader>Assigned to me</SectionHeader>
     </MainContainer>
   );
 };

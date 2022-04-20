@@ -1,5 +1,5 @@
 import { Flex } from "@chakra-ui/react";
-import { React, useState } from "react";
+import { useState } from "react";
 import SectionHeader from "../components/common/SectionHeader/SectionHeader";
 import MainContainer from "../components/layout/MainContainer";
 import EditProfileModal from "../components/profile/EditProfileModal";

@@ -13,6 +13,7 @@ import {
   ModalHeader,
   ModalOverlay,
   Text,
+  useColorMode,
   useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
@@ -21,6 +22,7 @@ import { CUIAutoComplete } from "chakra-ui-autocomplete";
 import { useRef, useState } from "react";
 
 const CreateProjectModal = ({ participantList }) => {
+  const { colorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const initialRef = useRef();
@@ -42,7 +44,16 @@ const CreateProjectModal = ({ participantList }) => {
     return (
       <Flex flexDir="row" alignItems="center">
         <Avvvatars value={selected.label} />
-        <Text pl={5}>{selected.label}</Text>
+
+        {colorMode === "dark" ? (
+          <Text pl={5} color="#fffdfe">
+            {selected.label}
+          </Text>
+        ) : (
+          <Text pl={5} color="#031d46">
+            {selected.label}
+          </Text>
+        )}
       </Flex>
     );
   };
@@ -74,16 +85,20 @@ const CreateProjectModal = ({ participantList }) => {
       >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader color={useColorModeValue("#031e49", "gray.200")}>
+          <ModalHeader color={useColorModeValue("#031e49", "#fffdfe")}>
             Create your project
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
             <FormControl isRequired>
-              <FormLabel color={useColorModeValue("#031e49", "gray.200")}>
+              <FormLabel color={useColorModeValue("#031e49", "#fffdfe")}>
                 Project name
               </FormLabel>
-              <Input ref={initialRef} placeholder="Project name" />
+              <Input
+                ref={initialRef}
+                placeholder="Project name"
+                color={useColorModeValue("#031d46", "#fffdfe")}
+              />
             </FormControl>
 
             <FormControl mt={4} isRequired>
@@ -102,10 +117,22 @@ const CreateProjectModal = ({ participantList }) => {
                   handleSelectedItemsChange(changes.selectedItems)
                 }
                 hideToggleButton={true}
-                listStyleProps={{ maxHeight: "200", overflow: "auto" }}
-                listItemStyleProps={{ cursor: "pointer" }}
+                listStyleProps={{
+                  maxHeight: "200",
+                  overflow: "auto",
+                  bg: useColorModeValue("", "#2D3748"),
+                }}
+                listItemStyleProps={{
+                  cursor: "pointer",
+                  _hover: {
+                    bg: useColorModeValue("", "#031e49"),
+                  },
+                }}
                 labelStyleProps={{
-                  color: useColorModeValue("#031e49", "gray.200"),
+                  color: useColorModeValue("#031e49", "#fffdfe"),
+                }}
+                inputStyleProps={{
+                  color: useColorModeValue("#031d46", "#fffdfe"),
                 }}
               />
             </FormControl>

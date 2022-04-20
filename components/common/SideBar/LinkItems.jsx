@@ -6,7 +6,7 @@ import { RouterPage } from "../../../config/router";
 
 export const LinkItems = [
   { name: "Dashboard", icon: AiFillHome, href: RouterPage.DASHBOARD },
-  { name: "Roadmap", icon: MdTimeline, href: RouterPage.ROADMAP },
   { name: "Backlog", icon: VscTasklist, href: RouterPage.BACKLOG },
   { name: "Active Sprint", icon: GiSprint, href: RouterPage.SPRINT },
+  { name: "Roadmap", icon: MdTimeline, href: RouterPage.ROADMAP },
 ];

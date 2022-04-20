@@ -8,7 +8,7 @@ import NumberButton from "./NumberButton";
 const ProjectItem = ({ id, name, author, createdTime, color, openTasks }) => {
   const handlePushProjectDetail = () => {
     Router.push({
-      pathname: `${RouterPage.PROJECT}/${id}`,
+      pathname: `${RouterPage.PROJECT}/${id}${RouterPage.BACKLOG}`,
     });
   };
 

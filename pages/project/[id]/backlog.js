@@ -1,12 +1,12 @@
 import { Box } from "@chakra-ui/react";
 import Head from "next/head";
 import React, { useEffect, useState } from "react";
-import projectAPI from "../api/services/projectAPI";
-import SectionHeader from "../components/common/SectionHeader/SectionHeader";
-import MainContainer from "../components/layout/MainContainer";
-import BacklogController from "../components/workspace/BacklogController";
-import Board from "../components/workspace/Board";
-import Column from "../components/workspace/Column";
+// import projectAPI from "../../../api/services/projectAPI";
+import SectionHeader from "../../../components/common/SectionHeader/SectionHeader";
+import MainContainer from "../../../components/layout/MainContainer";
+import BacklogController from "../../../components/workspace/BacklogController";
+import Board from "../../../components/workspace/Board";
+import Column from "../../../components/workspace/Column";
 
 const Backlog = ({ cards }) => {
   const initData = [

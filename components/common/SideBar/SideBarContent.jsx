@@ -11,8 +11,9 @@ import { motion } from "framer-motion";
 import NextLink from "next/link";
 import { FaMoon, FaSun } from "react-icons/fa";
 import Images from "../../../assets/images";
+import { RouterPage } from "../../../config/router";
 import { LinkItems } from "./LinkItems";
-import { SidebarItem } from "./SidebarItem";
+import { SideBarItem } from "./SideBarItem";
 
 export function SidebarContent({ onClose, toggleColorMode, ...rest }) {
   const SwitchIcon = useColorModeValue(FaSun, FaMoon);
@@ -29,7 +30,7 @@ export function SidebarContent({ onClose, toggleColorMode, ...rest }) {
       <Flex flexDir="column" justifyContent="space-between" h="full">
         <Flex h="20" alignItems="center" flexDir="column" w="full">
           <Flex justifyContent="center" mt={6} cursor="pointer">
-            <NextLink href="/dashboard" passHref>
+            <NextLink href={RouterPage.DASHBOARD} passHref>
               <motion.div
                 style={{ height: "50px", width: "50px" }}
                 animate={{ rotate: 360 }}
@@ -52,9 +53,9 @@ export function SidebarContent({ onClose, toggleColorMode, ...rest }) {
 
           <Flex flexDir="column" mt={5} w="full">
             {LinkItems.map((link) => (
-              <SidebarItem key={link.name} icon={link.icon} href={link.href}>
+              <SideBarItem key={link.name} icon={link.icon} href={link.href}>
                 {link.name}
-              </SidebarItem>
+              </SideBarItem>
             ))}
           </Flex>
         </Flex>

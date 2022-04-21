@@ -44,12 +44,12 @@ const Card = (props) => {
                 {props.card.userStory}
               </Heading>
             </Flex>
-            <Flex mt={4} justifyContent="space-between">
-              <Badge colorScheme="green" alignItems="center">
+            <Flex mt={4} justifyContent="space-between" alignItems={"center"}>
+              <Badge colorScheme="green" borderRadius={'4px'} shadow="inner">
                 {props.card.category}
               </Badge>
 
-              <Circle size="25px" bg="Gainsboro">
+              <Circle size="25px" bg={colorScheme} color="white" p={'10px'} shadow="inner">
                 {props.card.point}
               </Circle>
             </Flex>

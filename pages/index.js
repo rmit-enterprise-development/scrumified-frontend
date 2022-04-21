@@ -1,17 +1,16 @@
-import { Flex, useColorModeValue } from "@chakra-ui/react";
-import Head from "next/head";
-import { useState } from "react";
-import useStateRef from "react-usestateref";
-import MainForm from "../components/home/Account/MainForm";
-import HomeNavBar from "../components/home/NavBar/MainNavBar";
-import FirstSection from "../components/home/Section/FirstSection";
-import SecondSection from "../components/home/Section/SecondSection";
-import ThirdSection from "../components/home/Section/ThirdSection";
+import { Flex, useColorModeValue } from '@chakra-ui/react';
+import Head from 'next/head';
+import { useState } from 'react';
+import useStateRef from 'react-usestateref';
+import MainForm from '../components/home/Account/MainForm';
+import HomeNavBar from '../components/home/NavBar/MainNavBar';
+import FirstSection from '../components/home/Section/FirstSection';
+import SecondSection from '../components/home/Section/SecondSection';
 
 export default function Home() {
   const [isRegistering, setIsRegistering] = useState(false);
   const [isSigningIn, setIsSigningIn] = useState(false);
-  const [typedEmail, setTypedEmail, typedEmailRef] = useStateRef("");
+  const [typedEmail, setTypedEmail, typedEmailRef] = useStateRef('');
 
   return (
     <Flex
@@ -19,7 +18,7 @@ export default function Home() {
       h="full"
       direction="column"
       transition="all 0.4s linear"
-      bg={useColorModeValue("#fff", "#031e49")}
+      bg={useColorModeValue('#fff', '#031e49')}
     >
       <Head>
         <title>Home - Scrumified</title>
@@ -50,9 +49,6 @@ export default function Home() {
 
       {/* Second section */}
       <SecondSection />
-
-      {/* Third section */}
-      <ThirdSection />
     </Flex>
   );
 }

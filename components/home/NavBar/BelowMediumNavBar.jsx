@@ -159,32 +159,6 @@ const BelowMediumNavBar = ({
           </chakra.a>
         </Center>
 
-        <NextLink href="/" passHref>
-          <Center
-            h="55px"
-            w="90%"
-            bg="gray.100"
-            borderRadius="40px"
-            cursor="pointer"
-          >
-            <Text
-              style={{ transition: "all 0.5s" }}
-              color="gray.500"
-              _hover={{
-                color: "#eb0546",
-                textDecoration: "underline",
-                textDecorationStyle: "wavy",
-                textUnderlineOffset: "8px",
-                textDecorationThickness: "1.5px",
-              }}
-              aria-label="Instructions"
-              fontSize="lg"
-            >
-              Instructions
-            </Text>
-          </Center>
-        </NextLink>
-
         {/* 'Or' Divider */}
         <Flex h="50px" w="full" align="center" px="5rem">
           <Container

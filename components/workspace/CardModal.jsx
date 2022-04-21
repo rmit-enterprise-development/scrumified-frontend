@@ -48,6 +48,23 @@ const CardModal = ({ isOpen, onOpen, onClose, data, setData }) => {
 			email: 'andrew123@gmail.com',
 		},
 	]);
+	const [categories, setCategories] = useState([
+		'backend',
+		'frontend',
+		'left',
+		'right',
+		'center',
+	]);
+
+	const categoryList = categories.map((category) => {
+		return { value: category, label: category };
+	});
+
+	const [sortedCategory, setSortedCategory] = useState(
+		categoryList.sort((a, b) => a.label.localeCompare(b.label))
+	);
+
+	const [selectedCategory, setSelectedCategory] = useState([]);
 
 	const participantList = userList.map((a) => {
 		const userInfo = a.name + ' (' + a.email + ')';
@@ -55,6 +72,7 @@ const CardModal = ({ isOpen, onOpen, onClose, data, setData }) => {
 	});
 
 	const [selectedItems, setSelectedItems] = useState([]);
+
 	const { colorMode } = useColorMode();
 
 	const [pickerItems, setPickerItems] = useState(
@@ -70,7 +88,7 @@ const CardModal = ({ isOpen, onOpen, onClose, data, setData }) => {
 	const customRender = (selected) => {
 		return (
 			<Flex flexDir="row" alignItems={'center'}>
-				<Avvvatars value={selected.label}/>
+				<Avvvatars value={selected.label} />
 
 				{colorMode === 'dark' ? (
 					<Text pl={5} color="#fffdfe">
@@ -145,7 +163,7 @@ const CardModal = ({ isOpen, onOpen, onClose, data, setData }) => {
 			<ModalContent borderRadius={'1rem'} padding={'1rem'}>
 				<ModalHeader>Create User Story</ModalHeader>
 				<ModalBody>
-					<FormControl>
+					<FormControl isRequired>
 						<Flex>
 							<FormLabel htmlFor="person" fontSize={'2xl'}>
 								As a
@@ -163,7 +181,7 @@ const CardModal = ({ isOpen, onOpen, onClose, data, setData }) => {
 						</Flex>
 					</FormControl>
 
-					<FormControl mt={4}>
+					<FormControl mt={4} isRequired>
 						<Flex>
 							<FormLabel htmlFor="todo" fontSize={'2xl'}>
 								I need
@@ -183,7 +201,7 @@ const CardModal = ({ isOpen, onOpen, onClose, data, setData }) => {
 						</Flex>
 					</FormControl>
 
-					<FormControl mt={4}>
+					<FormControl mt={4} isRequired>
 						<Flex>
 							<FormLabel htmlFor="explaination" fontSize={'2xl'}>
 								So that
@@ -207,7 +225,7 @@ const CardModal = ({ isOpen, onOpen, onClose, data, setData }) => {
 						</Flex>
 					</FormControl>
 
-					<FormControl mt={4}>
+					<FormControl mt={4} isRequired>
 						<FormLabel htmlFor="definition" fontSize={'2xl'}>
 							Definition of Done
 						</FormLabel>
@@ -222,7 +240,7 @@ const CardModal = ({ isOpen, onOpen, onClose, data, setData }) => {
 						/>
 					</FormControl>
 
-					<FormControl mt={4}>
+					<FormControl mt={4} isRequired>
 						<FormLabel htmlFor="point" fontSize={'2xl'}>
 							Story point:
 						</FormLabel>
@@ -235,9 +253,51 @@ const CardModal = ({ isOpen, onOpen, onClose, data, setData }) => {
 							}}
 						>
 							<option value="1">1 point</option>
+							<option value="2">2 point</option>
 							<option value="3">3 point</option>
 							<option value="5">5 point</option>
+							<option value="8">8 point</option>
+							<option value="13">13 point</option>
 						</Select>
+					</FormControl>
+
+					<FormControl mt={4} isRequired>
+						<CUIAutoComplete
+							tagStyleProps={{
+								rounded: 'full',
+							}}
+							label="Category"
+							placeholder="Enter the category"
+							onCreateItem={() => {}} //Empty because don't want to add option in list. Please see the example in "https://www.npmjs.com/package/chakra-ui-autocomplete"
+							items={sortedCategory}
+							itemRenderer={customRender}
+							// createItemRenderer={customCreateItemRender}
+							selectedItems={selectedCategory}
+							onSelectedItemsChange={(changes) => {
+								console.log(changes);
+								return handleSelectedCategoryChange(
+									changes.selectedItems
+								);
+							}}
+							hideToggleButton={true}
+							listStyleProps={{
+								maxHeight: '200',
+								overflow: 'auto',
+								bg: useColorModeValue('', '#2D3748'),
+							}}
+							listItemStyleProps={{
+								cursor: 'pointer',
+								_hover: {
+									bg: useColorModeValue('', '#031e49'),
+								},
+							}}
+							labelStyleProps={{
+								color: useColorModeValue('#031e49', '#fffdfe'),
+							}}
+							inputStyleProps={{
+								color: useColorModeValue('#031d46', '#fffdfe'),
+							}}
+						/>
 					</FormControl>
 
 					<FormControl mt={4} isRequired>

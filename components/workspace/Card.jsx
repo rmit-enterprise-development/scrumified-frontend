@@ -12,7 +12,7 @@ import { Draggable } from "react-beautiful-dnd";
 import CardModal from "./CardModal";
 
 const Card = (props) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+	const { isOpen, onOpen, onClose } = useDisclosure();
 
   const colorScheme = "red" + ".500";
   return (

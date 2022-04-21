@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
 	Flex,
 	Spacer,
@@ -11,7 +11,12 @@ import {
 	Select,
 	HStack,
 	useDisclosure,
+	IconButton,
 } from '@chakra-ui/react';
+
+import { AddIcon, HamburgerIcon } from '@chakra-ui/icons';
+
+import { IoFilterSharp } from 'react-icons/io5';
 
 import CardModal from './CardModal';
 
@@ -69,32 +74,57 @@ const BacklogController = ({ data, setData }) => {
 		},
 	]);
 	const { isOpen, onOpen, onClose } = useDisclosure();
+
+	const [iconFilter, setIConFilter] = useState('');
 	return (
 		<FormControl>
 			<Flex>
 				<HStack py="2">
-					<InputGroup>
-						<Input placeholder="Basic usage" />
-					</InputGroup>
-					<Select placeholder="Select option">
+					<IconButton
+						onClick={() => {
+							onOpen();
+						}}
+						aria-label="Search database"
+						icon={<IoFilterSharp />}
+						display={{ base: 'flex', md: 'none' }}
+						alignItems={'center'}
+					/>
+					<Select
+						placeholder="Select option"
+						display={{ base: 'none', md: 'block' }}
+					>
 						<option value="option1">Option 1</option>
 						<option value="option2">Option 2</option>
 						<option value="option3">Option 3</option>
 					</Select>
-					<Box>
-						<Button>Button</Button>
-					</Box>
+					<IconButton
+						onClick={() => {
+							onOpen();
+						}}
+						aria-label="Search database"
+						icon={<IoFilterSharp />}
+						display={{ base: 'flex', md: 'none' }}
+						alignItems={'center'}
+					/>
+					<Select
+						placeholder="Select option"
+						display={{ base: 'none', md: 'block' }}
+					>
+						<option value="option1">Option 1</option>
+						<option value="option2">Option 2</option>
+						<option value="option3">Option 3</option>
+					</Select>
 				</HStack>
 				<Spacer />
 				<HStack gap="2">
 					<Text>Total points: 8</Text>
-					<Button
+					<IconButton
 						onClick={() => {
 							onOpen();
 						}}
-					>
-						Create User Card
-					</Button>
+						aria-label="Search database"
+						icon={<AddIcon />}
+					/>
 				</HStack>
 			</Flex>
 			<CardModal

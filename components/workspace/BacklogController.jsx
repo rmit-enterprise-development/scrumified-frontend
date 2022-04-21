@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
 	Flex,
 	Spacer,
@@ -16,8 +16,59 @@ import {
 import CardModal from './CardModal';
 
 const BacklogController = ({ data, setData }) => {
+	const [userList, setUserList] = useState([
+		{
+			id: '1',
+			name: 'Minh Pham',
+			email: 'pcminh0505@gmail.com',
+		},
+		{
+			id: '3',
+			name: 'Thach Ho',
+			email: 'thachho@123@gmail.com',
+		},
+		{
+			id: '2',
+			name: 'Khang Nguyen',
+			email: 'khangnguyen111101@gmail.com',
+		},
+		{
+			id: '5',
+			name: 'Duong Nguyen',
+			email: 'duongnguyen123@gmail.com',
+		},
+		{
+			id: '4',
+			name: 'An Le',
+			email: 'andrew123@gmail.com',
+		},
+		{
+			id: '4',
+			name: 'An Le',
+			email: 'andrew123@gmail.com',
+		},
+		{
+			id: '4',
+			name: 'An Le',
+			email: 'andrew123@gmail.com',
+		},
+		{
+			id: '4',
+			name: 'An Le',
+			email: 'andrew123@gmail.com',
+		},
+		{
+			id: '4',
+			name: 'An Le',
+			email: 'andrew123@gmail.com',
+		},
+		{
+			id: '4',
+			name: 'An Le',
+			email: 'andrew123@gmail.com',
+		},
+	]);
 	const { isOpen, onOpen, onClose } = useDisclosure();
-
 	return (
 		<FormControl>
 			<Flex>
@@ -50,8 +101,12 @@ const BacklogController = ({ data, setData }) => {
 				isOpen={isOpen}
 				onOpen={onOpen}
 				onClose={onClose}
-                data={data}
-                setData={setData}
+				data={data}
+				setData={setData}
+				participantList={userList.map((a) => {
+					const userInfo = a.name + ' (' + a.email + ')';
+					return { value: a.id, label: userInfo };
+				})}
 			/>
 		</FormControl>
 	);

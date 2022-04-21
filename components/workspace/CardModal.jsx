@@ -12,10 +12,62 @@ import {
 	Flex,
 	Textarea,
 	Select,
+	Text,
+	useColorMode,
+	useColorModeValue,
 } from '@chakra-ui/react';
+import Avvvatars from 'avvvatars-react';
+import { CUIAutoComplete } from 'chakra-ui-autocomplete';
 import React, { useState } from 'react';
 
-const CardModal = ({ isOpen, onOpen, onClose, data, setData }) => {
+const CardModal = ({
+	isOpen,
+	onOpen,
+	onClose,
+	data,
+	setData,
+	participantList,
+}) => {
+	const [selectedItems, setSelectedItems] = useState([]);
+	const { colorMode } = useColorMode();
+
+	console.log(participantList);
+	const [pickerItems, setPickerItems] = useState(
+		participantList.sort((a, b) => a.label.localeCompare(b.label))
+	);
+
+	const handleSelectedItemsChange = (selectedItems) => {
+		if (selectedItems) {
+			setSelectedItems(selectedItems);
+		}
+	};
+
+	const customRender = (selected) => {
+		return (
+			<Flex flexDir="row" alignItems="center">
+				<Avvvatars value={selected.label} />
+
+				{colorMode === 'dark' ? (
+					<Text pl={5} color="#fffdfe">
+						{selected.label}
+					</Text>
+				) : (
+					<Text pl={5} color="#031d46">
+						{selected.label}
+					</Text>
+				)}
+			</Flex>
+		);
+	};
+
+	const customCreateItemRender = (value) => {
+		return (
+			<Text as="span" color="red.500" fontWeight="bold">
+				User not found!
+			</Text>
+		);
+	};
+
 	const [card, setCard] = useState({
 		asA: '',
 		iNeed: '',
@@ -57,7 +109,13 @@ const CardModal = ({ isOpen, onOpen, onClose, data, setData }) => {
 			});
 	};
 	return (
-		<Modal isCentered isOpen={isOpen} onClose={onClose} width={'100%'} height={'100%'}>
+		<Modal
+			isCentered
+			isOpen={isOpen}
+			onClose={onClose}
+			width={'100%'}
+			height={'100%'}
+		>
 			<ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px)" />
 			<ModalContent borderRadius={'1rem'} padding={'1rem'}>
 				<ModalHeader>Create User Story</ModalHeader>
@@ -155,6 +213,42 @@ const CardModal = ({ isOpen, onOpen, onClose, data, setData }) => {
 							<option value="3">3 point</option>
 							<option value="5">5 point</option>
 						</Select>
+					</FormControl>
+
+					<FormControl mt={4} isRequired>
+						<CUIAutoComplete
+							tagStyleProps={{
+								rounded: 'full',
+							}}
+							label="Participants"
+							placeholder="Enter a participant's email"
+							onCreateItem={() => {}} // Empty because don't want to add option in list. Please see the example in "https://www.npmjs.com/package/chakra-ui-autocomplete"
+							items={pickerItems}
+							itemRenderer={customRender}
+							createItemRenderer={customCreateItemRender}
+							selectedItems={selectedItems}
+							onSelectedItemsChange={(changes) =>
+								handleSelectedItemsChange(changes.selectedItems)
+							}
+							hideToggleButton={true}
+							listStyleProps={{
+								maxHeight: '200',
+								overflow: 'auto',
+								bg: useColorModeValue('', '#2D3748'),
+							}}
+							listItemStyleProps={{
+								cursor: 'pointer',
+								_hover: {
+									bg: useColorModeValue('', '#031e49'),
+								},
+							}}
+							labelStyleProps={{
+								color: useColorModeValue('#031e49', '#fffdfe'),
+							}}
+							inputStyleProps={{
+								color: useColorModeValue('#031d46', '#fffdfe'),
+							}}
+						/>
 					</FormControl>
 				</ModalBody>
 				<ModalFooter>

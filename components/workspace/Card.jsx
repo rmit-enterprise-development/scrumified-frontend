@@ -54,14 +54,14 @@ const Card = (props) => {
               </Circle>
             </Flex>
           </Box>
-          <CardModal
+          {/* <CardModal
             isOpen={isOpen}
             onOpen={onOpen}
             onClose={onClose}
             // data={data}
             // setData={setData}
             // card={props.card}
-          />
+          /> */}
         </Box>
       )}
     </Draggable>

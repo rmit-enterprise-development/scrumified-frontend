@@ -103,10 +103,6 @@ const BacklogController = ({ data, setData }) => {
 				onClose={onClose}
 				data={data}
 				setData={setData}
-				participantList={userList.map((a) => {
-					const userInfo = a.name + ' (' + a.email + ')';
-					return { value: a.id, label: userInfo };
-				})}
 			/>
 		</FormControl>
 	);

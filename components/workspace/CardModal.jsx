@@ -20,18 +20,43 @@ import Avvvatars from 'avvvatars-react';
 import { CUIAutoComplete } from 'chakra-ui-autocomplete';
 import React, { useState } from 'react';
 
-const CardModal = ({
-	isOpen,
-	onOpen,
-	onClose,
-	data,
-	setData,
-	participantList,
-}) => {
+const CardModal = ({ isOpen, onOpen, onClose, data, setData }) => {
+	const [userList, setUserList] = useState([
+		{
+			id: '1',
+			name: 'Minh Pham',
+			email: 'pcminh0505@gmail.com',
+		},
+		{
+			id: '3',
+			name: 'Thach Ho',
+			email: 'thachho@123@gmail.com',
+		},
+		{
+			id: '2',
+			name: 'Khang Nguyen',
+			email: 'khangnguyen111101@gmail.com',
+		},
+		{
+			id: '5',
+			name: 'Duong Nguyen',
+			email: 'duongnguyen123@gmail.com',
+		},
+		{
+			id: '4',
+			name: 'An Le',
+			email: 'andrew123@gmail.com',
+		},
+	]);
+
+	const participantList = userList.map((a) => {
+		const userInfo = a.name + ' (' + a.email + ')';
+		return { value: a.id, label: userInfo };
+	});
+
 	const [selectedItems, setSelectedItems] = useState([]);
 	const { colorMode } = useColorMode();
 
-	console.log(participantList);
 	const [pickerItems, setPickerItems] = useState(
 		participantList.sort((a, b) => a.label.localeCompare(b.label))
 	);
@@ -44,8 +69,8 @@ const CardModal = ({
 
 	const customRender = (selected) => {
 		return (
-			<Flex flexDir="row" alignItems="center">
-				<Avvvatars value={selected.label} />
+			<Flex flexDir="row" alignItems={'center'}>
+				<Avvvatars value={selected.label}/>
 
 				{colorMode === 'dark' ? (
 					<Text pl={5} color="#fffdfe">
@@ -222,14 +247,17 @@ const CardModal = ({
 							}}
 							label="Participants"
 							placeholder="Enter a participant's email"
-							onCreateItem={() => {}} // Empty because don't want to add option in list. Please see the example in "https://www.npmjs.com/package/chakra-ui-autocomplete"
+							onCreateItem={() => {}} //Empty because don't want to add option in list. Please see the example in "https://www.npmjs.com/package/chakra-ui-autocomplete"
 							items={pickerItems}
 							itemRenderer={customRender}
 							createItemRenderer={customCreateItemRender}
 							selectedItems={selectedItems}
-							onSelectedItemsChange={(changes) =>
-								handleSelectedItemsChange(changes.selectedItems)
-							}
+							onSelectedItemsChange={(changes) => {
+								console.log(changes);
+								return handleSelectedItemsChange(
+									changes.selectedItems
+								);
+							}}
 							hideToggleButton={true}
 							listStyleProps={{
 								maxHeight: '200',
@@ -310,3 +338,22 @@ const CardModal = ({
 };
 
 export default CardModal;
+
+// export async function getStaticProps() {
+// 	const res = await fetch('http://127.0.0.1:8989/users/');
+// 	const cards = await res.json();
+// 	if (cards['_embedded']) {
+// 		return {
+// 			props: {
+// 				cards: cards['_embedded'].storyDtoList,
+// 			},
+// 			revalidate: 5,
+// 		};
+// 	}
+// 	return {
+// 		props: {
+// 			cards: [],
+// 		},
+// 		revalidate: 5,
+// 	};
+// }

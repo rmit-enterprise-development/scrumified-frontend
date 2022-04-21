@@ -7,59 +7,6 @@ import ProjectGrid from "../components/dashboard/ProjectGrid/ProjectGrid";
 import MainContainer from "../components/layout/MainContainer";
 
 const Dashboard = () => {
-  const [userList, setUserList] = useState([
-    {
-      id: "1",
-      name: "Minh Pham",
-      email: "pcminh0505@gmail.com",
-    },
-    {
-      id: "3",
-      name: "Thach Ho",
-      email: "thachho@123@gmail.com",
-    },
-    {
-      id: "2",
-      name: "Khang Nguyen",
-      email: "khangnguyen111101@gmail.com",
-    },
-    {
-      id: "5",
-      name: "Duong Nguyen",
-      email: "duongnguyen123@gmail.com",
-    },
-    {
-      id: "4",
-      name: "An Le",
-      email: "andrew123@gmail.com",
-    },
-    {
-      id: "4",
-      name: "An Le",
-      email: "andrew123@gmail.com",
-    },
-    {
-      id: "4",
-      name: "An Le",
-      email: "andrew123@gmail.com",
-    },
-    {
-      id: "4",
-      name: "An Le",
-      email: "andrew123@gmail.com",
-    },
-    {
-      id: "4",
-      name: "An Le",
-      email: "andrew123@gmail.com",
-    },
-    {
-      id: "4",
-      name: "An Le",
-      email: "andrew123@gmail.com",
-    },
-  ]);
-
   // useEffect(() => {
   //   const fetchUserList = async () => {
   //     try {

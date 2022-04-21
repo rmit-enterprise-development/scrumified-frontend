@@ -86,6 +86,7 @@ const MainForm = ({
     useEffect(() => {
         // if Register is clicked
         if (isRegistering || isSigningIn) openPopUp();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isSigningIn, isRegistering]);
 
     // render account pop up

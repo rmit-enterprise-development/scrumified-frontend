@@ -47,7 +47,7 @@ const ProjectGrid = () => {
     },
   ];
   return (
-    <Flex flexWrap="wrap" gap={5}>
+    <Flex flexWrap="wrap" gap={5} py={2}>
       <ProjectItem {...data[0]} />
       <ProjectItem {...data[1]} />
       <ProjectItem {...data[2]} />

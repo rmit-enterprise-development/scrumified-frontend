@@ -31,7 +31,6 @@ const CreateProjectModal = ({ participantList }) => {
 
   const [pickerItems, setPickerItems] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
-  console.log("selectedItems: ", selectedItems);
 
   const handleSelectedItemsChange = (selectedItems) => {
     if (selectedItems) {
@@ -69,7 +68,7 @@ const CreateProjectModal = ({ participantList }) => {
     const userID = "";
     const request = {
       title: "",
-      participantsId: selectedItems.map((a) => a.id),
+      participantsId: selectedItems.map((a) => a.value),
     };
     try {
       const response = await projectAPI.postProject(userID, request);

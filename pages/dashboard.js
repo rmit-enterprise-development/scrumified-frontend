@@ -1,4 +1,11 @@
-import { Flex } from "@chakra-ui/react";
+import { ArrowBackIcon, ArrowForwardIcon } from "@chakra-ui/icons";
+import {
+  Button,
+  Flex,
+  IconButton,
+  Input,
+  useColorModeValue,
+} from "@chakra-ui/react";
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import userAPI from "../api/services/userAPI";
@@ -9,33 +16,15 @@ import MainContainer from "../components/layout/MainContainer";
 import { digFind } from "../utils/object";
 
 const Dashboard = () => {
+  // const [currentPage, setCurrentPage] = useState(1);
   const [userList, setUserList] = useState([]);
-  // {
-  //   id: "1",
-  //   name: "Minh Pham",
-  //   email: "pcminh0505@gmail.com",
-  // },
-  // {
-  //   id: "3",
-  //   name: "Thach Ho",
-  //   email: "thachho@123@gmail.com",
-  // },
-  // {
-  //   id: "2",
-  //   name: "Khang Nguyen",
-  //   email: "khangnguyen111101@gmail.com",
-  // },
-  // {
-  //   id: "5",
-  //   name: "Duong Nguyen",
-  //   email: "duongnguyen123@gmail.com",
-  // },
-  // {
-  //   id: "4",
-  //   name: "An Le",
-  //   email: "andrew123@gmail.com",
-  // },
-  // ]);
+  const [value, setValue] = useState("");
+  const handleChange = (event) => setValue(event.target.value);
+
+  const handleSearch = () => {
+    // Submit search
+    console.log(value);
+  };
 
   useEffect(() => {
     const fetchUserList = async () => {
@@ -68,6 +57,41 @@ const Dashboard = () => {
               return { value: a.id, label: userInfo };
             })}
           />
+        </Flex>
+
+        <Flex justifyContent="space-between" alignItems="center" pb={2}>
+          <Flex gap={2}>
+            <Input
+              placeholder="Search for project name"
+              color={useColorModeValue("#031d46", "#fffdfe")}
+              value={value}
+              onChange={handleChange}
+            ></Input>
+            <Button
+              onClick={handleSearch}
+              color={useColorModeValue("#031d46", "#fffdfe")}
+            >
+              Search
+            </Button>
+          </Flex>
+          <Flex gap={1}>
+            <IconButton
+              aria-label="Previous"
+              icon={
+                <ArrowBackIcon
+                  color={useColorModeValue("#031d46", "#fffdfe")}
+                />
+              }
+            ></IconButton>
+            <IconButton
+              aria-label="Next"
+              icon={
+                <ArrowForwardIcon
+                  color={useColorModeValue("#031d46", "#fffdfe")}
+                />
+              }
+            ></IconButton>
+          </Flex>
         </Flex>
 
         <ProjectGrid />

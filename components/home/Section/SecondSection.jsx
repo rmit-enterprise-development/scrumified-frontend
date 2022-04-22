@@ -91,7 +91,7 @@ const SecondSection = () => {
                 '0px 31px 56px -22px rgba(255,255,255,0.51)'
             )}
             mx={{ base: '1rem', md: '6rem' }}
-            mb="10rem"
+            mb="4rem"
             data-aos="fade-up"
             style={{
                 '-moz-user-select': 'none',

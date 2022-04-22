@@ -79,9 +79,9 @@ const EditProfileModal = ({ id, fname, lname, email, bio }) => {
         initialFocusRef={initialRef}
         finalFocusRef={finalRef}
         isOpen={isOpen}
-        onClose={onClose}
+        onClose={onClose}fg
       >
-        <ModalOverlay />
+        <ModalOverlay backdropFilter="blur(10px)"/>
         <ModalContent>
           <ModalHeader color={useColorModeValue("#031e49", "gray.200")}>
             Edit Profile

@@ -43,7 +43,7 @@ const Profile = () => {
             <LogOutButton id={user.id} />
           </Flex>
         </Flex>
-
+    
         <SectionHeader>My Projects</SectionHeader>
       </MainContainer>
     </>

@@ -17,9 +17,9 @@ const userAPI = {
   },
 
   /**
-   * 
+   *
    * @param {*} params {email(String), password(String)}
-   * @returns 
+   * @returns
    */
   register: (params) => {
     const url = "/register";
@@ -27,9 +27,9 @@ const userAPI = {
   },
 
   /**
-   * 
-   * @param {*} params {email(String), password(String)} 
-   * @returns 
+   *
+   * @param {*} params {email(String), password(String)}
+   * @returns
    */
   login: (params) => {
     const url = `/login`;
@@ -37,10 +37,10 @@ const userAPI = {
   },
 
   /**
-   * 
+   *
    * @param {*} id userId(Long)
    * @param {*} params {email(String), password(String)}
-   * @returns 
+   * @returns
    */
   putUser: (id, params) => {
     const url = `/users/${id}`;
@@ -53,20 +53,25 @@ const userAPI = {
   },
 
   /**
-   * 
+   *
    * @param {*} id userId(Long)
    * @param {*} params {goal(String), status(String), defOfDone(String)}
-   * @returns 
+   * @returns
    */
   postProject: (id, params) => {
     const url = `users/${id}/projects`;
     return axiosClient.post(url, params);
   },
 
-  getAllProjects: (id) => {
+  /**
+   *
+   * @param {*} page Int
+   * @returns
+   */
+  getAllProjects: (id, params) => {
     const url = `users/${id}/projects`;
-    return axiosClient.get(url);
-  }
+    return axiosClient.get(url, { params });
+  },
 };
 
 export default userAPI;

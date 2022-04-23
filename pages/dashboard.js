@@ -8,6 +8,7 @@ import {
 } from "@chakra-ui/react";
 import Head from "next/head";
 import { useEffect, useState } from "react";
+import projectAPI from "../api/services/projectAPI";
 import userAPI from "../api/services/userAPI";
 import SectionHeader from "../components/common/SectionHeader/SectionHeader";
 import CreateProjectModal from "../components/dashboard/CreateProjectModal/CreateProjectModal";
@@ -16,8 +17,10 @@ import MainContainer from "../components/layout/MainContainer";
 import { digFind } from "../utils/object";
 
 const Dashboard = () => {
+  // const currentUser = {}
   // const [currentPage, setCurrentPage] = useState(1);
   const [userList, setUserList] = useState([]);
+  const [projectList, setProjectList] = useState([]);
   const [value, setValue] = useState("");
   const handleChange = (event) => setValue(event.target.value);
 
@@ -27,18 +30,31 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    const fetchUserList = async () => {
-      try {
-        const response = await userAPI.getAll();
-        const data = digFind(response, "userDtoList");
+    // const fetchUserList = async () => {
+    //   try {
+    //     const response = await userAPI.getAll();
+    //     const data = digFind(response, "userDtoList");
 
-        setUserList(data);
+    //     setUserList(data);
+    //   } catch (error) {
+    //     console.log("Fail to fetch: ", error);
+    //   }
+    // };
+
+    const fetchProjectByUser = async () => {
+      try {
+        const response = await projectAPI.getAllProjects(1); // Mock data
+        console.log("response: ", response);
+        // const data = digFind(response, "userDtoList");
+
+        // setUserList(data);
       } catch (error) {
         console.log("Fail to fetch: ", error);
       }
     };
 
-    fetchUserList();
+    // fetchUserList();
+    fetchProjectByUser();
   }, []);
 
   return (
@@ -47,17 +63,7 @@ const Dashboard = () => {
         <title>Dashboard</title>
       </Head>
       <MainContainer>
-        <Flex justifyContent="space-between" alignItems="center">
-          <SectionHeader>My Projects</SectionHeader>
-
-          <CreateProjectModal
-            participantList={userList.map((a) => {
-              const userInfo =
-                a.firstName + " " + a.lastName + " (" + a.email + ")";
-              return { value: a.id, label: userInfo };
-            })}
-          />
-        </Flex>
+        <SectionHeader>My Projects</SectionHeader>
 
         <Flex justifyContent="space-between" alignItems="center" pb={2}>
           <Flex gap={2}>
@@ -73,8 +79,6 @@ const Dashboard = () => {
             >
               Search
             </Button>
-          </Flex>
-          <Flex gap={1}>
             <IconButton
               aria-label="Previous"
               icon={
@@ -92,9 +96,17 @@ const Dashboard = () => {
               }
             ></IconButton>
           </Flex>
+
+          <CreateProjectModal
+            participantList={userList.map((a) => {
+              const userInfo =
+                a.firstName + " " + a.lastName + " (" + a.email + ")";
+              return { value: a.id, label: userInfo };
+            })}
+          />
         </Flex>
 
-        <ProjectGrid />
+        <ProjectGrid data={projectList} />
 
         <SectionHeader>Assigned to me</SectionHeader>
       </MainContainer>

@@ -1,7 +1,7 @@
-import { Box, Flex, SimpleGrid } from "@chakra-ui/react";
+import { SimpleGrid } from "@chakra-ui/react";
 import ProjectItem from "./ProjectItem/ProjectItem";
 
-const ProjectGrid = () => {
+const ProjectGrid = ({ data }) => {
   const randomColor = [
     "green",
     "yellow",
@@ -12,7 +12,7 @@ const ProjectGrid = () => {
     "brown",
   ];
 
-  const data = [
+  const dataMock = [
     {
       id: "1",
       name: "Sample Project 1",
@@ -23,7 +23,7 @@ const ProjectGrid = () => {
     },
     {
       id: "2",
-      name: "Dit con me project nay ten dai vai ca lon luon",
+      name: "Sample Project 3",
       author: "Minh Pham",
       createdTime: "12/3/2022",
       color: randomColor[2],
@@ -47,12 +47,12 @@ const ProjectGrid = () => {
     },
   ];
   return (
-    <Flex flexWrap="wrap" gap={5} py={2}>
-      <ProjectItem {...data[0]} />
-      <ProjectItem {...data[1]} />
-      <ProjectItem {...data[2]} />
-      <ProjectItem {...data[3]} />
-    </Flex>
+    <SimpleGrid columns={[1, 2, 4]} gap={5} py={2}>
+      <ProjectItem {...dataMock[0]} />
+      <ProjectItem {...dataMock[1]} />
+      <ProjectItem {...dataMock[2]} />
+      <ProjectItem {...dataMock[3]} />
+    </SimpleGrid>
   );
 };
 

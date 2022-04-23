@@ -38,6 +38,9 @@ const CreateProjectModal = ({ participantList }) => {
     }
   };
 
+  const [text, setText] = useState("");
+  const handleTextChange = (event) => setText(event.target.value);
+
   const customRender = (selected) => {
     return (
       <Flex flexDir="row" alignItems="center">
@@ -56,18 +59,10 @@ const CreateProjectModal = ({ participantList }) => {
     );
   };
 
-  const customCreateItemRender = (value) => {
-    return (
-      <Text as="span" color="red.500" fontWeight="bold">
-        User not found!
-      </Text>
-    );
-  };
-
   const handleSubmit = async () => {
     const userID = "";
     const request = {
-      title: "",
+      title: text,
       participantsId: selectedItems.map((a) => a.value),
     };
     try {
@@ -76,7 +71,7 @@ const CreateProjectModal = ({ participantList }) => {
         // Handle error
       } else {
         // Push to project backlog with new ID
-        const projectID = "";
+        const projectID = response.data.id;
         Router.push({
           pathname: `${RouterPage.PROJECT}/${projectID}${RouterPage.BACKLOG}`,
         });
@@ -94,12 +89,7 @@ const CreateProjectModal = ({ participantList }) => {
 
   return (
     <>
-      <Button
-        leftIcon={<AddIcon />}
-        size="sm"
-        colorScheme="teal"
-        onClick={onOpen}
-      >
+      <Button leftIcon={<AddIcon />} colorScheme="teal" onClick={onOpen}>
         Create Project
       </Button>
 
@@ -109,7 +99,7 @@ const CreateProjectModal = ({ participantList }) => {
         isOpen={isOpen}
         onClose={onClose}
       >
-        <ModalOverlay />
+        <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px)" />
         <ModalContent>
           <ModalHeader color={useColorModeValue("#031e49", "#fffdfe")}>
             Create your project
@@ -124,6 +114,8 @@ const CreateProjectModal = ({ participantList }) => {
                 ref={initialRef}
                 placeholder="Project name"
                 color={useColorModeValue("#031d46", "#fffdfe")}
+                value={text}
+                onChange={handleTextChange}
               />
             </FormControl>
 
@@ -134,10 +126,9 @@ const CreateProjectModal = ({ participantList }) => {
                 }}
                 label="Participants"
                 placeholder="Enter a participant's email"
-                onCreateItem={() => {}} // Empty because don't want to add option in list. Please see the example in "https://www.npmjs.com/package/chakra-ui-autocomplete"
+                disableCreateItem
                 items={pickerItems}
                 itemRenderer={customRender}
-                createItemRenderer={customCreateItemRender}
                 selectedItems={selectedItems}
                 onSelectedItemsChange={(changes) =>
                   handleSelectedItemsChange(changes.selectedItems)

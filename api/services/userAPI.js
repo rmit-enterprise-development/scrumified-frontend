@@ -1,9 +1,9 @@
 import axiosClient from "../axiosClient";
 
 const userAPI = {
-  getAll: () => {
+  getAll: (params) => {
     const url = "/users";
-    return axiosClient.get(url);
+    return axiosClient.get(url, { params });
   },
 
   getOne: (id) => {
@@ -65,11 +65,24 @@ const userAPI = {
 
   /**
    *
-   * @param {*} page Int
+   * @param {*} key: String
+   * @param {*} page: Int (start with 0)
+   * @param {*} limit: Int (start with 4)
    * @returns
    */
   getAllProjects: (id, params) => {
     const url = `users/${id}/projects`;
+    return axiosClient.get(url, { params });
+  },
+  /**
+   *
+   * @param {*} key: String
+   * @param {*} page: Int (start with 0)
+   * @param {*} limit: Int (start with 4)
+   * @returns
+   */
+  getAllTasks: (id, params) => {
+    const url = `users/${id}/stories`;
     return axiosClient.get(url, { params });
   },
 };

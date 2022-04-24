@@ -1,11 +1,9 @@
 import { Button } from "@chakra-ui/react";
 
-const NumberButton = ({ number }) => {
+const NumberButton = ({ children }) => {
   const customToggle = (e) => {
     e.stopPropagation();
-
     // Fetch user task here
-    console.log("Hello");
   };
   return (
     <>
@@ -21,7 +19,7 @@ const NumberButton = ({ number }) => {
         }
         onClick={(e) => customToggle(e)}
       >
-        {number}
+        {children}
       </Button>
     </>
   );

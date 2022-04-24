@@ -57,7 +57,7 @@ const ProjectItem = ({ id, name, author, createdTime, color, openTasks }) => {
             My task
           </Text>
 
-          <NumberButton number={openTasks} />
+          <NumberButton>{openTasks}</NumberButton>
         </Flex>
       </Flex>
     </Box>

@@ -7,20 +7,19 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import Head from "next/head";
-import { useEffect, useState } from "react";
-import projectAPI from "../api/services/projectAPI";
-import userAPI from "../api/services/userAPI";
+import { useState } from "react";
 import SectionHeader from "../components/common/SectionHeader/SectionHeader";
 import CreateProjectModal from "../components/dashboard/CreateProjectModal/CreateProjectModal";
 import ProjectGrid from "../components/dashboard/ProjectGrid/ProjectGrid";
 import MainContainer from "../components/layout/MainContainer";
-import { digFind } from "../utils/object";
+import useFetchDashboard from "../hooks/useFetchDashboard";
 
 const Dashboard = () => {
-  // const currentUser = {}
+  const currentUser = {
+    id: 1,
+  };
   // const [currentPage, setCurrentPage] = useState(1);
-  const [userList, setUserList] = useState([]);
-  const [projectList, setProjectList] = useState([]);
+
   const [value, setValue] = useState("");
   const handleChange = (event) => setValue(event.target.value);
 
@@ -29,33 +28,8 @@ const Dashboard = () => {
     console.log(value);
   };
 
-  useEffect(() => {
-    // const fetchUserList = async () => {
-    //   try {
-    //     const response = await userAPI.getAll();
-    //     const data = digFind(response, "userDtoList");
-
-    //     setUserList(data);
-    //   } catch (error) {
-    //     console.log("Fail to fetch: ", error);
-    //   }
-    // };
-
-    const fetchProjectByUser = async () => {
-      try {
-        const response = await projectAPI.getAllProjects(1); // Mock data
-        console.log("response: ", response);
-        // const data = digFind(response, "userDtoList");
-
-        // setUserList(data);
-      } catch (error) {
-        console.log("Fail to fetch: ", error);
-      }
-    };
-
-    // fetchUserList();
-    fetchProjectByUser();
-  }, []);
+  const { projectList, taskList } = useFetchDashboard(currentUser.id);
+  console.log("taskList: ", taskList);
 
   return (
     <>
@@ -97,16 +71,10 @@ const Dashboard = () => {
             ></IconButton>
           </Flex>
 
-          <CreateProjectModal
-            participantList={userList.map((a) => {
-              const userInfo =
-                a.firstName + " " + a.lastName + " (" + a.email + ")";
-              return { value: a.id, label: userInfo };
-            })}
-          />
+          <CreateProjectModal />
         </Flex>
 
-        <ProjectGrid data={projectList} />
+        <ProjectGrid projectData={projectList} taskData={taskList} />
 
         <SectionHeader>Assigned to me</SectionHeader>
       </MainContainer>

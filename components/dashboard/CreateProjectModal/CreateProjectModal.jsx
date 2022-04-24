@@ -1,6 +1,7 @@
 import { AddIcon } from "@chakra-ui/icons";
 import {
   Button,
+  CircularProgress,
   Flex,
   FormControl,
   FormLabel,
@@ -21,10 +22,18 @@ import Avvvatars from "avvvatars-react";
 import { CUIAutoComplete } from "chakra-ui-autocomplete";
 import Router from "next/router";
 import { useEffect, useRef, useState } from "react";
+import userAPI from "../../../api/services/userAPI";
+import { digFind } from "../../../utils/object";
+import { RouterPage } from "../../../config/router";
 
-const CreateProjectModal = ({ participantList }) => {
+const CreateProjectModal = () => {
   const { colorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [isExisted, setIsExisted] = useState(true);
+  const [isValid, setIsValid] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState("");
 
   const initialRef = useRef();
   const finalRef = useRef();
@@ -40,6 +49,16 @@ const CreateProjectModal = ({ participantList }) => {
 
   const [text, setText] = useState("");
   const handleTextChange = (event) => setText(event.target.value);
+
+  const customInputRender = (inputProps) => (
+    <Input
+      {...inputProps}
+      value={searchTerm}
+      onChange={(e) => {
+        setSearchTerm(e.target.value);
+      }}
+    />
+  );
 
   const customRender = (selected) => {
     return (
@@ -60,32 +79,71 @@ const CreateProjectModal = ({ participantList }) => {
   };
 
   const handleSubmit = async () => {
-    const userID = "";
-    const request = {
-      title: text,
-      participantsId: selectedItems.map((a) => a.value),
-    };
-    try {
-      const response = await projectAPI.postProject(userID, request);
-      if (response && response.header !== 200) {
-        // Handle error
-      } else {
+    const userID = 1;
+    if (text === "" || selectedItems.length === 0) {
+      setIsValid(false);
+      setError("Invalid form input. Please try again");
+    } else {
+      setIsValid(true);
+      const request = {
+        title: text,
+        participantsId: selectedItems.map((a) => a.value),
+      };
+
+      try {
+        setIsSubmitting(true);
+        const response = await userAPI.postProject(userID, request);
+        console.log("response: ", response);
         // Push to project backlog with new ID
         const projectID = response.data.id;
+        console.log("projectID: ", projectID);
         Router.push({
           pathname: `${RouterPage.PROJECT}/${projectID}${RouterPage.BACKLOG}`,
         });
+      } catch (error) {
+        console.error("There was an error: ", error);
+      } finally {
+        setIsSubmitting(false);
       }
-    } catch (error) {
-      console.error("There was an error: ", error);
     }
   };
 
   useEffect(() => {
-    setPickerItems(
-      participantList.sort((a, b) => a.label.localeCompare(b.label))
-    );
-  }, [participantList]);
+    const delayDebounceFn = setTimeout(async () => {
+      if (searchTerm !== "") {
+        // Send Axios request here
+        try {
+          const response = await userAPI.getAll({ key: searchTerm });
+          const data = response.data;
+          const userList = digFind(data, "userDtoList");
+
+          if (userList) {
+            const participantList = userList.map((a) => {
+              const userInfo =
+                a.firstName + " " + a.lastName + " (" + a.email + ")";
+              return { value: a.id, label: userInfo };
+            });
+            setIsExisted(true);
+            setPickerItems(
+              participantList.sort((a, b) => a.label.localeCompare(b.label))
+            );
+          } else {
+            setIsExisted(false);
+            setError("User not found!");
+            setPickerItems([]);
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      } else {
+        setIsExisted(true);
+        setPickerItems([]);
+      }
+    }, 500);
+
+    return () => clearTimeout(delayDebounceFn);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchTerm]);
 
   return (
     <>
@@ -125,8 +183,7 @@ const CreateProjectModal = ({ participantList }) => {
                   rounded: "full",
                 }}
                 label="Participants"
-                placeholder="Enter a participant's email"
-                disableCreateItem
+                placeholder="Enter a participant's info (>3 characters)"
                 items={pickerItems}
                 itemRenderer={customRender}
                 selectedItems={selectedItems}
@@ -151,15 +208,34 @@ const CreateProjectModal = ({ participantList }) => {
                 inputStyleProps={{
                   color: useColorModeValue("#031d46", "#fffdfe"),
                 }}
+                renderCustomInput={customInputRender}
+                disableCreateItem
               />
             </FormControl>
+            {!isExisted && (
+              <Text as="span" color="red.500" fontWeight="bold">
+                {error}
+              </Text>
+            )}
+            {!isValid && (
+              <Text as="span" color="red.500" fontWeight="bold">
+                {error}
+              </Text>
+            )}
           </ModalBody>
 
           <ModalFooter>
+            {isSubmitting && (
+              <CircularProgress isIndeterminate color="green.300" />
+            )}
             <Button onClick={onClose} mr={3}>
               Cancel
             </Button>
-            <Button onClick={handleSubmit} colorScheme="blue">
+            <Button
+              colorScheme="blue"
+              onClick={handleSubmit}
+              disabled={isSubmitting ? true : false}
+            >
               Create
             </Button>
           </ModalFooter>

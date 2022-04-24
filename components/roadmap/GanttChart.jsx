@@ -9,7 +9,6 @@ const GanttChart = () => {
           trackHeight: 30,
         },
     };
-    {console.log(data)};
 
     return (
         <Chart

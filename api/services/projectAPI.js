@@ -7,10 +7,10 @@ const projectAPI = {
   },
 
   /**
-   * 
+   *
    * @param {*} id projectId(Long)
    * @param {*} params {title(String), participantId(List<Long>)}
-   * @returns 
+   * @returns
    */
   putProject: (id, params) => {
     const url = `/projects/${id}`;
@@ -23,26 +23,32 @@ const projectAPI = {
   },
 
   /**
-   * 
+   *
    * @param {*} id projectId(Long)
    * @param {*} params {userStory(String), category(String), point(int), status(String), assignId(Long)}
-   * @returns 
+   * @returns
    */
   postStory: (id, params) => {
     const url = `/projects/${id}/stories`;
     return axiosClient.post(url, params);
   },
 
-  getAllStories: (id) => {
+  /**
+   *
+   * @param {*} id projectId(Long)
+   * @param {*} params {userID(Int), page(Int), limit(Int)}
+   * @returns
+   */
+  getAllStories: (id, params) => {
     const url = `/projects/${id}/stories`;
-    return axiosClient.get(url);
+    return axiosClient.get(url, params);
   },
 
   /**
-   * 
+   *
    * @param {*} id projectId(Long)
    * @param {*} params {goal(String), status(String), defOfDone(String)}
-   * @returns 
+   * @returns
    */
   postSprint: (id, params) => {
     const url = `/projects/${id}/sprints`;
@@ -57,8 +63,7 @@ const projectAPI = {
   getAllPoints: (id) => {
     const url = `/projects/${id}/status`;
     return axiosClient.get(url);
-  }
-  
+  },
 };
 
 export default projectAPI;

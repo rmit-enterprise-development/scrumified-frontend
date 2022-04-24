@@ -1,7 +1,7 @@
-import { Box, Flex, SimpleGrid } from "@chakra-ui/react";
+import { SimpleGrid } from "@chakra-ui/react";
 import ProjectItem from "./ProjectItem/ProjectItem";
 
-const ProjectGrid = () => {
+const ProjectGrid = ({ projectData, taskData }) => {
   const randomColor = [
     "green",
     "yellow",
@@ -9,50 +9,25 @@ const ProjectGrid = () => {
     "purple",
     "orange",
     "pink",
-    "brown",
+    "red",
   ];
 
-  const data = [
-    {
-      id: "1",
-      name: "Sample Project 1",
-      author: "Thach Ho",
-      createdTime: "4/3/2022",
-      color: randomColor[1],
-      openTasks: "2",
-    },
-    {
-      id: "2",
-      name: "Dit con me project nay ten dai vai ca lon luon",
-      author: "Minh Pham",
-      createdTime: "12/3/2022",
-      color: randomColor[2],
-      openTasks: "2",
-    },
-    {
-      id: "3",
-      name: "Sample Project 3",
-      author: "Duong Nguyen",
-      createdTime: "14/3/2022",
-      color: randomColor[3],
-      openTasks: "2",
-    },
-    {
-      id: "4",
-      name: "Sample Project 4",
-      author: "Khang Nguyen",
-      createdTime: "24/3/2022",
-      color: randomColor[4],
-      openTasks: "2",
-    },
-  ];
   return (
-    <Flex flexWrap="wrap" gap={5}>
-      <ProjectItem {...data[0]} />
-      <ProjectItem {...data[1]} />
-      <ProjectItem {...data[2]} />
-      <ProjectItem {...data[3]} />
-    </Flex>
+    <SimpleGrid columns={[1, 2, 4]} gap={5} py={2}>
+      {projectData.map((project) => (
+        <ProjectItem
+          key={project.id}
+          id={project.id}
+          name={project.title}
+          author={project.owner.firstName + " " + project.owner.lastName}
+          createdTime={new Date(project.createdDate * 1000).toLocaleDateString(
+            "en-IN"
+          )}
+          color={randomColor[project.id % randomColor.length]} // Mock for now
+          openTasks={taskData.filter((obj) => obj.id === project.id).length} // Mock for now
+        />
+      ))}
+    </SimpleGrid>
   );
 };
 

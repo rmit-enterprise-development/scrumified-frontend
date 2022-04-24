@@ -101,7 +101,6 @@ const AboveMediumNavbar = ({
             animate={{ rotate: 360 }}
             transition={{
               repeat: Infinity,
-              loop: Infinity,
               ease: 'linear',
               duration: 6,
             }}

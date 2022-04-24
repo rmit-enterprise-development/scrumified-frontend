@@ -113,7 +113,7 @@ const CreateProjectModal = () => {
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(async () => {
-      if (searchTerm !== "") {
+      if (searchTerm !== "" && searchTerm.length >= 3) {
         // Send Axios request here
         try {
           const response = await userAPI.getAll({ key: searchTerm });

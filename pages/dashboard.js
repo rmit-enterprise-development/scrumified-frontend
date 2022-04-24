@@ -6,20 +6,21 @@ import {
   Input,
   useColorModeValue,
 } from "@chakra-ui/react";
+import jsonwebtoken from "jsonwebtoken";
+import md5 from "md5";
+import cookies from "next-cookies";
 import Head from "next/head";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SectionHeader from "../components/common/SectionHeader/SectionHeader";
 import CreateProjectModal from "../components/dashboard/CreateProjectModal/CreateProjectModal";
 import ProjectGrid from "../components/dashboard/ProjectGrid/ProjectGrid";
 import MainContainer from "../components/layout/MainContainer";
 import useFetchDashboard from "../hooks/useFetchDashboard";
 
-const Dashboard = () => {
-  const currentUser = {
-    id: 1,
-  };
+const Dashboard = ({ authToken }) => {
   // const [currentPage, setCurrentPage] = useState(1);
-
+  const [loggedUser, setLoggedUser] = useState({});
+  console.log("loggedUser: ", loggedUser);
   const [value, setValue] = useState("");
   const handleChange = (event) => setValue(event.target.value);
 
@@ -28,15 +29,26 @@ const Dashboard = () => {
     console.log(value);
   };
 
-  const { projectList, taskList } = useFetchDashboard(currentUser.id);
-  console.log("taskList: ", taskList);
+  const { projectList, taskList } = useFetchDashboard(loggedUser);
+
+  useEffect(() => {
+    try {
+      const currentUser = jsonwebtoken.verify(
+        authToken,
+        md5("EmChiXemAnhLa_#BanNhauMaThoi")
+      );
+      setLoggedUser(currentUser);
+    } catch (error) {
+      console.log(error);
+    }
+  }, [authToken]);
 
   return (
     <>
       <Head>
         <title>Dashboard</title>
       </Head>
-      <MainContainer>
+      <MainContainer user={loggedUser}>
         <SectionHeader>My Projects</SectionHeader>
 
         <Flex justifyContent="space-between" alignItems="center" pb={2}>

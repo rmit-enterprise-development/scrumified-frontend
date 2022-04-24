@@ -2,7 +2,6 @@ import { SimpleGrid } from "@chakra-ui/react";
 import ProjectItem from "./ProjectItem/ProjectItem";
 
 const ProjectGrid = ({ projectData, taskData }) => {
-  console.log("taskData: ", taskData);
   const randomColor = [
     "green",
     "yellow",
@@ -10,7 +9,7 @@ const ProjectGrid = ({ projectData, taskData }) => {
     "purple",
     "orange",
     "pink",
-    "brown",
+    "red",
   ];
 
   return (

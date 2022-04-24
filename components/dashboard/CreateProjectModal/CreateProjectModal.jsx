@@ -80,9 +80,12 @@ const CreateProjectModal = () => {
 
   const handleSubmit = async () => {
     const userID = 1;
-    if (text === "" || selectedItems.length === 0) {
+    if (text === "") {
       setIsValid(false);
-      setError("Invalid form input. Please try again");
+      setError("Project name can't be empty");
+    } else if (selectedItems.length === 0) {
+      setIsValid(false);
+      setError("Participant list can't be empty");
     } else {
       setIsValid(true);
       const request = {

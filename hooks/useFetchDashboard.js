@@ -2,9 +2,11 @@ import { useState, useEffect } from "react";
 import userAPI from "../api/services/userAPI";
 import { digFind } from "../utils/object";
 
-const useFetchDashboard = (userID) => {
+const useFetchDashboard = (user) => {
   const [projectList, setProjectList] = useState([]);
-  const [taskList, setTaskList] = useState({});
+  const [taskList, setTaskList] = useState([]);
+
+  const userId = user.logUserId ? user.logUserId : -1;
 
   const fetchProjectByUser = async () => {
     try {
@@ -13,7 +15,7 @@ const useFetchDashboard = (userID) => {
         page: 0,
         limit: 10,
       };
-      const response = await userAPI.getAllProjects(userID, params); // Mock data
+      const response = await userAPI.getAllProjects(userId, params); // Mock data
       const data = response.data;
       const projects = digFind(data, "content");
 
@@ -23,14 +25,14 @@ const useFetchDashboard = (userID) => {
     }
   };
 
-  const fetchAssignedTaskByUser = async (userID) => {
+  const fetchAssignedTaskByUser = async () => {
     try {
       const params = {
         key: "",
         page: 0,
         limit: 10,
       };
-      const response = await userAPI.getAllTasks(userID, params); // Mock data
+      const response = await userAPI.getAllTasks(userId, params); // Mock data
       const data = response.data;
       const tasks = digFind(data, "content");
 
@@ -41,10 +43,11 @@ const useFetchDashboard = (userID) => {
   };
 
   useEffect(() => {
-    fetchProjectByUser(userID);
-    fetchAssignedTaskByUser(userID);
+    fetchProjectByUser();
+    fetchAssignedTaskByUser();
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [user]);
 
   return { projectList, taskList };
 };

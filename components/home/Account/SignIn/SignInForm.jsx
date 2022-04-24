@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
+import { useRouter } from 'next/router';
 import {
   Button,
-  chakra,
   FormControl,
   Text,
   InputRightElement,
@@ -13,13 +13,14 @@ import InputLabel from '../Register/InputLabel';
 import OthersInput from '../Register/OthersInput';
 import FormButton from '../Register/FormButton';
 import { motion } from 'framer-motion';
+import { sign } from 'jsonwebtoken';
 import userAPI from '../../../../api/services/userAPI';
+import md5 from 'md5';
 
 // integrate Chakra Components with framer motion
 const MotionText = motion(Text);
 const MotionFlex = motion(Flex);
 const MotionInputGroup = motion(InputGroup);
-const MotionChakraDiv = motion(chakra.div);
 
 const SignInForm = ({
   inputControls,
@@ -28,103 +29,71 @@ const SignInForm = ({
   setIsRegistering,
   setIsSigningIn,
 }) => {
+  // router to redirect
+  const router = useRouter();
+
   // state to track sign in email and password
   const [signInEmail, setSignInEmail] = useState('');
   const [signInPwd, setSignInPwd] = useState('');
-  const [emailValidate, setEmailValidate] = useState(true);
-  const [pwdValidate, setPwdValidate] = useState(true);
 
   // handle password toggle
   const [show, setShow] = useState(false);
   const handlePwdToggleClick = () => setShow(!show);
 
-  // methods to validate email and password input
-  const validateEmail = (email) => {
-    return email === ''
-      ? { value: false, msg: 'Required' }
-      : { value: true, msg: 'Perfect ✅' };
-  };
-
-  const validatePassword = (pwd) => {
-    let rs = [];
-    rs.push({
-      value: pwd !== '',
-      msg: 'Required',
-    });
-    rs.push({
-      value: pwd.length >= 8,
-      msg: 'At least 8 characters',
-    });
-    rs.push({
-      value:
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
-          pwd
-        ),
-      msg: 'At least 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character',
-    });
-
-    let errorFilter = rs.filter((item) => item.value === false);
-
-    return errorFilter.length > 0
-      ? errorFilter[0]
-      : { value: true, msg: 'Perfect ✅' };
-  };
-
-  // error message component
-  const CustomErrorMsg = ({ children }) => (
-    <MotionChakraDiv mt="0.75rem" animate={inputControls}>
-      <Text
-        color="crimson"
-        fontSize="0.7rem"
-        fontWeight="bold"
-        fontStyle="italic"
-      >
-        {children}
-      </Text>
-    </MotionChakraDiv>
-  );
-
-  // method to fetch GET API and check if user exist on database
-  const login = async (loginData) => {
-    try {
-      // get all users from database
-      const response = await userAPI.login(loginData);
-
-      // response dissection
-      const data = await response.data;
-
-      // check for error response
-      if (response.status !== 200) return Promise.reject(response.statusText);
-
-      // check if information is valid
-      console.log(data);
-      const { errorTarget, isSuccess } = data;
-      if (!isSuccess)
-        alert(`Login failed! Your ${errorTarget[0]} is incorrect!`);
-      else alert(`Login sucessfully!`);
-    } catch (error) {
-      console.log('[ERROR] Unable to login user because: ', error);
-    }
-  };
-
   // form subsmission handler
   const handleSubmit = async (e) => {
-    // prevent default nature of html forms
     e.preventDefault();
 
     // sign in data container
     const finalData = { email: signInEmail, password: signInPwd };
 
-    // login with current sign in data
-    await login(finalData);
+    try {
+      // login service usage
+      const loginServiceStatus = await userAPI.login(finalData);
 
-    // reset form's state
-    setTimeout(() => {
+      // if login service failed
+      if (loginServiceStatus.status !== 200)
+        throw new Error(
+          `Login service failed, msg: ${loginServiceStatus.statusText}`
+        );
+
+      // detach data from successful login service connection to db
+      const { errorTarget, isSuccess, id, firstName, lastName, email } =
+        await loginServiceStatus.data;
+
+      // handle cases for login input
+      if (!isSuccess) {
+        throw new Error(
+          `Login authentication failed, msg: ${errorTarget[0]} is incorrect`
+        );
+      }
+
+      // handle jwt authentication if login is successful
+      const claims = await { logUserId: id, firstName, lastName, email };
+      const jwt = await sign(claims, md5('EmChiXemAnhLa_#BanNhauMaThoi'), {
+        expiresIn: '1h',
+      });
+
+      // login with current sign in data
+      const loginApiStatus = await fetch('/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ token: jwt }),
+      });
+
+      const loginApiData = await loginApiStatus.json();
+
+      if (!loginApiData.loggedIn) throw new Error(loginApiData.message);
+
+      // reset form data
       setSignInEmail('');
       setSignInPwd('');
-      setEmailValidate(true);
-      setPwdValidate(true);
-    }, 1000);
+      router.push('/dashboard');
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -163,12 +132,8 @@ const SignInForm = ({
           inputValue={signInEmail}
           handleInput={(e) => {
             setSignInEmail(e.target.value);
-            setEmailValidate(validateEmail(e.target.value).value);
           }}
         />
-        {!emailValidate && (
-          <CustomErrorMsg>{validateEmail(signInEmail).msg}</CustomErrorMsg>
-        )}
       </FormControl>
 
       {/* Password */}
@@ -190,7 +155,6 @@ const SignInForm = ({
             inputValue={signInPwd}
             handleInput={(e) => {
               setSignInPwd(e.target.value);
-              setPwdValidate(validatePassword(e.target.value).value);
             }}
           />
 
@@ -217,10 +181,6 @@ const SignInForm = ({
             </Button>
           </InputRightElement>
         </MotionInputGroup>
-
-        {!pwdValidate && (
-          <CustomErrorMsg>{validatePassword(signInPwd).msg}</CustomErrorMsg>
-        )}
       </FormControl>
 
       {/* Buttons */}

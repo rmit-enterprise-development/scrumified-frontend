@@ -82,4 +82,9 @@ const Dashboard = () => {
   );
 };
 
+export async function getServerSideProps(ctx) {
+  const { auth } = cookies(ctx);
+  return { props: { authToken: auth || "" } };
+}
+
 export default Dashboard;

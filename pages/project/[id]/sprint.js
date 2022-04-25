@@ -1,59 +1,62 @@
-import Head from "next/head";
-import { useEffect, useState } from "react";
-import SectionHeader from "../../../components/common/SectionHeader/SectionHeader";
-import MainContainer from "../../../components/layout/MainContainer";
-import Board from "../../../components/workspace/Board";
-import Column from "../../../components/workspace/Column";
+import Head from 'next/head';
+import { useEffect, useState } from 'react';
+import SectionHeader from '../../../components/common/SectionHeader/SectionHeader';
+import MainContainer from '../../../components/layout/MainContainer';
+import Board from '../../../components/workspace/Board';
+import Column from '../../../components/workspace/Column';
 
-const Sprint = () => {
+import cookies from 'next-cookies';
+import { LoggedUserProvider } from '../components/common/LoggedUserProvider';
+
+const Sprint = ({ authToken }) => {
   const initData = [
     {
-      id: "1",
-      userStory: "Card1",
-      category: "Hello",
-      point: "12",
+      id: '1',
+      userStory: 'Card1',
+      category: 'Hello',
+      point: '12',
       position: 2,
-      status: "todo",
+      status: 'todo',
     },
     {
-      id: "2",
-      userStory: "Card2",
-      category: "Hello",
-      point: "12",
+      id: '2',
+      userStory: 'Card2',
+      category: 'Hello',
+      point: '12',
       position: 0,
-      status: "inProgress",
+      status: 'inProgress',
     },
     {
-      id: "3",
-      userStory: "Card3",
-      category: "Hello",
-      point: "12",
+      id: '3',
+      userStory: 'Card3',
+      category: 'Hello',
+      point: '12',
       position: 0,
-      status: "done",
+      status: 'done',
     },
     {
-      id: "4",
-      userStory: "Card4",
-      category: "Hello",
-      point: "12",
+      id: '4',
+      userStory: 'Card4',
+      category: 'Hello',
+      point: '12',
       position: 1,
-      status: "todo",
+      status: 'todo',
     },
     {
-      id: "5",
-      userStory: "Card5",
-      category: "Hello",
-      point: "12",
+      id: '5',
+      userStory: 'Card5',
+      category: 'Hello',
+      point: '12',
       position: 1,
-      status: "inProgress",
+      status: 'inProgress',
     },
     {
-      id: "6",
-      userStory: "Card6",
-      category: "Hello",
-      point: "12",
+      id: '6',
+      userStory: 'Card6',
+      category: 'Hello',
+      point: '12',
       position: 0,
-      status: "todo",
+      status: 'todo',
     },
   ];
 
@@ -71,7 +74,7 @@ const Sprint = () => {
   };
 
   return (
-    <>
+    <LoggedUserProvider authToken={authToken}>
       <Head>
         <title>Active Sprint</title>
       </Head>
@@ -82,27 +85,32 @@ const Sprint = () => {
           <Board data={data} setData={setData} templateColumns="repeat(3, 1fr)">
             <Column
               key={0}
-              title={"Todo"}
-              id={"todo"}
-              cards={filterCards("todo")}
+              title={'Todo'}
+              id={'todo'}
+              cards={filterCards('todo')}
             />
             <Column
               key={1}
-              title={"In Progress"}
-              id={"inProgress"}
-              cards={filterCards("inProgress")}
+              title={'In Progress'}
+              id={'inProgress'}
+              cards={filterCards('inProgress')}
             />
             <Column
               key={2}
-              title={"Done"}
-              id={"done"}
-              cards={filterCards("done")}
+              title={'Done'}
+              id={'done'}
+              cards={filterCards('done')}
             />
           </Board>
         ) : null}
       </MainContainer>
-    </>
+    </LoggedUserProvider>
   );
 };
+
+export async function getServerSideProps(ctx) {
+  const { auth } = cookies(ctx);
+  return { props: { authToken: auth || '' } };
+}
 
 export default Sprint;

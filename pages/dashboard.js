@@ -5,26 +5,11 @@ import SectionHeader from '../components/common/SectionHeader/SectionHeader';
 import CreateProjectModal from '../components/dashboard/CreateProjectModal/CreateProjectModal';
 import ProjectGrid from '../components/dashboard/ProjectGrid/ProjectGrid';
 import MainContainer from '../components/layout/MainContainer';
+
 import cookies from 'next-cookies';
+import { LoggedUserProvider } from '../components/common/LoggedUserProvider';
 
 const Dashboard = ({ authToken }) => {
-  // useEffect(() => {
-  //   const fetchUserList = async () => {
-  //     try {
-  //       const response = await userAPI.getAll();
-  //       console.log("response: ", response);
-
-  //       setUserList(response);
-  //     } catch (error) {
-  //       console.log("Fail to fetch: ", error);
-  //     }
-  //   };
-
-  //   fetchUserList();
-  // }, []);
-
-  // console.log("userList: ", userList);
-
   const [userList, setUserList] = useState([
     {
       id: '1',
@@ -53,11 +38,10 @@ const Dashboard = ({ authToken }) => {
     },
   ]);
   return (
-    <>
+    <LoggedUserProvider authToken={authToken}>
       <Head>
         <title>Dashboard</title>
       </Head>
-      <h1>Token nè he: {authToken}</h1>
       <MainContainer>
         <Flex justifyContent="space-between" alignItems="center">
           <SectionHeader>My Projects</SectionHeader>
@@ -74,7 +58,7 @@ const Dashboard = ({ authToken }) => {
 
         <SectionHeader>Assigned to me</SectionHeader>
       </MainContainer>
-    </>
+    </LoggedUserProvider>
   );
 };
 

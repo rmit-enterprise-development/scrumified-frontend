@@ -68,7 +68,7 @@ const SignInForm = ({
         );
       }
 
-      // handle jwt authentication if login is successful
+      // handle jwt authentication if login is successful-+-*\
       const claims = await { logUserId: id, firstName, lastName, email };
       const jwt = await sign(claims, md5('EmChiXemAnhLa_#BanNhauMaThoi'), {
         expiresIn: '1h',

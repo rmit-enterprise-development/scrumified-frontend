@@ -33,13 +33,24 @@ const EditProfileModal = ({ id, fname, lname, email, bio }) => {
     password: "",
   };
 
-  const onSubmit = (values, actions) => {
-    setTimeout(() => {
-      alert(JSON.stringify(values, null, 2));
-      userAPI.putUser()
-      actions.setSubmitting(false);
-    }, 1000);
-    console.log(values);
+  const onSubmit = async (values, actions) => {
+    try {
+      const verifyData = {email : email, password: values.password};
+      console.log(verifyData)
+      const loginServiceStatus = await userAPI.login(verifyData);
+      console.log(loginServiceStatus);
+
+      if (loginServiceStatus.data.isSuccess) {
+        alert("okie con de");
+      }
+      else {
+        alert("Incorrect password confirmation!");
+      } 
+    } catch (error) {
+      console.log(error);
+    }
+    actions.setSubmitting(false);
+    // console.log(values);
   };
 
   const validationSchema = Yup.object({

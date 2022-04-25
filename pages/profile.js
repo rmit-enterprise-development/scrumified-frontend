@@ -10,7 +10,7 @@ import jsonwebtoken from "jsonwebtoken";
 import md5 from "md5";
 import cookies from "next-cookies";
 import EditPasswordModal from "../components/profile/EditPasswordModal";
-
+import { LoggedUserProvider } from "../components/common/LoggedUserProvider";
 
 const Profile = ( {authToken} ) => {
   const [loggedUser, setLoggedUser] = useState({});

@@ -12,13 +12,14 @@ import React from "react";
 import { FiMenu } from "react-icons/fi";
 import { SidebarContent } from "./SidebarContent";
 
-export default function Sidebar({ children }) {
+export default function Sidebar({ user, children }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { toggleColorMode } = useColorMode();
 
   return (
     <Box minH="100vh" bg={useColorModeValue("#FFFDFE", "#031E49")}>
       <SidebarContent
+        user={user}
         onClose={() => onClose}
         toggleColorMode={toggleColorMode}
         display={{ base: "none", md: "block" }}

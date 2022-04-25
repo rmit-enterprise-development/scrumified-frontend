@@ -15,7 +15,7 @@ import { RouterPage } from "../../../config/router";
 import { LinkItems } from "./LinkItems";
 import { SideBarItem } from "./SideBarItem";
 
-export function SidebarContent({ onClose, toggleColorMode, ...rest }) {
+export function SidebarContent({ user, onClose, toggleColorMode, ...rest }) {
   const SwitchIcon = useColorModeValue(FaSun, FaMoon);
 
   return (
@@ -79,12 +79,20 @@ export function SidebarContent({ onClose, toggleColorMode, ...rest }) {
               /> */}
               <Avvvatars
                 size={40}
-                color="purple"
                 shadow={true}
-                value="Khang Nguyen"
+                value={
+                  user
+                    ? user.firstName +
+                      " " +
+                      user.lastName +
+                      " (" +
+                      user.email +
+                      ")"
+                    : "Hello"
+                }
               />
               <Text pl={3} cursor="pointer" color="#FFFDEF">
-                Khang
+                {user ? user.firstName + " " + user.lastName : "Hello"}
               </Text>
             </Flex>
           </NextLink>

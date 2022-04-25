@@ -11,51 +11,55 @@ const ProjectItem = ({ id, name, author, createdTime, color, openTasks }) => {
       pathname: `${RouterPage.PROJECT}/${id}${RouterPage.BACKLOG}`,
     });
   };
-
   const colorScheme = color + ".500";
-  if (name.length > 20) {
-    name = textUtils.truncate(name);
-  }
+  // if (name.length > 20) {
+  //   name = textUtils.truncate(name);
+  // }
   return (
     <Box
       borderColor={useColorModeValue("#fffdfe", "#2d4046")}
       borderWidth="1px"
-      borderRadius="10%"
-      boxShadow="xl"
+      borderRadius="1rem"
+      boxShadow={
+        "0px 1px 25px -5px rgb(66 153 225 / 48%), 0 10px 10px -5px rgb(66 153 225 / 43%)"
+      }
       display="flex"
       overflow="hidden"
-      w={250}
-      h={150}
+      // maxW={250}
+      // h={150}
       cursor="pointer"
       onClick={handlePushProjectDetail}
     >
-      <Box w={5} bg={colorScheme} />
-      <Box p={2}>
-        <Flex pb={2} alignItems="center">
-          <Avvvatars style="shape" value={id} />
-          <Text
-            fontWeight="bold"
-            pl={2}
-            color={useColorModeValue("#031d46", "#fffdfe")}
-          >
-            {name}
-          </Text>
-        </Flex>
+      <Box w="5%" bg={colorScheme} />
+      <Flex p={2} flexDir="column" justifyContent="space-between">
+        <Box>
+          <Flex pb={2} alignItems="center">
+            <Avvvatars style="shape" value={id} />
+            <Text
+              fontWeight="bold"
+              pl={2}
+              color={useColorModeValue("#031d46", "#fffdfe")}
+            >
+              {name}
+            </Text>
+          </Flex>
 
-        <Text color={useColorModeValue("#031d46", "#fffdfe")}>
-          Created at: {createdTime}
-        </Text>
-        <Text color={useColorModeValue("#031d46", "#fffdfe")}>
-          Owned by: {author}
-        </Text>
+          <Text color={useColorModeValue("#031d46", "#fffdfe")}>
+            Created at: {createdTime}
+          </Text>
+          <Text color={useColorModeValue("#031d46", "#fffdfe")}>
+            Owned by: {author}
+          </Text>
+        </Box>
 
         <Flex alignItems="center" pt={4}>
           <Text pr={2} color={useColorModeValue("#031d46", "#fffdfe")}>
             My task
           </Text>
-          <NumberButton bgColor={color}>{openTasks}</NumberButton>
+
+          <NumberButton>{openTasks}</NumberButton>
         </Flex>
-      </Box>
+      </Flex>
     </Box>
   );
 };

@@ -17,6 +17,9 @@ import ProjectGrid from "../components/dashboard/ProjectGrid/ProjectGrid";
 import MainContainer from "../components/layout/MainContainer";
 import useFetchDashboard from "../hooks/useFetchDashboard";
 
+import cookies from 'next-cookies';
+import { LoggedUserProvider } from '../components/common/LoggedUserProvider';
+
 const Dashboard = ({ authToken }) => {
   // const [currentPage, setCurrentPage] = useState(1);
   const [loggedUser, setLoggedUser] = useState({});
@@ -42,9 +45,9 @@ const Dashboard = ({ authToken }) => {
       console.log(error);
     }
   }, [authToken]);
-
+  
   return (
-    <>
+    <LoggedUserProvider authToken={authToken}>
       <Head>
         <title>Dashboard</title>
       </Head>
@@ -90,7 +93,7 @@ const Dashboard = ({ authToken }) => {
 
         <SectionHeader>Assigned to me</SectionHeader>
       </MainContainer>
-    </>
+    </LoggedUserProvider>
   );
 };
 

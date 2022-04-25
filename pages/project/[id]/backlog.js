@@ -1,41 +1,41 @@
-import { Box } from '@chakra-ui/react';
-import Head from 'next/head';
-import React, { useEffect, useState } from 'react';
+import { Box } from "@chakra-ui/react";
+import Head from "next/head";
+import React, { useEffect, useState } from "react";
 // import projectAPI from "../../../api/services/projectAPI";
-import SectionHeader from '../../../components/common/SectionHeader/SectionHeader';
-import MainContainer from '../../../components/layout/MainContainer';
-import BacklogController from '../../../components/workspace/BacklogController';
-import Board from '../../../components/workspace/Board';
-import Column from '../../../components/workspace/Column';
+import SectionHeader from "../../../components/common/SectionHeader/SectionHeader";
+import MainContainer from "../../../components/layout/MainContainer";
+import BacklogController from "../../../components/workspace/BacklogController";
+import Board from "../../../components/workspace/Board";
+import Column from "../../../components/workspace/Column";
 
-import cookies from 'next-cookies';
-import { LoggedUserProvider } from '../components/common/LoggedUserProvider';
+import cookies from "next-cookies";
+import { LoggedUserProvider } from "../../../components/common/LoggedUserProvider";
 
 const Backlog = ({ cards, authToken }) => {
   const initData = [
     {
-      id: '1',
-      userStory: 'Card1',
-      category: 'Hello',
-      point: '12',
+      id: "1",
+      userStory: "Card1",
+      category: "Hello",
+      point: "12",
       position: 2,
-      status: 'backlog',
+      status: "backlog",
     },
     {
-      id: '2',
-      userStory: 'Card2',
-      category: 'Hello',
-      point: '12',
+      id: "2",
+      userStory: "Card2",
+      category: "Hello",
+      point: "12",
       position: 0,
-      status: 'backlog',
+      status: "backlog",
     },
     {
-      id: '3',
-      userStory: 'Card3',
-      category: 'Hello',
-      point: '12',
+      id: "3",
+      userStory: "Card3",
+      category: "Hello",
+      point: "12",
       position: 1,
-      status: 'backlog',
+      status: "backlog",
     },
   ];
 
@@ -65,9 +65,9 @@ const Backlog = ({ cards, authToken }) => {
             <Board data={data} setData={setData}>
               <Column
                 key={0}
-                title={'Backlog'}
-                id={'backlog'}
-                cards={filterCards('backlog')}
+                title={"Backlog"}
+                id={"backlog"}
+                cards={filterCards("backlog")}
               />
             </Board>
           ) : null}
@@ -79,7 +79,7 @@ const Backlog = ({ cards, authToken }) => {
 
 export async function getServerSideProps(ctx) {
   const { auth } = cookies(ctx);
-  return { props: { authToken: auth || '' } };
+  return { props: { authToken: auth || "" } };
 }
 
 export default Backlog;

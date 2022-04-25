@@ -1,20 +1,32 @@
 import { Flex } from "@chakra-ui/react";
 import Head from "next/head";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SectionHeader from "../components/common/SectionHeader/SectionHeader";
 import MainContainer from "../components/layout/MainContainer";
 import EditProfileModal from "../components/profile/EditProfileModal";
 import ProfileCard from "../components/profile/ProfileCard";
 import LogOutButton from "../components/profile/LogOutButton";
+import jsonwebtoken from "jsonwebtoken";
+import md5 from "md5";
+import cookies from "next-cookies";
+import EditPasswordModal from "../components/profile/EditPasswordModal";
 
-const Profile = () => {
-  const [user, setUser] = useState({
-    id: "1",
-    fname: "Minh",
-    lname: "Pham",
-    email: "pcminh0505@gmail.com",
-    bio: "Minh dep dzai",
-  });
+
+const Profile = ( {authToken} ) => {
+  const [loggedUser, setLoggedUser] = useState({});
+  console.log("loggedUser: ", loggedUser);
+  
+  useEffect(() => {
+    try {
+      const currentUser = jsonwebtoken.verify(
+        authToken,
+        md5("EmChiXemAnhLa_#BanNhauMaThoi")
+      );
+      setLoggedUser(currentUser);
+    } catch (error) {
+      console.log(error);
+    }
+  }, [authToken]);
 
   return (
     <>
@@ -22,25 +34,30 @@ const Profile = () => {
         <title>Profile</title>
       </Head>
 
-      <MainContainer>
+      <MainContainer user={loggedUser}>
         <SectionHeader>Profile</SectionHeader>
 
         <Flex justifyContent="space-around" mt={10}>
           <ProfileCard
-            fname={user.fname}
-            lname={user.lname}
-            email={user.email}
-            bio={user.bio}
+            fname={loggedUser.firstName}
+            lname={loggedUser.lastName}
+            email={loggedUser.email}
+            bio="Em hay roi xa anh ta di!"
           />
           <Flex flexDir='column' justifyContent='space-around'>
             <EditProfileModal
-              id={user.id}
-              fname={user.fname}
-              lname={user.lname}
-              email={user.email}
-              bio={user.bio}
+              id={loggedUser.id}
+              fname={loggedUser.firstName}
+              lname={loggedUser.lastName}
+              email={loggedUser.email}
             />
-            <LogOutButton id={user.id} />
+            <EditPasswordModal
+              id={loggedUser.id}
+              fname={loggedUser.firstName}
+              lname={loggedUser.lastName}
+              email={loggedUser.email}
+            />
+            <LogOutButton id={loggedUser.id} />
           </Flex>
         </Flex>
     
@@ -49,5 +66,10 @@ const Profile = () => {
     </>
   );
 };
+
+export async function getServerSideProps(ctx) {
+  const { auth } = cookies(ctx);
+  return { props: { authToken: auth || "" } };
+}
 
 export default Profile;

@@ -4,7 +4,7 @@ import Avvvatars from "avvvatars-react";
 const ProfileCard = ({ id, fname, lname, email, bio }) => {
   return (
     <Flex>
-      <Avvvatars shadow={true} size="150" value={fname + " " + lname} />
+      <Avvvatars shadow={true} size="150" value={fname + " " + lname + " (" + email + ")" } />
 
       <Flex flexDir="row" ml={10} justifyContent="space-between">
         <Flex flexDir="column">

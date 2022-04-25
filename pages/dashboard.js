@@ -1,27 +1,29 @@
-import { ArrowBackIcon, ArrowForwardIcon } from "@chakra-ui/icons";
+import { ArrowBackIcon, ArrowForwardIcon } from '@chakra-ui/icons';
 import {
   Button,
   Flex,
   IconButton,
   Input,
   useColorModeValue,
-} from "@chakra-ui/react";
-import jsonwebtoken from "jsonwebtoken";
-import md5 from "md5";
-import cookies from "next-cookies";
-import Head from "next/head";
-import { useEffect, useState } from "react";
-import SectionHeader from "../components/common/SectionHeader/SectionHeader";
-import CreateProjectModal from "../components/dashboard/CreateProjectModal/CreateProjectModal";
-import ProjectGrid from "../components/dashboard/ProjectGrid/ProjectGrid";
-import MainContainer from "../components/layout/MainContainer";
-import useFetchDashboard from "../hooks/useFetchDashboard";
+} from '@chakra-ui/react';
+import jsonwebtoken from 'jsonwebtoken';
+import md5 from 'md5';
+import Head from 'next/head';
+import { useEffect, useState } from 'react';
+import SectionHeader from '../components/common/SectionHeader/SectionHeader';
+import CreateProjectModal from '../components/dashboard/CreateProjectModal/CreateProjectModal';
+import ProjectGrid from '../components/dashboard/ProjectGrid/ProjectGrid';
+import MainContainer from '../components/layout/MainContainer';
+import useFetchDashboard from '../hooks/useFetchDashboard';
+
+import cookies from 'next-cookies';
+import { LoggedUserProvider } from '../components/common/LoggedUserProvider';
 
 const Dashboard = ({ authToken }) => {
   // const [currentPage, setCurrentPage] = useState(1);
   const [loggedUser, setLoggedUser] = useState({});
-  console.log("loggedUser: ", loggedUser);
-  const [value, setValue] = useState("");
+  console.log('loggedUser: ', loggedUser);
+  const [value, setValue] = useState('');
   const handleChange = (event) => setValue(event.target.value);
 
   const handleSearch = () => {
@@ -35,7 +37,7 @@ const Dashboard = ({ authToken }) => {
     try {
       const currentUser = jsonwebtoken.verify(
         authToken,
-        md5("EmChiXemAnhLa_#BanNhauMaThoi")
+        md5('EmChiXemAnhLa_#BanNhauMaThoi')
       );
       setLoggedUser(currentUser);
     } catch (error) {
@@ -44,7 +46,7 @@ const Dashboard = ({ authToken }) => {
   }, [authToken]);
 
   return (
-    <>
+    <LoggedUserProvider authToken={authToken}>
       <Head>
         <title>Dashboard</title>
       </Head>
@@ -55,13 +57,13 @@ const Dashboard = ({ authToken }) => {
           <Flex gap={2}>
             <Input
               placeholder="Search for project name"
-              color={useColorModeValue("#031d46", "#fffdfe")}
+              color={useColorModeValue('#031d46', '#fffdfe')}
               value={value}
               onChange={handleChange}
             ></Input>
             <Button
               onClick={handleSearch}
-              color={useColorModeValue("#031d46", "#fffdfe")}
+              color={useColorModeValue('#031d46', '#fffdfe')}
             >
               Search
             </Button>
@@ -69,7 +71,7 @@ const Dashboard = ({ authToken }) => {
               aria-label="Previous"
               icon={
                 <ArrowBackIcon
-                  color={useColorModeValue("#031d46", "#fffdfe")}
+                  color={useColorModeValue('#031d46', '#fffdfe')}
                 />
               }
             ></IconButton>
@@ -77,7 +79,7 @@ const Dashboard = ({ authToken }) => {
               aria-label="Next"
               icon={
                 <ArrowForwardIcon
-                  color={useColorModeValue("#031d46", "#fffdfe")}
+                  color={useColorModeValue('#031d46', '#fffdfe')}
                 />
               }
             ></IconButton>
@@ -90,13 +92,13 @@ const Dashboard = ({ authToken }) => {
 
         <SectionHeader>Assigned to me</SectionHeader>
       </MainContainer>
-    </>
+    </LoggedUserProvider>
   );
 };
 
 export async function getServerSideProps(ctx) {
   const { auth } = cookies(ctx);
-  return { props: { authToken: auth || "" } };
+  return { props: { authToken: auth || '' } };
 }
 
 export default Dashboard;

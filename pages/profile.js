@@ -29,7 +29,7 @@ const Profile = ( {authToken} ) => {
   }, [authToken]);
 
   return (
-    <>
+    <LoggedUserProvider authToken={authToken}>
       <Head>
         <title>Profile</title>
       </Head>
@@ -63,7 +63,7 @@ const Profile = ( {authToken} ) => {
     
         <SectionHeader>My Projects</SectionHeader>
       </MainContainer>
-    </>
+    </LoggedUserProvider>
   );
 };
 

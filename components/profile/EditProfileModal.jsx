@@ -15,6 +15,7 @@ import {
   ModalOverlay,
   useColorModeValue,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import { Field, Form, Formik } from "formik";
 import { useRef } from "react";
@@ -23,7 +24,7 @@ import userAPI from "../../api/services/userAPI";
 
 const EditProfileModal = ({ id, fname, lname, email, bio }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-
+  const toast = useToast();
   const initialRef = useRef();
   const finalRef = useRef();
   const initialValues = {
@@ -35,21 +36,32 @@ const EditProfileModal = ({ id, fname, lname, email, bio }) => {
 
   const onSubmit = async (values, actions) => {
     try {
+      // get password confirm value from user -> verify with login method
       const verifyData = {email : email, password: values.password};
-      console.log(verifyData)
       const loginServiceStatus = await userAPI.login(verifyData);
-      console.log(loginServiceStatus);
 
+      // successfully verify password
       if (loginServiceStatus.data.isSuccess) {
-        alert("okie con de");
+        // update new user info
+        const updateData = {email : values.email,
+                          firstName : values.fname,
+                          lastName: values.lname};
+        const updateServiceStatus = await userAPI.putUser(id, updateData);
+        toast({
+          title: 'Successfully Edited',
+          description: "Your information has been edited",
+          status: 'success',
+          duration: 9000,
+          isClosable: false,
+        })
+        onClose();
       }
       else {
         alert("Incorrect password confirmation!");
-      } 
+      }
     } catch (error) {
       console.log(error);
     }
-    actions.setSubmitting(false);
     // console.log(values);
   };
 
@@ -65,7 +77,6 @@ const EditProfileModal = ({ id, fname, lname, email, bio }) => {
       .required("Required")
       .email("Invalid email"),
     password: Yup.string()
-      .min(8, "Must be more than 8 characters")
       .required("Please confirm your password")
   });
 

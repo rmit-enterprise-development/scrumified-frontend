@@ -13,21 +13,11 @@ import EditPasswordModal from "../components/profile/EditPasswordModal";
 import { LoggedUserProvider } from "../components/common/LoggedUserProvider";
 
 const Profile = ( {authToken} ) => {
-  const [loggedUser, setLoggedUser] = useState({});
-  console.log("loggedUser: ", loggedUser);
+  const loggedUser = jsonwebtoken.verify(
+    authToken,
+    md5("EmChiXemAnhLa_#BanNhauMaThoi")
+  );
   
-  useEffect(() => {
-    try {
-      const currentUser = jsonwebtoken.verify(
-        authToken,
-        md5("EmChiXemAnhLa_#BanNhauMaThoi")
-      );
-      setLoggedUser(currentUser);
-    } catch (error) {
-      console.log(error);
-    }
-  }, [authToken]);
-
   return (
     <LoggedUserProvider authToken={authToken}>
       <Head>
@@ -46,13 +36,13 @@ const Profile = ( {authToken} ) => {
           />
           <Flex flexDir='column' justifyContent='space-around'>
             <EditProfileModal
-              id={loggedUser.id}
+              id={loggedUser.logUserId}
               fname={loggedUser.firstName}
               lname={loggedUser.lastName}
               email={loggedUser.email}
             />
             <EditPasswordModal
-              id={loggedUser.id}
+              id={loggedUser.logUserId}
               fname={loggedUser.firstName}
               lname={loggedUser.lastName}
               email={loggedUser.email}

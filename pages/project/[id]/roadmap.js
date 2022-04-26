@@ -1,9 +1,9 @@
-import Head from 'next/head';
-import SectionHeader from '../../../components/common/SectionHeader/SectionHeader';
-import MainContainer from '../../../components/layout/MainContainer';
+import Head from "next/head";
+import SectionHeader from "../../../components/common/SectionHeader/SectionHeader";
+import MainContainer from "../../../components/layout/MainContainer";
 
-import cookies from 'next-cookies';
-import { LoggedUserProvider } from '../components/common/LoggedUserProvider';
+import cookies from "next-cookies";
+import { LoggedUserProvider } from "../../../components/common/LoggedUserProvider";
 
 const Roadmap = ({ authToken }) => {
   return (
@@ -21,7 +21,7 @@ const Roadmap = ({ authToken }) => {
 
 export async function getServerSideProps(ctx) {
   const { auth } = cookies(ctx);
-  return { props: { authToken: auth || '' } };
+  return { props: { authToken: auth || "" } };
 }
 
 export default Roadmap;

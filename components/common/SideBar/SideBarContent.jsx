@@ -9,14 +9,17 @@ import {
 import Avvvatars from "avvvatars-react";
 import { motion } from "framer-motion";
 import NextLink from "next/link";
+import { useContext } from "react";
 import { FaMoon, FaSun } from "react-icons/fa";
 import Images from "../../../assets/images";
 import { RouterPage } from "../../../config/router";
 import { LinkItems } from "./LinkItems";
 import { SideBarItem } from "./SideBarItem";
+import { LoggedUserContext } from "../LoggedUserProvider";
 
-export function SidebarContent({ user, onClose, toggleColorMode, ...rest }) {
+export function SidebarContent({ onClose, toggleColorMode, ...rest }) {
   const SwitchIcon = useColorModeValue(FaSun, FaMoon);
+  const user = useContext(LoggedUserContext);
 
   return (
     <Box

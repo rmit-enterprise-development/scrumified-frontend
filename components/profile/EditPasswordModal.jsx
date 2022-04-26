@@ -15,6 +15,7 @@ import {
   ModalOverlay,
   useColorModeValue,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import { Field, Form, Formik } from "formik";
 import { useRef } from "react";
@@ -23,18 +24,52 @@ import userAPI from "../../api/services/userAPI";
 
 const EditPasswordModal = ({ id, fname, lname, email, bio }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-
+  const toast = useToast();
   const initialRef = useRef();
   const finalRef = useRef();
   const initialValues = {
   };
 
-  const onSubmit = (values, actions) => {
-    setTimeout(() => {
-      alert(JSON.stringify(values, null, 2));
-      actions.setSubmitting(false);
-    }, 1000);
-    console.log(values);
+  const onSubmit = async (values, actions) => {
+    try {
+      // get password confirm value from user -> verify with login method
+      const verifyData = {email : email, password: values.oldPassword};
+      const loginServiceStatus = await userAPI.login(verifyData);
+
+      // successfully verify password
+      if (loginServiceStatus.data.isSuccess) {
+        // update new user info
+        const updateData = {password : values.newPassword};
+        const updateServiceStatus = await userAPI.putUser(id, updateData);
+        if (updateServiceStatus.status === 200) {
+          toast({
+            title: 'Password changed',
+            description: "Your password has been changed",
+            status: 'success',
+            duration: 9000,
+            isClosable: false,
+          })
+          onClose();
+        }
+        else {
+          toast({
+            title: 'Service Failure',
+            description: "Application failed to perform task!",
+            status: 'error',
+            duration: 9000,
+            isClosable: false,
+          })
+          throw new Error(
+            `Login service failed, msg: ${updateServiceStatus.statusText}`
+          );
+        }
+      }
+      else {
+        alert("Incorrect password confirmation!");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const validationSchema = Yup.object({

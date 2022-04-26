@@ -47,14 +47,30 @@ const EditProfileModal = ({ id, fname, lname, email, bio }) => {
                           firstName : values.fname,
                           lastName: values.lname};
         const updateServiceStatus = await userAPI.putUser(id, updateData);
-        toast({
-          title: 'Successfully Edited',
-          description: "Your information has been edited",
-          status: 'success',
-          duration: 9000,
-          isClosable: false,
-        })
-        onClose();
+
+        // successfully changed data
+        if (updateServiceStatus.status === 200) {
+          toast({
+            title: 'Successfully Edited',
+            description: "Your information has been edited",
+            status: 'success',
+            duration: 9000,
+            isClosable: false,
+          })
+          onClose();
+        }
+        else {
+          toast({
+            title: 'Service Failure',
+            description: "Application failed to perform task!",
+            status: 'error',
+            duration: 9000,
+            isClosable: false,
+          })
+          throw new Error(
+            `Login service failed, msg: ${updateServiceStatus.statusText}`
+          );
+        }
       }
       else {
         alert("Incorrect password confirmation!");
@@ -62,7 +78,6 @@ const EditProfileModal = ({ id, fname, lname, email, bio }) => {
     } catch (error) {
       console.log(error);
     }
-    // console.log(values);
   };
 
   const validationSchema = Yup.object({

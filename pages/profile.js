@@ -1,22 +1,27 @@
-import { Flex } from "@chakra-ui/react";
-import Head from "next/head";
-import { useState } from "react";
-import SectionHeader from "../components/common/SectionHeader/SectionHeader";
-import MainContainer from "../components/layout/MainContainer";
-import EditProfileModal from "../components/profile/EditProfileModal";
-import ProfileCard from "../components/profile/ProfileCard";
+import { Flex } from '@chakra-ui/react';
+import Head from 'next/head';
+import { useState } from 'react';
+import SectionHeader from '../components/common/SectionHeader/SectionHeader';
+import MainContainer from '../components/layout/MainContainer';
+import EditProfileModal from '../components/profile/EditProfileModal';
+import ProfileCard from '../components/profile/ProfileCard';
 
-const Profile = () => {
+import cookies from 'next-cookies';
+import {
+  LoggedUserProvider,
+} from '../components/common/LoggedUserProvider';
+
+const Profile = ({ authToken }) => {
   const [user, setUser] = useState({
-    id: "1",
-    fname: "Minh",
-    lname: "Pham",
-    email: "pcminh0505@gmail.com",
-    bio: "Minh dep dzai",
+    id: '1',
+    fname: 'Minh',
+    lname: 'Pham',
+    email: 'pcminh0505@gmail.com',
+    bio: 'Minh dep dzai',
   });
 
   return (
-    <>
+    <LoggedUserProvider authToken={authToken}>
       <Head>
         <title>Profile</title>
       </Head>
@@ -42,8 +47,13 @@ const Profile = () => {
 
         <SectionHeader>My Projects</SectionHeader>
       </MainContainer>
-    </>
+    </LoggedUserProvider>
   );
 };
+
+export async function getServerSideProps(ctx) {
+  const { auth } = cookies(ctx);
+  return { props: { authToken: auth || '' } };
+}
 
 export default Profile;

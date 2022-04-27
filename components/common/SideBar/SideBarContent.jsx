@@ -9,14 +9,17 @@ import {
 import Avvvatars from "avvvatars-react";
 import { motion } from "framer-motion";
 import NextLink from "next/link";
+import { useContext } from "react";
 import { FaMoon, FaSun } from "react-icons/fa";
 import Images from "../../../assets/images";
 import { RouterPage } from "../../../config/router";
 import { LinkItems } from "./LinkItems";
 import { SideBarItem } from "./SideBarItem";
+import { LoggedUserContext } from "../LoggedUserProvider";
 
 export function SidebarContent({ onClose, toggleColorMode, ...rest }) {
   const SwitchIcon = useColorModeValue(FaSun, FaMoon);
+  const user = useContext(LoggedUserContext);
 
   return (
     <Box
@@ -79,12 +82,20 @@ export function SidebarContent({ onClose, toggleColorMode, ...rest }) {
               /> */}
               <Avvvatars
                 size={40}
-                color="purple"
                 shadow={true}
-                value="Khang Nguyen"
+                value={
+                  user
+                    ? user.firstName +
+                      " " +
+                      user.lastName +
+                      " (" +
+                      user.email +
+                      ")"
+                    : "Hello"
+                }
               />
               <Text pl={3} cursor="pointer" color="#FFFDEF">
-                Khang
+                {user ? user.firstName + " " + user.lastName : "Hello"}
               </Text>
             </Flex>
           </NextLink>

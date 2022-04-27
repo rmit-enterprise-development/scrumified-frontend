@@ -3,9 +3,12 @@ import SectionHeader from "../../../components/common/SectionHeader/SectionHeade
 import MainContainer from "../../../components/layout/MainContainer";
 import GanttChart from "../../../components/roadmap/GanttChart";
 
-const Roadmap = () => {
+import cookies from "next-cookies";
+import { LoggedUserProvider } from "../../../components/common/LoggedUserProvider";
+
+const Roadmap = ({ authToken }) => {
   return (
-    <>
+    <LoggedUserProvider authToken={authToken}>
       <Head>
         <title>Roadmap</title>
       </Head>
@@ -14,8 +17,13 @@ const Roadmap = () => {
         <SectionHeader>Project Roadmap</SectionHeader>
         <GanttChart />
       </MainContainer>
-    </>
+    </LoggedUserProvider>
   );
 };
+
+export async function getServerSideProps(ctx) {
+  const { auth } = cookies(ctx);
+  return { props: { authToken: auth || "" } };
+}
 
 export default Roadmap;

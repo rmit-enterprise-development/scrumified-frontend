@@ -5,7 +5,10 @@ import MainContainer from "../../../components/layout/MainContainer";
 import Board from "../../../components/workspace/Board";
 import Column from "../../../components/workspace/Column";
 
-const Sprint = () => {
+import cookies from "next-cookies";
+import { LoggedUserProvider } from "../../../components/common/LoggedUserProvider";
+
+const Sprint = ({ authToken }) => {
   const initData = [
     {
       id: "1",
@@ -71,7 +74,7 @@ const Sprint = () => {
   };
 
   return (
-    <>
+    <LoggedUserProvider authToken={authToken}>
       <Head>
         <title>Active Sprint</title>
       </Head>
@@ -101,8 +104,13 @@ const Sprint = () => {
           </Board>
         ) : null}
       </MainContainer>
-    </>
+    </LoggedUserProvider>
   );
 };
+
+export async function getServerSideProps(ctx) {
+  const { auth } = cookies(ctx);
+  return { props: { authToken: auth || "" } };
+}
 
 export default Sprint;

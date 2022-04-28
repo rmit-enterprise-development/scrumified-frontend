@@ -7,6 +7,7 @@ const GanttChart = () => {
         height: 400,
         gantt: {
           trackHeight: 30,
+          criticalPathEnabled: false,
         },
     };
 

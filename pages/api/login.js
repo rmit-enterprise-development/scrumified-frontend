@@ -16,7 +16,7 @@ const login = async (req, res) => {
     res.json({
       statusCode: 200,
       loggedIn: true,
-      message: 'Login Authenticated! Welcome back to the app!',
+      message: 'Login Authenticated - Token Saved',
     });
   } else {
     res.json({

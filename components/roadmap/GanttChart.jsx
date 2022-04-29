@@ -8,6 +8,7 @@ const GanttChart = () => {
         gantt: {
           trackHeight: 30,
           criticalPathEnabled: false,
+          innerGridTrack: { fill: "#fff3e0" },
         },
     };
 

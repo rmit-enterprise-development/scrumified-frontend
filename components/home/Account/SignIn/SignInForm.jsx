@@ -23,6 +23,42 @@ const MotionText = motion(Text);
 const MotionFlex = motion(Flex);
 const MotionInputGroup = motion(InputGroup);
 
+// methodto log in and create token on cookies
+export async function loginCreateToken(dataObj) {
+  // login service usage
+  const loginServiceStatus = await userAPI.login(dataObj);
+
+  // if login service failed
+  if (loginServiceStatus.status !== 200)
+    throw `There has been an error verifying your account: ${loginServiceStatus.statusText}`;
+
+  // detach data from successful login service connection to db
+  const { errorTarget, isSuccess, id, firstName, lastName, email } =
+    await loginServiceStatus.data;
+
+  // handle cases for login input
+  if (!isSuccess) {
+    throw `Your ${errorTarget[0]} is incorrect`;
+  }
+
+  // handle jwt authentication if login is successful
+  const claims = await { logUserId: id, firstName, lastName, email };
+  const jwt = await sign(claims, md5('EmChiXemAnhLa_#BanNhauMaThoi'), {
+    expiresIn: '1h',
+  });
+
+  // login with current sign in data
+  await fetch('/api/login', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ token: jwt }),
+  });
+
+  return { logUserId: id, firstName, lastName, email };
+}
+
 const SignInForm = ({
   inputControls,
   openPopUp,
@@ -56,43 +92,17 @@ const SignInForm = ({
     const finalData = { email: signInEmail, password: signInPwd };
 
     try {
-      // login service usage
-      const loginServiceStatus = await userAPI.login(finalData);
-
-      // if login service failed
-      if (loginServiceStatus.status !== 200)
-        throw `There has been an error verifying youor account: ${loginServiceStatus.statusText}`;
-
-      // detach data from successful login service connection to db
-      const { errorTarget, isSuccess, id, firstName, lastName, email } =
-        await loginServiceStatus.data;
-
-      // handle cases for login input
-      if (!isSuccess) {
-        throw `Your ${errorTarget[0]} is incorrect`;
-      }
-
-      // handle jwt authentication if login is successful
-      const claims = await { logUserId: id, firstName, lastName, email };
-      const jwt = await sign(claims, md5('EmChiXemAnhLa_#BanNhauMaThoi'), {
-        expiresIn: '1h',
-      });
-
-      // login with current sign in data
-      await fetch('/api/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ token: jwt }),
-      });
+      const { firstName, lastName } = await loginCreateToken(finalData);
 
       // reset form data
       setSignInEmail('');
       setSignInPwd('');
 
+      // off laoding
+      await setIsSignInLoading(false);
+
       // toast msg
-      toast({
+      await toast({
         title: 'Authentication',
         description: `Signed in successfully. Welcome back, ${firstName} ${lastName}!`,
         status: 'success',
@@ -100,23 +110,20 @@ const SignInForm = ({
         isClosable: true,
       });
 
-      // off laoding
-      setIsSignInLoading(false);
-
       // redirect to dashboard page
-      router.replace('/dashboard');
+      await router.replace('/dashboard');
     } catch (error) {
+      // off laoding
+      await setIsSignInLoading(false);
+
       // toast msg
-      toast({
+      await toast({
         title: 'Authentication',
         description: error,
         status: 'error',
         duration: 3000,
         isClosable: true,
       });
-
-      // off laoding
-      setIsSignInLoading(false);
     }
   };
 

@@ -22,37 +22,29 @@ import { useRef } from "react";
 import * as Yup from "yup";
 import userAPI from "../../api/services/userAPI";
 
-const EditProfileModal = ({ id, fname, lname, email, bio }) => {
+const EditPasswordModal = ({ id, fname, lname, email, bio }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
   const initialRef = useRef();
   const finalRef = useRef();
   const initialValues = {
-    fname: fname,
-    lname: lname,
-    email: email,
-    password: "",
   };
 
   const onSubmit = async (values, actions) => {
     try {
       // get password confirm value from user -> verify with login method
-      const verifyData = {email : email, password: values.password};
+      const verifyData = {email : email, password: values.oldPassword};
       const loginServiceStatus = await userAPI.login(verifyData);
 
       // successfully verify password
       if (loginServiceStatus.data.isSuccess) {
         // update new user info
-        const updateData = {email : values.email,
-                          firstName : values.fname,
-                          lastName: values.lname};
+        const updateData = {password : values.newPassword};
         const updateServiceStatus = await userAPI.putUser(id, updateData);
-
-        // successfully changed data
         if (updateServiceStatus.status === 200) {
           toast({
-            title: 'Successfully Edited',
-            description: "Your information has been edited",
+            title: 'Password changed',
+            description: "Your password has been changed",
             status: 'success',
             duration: 9000,
             isClosable: false,
@@ -81,18 +73,18 @@ const EditProfileModal = ({ id, fname, lname, email, bio }) => {
   };
 
   const validationSchema = Yup.object({
-    fname: Yup.string()
-      .min(2, "Must be more than 1 character")
-      .required("Required"),
-    lname: Yup.string()
-      .min(2, "Must be more than 1 character")
-      .required("Required"),
-    email: Yup.string()
-      .min(2, "Must be more than 1 character")
+    oldPassword: Yup.string()
+        .required("Required"),
+    newPassword: Yup.string()
+      .min(8, "Must be more than 8 characters")
       .required("Required")
-      .email("Invalid email"),
-    password: Yup.string()
+      .matches(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[_@$!%*?&])[A-Za-z\d_@$!%*?&]{8,}$/,
+        "At least 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character"
+      ),
+    confirmPassword: Yup.string()
       .required("Please confirm your password")
+      .oneOf([Yup.ref("newPassword"), null], "Passwords do not match"),
   });
 
   return (
@@ -103,7 +95,7 @@ const EditProfileModal = ({ id, fname, lname, email, bio }) => {
         colorScheme="teal"
         onClick={onOpen}
       >
-        Edit Profile
+        Change Password
       </Button>
 
       <Modal
@@ -126,76 +118,31 @@ const EditProfileModal = ({ id, fname, lname, email, bio }) => {
             >
               {(props) => (
                 <Form>
-                  <Field name="fname">
-                    {({ field, form }) => (
-                      <FormControl
-                        isInvalid={form.errors.fname && form.touched.fname}
-                      >
-                        <FormLabel
-                          htmlFor="fname"
-                          pt={2}
-                          color={useColorModeValue("#031d46", "#fffdfe")}
-                        >
-                          First name
-                        </FormLabel>
-                        <Input
-                          {...field}
-                          id="fname"
-                          placeholder="Name"
-                          color={useColorModeValue("#031e49", "#fffdfe")}
-                        />
-                        <FormErrorMessage>{form.errors.fname}</FormErrorMessage>
-                      </FormControl>
-                    )}
-                  </Field>
-
-                  <Field name="lname">
-                    {({ field, form }) => (
-                      <FormControl
-                        isInvalid={form.errors.lname && form.touched.lname}
-                      >
-                        <FormLabel
-                          htmlFor="lname"
-                          pt={2}
-                          color={useColorModeValue("#031e49", "#fffdfe")}
-                        >
-                          Last name
-                        </FormLabel>
-                        <Input
-                          {...field}
-                          id="lname"
-                          placeholder="Last Name"
-                          color={useColorModeValue("#031e49", "#fffdfe")}
-                        />
-                        <FormErrorMessage>{form.errors.lname}</FormErrorMessage>
-                      </FormControl>
-                    )}
-                  </Field>
-
-                  <Field name="email">
+                  <Field name="oldPassword">
                     {({ field, form }) => (
                       <FormControl
                         isInvalid={form.errors.email && form.touched.email}
                       >
                         <FormLabel
-                          htmlFor="email"
+                          htmlFor="oldPassword"
                           pt={2}
                           color={useColorModeValue("#031e49", "#fffdfe")}
                         >
-                          Email
+                          Old Password
                         </FormLabel>
                         <Input
                           {...field}
-                          id="email"
-                          placeholder="Email"
+                          type="password"
+                          id="oldPassword"
+                          placeholder="Old Password"
                           color={useColorModeValue("#031e49", "#fffdfe")}
                         />
-                        <FormErrorMessage>{form.errors.email}</FormErrorMessage>
+                        <FormErrorMessage>{form.errors.oldPassword}</FormErrorMessage>
                       </FormControl>
                     )}
                   </Field>
 
-                  <Field name="password">
+                  <Field name="newPassword">
                     {({ field, form }) => (
                       <FormControl
                         isInvalid={
@@ -206,17 +153,45 @@ const EditProfileModal = ({ id, fname, lname, email, bio }) => {
                           pt={2}
                           color={useColorModeValue("#031e49", "#fffdfe")}
                         >
-                          Password
+                          New Password
                         </FormLabel>
                         <Input
                           {...field}
                           type="password"
-                          id="password"
+                          id="newPassword"
                           placeholder="Password"
                           color={useColorModeValue("#031e49", "#fffdfe")}
                         />
                         <FormErrorMessage>
-                          {form.errors.password}
+                          {form.errors.newPassword}
+                        </FormErrorMessage>
+                      </FormControl>
+                    )}
+                  </Field>
+
+                  <Field name="confirmPassword">
+                    {({ field, form }) => (
+                      <FormControl
+                        isInvalid={
+                          form.errors.confirmPassword &&
+                          form.touched.confirmPassword
+                        }
+                      >
+                        <FormLabel
+                          pt={2}
+                          color={useColorModeValue("#031e49", "#fffdfe")}
+                        >
+                          Confirm Password
+                        </FormLabel>
+                        <Input
+                          {...field}
+                          type="password"
+                          id="confirmPassword"
+                          placeholder="Confirm password"
+                          color={useColorModeValue("#031e49", "#fffdfe")}
+                        />
+                        <FormErrorMessage>
+                          {form.errors.confirmPassword}
                         </FormErrorMessage>
                       </FormControl>
                     )}
@@ -242,4 +217,4 @@ const EditProfileModal = ({ id, fname, lname, email, bio }) => {
   );
 };
 
-export default EditProfileModal;
+export default EditPasswordModal;

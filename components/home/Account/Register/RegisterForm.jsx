@@ -7,6 +7,7 @@ import {
   InputGroup,
   InputRightElement,
   Text,
+  useToast,
 } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import NameInput from './NameInput';
@@ -48,25 +49,34 @@ const RegisterForm = ({
   const [show, setShow] = useState(false);
   const handlePwdToggleClick = () => setShow(!show);
 
-  // method to fetch POST API and create new user on database
-  const createUserOnDatabase = async (submitData) => {
-    try {
-      const response = await userAPI.register(submitData);
-      console.log(response);
-    } catch (error) {
-      console.error('[ERROR] Unable to register new user because: ', error);
-    }
-  };
+  // sign up button loading state
+  const [isSignUpLoading, setIsSignUpLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  // toast for notifications
+  const toast = useToast();
+
+  // handle sign up data submit
+  const handleSubmit = async (e) => {
     // prevent default nature of html form
     e.preventDefault();
+    setIsSignUpLoading(true);
 
     // call method to fetch POST API and create new user on database
-    createUserOnDatabase(registerData);
+    try {
+      // sign up service usage
+      const signupServiceStatus = await userAPI.register(registerData);
 
-    // reset form's state
-    setTimeout(() => {
+      // if login service failed
+      if (signupServiceStatus.status !== 200)
+        throw `There has been an error creating an account: ${signupServiceStatus.statusText}`;
+
+      // detach data from successful signup service connection to db
+      const { message, firstName, lastName } = await signupServiceStatus.data;
+
+      // error handling
+      if (message) throw message;
+
+      // reset form state
       setRegisterData({
         firstName: '',
         lastName: '',
@@ -78,7 +88,37 @@ const RegisterForm = ({
       setLastNameValidate(true);
       setEmailValidate(true);
       setPwdValidate(true);
-    }, 1000);
+
+      // off laoding
+      await setIsSignUpLoading(false);
+
+      // toast msg
+      await toast({
+        title: 'Registration',
+        description: `Signed up successfully. Welcome, ${firstName} ${lastName}!`,
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+      });
+
+      // redirect to sign in page
+      await closePopUp();
+      await setIsRegistering(false);
+      await setIsSigningIn(true);
+      await openPopUp();
+    } catch (error) {
+      // off laoding
+      await setIsSignUpLoading(false);
+
+      // toast msg
+      await toast({
+        title: 'Registration',
+        description: error,
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+    }
   };
 
   // errors validation methods
@@ -331,6 +371,7 @@ const RegisterForm = ({
               boxShadow: '10px 10px 15px #c5cad1, -10px -10px 15px #ffffff',
             }}
             textContent="Register"
+            isLoading={isSignUpLoading}
           />
 
           <FormButton

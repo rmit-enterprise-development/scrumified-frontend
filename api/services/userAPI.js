@@ -39,7 +39,7 @@ const userAPI = {
   /**
    *
    * @param {*} id userId(Long)
-   * @param {*} params {email(String), password(String)}
+   * @param {*} params {firstName(String), lastName(String), email(String), password(String)}
    * @returns
    */
   putUser: (id, params) => {
@@ -47,7 +47,7 @@ const userAPI = {
     return axiosClient.put(url, params);
   },
 
-  deleteUser: (id) => {
+  deleteUser: (id) => {                                   
     const url = `users/${id}`;
     return axiosClient.delete(url);
   },

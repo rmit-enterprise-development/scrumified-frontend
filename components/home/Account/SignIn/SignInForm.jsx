@@ -8,6 +8,7 @@ import {
   InputGroup,
   Flex,
   Container,
+  useToast,
 } from '@chakra-ui/react';
 import InputLabel from '../Register/InputLabel';
 import OthersInput from '../Register/OthersInput';
@@ -22,6 +23,42 @@ const MotionText = motion(Text);
 const MotionFlex = motion(Flex);
 const MotionInputGroup = motion(InputGroup);
 
+// methodto log in and create token on cookies
+export async function loginCreateToken(dataObj) {
+  // login service usage
+  const loginServiceStatus = await userAPI.login(dataObj);
+
+  // if login service failed
+  if (loginServiceStatus.status !== 200)
+    throw `There has been an error verifying your account: ${loginServiceStatus.statusText}`;
+
+  // detach data from successful login service connection to db
+  const { errorTarget, isSuccess, id, firstName, lastName, email } =
+    await loginServiceStatus.data;
+
+  // handle cases for login input
+  if (!isSuccess) {
+    throw `Your ${errorTarget[0]} is incorrect`;
+  }
+
+  // handle jwt authentication if login is successful
+  const claims = await { logUserId: id, firstName, lastName, email };
+  const jwt = await sign(claims, md5('EmChiXemAnhLa_#BanNhauMaThoi'), {
+    expiresIn: '1h',
+  });
+
+  // login with current sign in data
+  await fetch('/api/login', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ token: jwt }),
+  });
+
+  return { logUserId: id, firstName, lastName, email };
+}
+
 const SignInForm = ({
   inputControls,
   openPopUp,
@@ -32,6 +69,9 @@ const SignInForm = ({
   // router to redirect
   const router = useRouter();
 
+  // toast for notifications
+  const toast = useToast();
+
   // state to track sign in email and password
   const [signInEmail, setSignInEmail] = useState('');
   const [signInPwd, setSignInPwd] = useState('');
@@ -40,59 +80,50 @@ const SignInForm = ({
   const [show, setShow] = useState(false);
   const handlePwdToggleClick = () => setShow(!show);
 
+  // sign in button loading state
+  const [isSignInLoading, setIsSignInLoading] = useState(false);
+
   // form subsmission handler
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSignInLoading(true);
 
     // sign in data container
     const finalData = { email: signInEmail, password: signInPwd };
 
     try {
-      // login service usage
-      const loginServiceStatus = await userAPI.login(finalData);
-
-      // if login service failed
-      if (loginServiceStatus.status !== 200)
-        throw new Error(
-          `Login service failed, msg: ${loginServiceStatus.statusText}`
-        );
-
-      // detach data from successful login service connection to db
-      const { errorTarget, isSuccess, id, firstName, lastName, email } =
-        await loginServiceStatus.data;
-
-      // handle cases for login input
-      if (!isSuccess) {
-        throw new Error(
-          `Login authentication failed, msg: ${errorTarget[0]} is incorrect`
-        );
-      }
-
-      // handle jwt authentication if login is successful
-      const claims = await { logUserId: id, firstName, lastName, email };
-      const jwt = await sign(claims, md5('EmChiXemAnhLa_#BanNhauMaThoi'), {
-        expiresIn: '1h',
-      });
-
-      // login with current sign in data
-      const loginApiStatus = await fetch('/api/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ token: jwt }),
-      });
-
-      const loginApiData = await loginApiStatus.json();
-
-      if (!loginApiData.loggedIn) throw new Error(loginApiData.message);
+      const { firstName, lastName } = await loginCreateToken(finalData);
 
       // reset form data
       setSignInEmail('');
       setSignInPwd('');
-      router.push('/dashboard');
+
+      // off laoding
+      await setIsSignInLoading(false);
+
+      // toast msg
+      await toast({
+        title: 'Authentication',
+        description: `Signed in successfully. Welcome back, ${firstName} ${lastName}!`,
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+      });
+
+      // redirect to dashboard page
+      await router.replace('/dashboard');
     } catch (error) {
-      console.log(error);
+      // off laoding
+      await setIsSignInLoading(false);
+
+      // toast msg
+      await toast({
+        title: 'Authentication',
+        description: error,
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
     }
   };
 
@@ -194,6 +225,7 @@ const SignInForm = ({
         gap={{ base: '1rem', md: '2rem' }}
       >
         <FormButton
+          isLoading={isSignInLoading}
           btnType="submit"
           btnBg="#eb0546"
           btnTextColor="#fff"

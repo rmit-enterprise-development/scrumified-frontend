@@ -54,8 +54,8 @@ const EditProfileModal = ({ id, fname, lname, email, bio }) => {
             title: 'Successfully Edited',
             description: "Your information has been edited",
             status: 'success',
-            duration: 9000,
-            isClosable: false,
+            duration: 3000,
+            isClosable: true,
           })
           onClose();
         }
@@ -64,8 +64,8 @@ const EditProfileModal = ({ id, fname, lname, email, bio }) => {
             title: 'Service Failure',
             description: "Application failed to perform task!",
             status: 'error',
-            duration: 9000,
-            isClosable: false,
+            duration: 3000,
+            isClosable: true,
           })
           throw new Error(
             `Login service failed, msg: ${updateServiceStatus.statusText}`

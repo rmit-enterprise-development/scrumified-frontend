@@ -46,8 +46,8 @@ const EditPasswordModal = ({ id, fname, lname, email, bio }) => {
             title: 'Password changed',
             description: "Your password has been changed",
             status: 'success',
-            duration: 9000,
-            isClosable: false,
+            duration: 3000,
+            isClosable: true,
           })
           onClose();
         }
@@ -56,8 +56,8 @@ const EditPasswordModal = ({ id, fname, lname, email, bio }) => {
             title: 'Service Failure',
             description: "Application failed to perform task!",
             status: 'error',
-            duration: 9000,
-            isClosable: false,
+            duration: 3000,
+            isClosable: true,
           })
           throw new Error(
             `Login service failed, msg: ${updateServiceStatus.statusText}`
@@ -121,7 +121,7 @@ const EditPasswordModal = ({ id, fname, lname, email, bio }) => {
                   <Field name="oldPassword">
                     {({ field, form }) => (
                       <FormControl
-                        isInvalid={form.errors.email && form.touched.email}
+                        isInvalid={form.errors.oldPassword && form.touched.oldPassword}
                       >
                         <FormLabel
                           htmlFor="oldPassword"
@@ -146,7 +146,7 @@ const EditPasswordModal = ({ id, fname, lname, email, bio }) => {
                     {({ field, form }) => (
                       <FormControl
                         isInvalid={
-                          form.errors.password && form.touched.password
+                          form.errors.newPassword && form.touched.newPassword
                         }
                       >
                         <FormLabel

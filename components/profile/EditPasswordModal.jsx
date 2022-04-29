@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { EditIcon } from "@chakra-ui/icons";
+import { EditIcon } from '@chakra-ui/icons';
 import {
   Button,
   Flex,
@@ -16,56 +16,53 @@ import {
   useColorModeValue,
   useDisclosure,
   useToast,
-} from "@chakra-ui/react";
-import { Field, Form, Formik } from "formik";
-import { useRef } from "react";
-import * as Yup from "yup";
-import userAPI from "../../api/services/userAPI";
+} from '@chakra-ui/react';
+import { Field, Form, Formik } from 'formik';
+import { useRef } from 'react';
+import * as Yup from 'yup';
+import userAPI from '../../api/services/userAPI';
 
 const EditPasswordModal = ({ id, fname, lname, email, bio }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
   const initialRef = useRef();
   const finalRef = useRef();
-  const initialValues = {
-  };
+  const initialValues = {};
 
   const onSubmit = async (values, actions) => {
     try {
       // get password confirm value from user -> verify with login method
-      const verifyData = {email : email, password: values.oldPassword};
+      const verifyData = { email: email, password: values.oldPassword };
       const loginServiceStatus = await userAPI.login(verifyData);
 
       // successfully verify password
       if (loginServiceStatus.data.isSuccess) {
         // update new user info
-        const updateData = {password : values.newPassword};
+        const updateData = { password: values.newPassword };
         const updateServiceStatus = await userAPI.putUser(id, updateData);
         if (updateServiceStatus.status === 200) {
           toast({
             title: 'Password changed',
-            description: "Your password has been changed",
+            description: 'Your password has been changed',
             status: 'success',
-            duration: 9000,
-            isClosable: false,
+            duration: 3000,
+            isClosable: true,
           })
           onClose();
-        }
-        else {
+        } else {
           toast({
             title: 'Service Failure',
-            description: "Application failed to perform task!",
+            description: 'Application failed to perform task!',
             status: 'error',
-            duration: 9000,
-            isClosable: false,
+            duration: 3000,
+            isClosable: true,
           })
           throw new Error(
             `Login service failed, msg: ${updateServiceStatus.statusText}`
           );
         }
-      }
-      else {
-        alert("Incorrect password confirmation!");
+      } else {
+        alert('Incorrect password confirmation!');
       }
     } catch (error) {
       console.log(error);
@@ -73,18 +70,17 @@ const EditPasswordModal = ({ id, fname, lname, email, bio }) => {
   };
 
   const validationSchema = Yup.object({
-    oldPassword: Yup.string()
-        .required("Required"),
+    oldPassword: Yup.string().required('Required'),
     newPassword: Yup.string()
-      .min(8, "Must be more than 8 characters")
-      .required("Required")
+      .min(8, 'Must be more than 8 characters')
+      .required('Required')
       .matches(
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[_@$!%*?&])[A-Za-z\d_@$!%*?&]{8,}$/,
-        "At least 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character"
+        'At least 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character'
       ),
     confirmPassword: Yup.string()
-      .required("Please confirm your password")
-      .oneOf([Yup.ref("newPassword"), null], "Passwords do not match"),
+      .required('Please confirm your password')
+      .oneOf([Yup.ref('newPassword'), null], 'Passwords do not match'),
   });
 
   return (
@@ -102,14 +98,15 @@ const EditPasswordModal = ({ id, fname, lname, email, bio }) => {
         initialFocusRef={initialRef}
         finalFocusRef={finalRef}
         isOpen={isOpen}
-        onClose={onClose}fg
+        onClose={onClose}
+        fg
       >
-        <ModalOverlay backdropFilter="blur(10px)"/>
+        <ModalOverlay backdropFilter="blur(10px)" />
         <ModalContent>
-          <ModalHeader color={useColorModeValue("#031e49", "gray.200")}>
-            Edit Profile
+          <ModalHeader color={useColorModeValue('#031e49', 'gray.200')}>
+            Change Password
           </ModalHeader>
-          <ModalCloseButton color={useColorModeValue("#031e49", "gray.200")} />
+          <ModalCloseButton color={useColorModeValue('#031e49', 'gray.200')} />
           <ModalBody pb={6}>
             <Formik
               initialValues={initialValues}
@@ -121,23 +118,25 @@ const EditPasswordModal = ({ id, fname, lname, email, bio }) => {
                   <Field name="oldPassword">
                     {({ field, form }) => (
                       <FormControl
-                        isInvalid={form.errors.email && form.touched.email}
+                        isInvalid={form.errors.oldPassword && form.touched.oldPassword}
                       >
                         <FormLabel
                           htmlFor="oldPassword"
                           pt={2}
-                          color={useColorModeValue("#031e49", "#fffdfe")}
+                          color={useColorModeValue('#031e49', '#fffdfe')}
                         >
-                          Old Password
+                          Current Password
                         </FormLabel>
                         <Input
                           {...field}
                           type="password"
                           id="oldPassword"
-                          placeholder="Old Password"
-                          color={useColorModeValue("#031e49", "#fffdfe")}
+                          placeholder="Current Password"
+                          color={useColorModeValue('#031e49', '#fffdfe')}
                         />
-                        <FormErrorMessage>{form.errors.oldPassword}</FormErrorMessage>
+                        <FormErrorMessage>
+                          {form.errors.oldPassword}
+                        </FormErrorMessage>
                       </FormControl>
                     )}
                   </Field>
@@ -146,12 +145,12 @@ const EditPasswordModal = ({ id, fname, lname, email, bio }) => {
                     {({ field, form }) => (
                       <FormControl
                         isInvalid={
-                          form.errors.password && form.touched.password
+                          form.errors.newPassword && form.touched.newPassword
                         }
                       >
                         <FormLabel
                           pt={2}
-                          color={useColorModeValue("#031e49", "#fffdfe")}
+                          color={useColorModeValue('#031e49', '#fffdfe')}
                         >
                           New Password
                         </FormLabel>
@@ -159,8 +158,8 @@ const EditPasswordModal = ({ id, fname, lname, email, bio }) => {
                           {...field}
                           type="password"
                           id="newPassword"
-                          placeholder="Password"
-                          color={useColorModeValue("#031e49", "#fffdfe")}
+                          placeholder="New Password"
+                          color={useColorModeValue('#031e49', '#fffdfe')}
                         />
                         <FormErrorMessage>
                           {form.errors.newPassword}
@@ -179,7 +178,7 @@ const EditPasswordModal = ({ id, fname, lname, email, bio }) => {
                       >
                         <FormLabel
                           pt={2}
-                          color={useColorModeValue("#031e49", "#fffdfe")}
+                          color={useColorModeValue('#031e49', '#fffdfe')}
                         >
                           Confirm Password
                         </FormLabel>
@@ -188,7 +187,7 @@ const EditPasswordModal = ({ id, fname, lname, email, bio }) => {
                           type="password"
                           id="confirmPassword"
                           placeholder="Confirm password"
-                          color={useColorModeValue("#031e49", "#fffdfe")}
+                          color={useColorModeValue('#031e49', '#fffdfe')}
                         />
                         <FormErrorMessage>
                           {form.errors.confirmPassword}

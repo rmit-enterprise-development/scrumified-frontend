@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { EditIcon } from "@chakra-ui/icons";
+import { EditIcon } from '@chakra-ui/icons';
 import {
   Button,
   Flex,
@@ -16,64 +16,90 @@ import {
   useColorModeValue,
   useDisclosure,
   useToast,
-} from "@chakra-ui/react";
-import { Field, Form, Formik } from "formik";
-import { useRef } from "react";
-import * as Yup from "yup";
-import userAPI from "../../api/services/userAPI";
+} from '@chakra-ui/react';
+import { Field, Form, Formik } from 'formik';
+import { useRef } from 'react';
+import * as Yup from 'yup';
+import userAPI from '../../api/services/userAPI';
+
+import { sign } from 'jsonwebtoken';
+import md5 from 'md5';
+import { useRouter } from 'next/router';
 
 const EditProfileModal = ({ id, fname, lname, email, bio }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
+  const router = useRouter();
   const initialRef = useRef();
   const finalRef = useRef();
   const initialValues = {
     fname: fname,
     lname: lname,
     email: email,
-    password: "",
+    password: '',
   };
 
   const onSubmit = async (values, actions) => {
     try {
       // get password confirm value from user -> verify with login method
-      const verifyData = {email : email, password: values.password};
+      const verifyData = { email: email, password: values.password };
       const loginServiceStatus = await userAPI.login(verifyData);
 
       // successfully verify password
       if (loginServiceStatus.data.isSuccess) {
         // update new user info
-        const updateData = {email : values.email,
-                          firstName : values.fname,
-                          lastName: values.lname};
+        const updateData = {
+          email: values.email,
+          firstName: values.fname,
+          lastName: values.lname,
+        };
         const updateServiceStatus = await userAPI.putUser(id, updateData);
 
         // successfully changed data
         if (updateServiceStatus.status === 200) {
-          toast({
+          // handle jwt authentication if login is successful
+          const claims = await {
+            logUserId: id,
+            firstName: values.fname,
+            lastName: values.lname,
+            email: values.email,
+          };
+          const jwt = await sign(claims, md5('EmChiXemAnhLa_#BanNhauMaThoi'), {
+            expiresIn: '1h',
+          });
+
+          // login with current sign in data
+          await fetch('/api/update', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ token: jwt }),
+          });
+
+          await toast({
             title: 'Successfully Edited',
-            description: "Your information has been edited",
+            description: 'Your information has been edited',
             status: 'success',
-            duration: 9000,
-            isClosable: false,
+            duration: 3000,
+            isClosable: true,
           })
           onClose();
         }
         else {
           toast({
             title: 'Service Failure',
-            description: "Application failed to perform task!",
+            description: 'Application failed to perform task!',
             status: 'error',
-            duration: 9000,
-            isClosable: false,
+            duration: 3000,
+            isClosable: true,
           })
           throw new Error(
             `Login service failed, msg: ${updateServiceStatus.statusText}`
           );
         }
-      }
-      else {
-        alert("Incorrect password confirmation!");
+      } else {
+        alert('Incorrect password confirmation!');
       }
     } catch (error) {
       console.log(error);
@@ -82,17 +108,16 @@ const EditProfileModal = ({ id, fname, lname, email, bio }) => {
 
   const validationSchema = Yup.object({
     fname: Yup.string()
-      .min(2, "Must be more than 1 character")
-      .required("Required"),
+      .min(2, 'Must be more than 1 character')
+      .required('Required'),
     lname: Yup.string()
-      .min(2, "Must be more than 1 character")
-      .required("Required"),
+      .min(2, 'Must be more than 1 character')
+      .required('Required'),
     email: Yup.string()
-      .min(2, "Must be more than 1 character")
-      .required("Required")
-      .email("Invalid email"),
-    password: Yup.string()
-      .required("Please confirm your password")
+      .min(2, 'Must be more than 1 character')
+      .required('Required')
+      .email('Invalid email'),
+    password: Yup.string().required('Please confirm your password'),
   });
 
   return (
@@ -110,14 +135,15 @@ const EditProfileModal = ({ id, fname, lname, email, bio }) => {
         initialFocusRef={initialRef}
         finalFocusRef={finalRef}
         isOpen={isOpen}
-        onClose={onClose}fg
+        onClose={onClose}
+        fg
       >
-        <ModalOverlay backdropFilter="blur(10px)"/>
+        <ModalOverlay backdropFilter="blur(10px)" />
         <ModalContent>
-          <ModalHeader color={useColorModeValue("#031e49", "gray.200")}>
+          <ModalHeader color={useColorModeValue('#031e49', 'gray.200')}>
             Edit Profile
           </ModalHeader>
-          <ModalCloseButton color={useColorModeValue("#031e49", "gray.200")} />
+          <ModalCloseButton color={useColorModeValue('#031e49', 'gray.200')} />
           <ModalBody pb={6}>
             <Formik
               initialValues={initialValues}
@@ -134,15 +160,15 @@ const EditProfileModal = ({ id, fname, lname, email, bio }) => {
                         <FormLabel
                           htmlFor="fname"
                           pt={2}
-                          color={useColorModeValue("#031d46", "#fffdfe")}
+                          color={useColorModeValue('#031d46', '#fffdfe')}
                         >
-                          First name
+                          First Name
                         </FormLabel>
                         <Input
                           {...field}
                           id="fname"
                           placeholder="Name"
-                          color={useColorModeValue("#031e49", "#fffdfe")}
+                          color={useColorModeValue('#031e49', '#fffdfe')}
                         />
                         <FormErrorMessage>{form.errors.fname}</FormErrorMessage>
                       </FormControl>
@@ -157,15 +183,15 @@ const EditProfileModal = ({ id, fname, lname, email, bio }) => {
                         <FormLabel
                           htmlFor="lname"
                           pt={2}
-                          color={useColorModeValue("#031e49", "#fffdfe")}
+                          color={useColorModeValue('#031e49', '#fffdfe')}
                         >
-                          Last name
+                          Last Name
                         </FormLabel>
                         <Input
                           {...field}
                           id="lname"
                           placeholder="Last Name"
-                          color={useColorModeValue("#031e49", "#fffdfe")}
+                          color={useColorModeValue('#031e49', '#fffdfe')}
                         />
                         <FormErrorMessage>{form.errors.lname}</FormErrorMessage>
                       </FormControl>
@@ -180,7 +206,7 @@ const EditProfileModal = ({ id, fname, lname, email, bio }) => {
                         <FormLabel
                           htmlFor="email"
                           pt={2}
-                          color={useColorModeValue("#031e49", "#fffdfe")}
+                          color={useColorModeValue('#031e49', '#fffdfe')}
                         >
                           Email
                         </FormLabel>
@@ -188,7 +214,7 @@ const EditProfileModal = ({ id, fname, lname, email, bio }) => {
                           {...field}
                           id="email"
                           placeholder="Email"
-                          color={useColorModeValue("#031e49", "#fffdfe")}
+                          color={useColorModeValue('#031e49', '#fffdfe')}
                         />
                         <FormErrorMessage>{form.errors.email}</FormErrorMessage>
                       </FormControl>
@@ -204,16 +230,16 @@ const EditProfileModal = ({ id, fname, lname, email, bio }) => {
                       >
                         <FormLabel
                           pt={2}
-                          color={useColorModeValue("#031e49", "#fffdfe")}
+                          color={useColorModeValue('#031e49', '#fffdfe')}
                         >
-                          Password
+                          Current Password
                         </FormLabel>
                         <Input
                           {...field}
                           type="password"
                           id="password"
                           placeholder="Password"
-                          color={useColorModeValue("#031e49", "#fffdfe")}
+                          color={useColorModeValue('#031e49', '#fffdfe')}
                         />
                         <FormErrorMessage>
                           {form.errors.password}

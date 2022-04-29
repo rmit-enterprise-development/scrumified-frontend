@@ -1,15 +1,24 @@
 import { Chart } from 'react-google-charts';
 import React from 'react';
 import { data } from './ChartData'
+import { useColorModeValue } from "@chakra-ui/react";
 
 const GanttChart = () => {
     const options = {
-        height: 400,
+        height: 40*13,
         gantt: {
-          trackHeight: 30,
+          trackHeight: 40,
           criticalPathEnabled: false,
-          innerGridTrack: { fill: "#fff3e0" },
+          innerGridTrack: { fill: useColorModeValue("","#031d46") },
         },
+        backgroundColor: {
+          fill: useColorModeValue("#FFFDFE", "#031E49")
+        },
+        legend: {
+          textStyle: {
+            
+          }
+        }
     };
 
     return (

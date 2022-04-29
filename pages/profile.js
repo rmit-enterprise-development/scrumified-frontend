@@ -15,7 +15,7 @@ import { LoggedUserProvider } from '../components/common/LoggedUserProvider';
 const Profile = ({ authToken }) => {
   const loggedUser = jsonwebtoken.verify(
     authToken,
-    md5("EmChiXemAnhLa_#BanNhauMaThoi")
+    md5('EmChiXemAnhLa_#BanNhauMaThoi')
   );
 
   return (

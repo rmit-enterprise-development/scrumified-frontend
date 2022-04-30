@@ -119,7 +119,7 @@ const SignInForm = ({
       // toast msg
       await toast({
         title: 'Authentication',
-        description: error,
+        description: typeof error !== 'string' ? 'Your account does not exist!' : error,
         status: 'error',
         duration: 3000,
         isClosable: true,

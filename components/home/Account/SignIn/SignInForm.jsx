@@ -33,8 +33,15 @@ export async function loginCreateToken(dataObj) {
     throw `There has been an error verifying your account: ${loginServiceStatus.statusText}`;
 
   // detach data from successful login service connection to db
-  const { errorTarget, isSuccess, id, firstName, lastName, email } =
-    await loginServiceStatus.data;
+  const {
+    errorTarget,
+    isSuccess,
+    id,
+    firstName,
+    lastName,
+    email,
+    description,
+  } = await loginServiceStatus.data;
 
   // handle cases for login input
   if (!isSuccess) {
@@ -42,7 +49,13 @@ export async function loginCreateToken(dataObj) {
   }
 
   // handle jwt authentication if login is successful
-  const claims = await { logUserId: id, firstName, lastName, email };
+  const claims = await {
+    logUserId: id,
+    firstName,
+    lastName,
+    email,
+    description,
+  };
   const jwt = await sign(claims, md5('EmChiXemAnhLa_#BanNhauMaThoi'), {
     expiresIn: '1h',
   });
@@ -119,7 +132,8 @@ const SignInForm = ({
       // toast msg
       await toast({
         title: 'Authentication',
-        description: error,
+        description:
+          typeof error !== 'string' ? 'Your account does not exist!' : error,
         status: 'error',
         duration: 3000,
         isClosable: true,

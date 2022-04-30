@@ -113,7 +113,7 @@ const RegisterForm = ({
       // toast msg
       await toast({
         title: 'Registration',
-        description: error,
+        description: typeof error !== 'string'? error.toString() : error,
         status: 'error',
         duration: 3000,
         isClosable: true,

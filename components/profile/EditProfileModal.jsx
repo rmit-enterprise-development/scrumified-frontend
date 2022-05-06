@@ -46,69 +46,64 @@ const EditProfileModal = ({ id, fname, lname, email, description }) => {
       const loginServiceStatus = await userAPI.login(verifyData);
 
       // successfully verify password
-      if (loginServiceStatus.data.isSuccess) {
-        // update new user info
-        const updateData = {
-          email: values.email,
-          firstName: values.fname,
-          lastName: values.lname,
-        };
-        const updateServiceStatus = await userAPI.putUser(id, updateData);
+      if (!loginServiceStatus.data.isSuccess)
+        throw `Incorrect confirm password`;
 
-        // successfully changed data
-        if (updateServiceStatus.status === 200) {
-          // handle jwt authentication if login is successful
-          const claims = await {
-            logUserId: id,
-            firstName: values.fname,
-            lastName: values.lname,
-            email: values.email,
-          };
-          const jwt = await sign(claims, md5('EmChiXemAnhLa_#BanNhauMaThoi'), {
-            expiresIn: '1h',
-          });
+      // update new user info
+      const updateData = {
+        email: values.email,
+        firstName: values.fname,
+        lastName: values.lname,
+      };
+      const updateServiceStatus = await userAPI.putUser(id, updateData);
 
-          // login with current sign in data
-          await fetch('/api/update', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ token: jwt }),
-          });
+      // update data failure
+      if (updateServiceStatus.status !== 200)
+        throw `There has been an error updating your profile: ${updateServiceStatus.statusText}`;
 
-          await toast({
-            title: 'Successfully Edited',
-            description: 'Your information has been edited',
-            status: 'success',
-            duration: 3000,
-            isClosable: true,
-          })
-          onClose();
-        }
-        else {
-          toast({
-            title: 'Service Failure',
-            description: 'Application failed to perform task!',
-            status: 'error',
-            duration: 3000,
-            isClosable: true,
-          })
-          throw new Error(
-            `Login service failed, msg: ${updateServiceStatus.statusText}`
-          );
-        }
-      } else {
-        toast({
-          title: 'Incorrect Current Password',
-          description: 'Please re-enter current password',
-          status: 'error',
-          duration: 3000,
-          isClosable: true,
-        })
-      }
+      // handle jwt authentication if login is successful
+      const claims = await {
+        logUserId: id,
+        firstName: values.fname,
+        lastName: values.lname,
+        email: values.email,
+      };
+      const jwt = await sign(claims, md5('EmChiXemAnhLa_#BanNhauMaThoi'), {
+        expiresIn: '1h',
+      });
+
+      // login with current sign in data
+      await fetch('/api/update', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ token: jwt }),
+      });
+
+      await toast({
+        title: 'Update Profile',
+        description: 'Your profile has been updated. Refreshing ...',
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+      });
+
+      await onClose();
+      setTimeout(() => {
+        router.reload();
+      }, 2000);
     } catch (error) {
-      console.log(error);
+      await toast({
+        title: 'Update Profile',
+        description:
+          typeof error !== 'string'
+            ? 'Server error, cannot update profile info'
+            : error,
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
     }
   };
 

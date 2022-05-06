@@ -21,10 +21,11 @@ import {
 import Avvvatars from "avvvatars-react";
 import { CUIAutoComplete } from "chakra-ui-autocomplete";
 import Router from "next/router";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import userAPI from "../../../api/services/userAPI";
 import { digFind } from "../../../utils/object";
 import { RouterPage } from "../../../config/router";
+import { LoggedUserContext } from "../../common/LoggedUserProvider";
 
 const CreateProjectModal = () => {
   const { colorMode } = useColorMode();
@@ -40,6 +41,8 @@ const CreateProjectModal = () => {
 
   const [pickerItems, setPickerItems] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
+
+  const user = useContext(LoggedUserContext);
 
   const handleSelectedItemsChange = (selectedItems) => {
     if (selectedItems) {
@@ -79,7 +82,6 @@ const CreateProjectModal = () => {
   };
 
   const handleSubmit = async () => {
-    const userID = 1;
     if (text === "") {
       setIsValid(false);
       setError("Project name can't be empty");
@@ -93,20 +95,22 @@ const CreateProjectModal = () => {
         participantsId: selectedItems.map((a) => a.value),
       };
 
-      try {
-        setIsSubmitting(true);
-        const response = await userAPI.postProject(userID, request);
-        console.log("response: ", response);
-        // Push to project backlog with new ID
-        const projectID = response.data.id;
-        console.log("projectID: ", projectID);
-        Router.push({
-          pathname: `${RouterPage.PROJECT}/${projectID}${RouterPage.BACKLOG}`,
-        });
-      } catch (error) {
-        console.error("There was an error: ", error);
-      } finally {
-        setIsSubmitting(false);
+      if (user) {
+        try {
+          setIsSubmitting(true);
+          const response = await userAPI.postProject(user.logUserId, request);
+          console.log("response: ", response);
+          // Push to project backlog with new ID
+          const projectID = response.data.id;
+          console.log("projectID: ", projectID);
+          Router.push({
+            pathname: `${RouterPage.PROJECT}/${projectID}${RouterPage.BACKLOG}`,
+          });
+        } catch (error) {
+          console.error("There was an error: ", error);
+        } finally {
+          setIsSubmitting(false);
+        }
       }
     }
   };
@@ -231,13 +235,13 @@ const CreateProjectModal = () => {
             {isSubmitting && (
               <CircularProgress isIndeterminate color="green.300" />
             )}
-            <Button onClick={onClose} mr={3}>
+            <Button onClick={onClose} disabled={isSubmitting} mr={3}>
               Cancel
             </Button>
             <Button
               colorScheme="blue"
               onClick={handleSubmit}
-              disabled={isSubmitting ? true : false}
+              disabled={isSubmitting}
             >
               Create
             </Button>

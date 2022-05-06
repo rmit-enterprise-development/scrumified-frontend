@@ -22,7 +22,7 @@ import { useRef } from 'react';
 import * as Yup from 'yup';
 import userAPI from '../../api/services/userAPI';
 
-const EditPasswordModal = ({ id, fname, lname, email, bio }) => {
+const EditPasswordModal = ({ id, email }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
   const initialRef = useRef();

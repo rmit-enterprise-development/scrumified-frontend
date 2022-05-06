@@ -26,16 +26,16 @@ import { sign } from 'jsonwebtoken';
 import md5 from 'md5';
 import { useRouter } from 'next/router';
 
-const EditProfileModal = ({ id, fname, lname, email, bio }) => {
+const EditProfileModal = ({ id, fname, lname, email, description }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
-  const router = useRouter();
   const initialRef = useRef();
   const finalRef = useRef();
   const initialValues = {
     fname: fname,
     lname: lname,
     email: email,
+    description: description,
     password: '',
   };
 
@@ -99,7 +99,13 @@ const EditProfileModal = ({ id, fname, lname, email, bio }) => {
           );
         }
       } else {
-        alert('Incorrect password confirmation!');
+        toast({
+          title: 'Incorrect Current Password',
+          description: 'Please re-enter current password',
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        })
       }
     } catch (error) {
       console.log(error);
@@ -217,6 +223,26 @@ const EditProfileModal = ({ id, fname, lname, email, bio }) => {
                           color={useColorModeValue('#031e49', '#fffdfe')}
                         />
                         <FormErrorMessage>{form.errors.email}</FormErrorMessage>
+                      </FormControl>
+                    )}
+                  </Field>
+
+                  <Field name="description">
+                    {({ field, form }) => (
+                      <FormControl>
+                        <FormLabel
+                          htmlFor="lname"
+                          pt={2}
+                          color={useColorModeValue('#031e49', '#fffdfe')}
+                        >
+                          Description
+                        </FormLabel>
+                        <Input
+                          {...field}
+                          id="Description"
+                          placeholder="Description"
+                          color={useColorModeValue('#031e49', '#fffdfe')}
+                        />
                       </FormControl>
                     )}
                   </Field>

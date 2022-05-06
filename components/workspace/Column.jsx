@@ -12,7 +12,7 @@ const Column = ({ title, id, cards }) => {
 			dir="column"
 			boxSizing="border-box"
 			overflow="hidden"
-			// bg={'white'}
+			bgGradient="linear(gray.50 0%, gray.100 100%)"
 			boxShadow="base"
 			borderRadius={'1rem'}
 		>

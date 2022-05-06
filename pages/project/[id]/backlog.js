@@ -65,7 +65,7 @@ const Backlog = ({ cards, authToken }) => {
             <Board data={data} setData={setData}>
               <Column
                 key={0}
-                title={"Backlog"}
+                title={"Stories"}
                 id={"backlog"}
                 cards={filterCards("backlog")}
               />

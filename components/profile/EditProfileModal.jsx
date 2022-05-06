@@ -21,15 +21,15 @@ import { Field, Form, Formik } from 'formik';
 import { useRef } from 'react';
 import * as Yup from 'yup';
 import userAPI from '../../api/services/userAPI';
-
 import { sign } from 'jsonwebtoken';
 import md5 from 'md5';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/router'
 
 const EditProfileModal = ({ id, fname, lname, email, description }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
   const initialRef = useRef();
+  const router = useRouter();
   const finalRef = useRef();
   const initialValues = {
     fname: fname,
@@ -54,6 +54,7 @@ const EditProfileModal = ({ id, fname, lname, email, description }) => {
         email: values.email,
         firstName: values.fname,
         lastName: values.lname,
+        description: values.description
       };
       const updateServiceStatus = await userAPI.putUser(id, updateData);
 
@@ -67,6 +68,7 @@ const EditProfileModal = ({ id, fname, lname, email, description }) => {
         firstName: values.fname,
         lastName: values.lname,
         email: values.email,
+        description: values.description
       };
       const jwt = await sign(claims, md5('EmChiXemAnhLa_#BanNhauMaThoi'), {
         expiresIn: '1h',
@@ -110,15 +112,18 @@ const EditProfileModal = ({ id, fname, lname, email, description }) => {
   const validationSchema = Yup.object({
     fname: Yup.string()
       .min(2, 'Must be more than 1 character')
-      .required('Required'),
+      .required('Required')
+      .matches(/^[A-Z]+[a-z]+$/,'Only letters, capitalize first letter (only)'),
     lname: Yup.string()
       .min(2, 'Must be more than 1 character')
-      .required('Required'),
+      .required('Required')
+      .matches(/^[A-Z]+[a-z]+$/,'Only letters, capitalize first letter (only)'),
     email: Yup.string()
       .min(2, 'Must be more than 1 character')
       .required('Required')
       .email('Invalid email'),
-    password: Yup.string().required('Please confirm your password'),
+    password: Yup.string()
+      .required('Please confirm your password'),
   });
 
   return (

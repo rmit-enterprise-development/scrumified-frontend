@@ -17,7 +17,7 @@ const Profile = ({ authToken }) => {
     authToken,
     md5('EmChiXemAnhLa_#BanNhauMaThoi')
   );
-
+  console.log(loggedUser);
   return (
     <LoggedUserProvider authToken={authToken}>
       <Head>
@@ -32,7 +32,7 @@ const Profile = ({ authToken }) => {
             fname={loggedUser.firstName}
             lname={loggedUser.lastName}
             email={loggedUser.email}
-            bio="Em hay roi xa anh ta di!"
+            description={loggedUser.description}
           />
           <Flex flexDir="column" justifyContent="space-around">
             <EditProfileModal
@@ -40,11 +40,10 @@ const Profile = ({ authToken }) => {
               fname={loggedUser.firstName}
               lname={loggedUser.lastName}
               email={loggedUser.email}
+              description={loggedUser.description}
             />
             <EditPasswordModal
               id={loggedUser.logUserId}
-              fname={loggedUser.firstName}
-              lname={loggedUser.lastName}
               email={loggedUser.email}
             />
             <LogOutButton id={loggedUser.id} />

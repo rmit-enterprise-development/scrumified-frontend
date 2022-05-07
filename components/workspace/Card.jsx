@@ -73,7 +73,6 @@ const Card = (props) => {
 								<Badge
 									colorScheme="green"
 									borderRadius={'4px'}
-									shadow="inner"
 									marginRight={2}
 								>
 									{props.card.category}
@@ -84,7 +83,6 @@ const Card = (props) => {
 									bg={colorScheme}
 									color="white"
 									p={'10px'}
-									shadow="inner"
 								>
 									{props.card.point}
 								</Circle>

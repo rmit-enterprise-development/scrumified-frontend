@@ -156,21 +156,25 @@ const CardModal = ({ isOpen, onOpen, onClose, data, setData }) => {
 			isCentered
 			isOpen={isOpen}
 			onClose={onClose}
-			width={'100%'}
-			height={'100%'}
+			scrollBehavior={'inside'}
 		>
 			<ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px)" />
 			<ModalContent borderRadius={'1rem'} padding={'1rem'}>
 				<ModalHeader>Create User Story</ModalHeader>
 				<ModalBody>
-					<FormControl isRequired>
-						<Flex>
-							<FormLabel htmlFor="person" fontSize={'2xl'}>
+					<FormControl>
+						<Flex alignItems={'center'}>
+							<FormLabel
+								htmlFor="person"
+								fontSize={'xl'}
+								marginBottom={0}
+							>
 								As a
 							</FormLabel>
 							<Input
 								id="person"
 								flex={1}
+								paddingX={'0.5rem'}
 								variant="flushed"
 								placeholder="User"
 								onChange={(e) => {
@@ -181,14 +185,19 @@ const CardModal = ({ isOpen, onOpen, onClose, data, setData }) => {
 						</Flex>
 					</FormControl>
 
-					<FormControl mt={4} isRequired>
-						<Flex>
-							<FormLabel htmlFor="todo" fontSize={'2xl'}>
+					<FormControl mt={4}>
+						<Flex alignItems={'center'}>
+							<FormLabel
+								htmlFor="todo"
+								fontSize={'xl'}
+								marginBottom={0}
+							>
 								I need
 							</FormLabel>
 							<Input
 								id="todo"
 								flex={1}
+								paddingX={'0.5rem'}
 								variant="flushed"
 								placeholder="Todo task"
 								onChange={(e) => {
@@ -201,14 +210,19 @@ const CardModal = ({ isOpen, onOpen, onClose, data, setData }) => {
 						</Flex>
 					</FormControl>
 
-					<FormControl mt={4} isRequired>
-						<Flex>
-							<FormLabel htmlFor="explaination" fontSize={'2xl'}>
+					<FormControl mt={4}>
+						<Flex alignItems={'center'}>
+							<FormLabel
+								htmlFor="explaination"
+								fontSize={'xl'}
+								marginBottom={0}
+							>
 								So that
 							</FormLabel>
 							<Input
 								id="explaination"
 								flex={1}
+								paddingX={'0.5rem'}
 								variant="flushed"
 								placeholder="Explaination"
 								onChange={(e) => {
@@ -225,13 +239,13 @@ const CardModal = ({ isOpen, onOpen, onClose, data, setData }) => {
 						</Flex>
 					</FormControl>
 
-					<FormControl mt={4} isRequired>
-						<FormLabel htmlFor="definition" fontSize={'2xl'}>
+					<FormControl mt={4}>
+						<FormLabel htmlFor="definition" fontSize={'xl'}>
 							Definition of Done
 						</FormLabel>
 						<Textarea
 							id="definition"
-							placeholder="Here is a sample placeholder"
+							placeholder="Requirement for complete a task"
 							resize={'none'}
 							onChange={(e) => {
 								setCard({ ...card, def: e.target.value });
@@ -240,8 +254,8 @@ const CardModal = ({ isOpen, onOpen, onClose, data, setData }) => {
 						/>
 					</FormControl>
 
-					<FormControl mt={4} isRequired>
-						<FormLabel htmlFor="point" fontSize={'2xl'}>
+					<FormControl mt={4}>
+						<FormLabel htmlFor="point" fontSize={'xl'}>
 							Story point:
 						</FormLabel>
 						<Select
@@ -252,16 +266,16 @@ const CardModal = ({ isOpen, onOpen, onClose, data, setData }) => {
 								setIsValidPoint(isValidInput(e.target.value));
 							}}
 						>
-							<option value="1">1 point</option>
-							<option value="2">2 point</option>
-							<option value="3">3 point</option>
-							<option value="5">5 point</option>
-							<option value="8">8 point</option>
-							<option value="13">13 point</option>
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+							<option value="5">5</option>
+							<option value="8">8</option>
+							<option value="13">13</option>
 						</Select>
 					</FormControl>
 
-					<FormControl mt={4} isRequired>
+					<FormControl mt={4}>
 						<CUIAutoComplete
 							tagStyleProps={{
 								rounded: 'full',
@@ -300,43 +314,20 @@ const CardModal = ({ isOpen, onOpen, onClose, data, setData }) => {
 						/>
 					</FormControl>
 
-					<FormControl mt={4} isRequired>
-						<CUIAutoComplete
-							tagStyleProps={{
-								rounded: 'full',
+					<FormControl mt={4}>
+						<FormLabel htmlFor="participant" fontSize={'xl'}>
+							Participant:
+						</FormLabel>
+						<Select
+							id="participant"
+							placeholder="Select participant"
+							onChange={(e) => {
+								setCard({ ...card, point: e.target.value });
+								setIsValidPoint(isValidInput(e.target.value));
 							}}
-							label="Participants"
-							placeholder="Enter a participant's email"
-							onCreateItem={() => {}} //Empty because don't want to add option in list. Please see the example in "https://www.npmjs.com/package/chakra-ui-autocomplete"
-							items={pickerItems}
-							itemRenderer={customRender}
-							createItemRenderer={customCreateItemRender}
-							selectedItems={selectedItems}
-							onSelectedItemsChange={(changes) => {
-								console.log(changes);
-								return handleSelectedItemsChange(
-									changes.selectedItems
-								);
-							}}
-							hideToggleButton={true}
-							listStyleProps={{
-								maxHeight: '200',
-								overflow: 'auto',
-								bg: useColorModeValue('', '#2D3748'),
-							}}
-							listItemStyleProps={{
-								cursor: 'pointer',
-								_hover: {
-									bg: useColorModeValue('', '#031e49'),
-								},
-							}}
-							labelStyleProps={{
-								color: useColorModeValue('#031e49', '#fffdfe'),
-							}}
-							inputStyleProps={{
-								color: useColorModeValue('#031d46', '#fffdfe'),
-							}}
-						/>
+						>
+							<option value="1">User name</option>
+						</Select>
 					</FormControl>
 				</ModalBody>
 				<ModalFooter>

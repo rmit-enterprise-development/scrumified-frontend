@@ -13,7 +13,7 @@ const ProjectGrid = ({ projectData, taskData }) => {
   ];
 
   return (
-    <SimpleGrid columns={[1, 2, 4]} gap={5} py={2}>
+    <SimpleGrid columns={[1, 2, 4]} gap={5} py={5}>
       {projectData.map((project) => (
         <ProjectItem
           key={project.id}

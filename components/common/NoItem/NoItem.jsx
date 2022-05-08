@@ -5,8 +5,6 @@ const NoItem = ({ icon, children }) => {
     <>
       <Flex
         borderColor={useColorModeValue("#fffdfe", "#2d4046")}
-        borderWidth="1px"
-        borderRadius="1rem"
         alignItems="center"
         flexDir="column"
         gap={3}

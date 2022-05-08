@@ -116,6 +116,7 @@ const CreateProjectModal = () => {
           console.error("There was an error: ", error);
         } finally {
           setIsSubmitting(false);
+          onClose;
         }
       }
     }

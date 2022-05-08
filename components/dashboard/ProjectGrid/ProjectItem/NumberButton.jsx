@@ -18,6 +18,7 @@ const NumberButton = ({ children }) => {
           "0px 1px 25px -5px rgb(66 153 225 / 48%), 0 10px 10px -5px rgb(66 153 225 / 43%)"
         }
         onClick={(e) => customToggle(e)}
+        _hover={{ bg: "red.300" }}
       >
         {children}
       </Button>

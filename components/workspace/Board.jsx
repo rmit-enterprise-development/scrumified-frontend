@@ -59,7 +59,14 @@ const Board = ({ cards, setCards, children, templateColumns, cardList }) => {
 			}
 
 			if (!!child) {
-				newCards[child].parentStoryId = !parent ? null : Number(parent);
+				if (!parent) {
+					newCards[child].parentStoryId = null;
+				} else {
+					newCards[child].parentStoryId = Number(parent);
+				}
+				console.log('This is element', newCards[child].parentStoryId);
+				console.log('This is not element', newCards[child]);
+				// newCards[child].parentStoryId = !parent ? null : Number(parent);
 			}
 
 			// add card back to the list
@@ -71,26 +78,29 @@ const Board = ({ cards, setCards, children, templateColumns, cardList }) => {
 				newCards[destId].parentStoryId = Number(srcId);
 				newCards[srcId].childStoryId = Number(destId);
 				newCards[srcId].parentStoryId = null;
-			} else if (source.index < destination.index) {
-				newCards[srcId].childStoryId = Number(
-					newCards[destId].childStoryId
-				);
-				newCards[destId].childStoryId = Number(srcId);
-				newCards[srcId].parentStoryId = Number(destId);
-				newCards[newCards[srcId].childStoryId].parentStoryId =
-					Number(srcId);
-			} else if (source.index > destination.index) {
-				newCards[srcId].parentStoryId = Number(
-					newCards[destId].parentStoryId
-				);
-				newCards[destId].parentStoryId = Number(srcId);
-				newCards[srcId].childStoryId = Number(destId);
-				newCards[newCards[srcId].parentStoryId].childStoryId = Number(srcId);
 			}
+			else if (source.index < destination.index) {
+				// newCards[srcId].childStoryId = Number(
+				// 	newCards[destId].childStoryId
+				// );
+				// newCards[destId].childStoryId = Number(srcId);
+				// newCards[srcId].parentStoryId = Number(destId);
+				// newCards[newCards[srcId].childStoryId].parentStoryId =
+				// 	Number(srcId);
+			}
+			// else if (source.index > destination.index) {
+			// 	newCards[srcId].parentStoryId = Number(
+			// 		newCards[destId].parentStoryId
+			// 	);
+			// 	newCards[destId].parentStoryId = Number(srcId);
+			// 	newCards[srcId].childStoryId = Number(destId);
+			// 	newCards[newCards[srcId].parentStoryId].childStoryId =
+			// 		Number(srcId);
+			// }
 		}
 		setCards(newCards);
 	};
-	
+
 	return (
 		<DragDropContext onDragEnd={onDragEnd}>
 			<Grid columnGap={'5'} templateColumns={templateColumns}>

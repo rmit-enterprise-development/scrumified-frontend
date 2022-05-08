@@ -1,10 +1,41 @@
 import { Flex, Grid } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { DragDropContext } from 'react-beautiful-dnd';
+import storyAPI from '../../api/services/storyAPI';
 
-const Board = ({ data, setData, children, templateColumns }) => {
+const Board = ({ cards, setCards, children, templateColumns, cardList }) => {
+	const updateCardOrder = async (source, target) => {
+		// const updateServiceStatus = await storyAPI.putStory(
+		// 	source,
+		// 	{
+		// 		replaceStoryId: target,
+		// 		status: 'backlog',
+		// 	},
+		// 	true
+		// );
+		// console.log(updateServiceStatus.data);
+
+		const response = await fetch(
+			`http://127.0.0.1:8989/stories/${source}?isDragged=true`,
+			{
+				method: 'PUT',
+				mode: 'cors',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					replaceStoryId: target,
+					status: 'backlog',
+				}),
+			}
+		);
+		const json = response.json();
+		console.log(json);
+	};
+
 	const onDragEnd = (result) => {
 		const { destination, source, draggableId } = result;
+		console.log(destination, source, draggableId);
 		if (!destination) {
 			return;
 		}
@@ -15,60 +46,51 @@ const Board = ({ data, setData, children, templateColumns }) => {
 			return;
 		}
 
-		console.log(destination, source, draggableId);
+		let newCards = JSON.parse(JSON.stringify(cards));
+		const destId = cardList[destination.index].key;
+		const srcId = draggableId;
 
 		if (destination.droppableId === source.droppableId) {
-			const newData = Array.from(data);
-			const sourceCard = newData.filter(
-				(card) => card.id == draggableId
-			)[0];
-			console.log(sourceCard);
-			newData.map((card) => {
-				if (card.status === destination.droppableId) {
-					if (source.index > destination.index) {
-						source.index >= card.position &&
-						card.position >= destination.index
-							? card.position++
-							: card.position;
-					} else {
-						source.index <= card.position &&
-						card.position <= destination.index
-							? card.position--
-							: card.position;
-					}
-				}
-			});
+			// remove card from the list
+			const parent = newCards[srcId].parentStoryId;
+			const child = newCards[srcId].childStoryId;
+			if (!!parent) {
+				newCards[parent].childStoryId = !child ? null : Number(child);
+			}
 
-			sourceCard.position = destination.index;
-			sourceCard.status = destination.droppableId;
+			if (!!child) {
+				newCards[child].parentStoryId = !parent ? null : Number(parent);
+			}
 
-			setData(newData);
-		} else {
-			const newData = Array.from(data);
-			const sourceCard = newData.filter(
-				(card) => card.id == draggableId
-			)[0];
-
-			newData.map((card) => {
-				if (
-					card.status === destination.droppableId &&
-					card.position >= destination.index
-				) {
-					card.position++;
-				} else if (
-					card.status === source.droppableId &&
-					card.position >= source.index
-				) {
-					card.position--;
-				}
-			});
-
-			sourceCard.position = destination.index;
-			sourceCard.status = destination.droppableId;
-
-			setData(newData);
+			// add card back to the list
+			if (!newCards[destId].childStoryId) {
+				newCards[destId].childStoryId = Number(srcId);
+				newCards[srcId].parentStoryId = Number(destId);
+				newCards[srcId].childStoryId = null;
+			} else if (!newCards[destId].parentStoryId) {
+				newCards[destId].parentStoryId = Number(srcId);
+				newCards[srcId].childStoryId = Number(destId);
+				newCards[srcId].parentStoryId = null;
+			} else if (source.index < destination.index) {
+				newCards[srcId].childStoryId = Number(
+					newCards[destId].childStoryId
+				);
+				newCards[destId].childStoryId = Number(srcId);
+				newCards[srcId].parentStoryId = Number(destId);
+				newCards[newCards[srcId].childStoryId].parentStoryId =
+					Number(srcId);
+			} else if (source.index > destination.index) {
+				newCards[srcId].parentStoryId = Number(
+					newCards[destId].parentStoryId
+				);
+				newCards[destId].parentStoryId = Number(srcId);
+				newCards[srcId].childStoryId = Number(destId);
+				newCards[newCards[srcId].parentStoryId].childStoryId = Number(srcId);
+			}
 		}
+		setCards(newCards);
 	};
+	
 	return (
 		<DragDropContext onDragEnd={onDragEnd}>
 			<Grid columnGap={'5'} templateColumns={templateColumns}>

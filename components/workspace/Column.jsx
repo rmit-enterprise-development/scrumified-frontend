@@ -3,8 +3,7 @@ import React from 'react';
 import { Droppable } from 'react-beautiful-dnd';
 import Card from './Card';
 
-const Column = ({ title, id, cards }) => {
-	console.log(cards);
+const Column = ({ title, id, cards, setCards, cardList }) => {
 	return (
 		<Flex
 			flexDir={'column'}
@@ -17,32 +16,22 @@ const Column = ({ title, id, cards }) => {
 			borderRadius={'1rem'}
 		>
 			<Box padding={'4'}>
-				<Text
-					textAlign={'center'}
-					// color={'white'}
-					fontSize={'xl'}
-					fontWeight={'bold'}
-				>
+				<Text textAlign={'center'} fontSize={'xl'} fontWeight={'bold'}>
 					{title}
 				</Text>
 			</Box>
 			<Droppable droppableId={id}>
 				{(provided) => (
-					<Box
+					<Flex
+						flexDirection={'column'}
 						flexGrow={1}
 						ref={provided.innerRef}
 						{...provided.droppableProps}
 						padding={'2'}
 					>
-						{cards.map((card) => (
-							<Card
-								key={card.id}
-								card={card}
-								index={card.position}
-							/>
-						))}
+						{cardList}
 						{provided.placeholder}
-					</Box>
+					</Flex>
 				)}
 			</Droppable>
 		</Flex>

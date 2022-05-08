@@ -20,7 +20,7 @@ import { IoFilterSharp } from 'react-icons/io5';
 
 import CardModal from './CardModal';
 
-const BacklogController = ({ data, setData }) => {
+const BacklogController = ({ cards, setCards }) => {
 	const [userList, setUserList] = useState([
 		{
 			id: '1',
@@ -131,8 +131,8 @@ const BacklogController = ({ data, setData }) => {
 				isOpen={isOpen}
 				onOpen={onOpen}
 				onClose={onClose}
-				data={data}
-				setData={setData}
+				cards={cards}
+				setCards={setCards}
 			/>
 		</FormControl>
 	);

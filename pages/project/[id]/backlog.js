@@ -1,104 +1,195 @@
-import { Box } from "@chakra-ui/react";
-import Head from "next/head";
-import React, { useEffect, useState } from "react";
+import { Box } from '@chakra-ui/react';
+import Head from 'next/head';
+import React, { useEffect, useState } from 'react';
+
+import { useRouter } from 'next/router';
+
 // import projectAPI from "../../../api/services/projectAPI";
-import SectionHeader from "../../../components/common/SectionHeader/SectionHeader";
-import MainContainer from "../../../components/layout/MainContainer";
-import BacklogController from "../../../components/workspace/BacklogController";
-import Board from "../../../components/workspace/Board";
-import Column from "../../../components/workspace/Column";
+import SectionHeader from '../../../components/common/SectionHeader/SectionHeader';
+import MainContainer from '../../../components/layout/MainContainer';
+import BacklogController from '../../../components/workspace/BacklogController';
+import Board from '../../../components/workspace/Board';
+import Column from '../../../components/workspace/Column';
 
-import cookies from "next-cookies";
-import { LoggedUserProvider } from "../../../components/common/LoggedUserProvider";
+import cookies from 'next-cookies';
+import { LoggedUserProvider } from '../../../components/common/LoggedUserProvider';
+import Card from '../../../components/workspace/Card';
+import projectAPI from '../../../api/services/projectAPI';
 
-const Backlog = ({ cards, authToken }) => {
-  const initData = [
-    {
-      id: "1",
-      userStory: "Card1",
-      category: "Hello",
-      point: "12",
-      position: 2,
-      status: "backlog",
-    },
-    {
-      id: "2",
-      userStory: "Card2",
-      category: "Hello",
-      point: "12",
-      position: 0,
-      status: "backlog",
-    },
-    {
-      id: "3",
-      userStory: "Card3",
-      category: "Hello",
-      point: "12",
-      position: 1,
-      status: "backlog",
-    },
-  ];
+const initData = {
+	2: {
+		id: 2,
+		userStory: 'Border',
+		category: 'category',
+		point: 4,
+		status: 'backlog',
+		parentStoryId: null,
+		childStoryId: 1,
+		projectId: 1,
+		sprintId: null,
+		assignId: 2,
+		links: [
+			{
+				rel: 'self',
+				href: 'http://127.0.0.1:8989/stories/2',
+			},
+		],
+	},
+	4: {
+		id: 4,
+		userStory: 'Dunky',
+		category: 'category',
+		point: 4,
+		status: 'backlog',
+		parentStoryId: 3,
+		childStoryId: null,
+		projectId: 1,
+		sprintId: null,
+		assignId: 2,
+		links: [
+			{
+				rel: 'self',
+				href: 'http://127.0.0.1:8989/stories/4',
+			},
+		],
+	},
+	1: {
+		id: 1,
+		userStory: 'Achor',
+		category: 'category',
+		point: 2,
+		status: 'backlog',
+		parentStoryId: 2,
+		childStoryId: 3,
+		projectId: 1,
+		sprintId: null,
+		assignId: 1,
+		links: [
+			{
+				rel: 'self',
+				href: 'http://127.0.0.1:8989/stories/1',
+			},
+		],
+	},
+	3: {
+		id: 3,
+		userStory: 'Catine',
+		category: 'category',
+		point: 2,
+		status: 'backlog',
+		parentStoryId: 1,
+		childStoryId: 4,
+		projectId: 1,
+		sprintId: null,
+		assignId: 1,
+		links: [
+			{
+				rel: 'self',
+				href: 'http://127.0.0.1:8989/stories/3',
+			},
+		],
+	},
+};
 
-  const [data, setData] = useState(initData);
+let flag = true;
 
-  const filterCards = (s) => {
-    const cards = data.filter((card) => card.status === s);
-    cards = cards.sort((a, b) => a.position - b.position);
-    return cards;
-  };
+const Backlog = ({ jsonCards, authToken }) => {
+	const { asPath } = useRouter();
 
-  const [winReady, setwinReady] = useState(false);
-  useEffect(() => {
-    setwinReady(true);
-  }, []);
+	const id = asPath.split('/')[2];
 
-  return (
-    <LoggedUserProvider authToken={authToken}>
-      <Head>
-        <title>Backlog</title>
-      </Head>
-      <MainContainer>
-        <Box>
-          <SectionHeader>Backlog</SectionHeader>
-          <BacklogController data={data} setData={setData} />
-          {winReady ? (
-            <Board data={data} setData={setData}>
-              <Column
-                key={0}
-                title={"Stories"}
-                id={"backlog"}
-                cards={filterCards("backlog")}
-              />
-            </Board>
-          ) : null}
-        </Box>
-      </MainContainer>
-    </LoggedUserProvider>
-  );
+	const getCards = async () => {
+		// const getStoryStatus = await projectAPI.getAllStories(id);
+		// return getStoryStatus.data;
+
+		const response = await fetch(
+			`http://127.0.0.1:8989/projects/${id}/stories?isBacklog=true`,
+			{
+				method: 'GET',
+				mode: 'cors',
+			}
+		);
+		const json = response.json();
+		return json;
+	};
+
+	const [cards, setCards] = useState(initData);
+
+	// useEffect(() => {
+	// 	setTimeout(() => getCards().then((data) => setCards(data)), 5000);
+	// }, [cards]);
+
+	const linkCards = (s) => {
+		let renderCards = [];
+		if (Object.keys(cards).length === 0) {
+			return renderCards;
+		}
+
+		let tmp = null;
+		for (let key in cards) {
+			if (
+				cards.hasOwnProperty(key) &&
+				!cards[key].parentStoryId &&
+				cards[key].status === s
+			) {
+				tmp = cards[key];
+				break;
+			}
+		}
+
+		let i = 0;
+		while (true) {
+			console.log(tmp);
+			renderCards.push(<Card key={tmp.id} card={tmp} index={i++} />);
+			if (!!tmp.childStoryId) tmp = cards[tmp.childStoryId];
+			else break;
+		}
+		return renderCards;
+	};
+
+	console.log(cards);
+
+	const cardList = linkCards('backlog');
+
+	const [winReady, setwinReady] = useState(false);
+	useEffect(() => {
+		setwinReady(true);
+	}, []);
+
+	return (
+		<LoggedUserProvider authToken={authToken}>
+			<Head>
+				<title>Backlog</title>
+			</Head>
+			<MainContainer>
+				<Box>
+					<SectionHeader>Backlog</SectionHeader>
+					<BacklogController cards={cards} setCards={setCards} />
+					{winReady ? (
+						<Board
+							cards={cards}
+							setCards={setCards}
+							cardList={cardList}
+						>
+							<Column
+								key={0}
+								title={'Stories'}
+								id={'backlog'}
+								cards={cards}
+								setCards={setCards}
+								cardList={cardList}
+							/>
+						</Board>
+					) : null}
+				</Box>
+			</MainContainer>
+		</LoggedUserProvider>
+	);
 };
 
 export async function getServerSideProps(ctx) {
-  const { auth } = cookies(ctx);
-  return { props: { authToken: auth || "" } };
+	const { auth } = cookies(ctx);
+	return { props: { authToken: auth || '' } };
 }
 
 export default Backlog;
-
-// export async function getStaticProps() {
-// 	const res = await fetch('http://127.0.0.1:8989/projects/1/stories');
-// 	const cards = await res.json();
-// 	if (cards['_embedded']) {
-// 		return {
-// 			props: {
-// 				cards: cards['_embedded'].storyDtoList,
-// 			},
-// 			revalidate: 5,
-// 		};
-// 	}
-// 	return {
-// 		props: {
-// 			cards: [],
-// 		},
-// 		revalidate: 5,
-// 	};
-// }

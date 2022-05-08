@@ -14,9 +14,11 @@ import { useState } from "react";
 import { LoggedUserProvider } from "../components/common/LoggedUserProvider";
 import SectionHeader from "../components/common/SectionHeader/SectionHeader";
 import CreateProjectModal from "../components/dashboard/CreateProjectModal/CreateProjectModal";
+import NoItem from "../components/dashboard/NoItem/NoItem";
 import ProjectGrid from "../components/dashboard/ProjectGrid/ProjectGrid";
 import MainContainer from "../components/layout/MainContainer";
 import useFetchDashboard from "../hooks/useFetchDashboard";
+import { GoProject, GoChecklist } from "react-icons/go";
 
 const Dashboard = ({ authToken }) => {
   // const [currentPage, setCurrentPage] = useState(1);
@@ -43,7 +45,13 @@ const Dashboard = ({ authToken }) => {
       <MainContainer>
         <SectionHeader>My Projects</SectionHeader>
 
-        <Flex justifyContent="space-between" alignItems="center" pb={2}>
+        <Flex
+          justifyContent="space-between"
+          alignItems="center"
+          pb={3}
+          gap={2}
+          wrap={"wrap"}
+        >
           <Flex gap={2}>
             <Input
               placeholder="Search for project name"
@@ -78,9 +86,19 @@ const Dashboard = ({ authToken }) => {
           <CreateProjectModal />
         </Flex>
 
+        {projectList.length === 0 && (
+          <NoItem icon={GoProject}>
+            No project found. Please start create your first project!
+          </NoItem>
+        )}
+
         <ProjectGrid projectData={projectList} taskData={taskList} />
 
         <SectionHeader>Assigned to me</SectionHeader>
+
+        {taskList.length === 0 && (
+          <NoItem icon={GoChecklist}>No task remained. Enjoy your day</NoItem>
+        )}
       </MainContainer>
     </LoggedUserProvider>
   );

@@ -28,6 +28,10 @@ import { RouterPage } from "../../../config/router";
 import { LoggedUserContext } from "../../common/LoggedUserProvider";
 
 const CreateProjectModal = () => {
+  const owner = useContext(LoggedUserContext);
+  const ownerInfo =
+    owner.firstName + " " + owner.lastName + " (" + owner.email + ")";
+
   const { colorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [searchTerm, setSearchTerm] = useState("");
@@ -40,7 +44,9 @@ const CreateProjectModal = () => {
   const finalRef = useRef();
 
   const [pickerItems, setPickerItems] = useState([]);
-  const [selectedItems, setSelectedItems] = useState([]);
+  const [selectedItems, setSelectedItems] = useState([
+    { value: owner.logUserId, label: ownerInfo },
+  ]);
 
   const user = useContext(LoggedUserContext);
 

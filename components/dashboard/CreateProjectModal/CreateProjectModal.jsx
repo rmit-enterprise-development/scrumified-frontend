@@ -159,7 +159,7 @@ const CreateProjectModal = () => {
         leftIcon={<AddIcon />}
         colorScheme="teal"
         onClick={onOpen}
-        color={useColorModeValue("#031d46", "#2d4046")}
+        color={useColorModeValue("#FFFDFE", "#2d4046")}
       >
         Create Project
       </Button>

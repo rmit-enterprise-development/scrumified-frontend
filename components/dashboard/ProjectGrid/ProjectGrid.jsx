@@ -15,7 +15,7 @@ const ProjectGrid = ({ projectData, fetchUpdate }) => {
 
   // openTasks={taskData.filter((obj) => obj.id === project.id).length} // Mock for now
   return (
-    <SimpleGrid columns={[1, 2, 4]} gap={5} py={5}>
+    <SimpleGrid columns={[1, 2, 4]} gap={5} pb={3}>
       {projectData.map((project) => (
         <ProjectItem
           key={project.id}

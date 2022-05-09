@@ -222,7 +222,9 @@ export async function getServerSideProps(ctx) {
 	// const json = await response.json();
 	const { auth } = cookies(ctx);
 	return {
-		props: { authToken: auth || '', project: json },
+		props: { authToken: auth || '', 
+		// project: json 
+		},
 	};
 }
 

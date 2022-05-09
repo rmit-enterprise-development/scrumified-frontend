@@ -10,6 +10,7 @@ import {
 	WrapItem,
 	Tooltip,
 	IconButton,
+	useColorModeValue,
 } from '@chakra-ui/react';
 import Avvvatars from 'avvvatars-react';
 import { Draggable } from 'react-beautiful-dnd';
@@ -17,27 +18,32 @@ import CardModal from './CardModal';
 
 const Card = (props) => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
+	let bg = useColorModeValue('white', 'gray.500');
+	let color = useColorModeValue('#031d46', '#fffdfe');
+	let btnBg = useColorModeValue('gray.200', '#fffdfe');
+	let btnColor = 'black';
 
 	const colorScheme = 'red' + '.500';
 	return (
 		<Draggable draggableId={'' + props.card.id} index={props.index}>
 			{(provided) => (
-				<Box
-					{...provided.draggableProps}
-					{...provided.dragHandleProps}
-					ref={provided.innerRef}
-					onClick={(e) => {
-						// e.nativeEvent.stopImmediatePropagation();
-						onOpen();
-					}}
-					boxSizing="border-box"
-					borderRadius="1rem"
-					overflow="hidden"
-					bg={'white'}
-					mb={4}
-					boxShadow="base"
-				>
-					<Box p={4} bgColor={'white'}>
+				<>
+					<Box
+						{...provided.draggableProps}
+						{...provided.dragHandleProps}
+						ref={provided.innerRef}
+						onClick={(e) => {
+							onOpen();
+						}}
+						boxSizing="border-box"
+						borderRadius="1rem"
+						overflow="hidden"
+						bg={bg}
+						color={color}
+						mb={4}
+						p={4}
+						boxShadow="base"
+					>
 						<Flex
 							alignItems={'center'}
 							justifyContent={'space-between'}
@@ -54,12 +60,13 @@ const Card = (props) => {
 									<IconButton
 										isRound={true}
 										size={'xs'}
+										bgColor={btnBg}
 										onClick={(e) => {
 											e.stopPropagation();
 											console.log('DitMe');
 										}}
 										aria-label="Search database"
-										icon={<AddIcon />}
+										icon={<AddIcon color={btnColor} />}
 									/>
 								</Tooltip>
 							</WrapItem>
@@ -98,11 +105,8 @@ const Card = (props) => {
 						isOpen={isOpen}
 						onOpen={onOpen}
 						onClose={onClose}
-						// data={data}
-						// setData={setData}
-						// card={props.card}
 					/>
-				</Box>
+				</>
 			)}
 		</Draggable>
 	);

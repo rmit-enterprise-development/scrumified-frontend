@@ -46,7 +46,7 @@ const Board = ({ cards, setCards, children, templateColumns, cardList }) => {
 			return;
 		}
 
-		let newCards = JSON.parse(JSON.stringify(cards));
+		let newCards = { ...cards };
 		const destId = cardList[destination.index].key;
 		const srcId = draggableId;
 

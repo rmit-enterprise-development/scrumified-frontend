@@ -1,4 +1,4 @@
-import { Box } from '@chakra-ui/react';
+import { Box, useColorModeValue } from '@chakra-ui/react';
 import Head from 'next/head';
 import React, { useEffect, useState } from 'react';
 
@@ -91,8 +91,6 @@ const initData = {
 	},
 };
 
-let flag = true;
-
 const Backlog = ({ jsonCards, authToken }) => {
 	const { asPath } = useRouter();
 
@@ -113,11 +111,20 @@ const Backlog = ({ jsonCards, authToken }) => {
 		return json;
 	};
 
-	const [cards, setCards] = useState({});
+	const [cards, setCards] = useState(initData);
 
-	useEffect(() => {
-		setTimeout(() => getCards().then((data) => setCards(data)), 5000);
-	}, [cards]);
+	// useEffect(() => {
+	// 	setTimeout(() => getCards().then((data) => setCards(data)), 100000);
+	// }, [cards]);
+
+	let bg = useColorModeValue('white', '#405A7D');
+	let color = useColorModeValue('#031d46', '#fffdfe');
+	let btnBg = useColorModeValue('gray.200', '#fffdfe');
+	let btnColor = 'black';
+	let bgGradient = useColorModeValue(
+		'linear(gray.50 0%, gray.100 100%)',
+		'linear(blue.800 0%, blue.900 100%)'
+	);
 
 	const linkCards = (s) => {
 		let renderCards = [];
@@ -139,7 +146,17 @@ const Backlog = ({ jsonCards, authToken }) => {
 
 		let i = 0;
 		while (true) {
-			renderCards.push(<Card key={tmp.id} card={tmp} index={i++} />);
+			renderCards.push(
+				<Card
+					key={tmp.id}
+					card={tmp}
+					index={i++}
+					bg={bg}
+					color={color}
+					btnBg={btnBg}
+					btnColor={btnColor}
+				/>
+			);
 			if (!!tmp.childStoryId) tmp = cards[tmp.childStoryId];
 			else break;
 		}
@@ -161,7 +178,14 @@ const Backlog = ({ jsonCards, authToken }) => {
 			<MainContainer>
 				<Box>
 					<SectionHeader>Backlog</SectionHeader>
-					<BacklogController cards={cards} setCards={setCards} />
+					<BacklogController
+						cards={cards}
+						setCards={setCards}
+						bg={bg}
+						color={color}
+						btnBg={btnBg}
+						btnColor={btnColor}
+					/>
 					{winReady ? (
 						<Board
 							cards={cards}
@@ -175,6 +199,11 @@ const Backlog = ({ jsonCards, authToken }) => {
 								cards={cards}
 								setCards={setCards}
 								cardList={cardList}
+								bg={bg}
+								color={color}
+								btnBg={btnBg}
+								btnColor={btnColor}
+								bgGradient={bgGradient}
 							/>
 						</Board>
 					) : null}

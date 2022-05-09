@@ -16,13 +16,8 @@ import Avvvatars from 'avvvatars-react';
 import { Draggable } from 'react-beautiful-dnd';
 import CardModal from './CardModal';
 
-const Card = (props) => {
+const Card = ({ bg, color, btnColor, btnBg, ...props }) => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
-	let bg = useColorModeValue('white', 'gray.500');
-	let color = useColorModeValue('#031d46', '#fffdfe');
-	let btnBg = useColorModeValue('gray.200', '#fffdfe');
-	let btnColor = 'black';
-
 	const colorScheme = 'red' + '.500';
 	return (
 		<Draggable draggableId={'' + props.card.id} index={props.index}>
@@ -61,6 +56,7 @@ const Card = (props) => {
 										isRound={true}
 										size={'xs'}
 										bgColor={btnBg}
+										_hover={{ opacity: 0.8 }}
 										onClick={(e) => {
 											e.stopPropagation();
 											console.log('DitMe');

@@ -20,7 +20,7 @@ import { IoFilterSharp } from 'react-icons/io5';
 
 import CardModal from './CardModal';
 
-const BacklogController = ({ cards, setCards }) => {
+const BacklogController = ({ cards, setCards, bg, color, btnColor, btnBg }) => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
 	const [iconFilter, setIConFilter] = useState('');
@@ -67,6 +67,8 @@ const BacklogController = ({ cards, setCards }) => {
 				<HStack gap="2">
 					<Text>Total points: 8</Text>
 					<IconButton
+						_hover={{ opacity: 0.8 }}
+						bg={btnBg}
 						onClick={() => {
 							onOpen();
 						}}
@@ -81,6 +83,10 @@ const BacklogController = ({ cards, setCards }) => {
 				onClose={onClose}
 				cards={cards}
 				setCards={setCards}
+				color={color}
+				bg={bg}
+				btnBg={btnBg}
+				btnColor={btnColor}
 			/>
 		</FormControl>
 	);

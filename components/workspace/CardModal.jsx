@@ -20,52 +20,22 @@ import Avvvatars from 'avvvatars-react';
 import { CUIAutoComplete } from 'chakra-ui-autocomplete';
 import React, { useState } from 'react';
 
-const CardModal = ({ isOpen, onOpen, onClose, cards, setCards }) => {
-	const [categories, setCategories] = useState([
-		'backend',
-		'frontend',
-		'left',
-		'right',
-		'center',
-	]);
-
-	const categoryList = categories.map((category) => {
-		return { value: category, label: category };
-	});
-
-	const [sortedCategory, setSortedCategory] = useState(
-		categoryList.sort((a, b) => a.label.localeCompare(b.label))
-	);
-
+const CardModal = ({
+	isOpen,
+	onOpen,
+	onClose,
+	cards,
+	setCards,
+	color,
+	bg,
+	btnBg,
+	btnColor,
+}) => {
 	const [selectedCategory, setSelectedCategory] = useState([]);
 
 	const [selectedItems, setSelectedItems] = useState([]);
 
 	const { colorMode } = useColorMode();
-
-	const handleSelectedItemsChange = (selectedItems) => {
-		if (selectedItems) {
-			setSelectedItems(selectedItems);
-		}
-	};
-
-	const customRender = (selected) => {
-		return (
-			<Flex flexDir="row" alignItems={'center'}>
-				<Avvvatars value={selected.label} />
-
-				{colorMode === 'dark' ? (
-					<Text pl={5} color="#fffdfe">
-						{selected.label}
-					</Text>
-				) : (
-					<Text pl={5} color="#031d46">
-						{selected.label}
-					</Text>
-				)}
-			</Flex>
-		);
-	};
 
 	const [card, setCard] = useState({
 		asA: '',
@@ -116,8 +86,8 @@ const CardModal = ({ isOpen, onOpen, onClose, cards, setCards }) => {
 		>
 			<ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px)" />
 			<ModalContent borderRadius={'1rem'} padding={'1rem'}>
-				<ModalHeader>Create User Story</ModalHeader>
-				<ModalBody>
+				<ModalHeader color={color}>Create User Story</ModalHeader>
+				<ModalBody color={color}>
 					<FormControl>
 						<Flex alignItems={'center'}>
 							<FormLabel
@@ -132,7 +102,7 @@ const CardModal = ({ isOpen, onOpen, onClose, cards, setCards }) => {
 								flex={1}
 								paddingX={'0.5rem'}
 								variant="flushed"
-								placeholder="User"
+								placeholder="Who is responsible?"
 								onChange={(e) => {
 									setCard({ ...card, asA: e.target.value });
 									setIsValidAsA(isValidInput(e.target.value));
@@ -155,7 +125,7 @@ const CardModal = ({ isOpen, onOpen, onClose, cards, setCards }) => {
 								flex={1}
 								paddingX={'0.5rem'}
 								variant="flushed"
-								placeholder="Todo task"
+								placeholder="What is the task?"
 								onChange={(e) => {
 									setCard({ ...card, iNeed: e.target.value });
 									setIsValidINeed(
@@ -180,7 +150,7 @@ const CardModal = ({ isOpen, onOpen, onClose, cards, setCards }) => {
 								flex={1}
 								paddingX={'0.5rem'}
 								variant="flushed"
-								placeholder="Explaination"
+								placeholder="Why does the task is important?"
 								onChange={(e) => {
 									setCard({
 										...card,
@@ -249,10 +219,16 @@ const CardModal = ({ isOpen, onOpen, onClose, cards, setCards }) => {
 					</FormControl>
 				</ModalBody>
 				<ModalFooter>
-					<Button onClick={onClose} mr={4}>
+					<Button
+						colorScheme={'red'}
+						variant={'outline'}
+						onClick={onClose}
+						mr={4}
+					>
 						Close
 					</Button>
 					<Button
+						colorScheme={'telegram'}
 						isDisabled={
 							!(
 								isValidAsA &&
@@ -271,7 +247,6 @@ const CardModal = ({ isOpen, onOpen, onClose, cards, setCards }) => {
 								isValidPoint
 							) {
 								const result = {
-									// id: Math.floor(Math.random() * 10000),
 									userStory:
 										'As a ' +
 										card.asA +

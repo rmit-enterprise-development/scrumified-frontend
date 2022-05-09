@@ -13,7 +13,6 @@ import SectionHeader from "../components/common/SectionHeader/SectionHeader";
 import CreateProjectModal from "../components/dashboard/CreateProjectModal/CreateProjectModal";
 import ProjectGrid from "../components/dashboard/ProjectGrid/ProjectGrid";
 import MainContainer from "../components/layout/MainContainer";
-import useFetchStory from "../hooks/useFetchStory";
 import { digFind } from "../utils/object";
 
 const Dashboard = ({ authToken }) => {
@@ -23,14 +22,23 @@ const Dashboard = ({ authToken }) => {
     md5("EmChiXemAnhLa_#BanNhauMaThoi")
   );
 
+  const PAGE_LIMIT = 4;
+
   // Init projectData & its pagination
   const [projectData, setProjectData] = useState({
     projectList: [],
     totalProject: 0,
   });
   const [currentProjectPage, setCurrentProjectPage] = useState(1);
-  const PAGE_LIMIT = 4;
 
+  // Init storyData & its pagination
+  const [storyData, setStoryData] = useState({
+    storyList: [],
+    totalStory: 0,
+  });
+  const [currentStoryPage, setCurrentStoryPage] = useState(1);
+
+  //----------------Project Setting-----------------------//
   // Input search Project
   const [value, setValue] = useState("");
   const handleChange = (event) => setValue(event.target.value);
@@ -76,8 +84,6 @@ const Dashboard = ({ authToken }) => {
     }
   };
 
-  const storyList = useFetchStory(loggedUser);
-
   const fetchUpdate = () => {
     let currentFilter = filterProject;
     currentFilter.page = currentProjectPage - 1;
@@ -85,6 +91,8 @@ const Dashboard = ({ authToken }) => {
 
     fetchProject(filterProject);
   };
+
+  //----------------Story Setting-----------------------//
 
   useEffect(() => {
     fetchUpdate();
@@ -131,7 +139,6 @@ const Dashboard = ({ authToken }) => {
 
         <ProjectGrid
           projectData={projectData.projectList}
-          taskData={storyList}
           fetchUpdate={fetchUpdate}
         />
 
@@ -146,9 +153,11 @@ const Dashboard = ({ authToken }) => {
 
         <SectionHeader>Assigned to me</SectionHeader>
 
-        {storyList.length === 0 && (
-          <NoItem icon={GoChecklist}>No task remained. Enjoy your day</NoItem>
-        )}
+        {/* {storyData.length === 0 && ( */}
+        <NoItem icon={GoChecklist}>
+          Click the red button of one project to view your task(s).
+        </NoItem>
+        {/* )} */}
       </MainContainer>
     </LoggedUserProvider>
   );

@@ -21,21 +21,21 @@ import { Field, Form, Formik } from 'formik';
 import { useRef } from 'react';
 import * as Yup from 'yup';
 import userAPI from '../../api/services/userAPI';
-
 import { sign } from 'jsonwebtoken';
 import md5 from 'md5';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/router'
 
-const EditProfileModal = ({ id, fname, lname, email, bio }) => {
+const EditProfileModal = ({ id, fname, lname, email, description }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
-  const router = useRouter();
   const initialRef = useRef();
+  const router = useRouter();
   const finalRef = useRef();
   const initialValues = {
     fname: fname,
     lname: lname,
     email: email,
+    description: description,
     password: '',
   };
 
@@ -54,6 +54,7 @@ const EditProfileModal = ({ id, fname, lname, email, bio }) => {
         email: values.email,
         firstName: values.fname,
         lastName: values.lname,
+        description: values.description
       };
       const updateServiceStatus = await userAPI.putUser(id, updateData);
 
@@ -67,6 +68,7 @@ const EditProfileModal = ({ id, fname, lname, email, bio }) => {
         firstName: values.fname,
         lastName: values.lname,
         email: values.email,
+        description: values.description
       };
       const jwt = await sign(claims, md5('EmChiXemAnhLa_#BanNhauMaThoi'), {
         expiresIn: '1h',
@@ -110,15 +112,18 @@ const EditProfileModal = ({ id, fname, lname, email, bio }) => {
   const validationSchema = Yup.object({
     fname: Yup.string()
       .min(2, 'Must be more than 1 character')
-      .required('Required'),
+      .required('Required')
+      .matches(/^[A-Z]+[a-z]+$/,'Only letters, capitalize first letter (only)'),
     lname: Yup.string()
       .min(2, 'Must be more than 1 character')
-      .required('Required'),
+      .required('Required')
+      .matches(/^[A-Z]+[a-z]+$/,'Only letters, capitalize first letter (only)'),
     email: Yup.string()
       .min(2, 'Must be more than 1 character')
       .required('Required')
       .email('Invalid email'),
-    password: Yup.string().required('Please confirm your password'),
+    password: Yup.string()
+      .required('Please confirm your password'),
   });
 
   return (
@@ -218,6 +223,26 @@ const EditProfileModal = ({ id, fname, lname, email, bio }) => {
                           color={useColorModeValue('#031e49', '#fffdfe')}
                         />
                         <FormErrorMessage>{form.errors.email}</FormErrorMessage>
+                      </FormControl>
+                    )}
+                  </Field>
+
+                  <Field name="description">
+                    {({ field, form }) => (
+                      <FormControl>
+                        <FormLabel
+                          htmlFor="lname"
+                          pt={2}
+                          color={useColorModeValue('#031e49', '#fffdfe')}
+                        >
+                          Description
+                        </FormLabel>
+                        <Input
+                          {...field}
+                          id="Description"
+                          placeholder="Description"
+                          color={useColorModeValue('#031e49', '#fffdfe')}
+                        />
                       </FormControl>
                     )}
                   </Field>

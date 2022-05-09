@@ -23,7 +23,7 @@ import * as Yup from 'yup';
 import userAPI from '../../api/services/userAPI';
 import { useRouter } from 'next/router';
 
-const EditPasswordModal = ({ id, fname, lname, email, bio }) => {
+const EditPasswordModal = ({ id, email }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
   const router = useRouter();

@@ -16,7 +16,7 @@ const Board = ({ cards, setCards, children, templateColumns, cardList }) => {
 		// console.log(updateServiceStatus.data);
 
 		const response = await fetch(
-			`http://127.0.0.1:8989/stories/${source}?isDragged=true&&isTopDown=${flag}`,
+			`http://127.0.0.1:8989/stories/${source}?isDragged=true&isTopDown=${flag}`,
 			{
 				method: 'PUT',
 				mode: 'cors',

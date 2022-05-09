@@ -26,7 +26,8 @@ const Card = (props) => {
 					{...provided.draggableProps}
 					{...provided.dragHandleProps}
 					ref={provided.innerRef}
-					onClick={() => {
+					onClick={(e) => {
+						// e.nativeEvent.stopImmediatePropagation();
 						onOpen();
 					}}
 					boxSizing="border-box"
@@ -46,12 +47,16 @@ const Card = (props) => {
 							</Heading>
 
 							<WrapItem>
-								<Tooltip label={'Add to sprint 1'} placement={'left-start'}>
+								<Tooltip
+									label={'Add to sprint 1'}
+									placement={'left-start'}
+								>
 									<IconButton
 										isRound={true}
 										size={'xs'}
-										onClick={() => {
-											onOpen();
+										onClick={(e) => {
+											e.stopPropagation();
+											console.log('DitMe');
 										}}
 										aria-label="Search database"
 										icon={<AddIcon />}
@@ -104,3 +109,41 @@ const Card = (props) => {
 };
 
 export default Card;
+
+const ComponentName = (props) => {
+	const handleCancel = (event) => {
+		stopEventPropagationTry(event);
+
+		// do something here
+	};
+
+	const handleConfirmButton = (event) => {
+		stopEventPropagationTry(event);
+
+		// do something here
+	};
+
+	// so elements with multiple event handlers aren't unnecessarily
+	// called more than once(ie. SyntheticEvent Bubbling)
+	const stopEventPropagationTry = (event) => {
+		if (event.target === event.currentTarget) {
+			event.stopPropagation();
+		}
+	};
+
+	return;
+	<div onClick={handleCancel} className="ui dimmer modals visible active">
+		<div className="ui tiny modal visible active">
+			<div className="header">{[EXAMPLE_PLACEHOLDER]}</div>
+			<div className="content">{[EXAMPLE_PLACEHOLDER]}</div>
+			<div className="actions">
+				<button onClick={handleCancel} className="ui button">
+					{[EXAMPLE_PLACEHOLDER]}
+				</button>
+				<button onClick={handleConfirmButton} className="ui red button">
+					{[EXAMPLE_PLACEHOLDER]}
+				</button>
+			</div>
+		</div>
+	</div>;
+};

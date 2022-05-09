@@ -1,12 +1,20 @@
-import { Box, Flex, useColorModeValue } from "@chakra-ui/react";
-import SideBar from "../common/SideBar/SideBar";
+import {
+  Box,
+  Flex,
+  useColorModeValue,
+  useBreakpointValue,
+} from '@chakra-ui/react';
+import SideBar from '../common/SideBar/SideBar';
 
 export default function MainContainer({ children }) {
   return (
-    <Flex>
+    <Flex flexDir={useBreakpointValue({ base: 'column', md: 'row' })}>
       <SideBar />
-      <Box flexGrow="1" bg={useColorModeValue("#FFFDFE", "#031E49")}>
-        <Box my={5} mr={10}>
+      <Box flexGrow="1" bg={useColorModeValue('#FFFDFE', '#031E49')}>
+        <Box
+          py={useBreakpointValue({ base: 0, md: 5 })}
+          px={useBreakpointValue({ base: 30, md: 10 })}
+        >
           {children}
         </Box>
       </Box>

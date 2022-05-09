@@ -57,7 +57,7 @@ export async function loginCreateToken(dataObj) {
     description,
   };
   const jwt = await sign(claims, md5('EmChiXemAnhLa_#BanNhauMaThoi'), {
-    expiresIn: '1h',
+    expiresIn: '1d',
   });
 
   // login with current sign in data

@@ -1,10 +1,10 @@
-import { Icon, Flex, Text, useColorModeValue } from "@chakra-ui/react";
+import { Icon, Flex, Text, useColorModeValue } from '@chakra-ui/react';
 
 const NoItem = ({ icon, children }) => {
   return (
     <>
       <Flex
-        borderColor={useColorModeValue("#fffdfe", "#2d4046")}
+        borderColor={useColorModeValue('#fffdfe', '#2d4046')}
         alignItems="center"
         flexDir="column"
         gap={3}

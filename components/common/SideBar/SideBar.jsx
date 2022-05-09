@@ -6,22 +6,26 @@ import {
   IconButton,
   useColorMode,
   useColorModeValue,
+  useBreakpointValue,
   useDisclosure,
-} from "@chakra-ui/react";
-import React from "react";
-import { FiMenu } from "react-icons/fi";
-import { SidebarContent } from "./SidebarContent";
+} from '@chakra-ui/react';
+import React from 'react';
+import { FiMenu } from 'react-icons/fi';
+import { SidebarContent } from './SidebarContent';
 
 export default function Sidebar({ children }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { toggleColorMode } = useColorMode();
 
   return (
-    <Box minH="100vh" bg={useColorModeValue("#FFFDFE", "#031E49")}>
+    <Box
+      minH={useBreakpointValue({ base: '0.5rem', md: '100vh' })}
+      bg={useColorModeValue('#FFFDFE', '#031E49')}
+    >
       <SidebarContent
         onClose={() => onClose}
         toggleColorMode={toggleColorMode}
-        display={{ base: "none", md: "block" }}
+        display={{ base: 'none', md: 'block' }}
       />
       <Drawer
         autoFocus={false}
@@ -39,10 +43,8 @@ export default function Sidebar({ children }) {
 
       <Box>
         {/* mobilenav */}
-        <MobileNav display={{ base: "flex", md: "none" }} onOpen={onOpen} />
-        <Box ml={{ base: 0, md: 60 }} p="4">
-          {children}
-        </Box>
+        <MobileNav display={{ base: 'flex', md: 'none' }} onOpen={onOpen} />
+        <Box ml={{ base: 0, md: 60 }}>{children}</Box>
       </Box>
     </Box>
   );
@@ -51,12 +53,15 @@ export default function Sidebar({ children }) {
 const MobileNav = ({ onOpen, ...rest }) => {
   return (
     <Flex
+      position="absolute"
+      top="-5px"
+      right="5px"
       ml={{ base: 0, md: 60 }}
       px={{ base: 4, md: 24 }}
       height="20"
       alignItems="center"
-      borderBottomColor={useColorModeValue("gray.200", "gray.700")}
-      justifyContent="flex-start"
+      borderBottomColor={useColorModeValue('gray.200', 'gray.700')}
+      justifyContent="flex-end"
       {...rest}
     >
       <IconButton

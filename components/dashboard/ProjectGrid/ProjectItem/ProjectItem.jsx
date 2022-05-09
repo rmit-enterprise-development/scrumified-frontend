@@ -17,13 +17,12 @@ import NumberButton from "./NumberButton";
 const ProjectItem = ({ project, color, openTasks, fetchUpdate }) => {
   const handlePushProjectDetail = () => {
     Router.push({
-      pathname: `${RouterPage.PROJECT}/${id}${RouterPage.BACKLOG}`,
+      pathname: `${RouterPage.PROJECT}/${project.id}${RouterPage.BACKLOG}`,
     });
   };
   const colorScheme = color + ".500";
 
   const user = useContext(LoggedUserContext);
-  console.log("user: ", user);
   return (
     <Flex
       borderColor="#2d4046"
@@ -76,7 +75,7 @@ const ProjectItem = ({ project, color, openTasks, fetchUpdate }) => {
             My task
           </Text>
 
-          <NumberButton>{openTasks}</NumberButton>
+          <NumberButton>0</NumberButton>
         </Flex>
       </Flex>
     </Flex>

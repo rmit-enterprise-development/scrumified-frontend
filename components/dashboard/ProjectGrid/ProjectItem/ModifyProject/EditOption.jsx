@@ -19,15 +19,12 @@ import {
 } from "@chakra-ui/react";
 import Avvvatars from "avvvatars-react";
 import { CUIAutoComplete } from "chakra-ui-autocomplete";
-import Router from "next/router";
 import { useContext, useEffect, useRef, useState } from "react";
-import userAPI from "../../../../../api/services/userAPI";
-import { digFind } from "../../../../../utils/object";
-
-import { RouterPage } from "../../../../../config/router";
-import { LoggedUserContext } from "../../../../common/LoggedUserProvider";
 import { AiOutlineEdit } from "react-icons/ai";
 import projectAPI from "../../../../../api/services/projectAPI";
+import userAPI from "../../../../../api/services/userAPI";
+import { digFind } from "../../../../../utils/object";
+import { LoggedUserContext } from "../../../../common/LoggedUserProvider";
 
 const EditOption = ({ id, name, participants, fetchUpdate }) => {
   const { colorMode } = useColorMode();

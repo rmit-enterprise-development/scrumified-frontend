@@ -146,8 +146,6 @@ const Backlog = ({ jsonCards, authToken }) => {
 		return renderCards;
 	};
 
-	console.log(cards);
-
 	const cardList = linkCards('backlog');
 
 	const [winReady, setwinReady] = useState(false);

@@ -20,34 +20,7 @@ import Avvvatars from 'avvvatars-react';
 import { CUIAutoComplete } from 'chakra-ui-autocomplete';
 import React, { useState } from 'react';
 
-const CardModal = ({ isOpen, onOpen, onClose, data, setData }) => {
-	const [userList, setUserList] = useState([
-		{
-			id: '1',
-			name: 'Minh Pham',
-			email: 'pcminh0505@gmail.com',
-		},
-		{
-			id: '3',
-			name: 'Thach Ho',
-			email: 'thachho@123@gmail.com',
-		},
-		{
-			id: '2',
-			name: 'Khang Nguyen',
-			email: 'khangnguyen111101@gmail.com',
-		},
-		{
-			id: '5',
-			name: 'Duong Nguyen',
-			email: 'duongnguyen123@gmail.com',
-		},
-		{
-			id: '4',
-			name: 'An Le',
-			email: 'andrew123@gmail.com',
-		},
-	]);
+const CardModal = ({ isOpen, onOpen, onClose, cards, setCards }) => {
 	const [categories, setCategories] = useState([
 		'backend',
 		'frontend',
@@ -66,18 +39,9 @@ const CardModal = ({ isOpen, onOpen, onClose, data, setData }) => {
 
 	const [selectedCategory, setSelectedCategory] = useState([]);
 
-	const participantList = userList.map((a) => {
-		const userInfo = a.name + ' (' + a.email + ')';
-		return { value: a.id, label: userInfo };
-	});
-
 	const [selectedItems, setSelectedItems] = useState([]);
 
 	const { colorMode } = useColorMode();
-
-	const [pickerItems, setPickerItems] = useState(
-		participantList.sort((a, b) => a.label.localeCompare(b.label))
-	);
 
 	const handleSelectedItemsChange = (selectedItems) => {
 		if (selectedItems) {
@@ -100,14 +64,6 @@ const CardModal = ({ isOpen, onOpen, onClose, data, setData }) => {
 					</Text>
 				)}
 			</Flex>
-		);
-	};
-
-	const customCreateItemRender = (value) => {
-		return (
-			<Text as="span" color="red.500" fontWeight="bold">
-				User not found!
-			</Text>
 		);
 	};
 
@@ -230,7 +186,6 @@ const CardModal = ({ isOpen, onOpen, onClose, data, setData }) => {
 										...card,
 										soThat: e.target.value,
 									});
-									console.log(isValidInput(e.target.value));
 									setIsValidSoThat(
 										isValidInput(e.target.value)
 									);
@@ -245,7 +200,7 @@ const CardModal = ({ isOpen, onOpen, onClose, data, setData }) => {
 						</FormLabel>
 						<Textarea
 							id="definition"
-							placeholder="Requirement for complete a task"
+							placeholder="Requirement to complete a task"
 							resize={'none'}
 							onChange={(e) => {
 								setCard({ ...card, def: e.target.value });
@@ -275,44 +230,7 @@ const CardModal = ({ isOpen, onOpen, onClose, data, setData }) => {
 						</Select>
 					</FormControl>
 
-					<FormControl mt={4}>
-						<CUIAutoComplete
-							tagStyleProps={{
-								rounded: 'full',
-							}}
-							label="Category"
-							placeholder="Enter the category"
-							onCreateItem={() => {}} //Empty because don't want to add option in list. Please see the example in "https://www.npmjs.com/package/chakra-ui-autocomplete"
-							items={sortedCategory}
-							itemRenderer={customRender}
-							// createItemRenderer={customCreateItemRender}
-							selectedItems={selectedCategory}
-							onSelectedItemsChange={(changes) => {
-								console.log(changes);
-								return handleSelectedCategoryChange(
-									changes.selectedItems
-								);
-							}}
-							hideToggleButton={true}
-							listStyleProps={{
-								maxHeight: '200',
-								overflow: 'auto',
-								bg: useColorModeValue('', '#2D3748'),
-							}}
-							listItemStyleProps={{
-								cursor: 'pointer',
-								_hover: {
-									bg: useColorModeValue('', '#031e49'),
-								},
-							}}
-							labelStyleProps={{
-								color: useColorModeValue('#031e49', '#fffdfe'),
-							}}
-							inputStyleProps={{
-								color: useColorModeValue('#031d46', '#fffdfe'),
-							}}
-						/>
-					</FormControl>
+					<FormControl mt={4}></FormControl>
 
 					<FormControl mt={4}>
 						<FormLabel htmlFor="participant" fontSize={'xl'}>
@@ -335,6 +253,15 @@ const CardModal = ({ isOpen, onOpen, onClose, data, setData }) => {
 						Close
 					</Button>
 					<Button
+						isDisabled={
+							!(
+								isValidAsA &&
+								isValidINeed &&
+								isValidSoThat &&
+								isValidDef &&
+								isValidPoint
+							)
+						}
 						onClick={() => {
 							if (
 								isValidAsA &&

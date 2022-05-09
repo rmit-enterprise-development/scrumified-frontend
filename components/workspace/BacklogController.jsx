@@ -21,58 +21,6 @@ import { IoFilterSharp } from 'react-icons/io5';
 import CardModal from './CardModal';
 
 const BacklogController = ({ cards, setCards }) => {
-	const [userList, setUserList] = useState([
-		{
-			id: '1',
-			name: 'Minh Pham',
-			email: 'pcminh0505@gmail.com',
-		},
-		{
-			id: '3',
-			name: 'Thach Ho',
-			email: 'thachho@123@gmail.com',
-		},
-		{
-			id: '2',
-			name: 'Khang Nguyen',
-			email: 'khangnguyen111101@gmail.com',
-		},
-		{
-			id: '5',
-			name: 'Duong Nguyen',
-			email: 'duongnguyen123@gmail.com',
-		},
-		{
-			id: '4',
-			name: 'An Le',
-			email: 'andrew123@gmail.com',
-		},
-		{
-			id: '4',
-			name: 'An Le',
-			email: 'andrew123@gmail.com',
-		},
-		{
-			id: '4',
-			name: 'An Le',
-			email: 'andrew123@gmail.com',
-		},
-		{
-			id: '4',
-			name: 'An Le',
-			email: 'andrew123@gmail.com',
-		},
-		{
-			id: '4',
-			name: 'An Le',
-			email: 'andrew123@gmail.com',
-		},
-		{
-			id: '4',
-			name: 'An Le',
-			email: 'andrew123@gmail.com',
-		},
-	]);
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
 	const [iconFilter, setIConFilter] = useState('');

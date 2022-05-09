@@ -287,13 +287,3 @@ const CardModal = ({
 };
 
 export default CardModal;
-
-// export async function getServerSideProps(ctx) {
-// 	const response = await fetch(`http://127.0.0.1:8989/projects/1`);
-// 	const json = response.json();
-// 	return {
-// 		props: {
-// 			participants: json,
-// 		},
-// 	};
-// }

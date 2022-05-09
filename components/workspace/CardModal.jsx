@@ -18,7 +18,7 @@ import {
 } from '@chakra-ui/react';
 import Avvvatars from 'avvvatars-react';
 import { CUIAutoComplete } from 'chakra-ui-autocomplete';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const CardModal = ({
 	isOpen,
@@ -30,13 +30,9 @@ const CardModal = ({
 	bg,
 	btnBg,
 	btnColor,
+	projectId,
+	participants,
 }) => {
-	const [selectedCategory, setSelectedCategory] = useState([]);
-
-	const [selectedItems, setSelectedItems] = useState([]);
-
-	const { colorMode } = useColorMode();
-
 	const [card, setCard] = useState({
 		asA: '',
 		iNeed: '',
@@ -292,21 +288,12 @@ const CardModal = ({
 
 export default CardModal;
 
-// export async function getStaticProps() {
-// 	const res = await fetch('http://127.0.0.1:8989/users/');
-// 	const cards = await res.json();
-// 	if (cards['_embedded']) {
-// 		return {
-// 			props: {
-// 				cards: cards['_embedded'].storyDtoList,
-// 			},
-// 			revalidate: 5,
-// 		};
-// 	}
+// export async function getServerSideProps(ctx) {
+// 	const response = await fetch(`http://127.0.0.1:8989/projects/1`);
+// 	const json = response.json();
 // 	return {
 // 		props: {
-// 			cards: [],
+// 			participants: json,
 // 		},
-// 		revalidate: 5,
 // 	};
 // }

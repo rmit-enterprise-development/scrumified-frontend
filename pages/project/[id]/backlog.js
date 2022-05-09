@@ -91,10 +91,11 @@ const initData = {
 	},
 };
 
-const Backlog = ({ jsonCards, authToken }) => {
+const Backlog = ({ authToken, project }) => {
+	console.log(project);
 	const { asPath } = useRouter();
 
-	const id = asPath.split('/')[2];
+	const projectId = asPath.split('/')[2];
 
 	const getCards = async () => {
 		// const getStoryStatus = await projectAPI.getAllStories(id);
@@ -185,6 +186,7 @@ const Backlog = ({ jsonCards, authToken }) => {
 						color={color}
 						btnBg={btnBg}
 						btnColor={btnColor}
+						projectId={projectId}
 					/>
 					{winReady ? (
 						<Board
@@ -214,8 +216,14 @@ const Backlog = ({ jsonCards, authToken }) => {
 };
 
 export async function getServerSideProps(ctx) {
+	const response = await fetch(`http://127.0.0.1:8989/projects/1`);
+	console.log(response);
+	const json = await response.json();
+	console.log('this is json', json);
 	const { auth } = cookies(ctx);
-	return { props: { authToken: auth || '' } };
+	return {
+		props: { authToken: auth || '', project: json },
+	};
 }
 
 export default Backlog;

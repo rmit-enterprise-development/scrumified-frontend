@@ -20,7 +20,15 @@ import { IoFilterSharp } from 'react-icons/io5';
 
 import CardModal from './CardModal';
 
-const BacklogController = ({ cards, setCards, bg, color, btnColor, btnBg }) => {
+const BacklogController = ({
+	cards,
+	setCards,
+	bg,
+	color,
+	btnColor,
+	btnBg,
+	projectId,
+}) => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
 	const [iconFilter, setIConFilter] = useState('');
@@ -87,6 +95,7 @@ const BacklogController = ({ cards, setCards, bg, color, btnColor, btnBg }) => {
 				bg={bg}
 				btnBg={btnBg}
 				btnColor={btnColor}
+				projectId={projectId}
 			/>
 		</FormControl>
 	);

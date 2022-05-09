@@ -59,44 +59,31 @@ const Board = ({ cards, setCards, children, templateColumns, cardList }) => {
 			}
 
 			if (!!child) {
-				if (!parent) {
-					newCards[child].parentStoryId = null;
-				} else {
-					newCards[child].parentStoryId = Number(parent);
-				}
-				console.log('This is element', newCards[child].parentStoryId);
-				console.log('This is not element', newCards[child]);
-				// newCards[child].parentStoryId = !parent ? null : Number(parent);
+				newCards[child].parentStoryId = !parent ? null : Number(parent);
 			}
 
 			// add card back to the list
-			if (!newCards[destId].childStoryId) {
+			if (source.index < destination.index) {
+				newCards[srcId].childStoryId = !newCards[destId].childStoryId
+					? null
+					: Number(newCards[destId].childStoryId);
 				newCards[destId].childStoryId = Number(srcId);
 				newCards[srcId].parentStoryId = Number(destId);
-				newCards[srcId].childStoryId = null;
-			} else if (!newCards[destId].parentStoryId) {
+				const childOfSrc = newCards[srcId].childStoryId;
+				if (!!childOfSrc) {
+					newCards[childOfSrc].parentStoryId = Number(srcId);
+				}
+			} else if (source.index > destination.index) {
+				newCards[srcId].parentStoryId = !newCards[destId].parentStoryId
+					? null
+					: Number(newCards[destId].parentStoryId);
 				newCards[destId].parentStoryId = Number(srcId);
 				newCards[srcId].childStoryId = Number(destId);
-				newCards[srcId].parentStoryId = null;
+				const parentOfSrc = newCards[srcId].parentStoryId;
+				if (!!parentOfSrc) {
+					newCards[parentOfSrc].childStoryId = Number(srcId);
+				}
 			}
-			else if (source.index < destination.index) {
-				// newCards[srcId].childStoryId = Number(
-				// 	newCards[destId].childStoryId
-				// );
-				// newCards[destId].childStoryId = Number(srcId);
-				// newCards[srcId].parentStoryId = Number(destId);
-				// newCards[newCards[srcId].childStoryId].parentStoryId =
-				// 	Number(srcId);
-			}
-			// else if (source.index > destination.index) {
-			// 	newCards[srcId].parentStoryId = Number(
-			// 		newCards[destId].parentStoryId
-			// 	);
-			// 	newCards[destId].parentStoryId = Number(srcId);
-			// 	newCards[srcId].childStoryId = Number(destId);
-			// 	newCards[newCards[srcId].parentStoryId].childStoryId =
-			// 		Number(srcId);
-			// }
 		}
 		setCards(newCards);
 	};

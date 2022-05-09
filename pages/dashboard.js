@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   Flex,
   Input,
@@ -19,6 +20,7 @@ import Pagination from "../components/common/Pagination/Pagination";
 import SectionHeader from "../components/common/SectionHeader/SectionHeader";
 import CreateProjectModal from "../components/dashboard/CreateProjectModal/CreateProjectModal";
 import ProjectGrid from "../components/dashboard/ProjectGrid/ProjectGrid";
+import StoryCardDashboard from "../components/dashboard/StoryCardDashboard/StoryCardDashboard";
 import MainContainer from "../components/layout/MainContainer";
 import { digFind } from "../utils/object";
 
@@ -26,7 +28,7 @@ const Dashboard = ({ authToken }) => {
   // Get current user from cookies
   const loggedUser = jsonwebtoken.verify(
     authToken,
-    md5('EmChiXemAnhLa_#BanNhauMaThoi')
+    md5("EmChiXemAnhLa_#BanNhauMaThoi")
   );
 
   const PAGE_LIMIT = 4;
@@ -41,12 +43,21 @@ const Dashboard = ({ authToken }) => {
 
   // Input search Project
   const [searchProjectValue, setSearchProjectValue] = useState("");
-  const handleProjectChange = (event) =>
-    setSearchProjectValue(event.target.searchProjectValue);
+  const handleProjectChange = (event) => {
+    setSearchProjectValue(event.target.value);
+    if (event.target.value === "") {
+      let currentFilter = filterProject;
+      // Reset default
+      currentFilter.page = 0;
+      currentFilter.key = "";
+      setFilterProject(currentFilter);
+      fetchProject(filterProject);
+    }
+  };
 
   // Filter
   const [filterProject, setFilterProject] = useState({
-    key: '',
+    key: "",
     page: currentProjectPage - 1,
     limit: PAGE_LIMIT,
   });
@@ -59,37 +70,31 @@ const Dashboard = ({ authToken }) => {
         filter
       );
       const data = response.data;
-      const projects = digFind(data, 'content');
+      const projects = digFind(data, "content");
 
       setProjectData({
         projectList: projects,
         totalProject: data.totalElements,
       });
     } catch (error) {
-      console.log('Fail to fetch: ', error);
+      console.log("Fail to fetch: ", error);
     }
   };
 
   // Submit search name project
   const handleSearchProject = () => {
     let currentFilter = filterProject;
-    if (searchProjectValue) {
-      currentFilter.key = searchProjectValue;
-      setFilterProject(currentFilter);
-
-      fetchProject(filterProject);
-    } else {
-      currentFilter.key = '';
-      setFilterProject(currentFilter);
-      fetchProject(filterProject);
-    }
+    // Reset default
+    currentFilter.page = 0;
+    currentFilter.key = searchProjectValue;
+    setFilterProject(currentFilter);
+    fetchProject(filterProject);
   };
 
   const fetchUpdatedProject = () => {
     let currentFilter = filterProject;
     currentFilter.page = currentProjectPage - 1;
     setFilterProject(currentFilter);
-
     fetchProject(filterProject);
   };
 
@@ -99,13 +104,21 @@ const Dashboard = ({ authToken }) => {
     storyList: [],
     totalStory: 0,
   });
+  console.log("storyData: ", storyData);
   const [currentStoryPage, setCurrentStoryPage] = useState(1);
   // Input search story
   const [searchStoryValue, setSearchStoryValue] = useState("");
-  // Input sort story
-  const [sortStoryValue, setSortStoryValue] = useState("");
-  const handleStoryChange = (event) =>
-    setSortStoryValue(event.target.sortStoryValue);
+  const handleStoryChange = (event) => {
+    if (event.target.value === "") {
+      let currentFilter = filterStory;
+      // Reset default
+      currentFilter.page = 0;
+      currentFilter.key = "";
+      setFilterStory(currentFilter);
+      fetchStory(filterStory);
+    }
+    setSearchStoryValue(event.target.value);
+  };
 
   // Filter
   const [filterStory, setFilterStory] = useState({
@@ -114,43 +127,43 @@ const Dashboard = ({ authToken }) => {
     limit: PAGE_LIMIT,
     sortProp: "points",
     ascending: false,
+    projectId:
+      projectData.projectList.length > 0 ? projectData.projectList[0].id : -1,
   });
 
   // Populate Story data
   const fetchStory = async (filter) => {
-    // try {
-    //   const response = await userAPI.getAllStorys(
-    //     loggedUser.logUserId,
-    //     filter
-    //   );
-    //   const data = response.data;
-    //   const projects = digFind(data, "content");
-    //   setProjectData({
-    //     projectList: projects,
-    //     totalProject: data.totalElements,
-    //   });
-    // } catch (error) {
-    //   console.log("Fail to fetch: ", error);
-    // }
+    try {
+      const response = await userAPI.getAllStories(
+        loggedUser.logUserId,
+        filter
+      );
+      const data = response.data;
+      const stories = digFind(data, "content");
+      setStoryData({
+        storyList: stories,
+        totalStory: data.totalElements,
+      });
+    } catch (error) {
+      console.log("Fail to fetch: ", error);
+    }
   };
 
   // Submit search name project
   const handleSearchStory = () => {
-    let currentFilter = filterStory;
-    if (searchStoryValue) {
-      currentFilter.key = searchStoryValue;
-      setFilterStory(currentFilter);
-
-      fetchStory(filterStory);
-    } else {
-      currentFilter.key = "";
-      setFilterStory(currentFilter);
-      fetchStory(filterStory);
-    }
+    let currentFilter = filterProject;
+    // Reset default
+    currentFilter.page = 0;
+    currentFilter.key = searchStoryValue;
+    setFilterStory(currentFilter);
+    fetchStory(filterStory);
   };
 
   const handleSortStory = (type) => {
     let currentFilter = filterStory;
+    // Reset default
+    currentFilter.page = 0;
+    currentFilter.key = "";
 
     if (type.includes("Dsc")) {
       currentFilter.ascending = true;
@@ -165,13 +178,21 @@ const Dashboard = ({ authToken }) => {
     }
 
     setFilterStory(currentFilter);
-
     fetchStory(filterStory);
   };
 
   const fetchUpdatedStory = () => {
     let currentFilter = filterStory;
     currentFilter.page = currentStoryPage - 1;
+    setFilterStory(currentFilter);
+
+    fetchStory(filterStory);
+  };
+
+  const fetchProjectStory = (id) => {
+    let currentFilter = filterStory;
+    currentFilter.page = 0;
+    currentFilter.projectId = id;
     setFilterStory(currentFilter);
 
     fetchStory(filterStory);
@@ -193,7 +214,6 @@ const Dashboard = ({ authToken }) => {
       </Head>
       <MainContainer>
         <SectionHeader>My Projects</SectionHeader>
-
         <Flex
           justifyContent={useBreakpointValue({
             base: "center",
@@ -222,18 +242,16 @@ const Dashboard = ({ authToken }) => {
 
           <CreateProjectModal />
         </Flex>
-
         {projectData.projectList.length === 0 && (
           <NoItem icon={GoProject}>
             No project found. Please start create your first project!
           </NoItem>
         )}
-
         <ProjectGrid
           projectData={projectData.projectList}
-          fetchUpdate={fetchUpdatedProject}
+          fetchUpdatedProject={fetchUpdatedProject}
+          fetchProjectStory={fetchProjectStory}
         />
-
         <Pagination
           currentPage={currentProjectPage}
           totalCount={projectData.totalProject}
@@ -242,24 +260,21 @@ const Dashboard = ({ authToken }) => {
             setCurrentProjectPage(page);
           }}
         />
-
         <SectionHeader>Assigned to me</SectionHeader>
         <Flex
           justifyContent={useBreakpointValue({
             base: "center",
             md: "space-between",
           })}
-          alignItems="center"
           py={5}
           gap={8}
           wrap={"wrap"}
         >
-          <Flex gap={2} pb={2}>
+          <Flex gap={6}>
             <Input
               placeholder="Search for story name"
               color={useColorModeValue("#031d46", "#fffdfe")}
               value={searchStoryValue}
-              width="auto"
               onChange={handleStoryChange}
             ></Input>
             <Button
@@ -274,19 +289,27 @@ const Dashboard = ({ authToken }) => {
             placeholder="Sort"
             width="auto"
             onChange={(e) => handleSortStory(e.target.value)}
+            color={useColorModeValue("#031d46", "#fffdfe")}
           >
-            <option value="timeDsc">Recently Assigned</option>
+            <option value="timeDsc" selected="selected">
+              Recently Assigned
+            </option>
             <option value="timeAsc">Oldest Assigned</option>
             <option value="pointDsc">Point: High to Low</option>
             <option value="pointAsc">Point: Low to High</option>
           </Select>
         </Flex>
 
-        {/* {storyData.length === 0 && ( */}
-        <NoItem icon={GoChecklist}>
-          Click the red button of one project to view your task(s).
-        </NoItem>
-        {/* )} */}
+        <Box h="100%">
+          {storyData.storyList.length === 0 && (
+            <NoItem icon={GoChecklist}>
+              No task on this project. You are good to go!
+            </NoItem>
+          )}
+          {storyData.storyList.map((story) => (
+            <StoryCardDashboard key={story.id} card={story} />
+          ))}
+        </Box>
 
         <Pagination
           currentPage={currentStoryPage}
@@ -303,7 +326,7 @@ const Dashboard = ({ authToken }) => {
 
 export async function getServerSideProps(ctx) {
   const { auth } = cookies(ctx);
-  return { props: { authToken: auth || '' } };
+  return { props: { authToken: auth || "" } };
 }
 
 export default Dashboard;

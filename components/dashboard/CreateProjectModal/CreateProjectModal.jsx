@@ -85,9 +85,6 @@ const CreateProjectModal = () => {
     if (text === "") {
       setIsValid(false);
       setError("Project name can't be empty");
-    } else if (selectedItems.length === 0) {
-      setIsValid(false);
-      setError("Participant list can't be empty");
     } else {
       setIsValid(true);
       const request = {
@@ -190,7 +187,7 @@ const CreateProjectModal = () => {
               />
             </FormControl>
 
-            <FormControl mt={4} isRequired>
+            <FormControl mt={4}>
               <CUIAutoComplete
                 tagStyleProps={{
                   rounded: "full",

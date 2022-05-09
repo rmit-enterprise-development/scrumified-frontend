@@ -1,8 +1,11 @@
 import { SimpleGrid } from "@chakra-ui/react";
 import ProjectItem from "./ProjectItem/ProjectItem";
 
-const ProjectGrid = ({ projectData, fetchUpdate }) => {
-  console.log("projectData: ", projectData);
+const ProjectGrid = ({
+  projectData,
+  fetchUpdatedProject,
+  fetchProjectStory,
+}) => {
   const randomColor = [
     "green",
     "yellow",
@@ -21,7 +24,8 @@ const ProjectGrid = ({ projectData, fetchUpdate }) => {
           key={project.id}
           project={project}
           color={randomColor[project.id % randomColor.length]} // Mock for now
-          fetchUpdate={fetchUpdate}
+          fetchUpdatedProject={fetchUpdatedProject}
+          fetchProjectStory={fetchProjectStory}
         />
       ))}
     </SimpleGrid>

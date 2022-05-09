@@ -47,7 +47,7 @@ const userAPI = {
     return axiosClient.put(url, params);
   },
 
-  deleteUser: (id) => {                                   
+  deleteUser: (id) => {
     const url = `users/${id}`;
     return axiosClient.delete(url);
   },
@@ -81,7 +81,7 @@ const userAPI = {
    * @param {*} limit: Int (start with 4)
    * @returns
    */
-  getAllTasks: (id, params) => {
+  getAllStories: (id, params) => {
     const url = `users/${id}/stories`;
     return axiosClient.get(url, { params });
   },

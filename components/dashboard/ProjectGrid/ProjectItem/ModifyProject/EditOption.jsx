@@ -27,7 +27,7 @@ import { digFind } from "../../../utils/object";
 import { RouterPage } from "../../../config/router";
 import { LoggedUserContext } from "../../common/LoggedUserProvider";
 
-const CreateProjectModal = () => {
+const EditOption = () => {
   const owner = useContext(LoggedUserContext);
   const ownerInfo =
     owner.firstName + " " + owner.lastName + " (" + owner.email + ")";
@@ -264,4 +264,4 @@ const CreateProjectModal = () => {
   );
 };
 
-export default CreateProjectModal;
+export default EditOption;

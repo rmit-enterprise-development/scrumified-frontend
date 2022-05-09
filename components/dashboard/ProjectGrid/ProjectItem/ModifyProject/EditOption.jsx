@@ -1,4 +1,3 @@
-import { AddIcon } from "@chakra-ui/icons";
 import {
   Button,
   CircularProgress,
@@ -22,16 +21,15 @@ import Avvvatars from "avvvatars-react";
 import { CUIAutoComplete } from "chakra-ui-autocomplete";
 import Router from "next/router";
 import { useContext, useEffect, useRef, useState } from "react";
-import userAPI from "../../../api/services/userAPI";
-import { digFind } from "../../../utils/object";
-import { RouterPage } from "../../../config/router";
-import { LoggedUserContext } from "../../common/LoggedUserProvider";
+import userAPI from "../../../../../api/services/userAPI";
+import { digFind } from "../../../../../utils/object";
 
-const CreateProjectModal = () => {
-  const owner = useContext(LoggedUserContext);
-  const ownerInfo =
-    owner.firstName + " " + owner.lastName + " (" + owner.email + ")";
+import { RouterPage } from "../../../../../config/router";
+import { LoggedUserContext } from "../../../../common/LoggedUserProvider";
+import { AiOutlineEdit } from "react-icons/ai";
+import projectAPI from "../../../../../api/services/projectAPI";
 
+const EditOption = ({ id, name, participants, fetchUpdate }) => {
   const { colorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [searchTerm, setSearchTerm] = useState("");
@@ -44,9 +42,12 @@ const CreateProjectModal = () => {
   const finalRef = useRef();
 
   const [pickerItems, setPickerItems] = useState([]);
-  const [selectedItems, setSelectedItems] = useState([
-    { value: owner.logUserId, label: ownerInfo },
-  ]);
+  const [selectedItems, setSelectedItems] = useState(
+    participants.map((a) => {
+      const userInfo = a.firstName + " " + a.lastName + " (" + a.email + ")";
+      return { value: a.id, label: userInfo };
+    })
+  );
 
   const user = useContext(LoggedUserContext);
 
@@ -56,7 +57,7 @@ const CreateProjectModal = () => {
     }
   };
 
-  const [text, setText] = useState("");
+  const [text, setText] = useState(name);
   const handleTextChange = (event) => setText(event.target.value);
 
   const customInputRender = (inputProps) => (
@@ -104,19 +105,16 @@ const CreateProjectModal = () => {
       if (user) {
         try {
           setIsSubmitting(true);
-          const response = await userAPI.postProject(user.logUserId, request);
+          const response = await projectAPI.putProject(id, request);
 
-          // Push to project backlog with new ID
-          const projectID = response.data.id;
-
-          Router.push({
-            pathname: `${RouterPage.PROJECT}/${projectID}${RouterPage.BACKLOG}`,
-          });
+          if (response) {
+            fetchUpdate();
+          }
         } catch (error) {
           console.error("There was an error: ", error);
         } finally {
           setIsSubmitting(false);
-          onClose;
+          onClose();
         }
       }
     }
@@ -162,12 +160,16 @@ const CreateProjectModal = () => {
   return (
     <>
       <Button
-        leftIcon={<AddIcon />}
-        colorScheme="teal"
-        onClick={onOpen}
-        color={useColorModeValue("#031d46", "#2d4046")}
+        variant="ghost"
+        rightIcon={<AiOutlineEdit />}
+        justifyContent="space-between"
+        fontWeight="normal"
+        onClick={(e) => {
+          e.stopPropagation();
+          onOpen();
+        }}
       >
-        Create Project
+        Edit Project
       </Button>
 
       <Modal
@@ -179,7 +181,7 @@ const CreateProjectModal = () => {
         <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px)" />
         <ModalContent>
           <ModalHeader color={useColorModeValue("#031e49", "#fffdfe")}>
-            Create your project
+            Edit your project
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
@@ -247,15 +249,21 @@ const CreateProjectModal = () => {
             {isSubmitting && (
               <CircularProgress isIndeterminate color="green.300" />
             )}
-            <Button onClick={onClose} disabled={isSubmitting} mr={3}>
+            <Button
+              onClick={onClose}
+              disabled={isSubmitting}
+              mr={3}
+              color={useColorModeValue("#031e49", "#fffdfe")}
+            >
               Cancel
             </Button>
             <Button
               colorScheme="blue"
               onClick={handleSubmit}
               disabled={isSubmitting}
+              color={useColorModeValue("#031e49", "#fffdfe")}
             >
-              Create
+              Edit
             </Button>
           </ModalFooter>
         </ModalContent>
@@ -264,4 +272,4 @@ const CreateProjectModal = () => {
   );
 };
 
-export default CreateProjectModal;
+export default EditOption;

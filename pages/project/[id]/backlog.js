@@ -92,9 +92,9 @@ const initData = {
 };
 
 const Backlog = ({ authToken, project }) => {
-	console.log(project);
-	const participants = [project.owner, ...project.participants];
-	console.log(participants);
+	// console.log(project);
+	// const participants = [project.owner, ...project.participants];
+	// console.log(participants);
 	const { asPath } = useRouter();
 
 	const projectId = asPath.split('/')[2];
@@ -218,8 +218,8 @@ const Backlog = ({ authToken, project }) => {
 };
 
 export async function getServerSideProps(ctx) {
-	const response = await fetch(`http://127.0.0.1:8989/projects/1`);
-	const json = await response.json();
+	// const response = await fetch(`http://127.0.0.1:8989/projects/1`);
+	// const json = await response.json();
 	const { auth } = cookies(ctx);
 	return {
 		props: { authToken: auth || '', project: json },

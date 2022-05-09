@@ -55,7 +55,7 @@ const MobileNav = ({ onOpen, ...rest }) => {
     <Flex
       position="absolute"
       top="-5px"
-      right="5px"
+      right="14px"
       ml={{ base: 0, md: 60 }}
       px={{ base: 4, md: 24 }}
       height="20"

@@ -28,10 +28,6 @@ import { RouterPage } from "../../../config/router";
 import { LoggedUserContext } from "../../common/LoggedUserProvider";
 
 const CreateProjectModal = () => {
-  const owner = useContext(LoggedUserContext);
-  const ownerInfo =
-    owner.firstName + " " + owner.lastName + " (" + owner.email + ")";
-
   const { colorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [searchTerm, setSearchTerm] = useState("");
@@ -44,9 +40,7 @@ const CreateProjectModal = () => {
   const finalRef = useRef();
 
   const [pickerItems, setPickerItems] = useState([]);
-  const [selectedItems, setSelectedItems] = useState([
-    { value: owner.logUserId, label: ownerInfo },
-  ]);
+  const [selectedItems, setSelectedItems] = useState([]);
 
   const user = useContext(LoggedUserContext);
 
@@ -165,7 +159,7 @@ const CreateProjectModal = () => {
         leftIcon={<AddIcon />}
         colorScheme="teal"
         onClick={onOpen}
-        color={useColorModeValue("#031d46", "#2d4046")}
+        color={useColorModeValue("#FFFDFE", "#2d4046")}
       >
         Create Project
       </Button>

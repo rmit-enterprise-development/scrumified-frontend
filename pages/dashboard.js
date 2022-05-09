@@ -1,25 +1,31 @@
-import { Button, Flex, Input, useColorModeValue } from "@chakra-ui/react";
-import jsonwebtoken from "jsonwebtoken";
-import md5 from "md5";
-import cookies from "next-cookies";
-import Head from "next/head";
-import { useEffect, useState } from "react";
-import { GoChecklist, GoProject } from "react-icons/go";
-import userAPI from "../api/services/userAPI";
-import { LoggedUserProvider } from "../components/common/LoggedUserProvider";
-import NoItem from "../components/common/NoItem/NoItem";
-import Pagination from "../components/common/Pagination/Pagination";
-import SectionHeader from "../components/common/SectionHeader/SectionHeader";
-import CreateProjectModal from "../components/dashboard/CreateProjectModal/CreateProjectModal";
-import ProjectGrid from "../components/dashboard/ProjectGrid/ProjectGrid";
-import MainContainer from "../components/layout/MainContainer";
-import { digFind } from "../utils/object";
+import {
+  Button,
+  Flex,
+  Input,
+  useColorModeValue,
+  useBreakpointValue,
+} from '@chakra-ui/react';
+import jsonwebtoken from 'jsonwebtoken';
+import md5 from 'md5';
+import cookies from 'next-cookies';
+import Head from 'next/head';
+import { useEffect, useState } from 'react';
+import { GoChecklist, GoProject } from 'react-icons/go';
+import userAPI from '../api/services/userAPI';
+import { LoggedUserProvider } from '../components/common/LoggedUserProvider';
+import NoItem from '../components/common/NoItem/NoItem';
+import Pagination from '../components/common/Pagination/Pagination';
+import SectionHeader from '../components/common/SectionHeader/SectionHeader';
+import CreateProjectModal from '../components/dashboard/CreateProjectModal/CreateProjectModal';
+import ProjectGrid from '../components/dashboard/ProjectGrid/ProjectGrid';
+import MainContainer from '../components/layout/MainContainer';
+import { digFind } from '../utils/object';
 
 const Dashboard = ({ authToken }) => {
   // Get current user from cookies
   const loggedUser = jsonwebtoken.verify(
     authToken,
-    md5("EmChiXemAnhLa_#BanNhauMaThoi")
+    md5('EmChiXemAnhLa_#BanNhauMaThoi')
   );
 
   const PAGE_LIMIT = 4;
@@ -40,12 +46,12 @@ const Dashboard = ({ authToken }) => {
 
   //----------------Project Setting-----------------------//
   // Input search Project
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState('');
   const handleChange = (event) => setValue(event.target.value);
 
   // Filter
   const [filterProject, setFilterProject] = useState({
-    key: "",
+    key: '',
     page: currentProjectPage - 1,
     limit: PAGE_LIMIT,
   });
@@ -58,14 +64,14 @@ const Dashboard = ({ authToken }) => {
         filter
       );
       const data = response.data;
-      const projects = digFind(data, "content");
+      const projects = digFind(data, 'content');
 
       setProjectData({
         projectList: projects,
         totalProject: data.totalElements,
       });
     } catch (error) {
-      console.log("Fail to fetch: ", error);
+      console.log('Fail to fetch: ', error);
     }
   };
 
@@ -78,7 +84,7 @@ const Dashboard = ({ authToken }) => {
 
       fetchProject(filterProject);
     } else {
-      currentFilter.key = "";
+      currentFilter.key = '';
       setFilterProject(currentFilter);
       fetchProject(filterProject);
     }
@@ -107,22 +113,26 @@ const Dashboard = ({ authToken }) => {
         <SectionHeader>My Projects</SectionHeader>
 
         <Flex
-          justifyContent="space-between"
+          justifyContent={useBreakpointValue({
+            base: 'center',
+            md: 'space-between',
+          })}
           alignItems="center"
-          pb={3}
-          gap={2}
-          wrap={"wrap"}
+          py={5}
+          gap={8}
+          wrap={'wrap'}
         >
-          <Flex gap={2}>
+          <Flex gap={6}>
             <Input
               placeholder="Search for project name"
-              color={useColorModeValue("#031d46", "#fffdfe")}
+              color={useColorModeValue('#031d46', '#fffdfe')}
               value={value}
               onChange={handleChange}
             ></Input>
             <Button
               onClick={handleSearch}
-              color={useColorModeValue("#031d46", "#fffdfe")}
+              color={useColorModeValue('#031d46', '#fffdfe')}
+              px={10}
             >
               Search
             </Button>
@@ -165,7 +175,7 @@ const Dashboard = ({ authToken }) => {
 
 export async function getServerSideProps(ctx) {
   const { auth } = cookies(ctx);
-  return { props: { authToken: auth || "" } };
+  return { props: { authToken: auth || '' } };
 }
 
 export default Dashboard;

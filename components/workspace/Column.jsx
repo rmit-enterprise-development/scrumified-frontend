@@ -1,6 +1,8 @@
 import { Text, Box, Flex, Grid, useColorModeValue } from '@chakra-ui/react';
 import React from 'react';
 import { Droppable } from 'react-beautiful-dnd';
+import { GoTasklist } from 'react-icons/go';
+import NoItem from '../common/NoItem/NoItem';
 import Card from './Card';
 
 const Column = ({
@@ -35,6 +37,13 @@ const Column = ({
 					{title}
 				</Text>
 			</Box>
+
+			{cardList.length === 0 && (
+				<NoItem icon={GoTasklist}>
+					No Backlog found. Please start create your first backlog!
+				</NoItem>
+			)}
+
 			<Droppable droppableId={id}>
 				{(provided) => (
 					<Flex

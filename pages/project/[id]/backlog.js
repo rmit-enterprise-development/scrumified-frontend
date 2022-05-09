@@ -114,7 +114,7 @@ const Backlog = ({ authToken, project }) => {
 		return json;
 	};
 
-	const [cards, setCards] = useState(initData);
+	const [cards, setCards] = useState({});
 
 	// useEffect(() => {
 	// 	setTimeout(() => getCards().then((data) => setCards(data)), 100000);

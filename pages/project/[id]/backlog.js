@@ -113,11 +113,11 @@ const Backlog = ({ jsonCards, authToken }) => {
 		return json;
 	};
 
-	const [cards, setCards] = useState(initData);
+	const [cards, setCards] = useState({});
 
-	// useEffect(() => {
-	// 	setTimeout(() => getCards().then((data) => setCards(data)), 5000);
-	// }, [cards]);
+	useEffect(() => {
+		setTimeout(() => getCards().then((data) => setCards(data)), 5000);
+	}, [cards]);
 
 	const linkCards = (s) => {
 		let renderCards = [];
@@ -139,7 +139,6 @@ const Backlog = ({ jsonCards, authToken }) => {
 
 		let i = 0;
 		while (true) {
-			console.log(tmp);
 			renderCards.push(<Card key={tmp.id} card={tmp} index={i++} />);
 			if (!!tmp.childStoryId) tmp = cards[tmp.childStoryId];
 			else break;

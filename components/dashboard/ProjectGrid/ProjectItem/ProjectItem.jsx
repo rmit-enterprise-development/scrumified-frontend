@@ -8,29 +8,22 @@ import {
 } from "@chakra-ui/react";
 import Avvvatars from "avvvatars-react";
 import Router from "next/router";
+import { useContext } from "react";
 import { RouterPage } from "../../../../config/router";
+import { LoggedUserContext } from "../../../common/LoggedUserProvider";
 import ModifyButton from "./ModifyProject/ModifyButton";
 import NumberButton from "./NumberButton";
 
-const ProjectItem = ({
-  id,
-  name,
-  author,
-  createdTime,
-  color,
-  openTasks,
-  participants,
-  fetchUpdate,
-}) => {
+const ProjectItem = ({ project, color, openTasks, fetchUpdate }) => {
   const handlePushProjectDetail = () => {
     Router.push({
       pathname: `${RouterPage.PROJECT}/${id}${RouterPage.BACKLOG}`,
     });
   };
   const colorScheme = color + ".500";
-  // if (name.length > 20) {
-  //   name = textUtils.truncate(name);
-  // }
+
+  const user = useContext(LoggedUserContext);
+  console.log("user: ", user);
   return (
     <Flex
       borderColor="#2d4046"
@@ -49,29 +42,32 @@ const ProjectItem = ({
         <Box>
           <Flex pb={2} justifyContent="space-between">
             <Flex alignItems="center" flexWrap="wrap">
-              <Avvvatars style="shape" value={id} />
+              <Avvvatars style="shape" value={project.id} />
               <Text
                 fontWeight="bold"
                 pl={2}
                 color={useColorModeValue("#031d46", "#fffdfe")}
               >
-                {name}
+                {project.title}
               </Text>
             </Flex>
 
-            <ModifyButton
-              id={id}
-              name={name}
-              participants={participants}
-              fetchUpdate={fetchUpdate}
-            />
+            {user.logUserId === project.ownerId && (
+              <ModifyButton
+                id={project.id}
+                name={project.title}
+                participants={project.participants}
+                fetchUpdate={fetchUpdate}
+              />
+            )}
           </Flex>
 
           <Text color={useColorModeValue("#031d46", "#fffdfe")}>
-            Created at: {createdTime}
+            Created at:
+            {new Date(project.createdDate * 1000).toLocaleDateString("en-IN")}
           </Text>
           <Text color={useColorModeValue("#031d46", "#fffdfe")}>
-            Owned by: {author}
+            Owned by: {project.owner.firstName + " " + project.owner.lastName}
           </Text>
         </Box>
 

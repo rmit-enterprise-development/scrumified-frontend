@@ -14,16 +14,16 @@ import { useRef } from "react";
 import { AiOutlineDelete } from "react-icons/ai";
 import projectAPI from "../../../../../api/services/projectAPI";
 
-const DeleteOption = ({ id, fetchUpdate }) => {
+const DeleteOption = ({ id, fetchUpdatedProject }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef();
 
   const handleDeleteProject = async () => {
     try {
-      const response = await projectAPI.fetchUpdate(id);
+      const response = await projectAPI.deleteProject(id);
       if (response) {
         onClose();
-        fetchUpdate();
+        fetchUpdatedProject();
       }
     } catch (error) {
       console.log(error);

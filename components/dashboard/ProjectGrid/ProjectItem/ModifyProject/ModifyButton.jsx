@@ -11,7 +11,12 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import DeleteOption from "./DeleteOption";
 import EditOption from "./EditOption";
 
-export default function ModifyButton({ id, name, participants, fetchUpdate }) {
+export default function ModifyButton({
+  id,
+  name,
+  participants,
+  fetchUpdatedProject,
+}) {
   return (
     <Flex justifyContent="center" alignItems="center">
       <Menu>
@@ -30,10 +35,10 @@ export default function ModifyButton({ id, name, participants, fetchUpdate }) {
               id={id}
               name={name}
               participants={participants}
-              fetchUpdate={fetchUpdate}
+              fetchUpdatedProject={fetchUpdatedProject}
             />
 
-            <DeleteOption id={id} fetchUpdate={fetchUpdate} />
+            <DeleteOption id={id} fetchUpdatedProject={fetchUpdatedProject} />
           </Stack>
         </MenuList>
       </Menu>

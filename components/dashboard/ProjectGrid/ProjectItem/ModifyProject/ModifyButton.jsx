@@ -1,25 +1,17 @@
 import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverBody,
-  PopoverArrow,
-  IconButton,
-  Button,
-  Stack,
   Flex,
-  useColorModeValue,
+  IconButton,
   Menu,
   MenuButton,
   MenuList,
-  MenuItem,
+  Stack,
+  useColorModeValue,
 } from "@chakra-ui/react";
-import { AiOutlineEdit } from "react-icons/ai";
-
 import { BsThreeDotsVertical } from "react-icons/bs";
 import DeleteOption from "./DeleteOption";
+import EditOption from "./EditOption";
 
-export default function ServerSecondaryOptions() {
+export default function ModifyButton({ id, name, participants, fetchUpdate }) {
   return (
     <Flex justifyContent="center" alignItems="center">
       <Menu>
@@ -34,16 +26,14 @@ export default function ServerSecondaryOptions() {
         ></MenuButton>
         <MenuList>
           <Stack>
-            <Button
-              variant="ghost"
-              rightIcon={<AiOutlineEdit />}
-              justifyContent="space-between"
-              fontWeight="normal"
-              fontSize="sm"
-            >
-              Edit Project
-            </Button>
-            <DeleteOption />
+            <EditOption
+              id={id}
+              name={name}
+              participants={participants}
+              fetchUpdate={fetchUpdate}
+            />
+
+            <DeleteOption id={id} fetchUpdate={fetchUpdate} />
           </Stack>
         </MenuList>
       </Menu>

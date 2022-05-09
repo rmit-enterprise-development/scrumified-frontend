@@ -12,7 +12,16 @@ import { RouterPage } from "../../../../config/router";
 import ModifyButton from "./ModifyProject/ModifyButton";
 import NumberButton from "./NumberButton";
 
-const ProjectItem = ({ id, name, author, createdTime, color, openTasks }) => {
+const ProjectItem = ({
+  id,
+  name,
+  author,
+  createdTime,
+  color,
+  openTasks,
+  participants,
+  fetchUpdate,
+}) => {
   const handlePushProjectDetail = () => {
     Router.push({
       pathname: `${RouterPage.PROJECT}/${id}${RouterPage.BACKLOG}`,
@@ -50,7 +59,12 @@ const ProjectItem = ({ id, name, author, createdTime, color, openTasks }) => {
               </Text>
             </Flex>
 
-            <ModifyButton />
+            <ModifyButton
+              id={id}
+              name={name}
+              participants={participants}
+              fetchUpdate={fetchUpdate}
+            />
           </Flex>
 
           <Text color={useColorModeValue("#031d46", "#fffdfe")}>

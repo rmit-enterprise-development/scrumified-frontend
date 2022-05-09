@@ -105,10 +105,10 @@ const CreateProjectModal = () => {
         try {
           setIsSubmitting(true);
           const response = await userAPI.postProject(user.logUserId, request);
-          console.log("response: ", response);
+
           // Push to project backlog with new ID
           const projectID = response.data.id;
-          console.log("projectID: ", projectID);
+
           Router.push({
             pathname: `${RouterPage.PROJECT}/${projectID}${RouterPage.BACKLOG}`,
           });

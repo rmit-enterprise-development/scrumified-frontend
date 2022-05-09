@@ -8,13 +8,27 @@ import {
   AlertDialog,
   useDisclosure,
   Box,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { useRef } from "react";
 import { AiOutlineDelete } from "react-icons/ai";
+import projectAPI from "../../../../../api/services/projectAPI";
 
-const DeleteOption = () => {
+const DeleteOption = ({ id, fetchUpdate }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef();
+
+  const handleDeleteProject = async () => {
+    try {
+      const response = await projectAPI.fetchUpdate(id);
+      if (response) {
+        onClose();
+        fetchUpdate();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -22,16 +36,16 @@ const DeleteOption = () => {
         variant="ghost"
         rightIcon={<AiOutlineDelete />}
         justifyContent="space-between"
-        fontWeight="normal"
         colorScheme="red"
-        fontSize="sm"
+        fontWeight="normal"
         onClick={(e) => {
           e.stopPropagation();
-          onOpen;
+          onOpen();
         }}
       >
         Delete Project
       </Button>
+
       <AlertDialog
         isOpen={isOpen}
         leastDestructiveRef={cancelRef}
@@ -39,19 +53,32 @@ const DeleteOption = () => {
       >
         <AlertDialogOverlay>
           <AlertDialogContent>
-            <AlertDialogHeader fontSize="lg" fontWeight="bold">
+            <AlertDialogHeader
+              fontSize="lg"
+              fontWeight="bold"
+              color={useColorModeValue("#031d46", "#fffdfe")}
+            >
               Delete Project
             </AlertDialogHeader>
 
-            <AlertDialogBody>
+            <AlertDialogBody color={useColorModeValue("#031d46", "#fffdfe")}>
               Are you sure? You can&apos;t undo this action afterwards.
             </AlertDialogBody>
 
             <AlertDialogFooter>
-              <Button ref={cancelRef} onClick={onClose}>
+              <Button
+                ref={cancelRef}
+                onClick={onClose}
+                color={useColorModeValue("#031d46", "#fffdfe")}
+              >
                 Cancel
               </Button>
-              <Button colorScheme="red" onClick={onClose} ml={3}>
+              <Button
+                colorScheme="red"
+                onClick={handleDeleteProject}
+                ml={3}
+                color={useColorModeValue("#031d46", "#fffdfe")}
+              >
                 Delete
               </Button>
             </AlertDialogFooter>

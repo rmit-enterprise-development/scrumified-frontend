@@ -78,12 +78,16 @@ const Dashboard = ({ authToken }) => {
 
   const storyList = useFetchStory(loggedUser);
 
-  useEffect(() => {
+  const fetchUpdate = () => {
     let currentFilter = filterProject;
     currentFilter.page = currentProjectPage - 1;
     setFilterProject(currentFilter);
 
     fetchProject(filterProject);
+  };
+
+  useEffect(() => {
+    fetchUpdate();
   }, [currentProjectPage]);
 
   return (
@@ -128,6 +132,7 @@ const Dashboard = ({ authToken }) => {
         <ProjectGrid
           projectData={projectData.projectList}
           taskData={storyList}
+          fetchUpdate={fetchUpdate}
         />
 
         <Pagination

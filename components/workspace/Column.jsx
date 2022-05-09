@@ -38,11 +38,11 @@ const Column = ({
 				</Text>
 			</Box>
 
-			{cardList.length === 0 && (
+			{/* {cardList.length === 0 && (
 				<NoItem icon={GoTasklist}>
 					No Backlog found. Please start create your first backlog!
 				</NoItem>
-			)}
+			)} */}
 
 			<Droppable droppableId={id}>
 				{(provided) => (

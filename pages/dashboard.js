@@ -187,7 +187,7 @@ const Dashboard = ({ authToken }) => {
     }
 
     if (type.includes("time")) {
-      currentFilter.sortProp = "createDate";
+      currentFilter.sortProp = "created_date";
     } else {
       currentFilter.sortProp = "points";
     }

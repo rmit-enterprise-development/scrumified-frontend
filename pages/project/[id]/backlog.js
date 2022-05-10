@@ -184,6 +184,7 @@ const Backlog = ({ authToken }) => {
   const cardList = linkCards('backlog');
 
   const [winReady, setwinReady] = useState(false);
+  
   useEffect(() => {
     setwinReady(true);
   }, []);

@@ -20,7 +20,7 @@ import Pagination from "../components/common/Pagination/Pagination";
 import SectionHeader from "../components/common/SectionHeader/SectionHeader";
 import CreateProjectModal from "../components/dashboard/CreateProjectModal/CreateProjectModal";
 import ProjectGrid from "../components/dashboard/ProjectGrid/ProjectGrid";
-import StoryCardDashboard from "../components/dashboard/StoryCardDashboard/StoryCardDashboard";
+import StoryGrid from "../components/dashboard/StoryGrid/StoryGrid";
 import MainContainer from "../components/layout/MainContainer";
 import { digFind } from "../utils/object";
 
@@ -31,7 +31,8 @@ const Dashboard = ({ authToken }) => {
     md5("EmChiXemAnhLa_#BanNhauMaThoi")
   );
 
-  const PAGE_LIMIT = 4;
+  const PAGE_LIMIT_PROJECT = 4;
+  const PAGE_LIMIT_STORY = 2;
 
   //----------------Project Setting-----------------------//
   // Init projectData & its pagination
@@ -40,6 +41,11 @@ const Dashboard = ({ authToken }) => {
     totalProject: 0,
   });
   const [currentProjectPage, setCurrentProjectPage] = useState(1);
+
+  // Init current project name
+  const [currentProjectName, setCurrentProjectName] = useState(
+    projectData.projectList.length > 0 ? projectData.projectList[0].title : ""
+  );
 
   // Input search Project
   const [searchProjectValue, setSearchProjectValue] = useState("");
@@ -59,7 +65,7 @@ const Dashboard = ({ authToken }) => {
   const [filterProject, setFilterProject] = useState({
     key: "",
     page: currentProjectPage - 1,
-    limit: PAGE_LIMIT,
+    limit: PAGE_LIMIT_PROJECT,
   });
 
   // Populate project data
@@ -76,6 +82,14 @@ const Dashboard = ({ authToken }) => {
         projectList: projects,
         totalProject: data.totalElements,
       });
+      // Set current project name
+      setCurrentProjectName(projects[0].title);
+      // Set current story
+      let currentFilter = filterStory;
+      currentFilter.page = 0;
+      currentFilter.projectId = projects[0].id;
+      setFilterStory(currentFilter);
+      fetchStory(filterStory);
     } catch (error) {
       console.log("Fail to fetch: ", error);
     }
@@ -105,6 +119,7 @@ const Dashboard = ({ authToken }) => {
     totalStory: 0,
   });
   console.log("storyData: ", storyData);
+
   const [currentStoryPage, setCurrentStoryPage] = useState(1);
   // Input search story
   const [searchStoryValue, setSearchStoryValue] = useState("");
@@ -124,7 +139,7 @@ const Dashboard = ({ authToken }) => {
   const [filterStory, setFilterStory] = useState({
     key: "",
     page: currentStoryPage - 1,
-    limit: PAGE_LIMIT,
+    limit: PAGE_LIMIT_STORY,
     sortProp: "points",
     ascending: false,
     projectId:
@@ -172,7 +187,7 @@ const Dashboard = ({ authToken }) => {
     }
 
     if (type.includes("time")) {
-      currentFilter.sortProp = "createdDate";
+      currentFilter.sortProp = "created_date";
     } else {
       currentFilter.sortProp = "points";
     }
@@ -194,7 +209,9 @@ const Dashboard = ({ authToken }) => {
     currentFilter.page = 0;
     currentFilter.projectId = id;
     setFilterStory(currentFilter);
-
+    setCurrentProjectName(
+      projectData.projectList.find((x) => x.id === id).title
+    );
     fetchStory(filterStory);
   };
 
@@ -243,9 +260,7 @@ const Dashboard = ({ authToken }) => {
           <CreateProjectModal />
         </Flex>
         {projectData.projectList.length === 0 && (
-          <NoItem icon={GoProject}>
-            No project found. Please start create your first project!
-          </NoItem>
+          <NoItem icon={GoProject}>No project found!</NoItem>
         )}
         <ProjectGrid
           projectData={projectData.projectList}
@@ -255,7 +270,7 @@ const Dashboard = ({ authToken }) => {
         <Pagination
           currentPage={currentProjectPage}
           totalCount={projectData.totalProject}
-          pageSize={PAGE_LIMIT} // Fixed size
+          pageSize={PAGE_LIMIT_PROJECT} // Fixed size
           onPageChange={(page) => {
             setCurrentProjectPage(page);
           }}
@@ -286,39 +301,33 @@ const Dashboard = ({ authToken }) => {
           </Flex>
 
           <Select
-            placeholder="Sort"
             width="auto"
             onChange={(e) => handleSortStory(e.target.value)}
             color={useColorModeValue("#031d46", "#fffdfe")}
+            defaultValue="pointDsc"
           >
-            <option value="timeDsc" selected="selected">
-              Recently Assigned
-            </option>
-            <option value="timeAsc">Oldest Assigned</option>
             <option value="pointDsc">Point: High to Low</option>
             <option value="pointAsc">Point: Low to High</option>
+            <option value="timeDsc">Recently Assigned</option>
+            <option value="timeAsc">Oldest Assigned</option>
           </Select>
         </Flex>
 
         <Box h="100%">
-          {storyData.storyList.length === 0 && (
+          {projectData.projectList.length === 0 ? (
             <NoItem icon={GoChecklist}>
-              No task on this project. You are good to go!
+              No task found in any project. Enjoy your day!
             </NoItem>
+          ) : (
+            <StoryGrid
+              storyData={storyData}
+              projectTitle={currentProjectName}
+              currentStoryPage={currentStoryPage}
+              setCurrentStoryPage={setCurrentStoryPage}
+              pageLimit={PAGE_LIMIT_STORY}
+            />
           )}
-          {storyData.storyList.map((story) => (
-            <StoryCardDashboard key={story.id} card={story} />
-          ))}
         </Box>
-
-        <Pagination
-          currentPage={currentStoryPage}
-          totalCount={storyData.totalStory}
-          pageSize={PAGE_LIMIT} // Fixed size
-          onPageChange={(page) => {
-            setCurrentStoryPage(page);
-          }}
-        />
       </MainContainer>
     </LoggedUserProvider>
   );

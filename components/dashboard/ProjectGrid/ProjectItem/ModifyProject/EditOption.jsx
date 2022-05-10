@@ -26,7 +26,7 @@ import userAPI from "../../../../../api/services/userAPI";
 import { digFind } from "../../../../../utils/object";
 import { LoggedUserContext } from "../../../../common/LoggedUserProvider";
 
-const EditOption = ({ id, name, participants, fetchUpdate }) => {
+const EditOption = ({ id, name, participants, fetchUpdatedProject }) => {
   const { colorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [searchTerm, setSearchTerm] = useState("");
@@ -40,10 +40,13 @@ const EditOption = ({ id, name, participants, fetchUpdate }) => {
 
   const [pickerItems, setPickerItems] = useState([]);
   const [selectedItems, setSelectedItems] = useState(
-    participants.map((a) => {
-      const userInfo = a.firstName + " " + a.lastName + " (" + a.email + ")";
-      return { value: a.id, label: userInfo };
-    })
+    participants
+      ? participants.map((a) => {
+          const userInfo =
+            a.firstName + " " + a.lastName + " (" + a.email + ")";
+          return { value: a.id, label: userInfo };
+        })
+      : []
   );
 
   const user = useContext(LoggedUserContext);
@@ -89,9 +92,6 @@ const EditOption = ({ id, name, participants, fetchUpdate }) => {
     if (text === "") {
       setIsValid(false);
       setError("Project name can't be empty");
-    } else if (selectedItems.length === 0) {
-      setIsValid(false);
-      setError("Participant list can't be empty");
     } else {
       setIsValid(true);
       const request = {
@@ -105,7 +105,7 @@ const EditOption = ({ id, name, participants, fetchUpdate }) => {
           const response = await projectAPI.putProject(id, request);
 
           if (response) {
-            fetchUpdate();
+            fetchUpdatedProject();
           }
         } catch (error) {
           console.error("There was an error: ", error);

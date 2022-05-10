@@ -28,6 +28,7 @@ const BacklogController = ({
 	btnColor,
 	btnBg,
 	projectId,
+	participants,
 }) => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -96,6 +97,7 @@ const BacklogController = ({
 				btnBg={btnBg}
 				btnColor={btnColor}
 				projectId={projectId}
+				participants={participants}
 			/>
 		</FormControl>
 	);

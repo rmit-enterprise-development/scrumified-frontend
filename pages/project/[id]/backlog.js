@@ -91,20 +91,25 @@ const initData = {
 	},
 };
 
-const Backlog = ({ authToken, project }) => {
-	// console.log(project);
-	// const participants = [project.owner, ...project.participants];
-	// console.log(participants);
+const Backlog = ({ authToken }) => {
 	const { asPath } = useRouter();
 
 	const projectId = asPath.split('/')[2];
 
+	const getParticipants = async () => {
+		const response = await fetch(
+			`http://127.0.0.1:8989/projects/${projectId}`
+		);
+		const json = await response.json();
+		console.log(json);
+		return [json.owner, ...json.participants];
+	};
+
 	const getCards = async () => {
 		// const getStoryStatus = await projectAPI.getAllStories(id);
 		// return getStoryStatus.data;
-
 		const response = await fetch(
-			`http://127.0.0.1:8989/projects/${id}/stories?isBacklog=true`,
+			`http://127.0.0.1:8989/projects/${projectId}/stories?isBacklog=true`,
 			{
 				method: 'GET',
 				mode: 'cors',
@@ -115,10 +120,27 @@ const Backlog = ({ authToken, project }) => {
 	};
 
 	const [cards, setCards] = useState({});
+	const [participants, setParticipants] = useState([]);
 
-	// useEffect(() => {
-	// 	setTimeout(() => getCards().then((data) => setCards(data)), 100000);
-	// }, [cards]);
+	useEffect(() => {
+		// setTimeout(() => getCards().then((data) => setCards(data)), 100000);
+		getCards().then((data) => setCards(data));
+		getParticipants().then((data) => setParticipants(data));
+
+		let uri = 'http://127.0.0.1:8989/backlog';
+		let eventSource = new EventSource(uri);
+		eventSource.onopen = (e) => {
+			console.log('Open World!');
+		};
+		eventSource.addEventListener('abc', (e) => {
+			console.log(JSON.parse(e.data));
+			console.log(typeof e.data);
+		});
+
+		return () => {
+			eventSource.close();
+		};
+	}, []);
 
 	let bg = useColorModeValue('white', '#405A7D');
 	let color = useColorModeValue('#031d46', '#fffdfe');
@@ -189,6 +211,7 @@ const Backlog = ({ authToken, project }) => {
 						btnBg={btnBg}
 						btnColor={btnColor}
 						projectId={projectId}
+						participants={participants}
 					/>
 					{winReady ? (
 						<Board
@@ -218,12 +241,10 @@ const Backlog = ({ authToken, project }) => {
 };
 
 export async function getServerSideProps(ctx) {
-	// const response = await fetch(`http://127.0.0.1:8989/projects/1`);
-	// const json = await response.json();
 	const { auth } = cookies(ctx);
 	return {
-		props: { authToken: auth || '', 
-		// project: json 
+		props: {
+			authToken: auth || '',
 		},
 	};
 }

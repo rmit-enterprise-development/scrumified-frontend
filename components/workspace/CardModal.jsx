@@ -33,6 +33,7 @@ const CardModal = ({
 	projectId,
 	participants,
 }) => {
+	console.log(participants);
 	const [card, setCard] = useState({
 		asA: '',
 		iNeed: '',
@@ -210,7 +211,11 @@ const CardModal = ({
 								setIsValidPoint(isValidInput(e.target.value));
 							}}
 						>
-							<option value="1">User name</option>
+							{participants && participants.map((participant, idx) => (
+								<option key={idx} value={participant.id}>
+									{participant.email}
+								</option>
+							))}
 						</Select>
 					</FormControl>
 				</ModalBody>

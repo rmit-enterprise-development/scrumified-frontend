@@ -9,10 +9,15 @@ import {
 } from "@chakra-ui/react";
 import Avvvatars from "avvvatars-react";
 import Router from "next/router";
-import { RouterPage } from "../../../config/router";
+import { useContext } from "react";
+import { RouterPage } from "../../../../config/router";
+import { LoggedUserContext } from "../../../common/LoggedUserProvider";
 
 const StoryCardDashboard = ({ card }) => {
   const colorScheme = "red" + ".500";
+  const user = useContext(LoggedUserContext);
+  const userInfo =
+    user.firstName + " " + user.lastName + " (" + user.email + ")";
   return (
     <Box
       _hover={{
@@ -48,7 +53,7 @@ const StoryCardDashboard = ({ card }) => {
       >
         <Flex alignItems={"center"}>
           <Text paddingRight={2}>Assignees:</Text>
-          <Avvvatars value="Minh Pham" size="25" />
+          <Avvvatars value={userInfo} size="25" />
         </Flex>
         <Flex alignItems={"center"}>
           <Badge colorScheme="green" borderRadius={"4px"} marginRight={2}>

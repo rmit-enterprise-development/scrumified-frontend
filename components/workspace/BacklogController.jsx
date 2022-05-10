@@ -1,12 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
 	Flex,
 	Spacer,
 	Text,
-	Box,
-	InputGroup,
-	Input,
-	Button,
 	FormControl,
 	Select,
 	HStack,
@@ -14,7 +10,7 @@ import {
 	IconButton,
 } from '@chakra-ui/react';
 
-import { AddIcon, HamburgerIcon } from '@chakra-ui/icons';
+import { AddIcon } from '@chakra-ui/icons';
 
 import { IoFilterSharp } from 'react-icons/io5';
 
@@ -32,7 +28,6 @@ const BacklogController = ({
 }) => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 
-	const [iconFilter, setIConFilter] = useState('');
 	return (
 		<FormControl>
 			<Flex>

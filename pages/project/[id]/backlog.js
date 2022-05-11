@@ -192,8 +192,18 @@ const Backlog = ({ authToken }) => {
 
 			let i = 0;
 			while (true) {
-				console.log(tmp);
-				renderCards.push(<Card key={tmp.id} card={tmp} index={i++} bg={bg} color={color} btnBg={btnBg} btnColor={btnColor} />);
+				renderCards.push(
+					<Card
+						key={tmp.id}
+						card={tmp}
+						index={i++}
+						participants={participants}
+						bg={bg}
+						color={color}
+						btnBg={btnBg}
+						btnColor={btnColor}
+					/>
+				);
 				if (!!tmp.childStoryId) tmp = data[tmp.childStoryId];
 				else break;
 			}

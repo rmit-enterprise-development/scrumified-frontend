@@ -28,34 +28,21 @@ const CardModal = ({
 	participants,
 	prevCard,
 }) => {
-	console.log(prevCard);
-	// const userStory = prevCard.userStory;
-	// const asA = userStory.split(',');
+	console.log(participants);
 	let initCard = {
-		asA: '',
-		iNeed: '',
-		soThat: '',
+		userStory: '',
 		point: '',
 		category: '',
 		def: '',
-		participant: 0,
+		assignId: 0,
 	};
 	if (!!prevCard) {
-		initCard = {
-			asA: 'Hello',
-			iNeed: '',
-			soThat: '',
-			point: prevCard.point,
-			category: '',
-			def: 'Hello',
-			participant: 0,
-		};
+		initCard = prevCard;
+		console.log(prevCard);
 	}
-	const [card, setCard] = useState(initCard);
 
-	const [isValidAsA, setIsValidAsA] = useState(false);
-	const [isValidINeed, setIsValidINeed] = useState(false);
-	const [isValidSoThat, setIsValidSoThat] = useState(false);
+	const [card, setCard] = useState(initCard);
+	const [isValidUserStory, setIsValidUserStory] = useState(false);
 	const [isValidPoint, setIsValidPoint] = useState(false);
 	const [isValidDef, setIsValidDef] = useState(false);
 
@@ -91,99 +78,44 @@ const CardModal = ({
 		<Modal
 			isCentered
 			isOpen={isOpen}
-			onClose={onClose}
+			onClose={() => {
+				setCard(initCard);
+				onClose();
+			}}
 			scrollBehavior={'inside'}
 		>
 			<ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px)" />
 			<ModalContent borderRadius={'1rem'} padding={'1rem'}>
 				<ModalHeader color={color}>Create User Story</ModalHeader>
 				<ModalBody color={color}>
-					<FormControl>
-						<Flex alignItems={'center'}>
-							<FormLabel
-								htmlFor="person"
-								fontSize={'xl'}
-								marginBottom={0}
-							>
-								As a
-							</FormLabel>
-							<Input
-								id="person"
-								flex={1}
-								paddingX={'0.5rem'}
-								variant="flushed"
-								value={prevCard ? prevCard.userStory : ''}
-								placeholder="Who is responsible?"
-								onChange={(e) => {
-									setCard({ ...card, asA: e.target.value });
-									setIsValidAsA(isValidInput(e.target.value));
-								}}
-							/>
-						</Flex>
+					<FormControl mt={4}>
+						<FormLabel htmlFor="userStory" fontSize={'lg'}>
+							User Story
+						</FormLabel>
+						<Textarea
+							id="userStory"
+							defaultValue={card.userStory}
+							placeholder="As a ... I need ... So that ..."
+							resize={'none'}
+							onBlur={(e) => {
+								setCard({ ...card, userStory: e.target.value });
+								setIsValidUserStory(
+									isValidInput(e.target.value)
+								);
+							}}
+						/>
 					</FormControl>
 
 					<FormControl mt={4}>
-						<Flex alignItems={'center'}>
-							<FormLabel
-								htmlFor="todo"
-								fontSize={'xl'}
-								marginBottom={0}
-							>
-								I need
-							</FormLabel>
-							<Input
-								id="todo"
-								flex={1}
-								paddingX={'0.5rem'}
-								variant="flushed"
-								placeholder="What is the task?"
-								onChange={(e) => {
-									setCard({ ...card, iNeed: e.target.value });
-									setIsValidINeed(
-										isValidInput(e.target.value)
-									);
-								}}
-							/>
-						</Flex>
-					</FormControl>
-
-					<FormControl mt={4}>
-						<Flex alignItems={'center'}>
-							<FormLabel
-								htmlFor="explaination"
-								fontSize={'xl'}
-								marginBottom={0}
-							>
-								So that
-							</FormLabel>
-							<Input
-								id="explaination"
-								flex={1}
-								paddingX={'0.5rem'}
-								variant="flushed"
-								placeholder="Why does the task is important?"
-								onChange={(e) => {
-									setCard({
-										...card,
-										soThat: e.target.value,
-									});
-									setIsValidSoThat(
-										isValidInput(e.target.value)
-									);
-								}}
-							/>
-						</Flex>
-					</FormControl>
-
-					<FormControl mt={4}>
-						<FormLabel htmlFor="definition" fontSize={'xl'}>
+						<FormLabel htmlFor="definition" fontSize={'lg'}>
 							Definition of Done
 						</FormLabel>
 						<Textarea
 							id="definition"
+							defaultValue={card.def}
 							placeholder="Requirement to complete a task"
 							resize={'none'}
-							onChange={(e) => {
+							onBlur={(e) => {
 								setCard({ ...card, def: e.target.value });
 								setIsValidDef(isValidInput(e.target.value));
 							}}
@@ -191,13 +123,14 @@ const CardModal = ({
 					</FormControl>
 
 					<FormControl mt={4}>
-						<FormLabel htmlFor="point" fontSize={'xl'}>
+						<FormLabel htmlFor="point" fontSize={'lg'}>
 							Story point:
 						</FormLabel>
 						<Select
 							id="point"
+							defaultValue={card.point}
 							placeholder="Select point"
-							onChange={(e) => {
+							onBlur={(e) => {
 								setCard({ ...card, point: e.target.value });
 								setIsValidPoint(isValidInput(e.target.value));
 							}}
@@ -214,22 +147,29 @@ const CardModal = ({
 					<FormControl mt={4}></FormControl>
 
 					<FormControl mt={4}>
-						<FormLabel htmlFor="participant" fontSize={'xl'}>
+						<FormLabel htmlFor="participant" fontSize={'lg'}>
 							Assignee:
 						</FormLabel>
 						<Select
 							id="participant"
+							defaultValue={card.assignId}
 							placeholder="Select participant"
-							onChange={(e) => {
+							onBlur={(e) => {
 								setCard({
 									...card,
-									participant: e.target.value,
+									assignId: e.target.value,
 								});
 							}}
 						>
 							{participants &&
 								participants.map((participant, idx) => (
-									<option key={idx} value={participant.id}>
+									<option
+										key={idx}
+										value={participant.id}
+										selected={
+											card.assignId === participant.id
+										}
+									>
 										{participant.email}
 									</option>
 								))}
@@ -248,51 +188,33 @@ const CardModal = ({
 					<Button
 						colorScheme={'telegram'}
 						isDisabled={
-							!(
-								isValidAsA &&
-								isValidINeed &&
-								isValidSoThat &&
-								isValidDef &&
-								isValidPoint
-							)
+							!(isValidUserStory && isValidDef && isValidPoint)
 						}
 						onClick={() => {
 							if (
-								isValidAsA &&
-								isValidINeed &&
-								isValidSoThat &&
+								isValidUserStory &&
 								isValidDef &&
 								isValidPoint
 							) {
 								const result = {
-									userStory:
-										'As a ' +
-										card.asA +
-										', I need ' +
-										card.iNeed +
-										'. So that, ' +
-										card.soThat,
+									userStory: card.userStory,
 									point: card.point,
 									category: 'abc',
 									def: card.def,
 									status: 'backlog',
-									assignId: card.participant,
+									assignId: card.assignId,
 								};
 
 								createCard(result);
 								setCard({
-									asA: '',
-									iNeed: '',
-									soThat: '',
+									userStory: '',
 									point: '',
 									category: '',
 									def: '',
-									participant: 0,
+									assignId: 0,
 								});
 
-								setIsValidAsA(false);
-								setIsValidINeed(false);
-								setIsValidSoThat(false);
+								setIsValidUserStory(false);
 								setIsValidPoint(false);
 								setIsValidDef(false);
 

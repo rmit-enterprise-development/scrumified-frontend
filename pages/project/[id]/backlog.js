@@ -3,6 +3,7 @@ import cookies from 'next-cookies';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState, useRef } from 'react';
+import projectAPI from '../../../api/services/projectAPI';
 import { LoggedUserProvider } from '../../../components/common/LoggedUserProvider';
 import SectionHeader from '../../../components/common/SectionHeader/SectionHeader';
 import MainContainer from '../../../components/layout/MainContainer';
@@ -103,10 +104,8 @@ const Backlog = ({ authToken }) => {
 	const projectId = asPath.split('/')[2];
 
 	const getParticipants = async () => {
-		const response = await fetch(
-			`https://scrumified-dev-bakend.herokuapp.com/projects/${projectId}`
-		);
-		const json = await response.json();
+		const response = await projectAPI.getProject(projectId);
+		const json = response.data;
 		if (json.participants) {
 			return [json.owner, ...json.participants];
 		} else {
@@ -115,14 +114,10 @@ const Backlog = ({ authToken }) => {
 	};
 
 	const getCards = async () => {
-		const response = await fetch(
-			`https://scrumified-dev-bakend.herokuapp.com/projects/${projectId}/stories?isBacklog=true`,
-			{
-				method: 'GET',
-				mode: 'cors',
-			}
-		);
-		const json = response.json();
+		const response = await projectAPI.getAllStories(projectId, {
+			isBacklog: true,
+		});
+		const json = response.data;
 		return json;
 	};
 

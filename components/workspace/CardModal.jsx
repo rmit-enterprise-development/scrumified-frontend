@@ -40,12 +40,13 @@ const CardModal = ({
 		initCard = prevCard;
 	}
 
-	const [card, setCard] = useState(initCard);
-	const [isValidUserStory, setIsValidUserStory] = useState(false);
-	const [isValidPoint, setIsValidPoint] = useState(false);
-	const [isValidDef, setIsValidDef] = useState(false);
-
 	const isValidInput = (value) => value.length > 0;
+
+	const [card, setCard] = useState(initCard);
+
+	const [isValidUserStory, setIsValidUserStory] = useState(isCard);
+	const [isValidPoint, setIsValidPoint] = useState(isCard);
+	const [isValidDef, setIsValidDef] = useState(isCard);
 
 	const createCard = (submitData) => {
 		const requestOptions = {
@@ -83,6 +84,31 @@ const CardModal = ({
 		console.log('submit:', submitData);
 		fetch(
 			`https://scrumified-dev-bakend.herokuapp.com/stories/${submitData.id}`,
+			requestOptions
+		)
+			.then(async (response) => {
+				const isJson = response.headers
+					.get('content-Type')
+					?.includes('application/json');
+				const data = isJson && (await response.json());
+
+				if (!response.ok) {
+					const error = (data && data.message) || response.status;
+					return Promise.reject(error);
+				}
+			})
+			.catch((error) => {
+				console.error(error);
+			});
+	};
+
+	const deleteCard = (id) => {
+		const requestOptions = {
+			method: 'DELETE',
+		};
+		console.log('Delete');
+		fetch(
+			`https://scrumified-dev-bakend.herokuapp.com/stories/${id}`,
 			requestOptions
 		)
 			.then(async (response) => {
@@ -198,8 +224,21 @@ const CardModal = ({
 					</FormControl>
 				</ModalBody>
 				<ModalFooter>
+					{isCard && (
+						<Button
+							colorScheme={'red'}
+							variant={'outline'}
+							onClick={() => {
+								deleteCard(card.id);
+								onClose();
+							}}
+							mr={4}
+						>
+							Delete
+						</Button>
+					)}
 					<Button
-						colorScheme={'red'}
+						colorScheme={'gray'}
 						variant={'outline'}
 						onClick={onClose}
 						mr={4}

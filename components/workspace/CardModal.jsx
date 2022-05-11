@@ -33,7 +33,7 @@ const CardModal = ({
 		userStory: '',
 		point: '',
 		category: '',
-		def: '',
+		defOfDone: '',
 		assignId: 0,
 	};
 	if (!!prevCard) {
@@ -54,7 +54,7 @@ const CardModal = ({
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify(submitData),
 		};
-
+		console.log('submit:', submitData);
 		fetch(
 			`https://scrumified-dev-bakend.herokuapp.com/projects/${projectId}/stories`,
 			requestOptions
@@ -112,11 +112,11 @@ const CardModal = ({
 						</FormLabel>
 						<Textarea
 							id="definition"
-							defaultValue={card.def}
+							defaultValue={card.defOfDone}
 							placeholder="Requirement to complete a task"
 							resize={'none'}
 							onBlur={(e) => {
-								setCard({ ...card, def: e.target.value });
+								setCard({ ...card, defOfDone: e.target.value });
 								setIsValidDef(isValidInput(e.target.value));
 							}}
 						/>
@@ -163,13 +163,7 @@ const CardModal = ({
 						>
 							{participants &&
 								participants.map((participant, idx) => (
-									<option
-										key={idx}
-										value={participant.id}
-										selected={
-											card.assignId === participant.id
-										}
-									>
+									<option key={idx} value={participant.id}>
 										{participant.email}
 									</option>
 								))}
@@ -200,7 +194,7 @@ const CardModal = ({
 									userStory: card.userStory,
 									point: card.point,
 									category: 'abc',
-									def: card.def,
+									defOfDone: card.defOfDone,
 									status: 'backlog',
 									assignId: card.assignId,
 								};
@@ -210,7 +204,7 @@ const CardModal = ({
 									userStory: '',
 									point: '',
 									category: '',
-									def: '',
+									defOfDone: '',
 									assignId: 0,
 								});
 

@@ -4,13 +4,13 @@ import {
   Text,
   useColorModeValue,
   useBreakpointValue,
-} from '@chakra-ui/react';
-import { GoChecklist } from 'react-icons/go';
-import NoItem from '../../common/NoItem/NoItem';
-import Pagination from '../../common/Pagination/Pagination';
-import StoryCardDashboard from './StoryCardDashboard/StoryCardDashboard';
+} from "@chakra-ui/react";
+import { GoChecklist } from "react-icons/go";
+import NoItem from "../../common/NoItem/NoItem";
+import Pagination from "../../common/Pagination/Pagination";
+import StoryCardDashboard from "./StoryCardDashboard/StoryCardDashboard";
 
-const StoryGrid = ({
+const StaticBoardDashboard = ({
   projectTitle,
   storyData,
   currentStoryPage,
@@ -20,24 +20,24 @@ const StoryGrid = ({
   return (
     <Flex
       maxH="17.5rem"
-      mb={useBreakpointValue({ base: '2rem', md: 0 })}
-      flexDir={'column'}
+      mb={useBreakpointValue({ base: "2rem", md: 0 })}
+      flexDir={"column"}
       boxSizing="border-box"
       overflow="hidden"
       bgGradient={useColorModeValue(
-        'linear(gray.50 0%, gray.100 100%)',
-        'linear(blue.800 0%, blue.900 100%)'
+        "linear(gray.50 0%, gray.100 100%)",
+        "linear(blue.800 0%, blue.900 100%)"
       )}
       boxShadow="base"
-      borderRadius={'1rem'}
+      borderRadius={"1rem"}
       py={2.5}
       px={4}
     >
       <Text
-        textAlign={'center'}
-        fontSize={'xl'}
-        fontWeight={'bold'}
-        color={useColorModeValue('#031d46', '#fffdfe')}
+        textAlign={"center"}
+        fontSize={"xl"}
+        fontWeight={"bold"}
+        color={useColorModeValue("#031d46", "#fffdfe")}
         pb={4}
       >
         Project: {projectTitle}
@@ -61,4 +61,4 @@ const StoryGrid = ({
   );
 };
 
-export default StoryGrid;
+export default StaticBoardDashboard;

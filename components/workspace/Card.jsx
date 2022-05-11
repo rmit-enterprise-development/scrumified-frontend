@@ -103,6 +103,7 @@ const Card = ({ participants, bg, color, btnColor, btnBg, card, ...props }) => {
 						onClose={onClose}
 						prevCard={card}
 						participants={participants}
+						isCard={true}
 					/>
 				</>
 			)}

@@ -2,7 +2,7 @@ import { Box, useColorModeValue } from '@chakra-ui/react';
 import cookies from 'next-cookies';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { LoggedUserProvider } from '../../../components/common/LoggedUserProvider';
 import SectionHeader from '../../../components/common/SectionHeader/SectionHeader';
 import MainContainer from '../../../components/layout/MainContainer';
@@ -89,6 +89,15 @@ const initData = {
 var isEvtSrcOpenedOnce = false;
 
 const Backlog = ({ authToken }) => {
+	let bg = useColorModeValue('white', '#405A7D');
+	let color = useColorModeValue('#031d46', '#fffdfe');
+	let btnBg = useColorModeValue('gray.200', '#fffdfe');
+	let btnColor = 'black';
+	let bgGradient = useColorModeValue(
+		'linear(gray.50 0%, gray.100 100%)',
+		'linear(blue.800 0%, blue.900 100%)'
+	);
+
 	const { asPath } = useRouter();
 
 	const projectId = asPath.split('/')[2];
@@ -98,7 +107,6 @@ const Backlog = ({ authToken }) => {
 			`https://scrumified-dev-bakend.herokuapp.com/projects/${projectId}`
 		);
 		const json = await response.json();
-		console.log(json);
 		if (json.participants) {
 			return [json.owner, ...json.participants];
 		} else {
@@ -119,85 +127,83 @@ const Backlog = ({ authToken }) => {
 	};
 
 	const [cards, setCards] = useState({});
+	const cardsRef = useRef(cards);
+	const [cardList, setCardList] = useState([]);
 	const [participants, setParticipants] = useState([]);
 
 	useEffect(() => {
-		getCards().then((data) => setCards(data));
+		getCards().then((data) => {
+			cardsRef.current = data;
+			return setCards(data);
+		});
 		getParticipants().then((data) => setParticipants(data));
 
-		const uri = 'https://scrumified-dev-bakend.herokuapp.com/backlog';
-		let eventSource = new EventSource(uri);
-
-		eventSource.onopen = (e) => {
-			if (isEvtSrcOpenedOnce) {
-				eventSource.close();
-			} else {
-				console.log('Open Backlog Event Source!');
-				isEvtSrcOpenedOnce = true;
+		const handleReceiveCard = (e) => {
+			const newCard = JSON.parse(e.data);
+			const newCards = { ...cardsRef.current };
+			newCards[newCard.id] = newCard;
+			if (!!newCard.parentStoryId) {
+				newCards[Number(newCard.parentStoryId)].childStoryId =
+					newCard.id;
 			}
+			cardsRef.current = newCards;
+			setCards(newCards);
+			console.log('new cards', newCards);
 		};
 
-		eventSource.addEventListener('Fired', (e) => {
-			const newCard = JSON.parse(e.data);
-			const newCards = { ...cards };
-			newCards[newCard.id] = newCard;
-			setCards(newCards);
-			console.log(newCards);
-		});
-
+		const uri = `https://scrumified-dev-bakend.herokuapp.com/backlog?projectId=${projectId}`;
+		let eventSource = new EventSource(uri);
+		eventSource.onopen = (e) => {
+			if (isEvtSrcOpenedOnce) {
+				// eventSource.close();
+			} else {
+				isEvtSrcOpenedOnce = true;
+			}
+			console.log('Open Backlog Event Source!');
+		};
+		eventSource.onmessage = (e) => {
+			console.log('on message', e.data);
+		};
+		eventSource.addEventListener('created', handleReceiveCard);
 		return () => {
 			eventSource.close();
 		};
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	let bg = useColorModeValue('white', '#405A7D');
-	let color = useColorModeValue('#031d46', '#fffdfe');
-	let btnBg = useColorModeValue('gray.200', '#fffdfe');
-	let btnColor = 'black';
-	let bgGradient = useColorModeValue(
-		'linear(gray.50 0%, gray.100 100%)',
-		'linear(blue.800 0%, blue.900 100%)'
-	);
-
-	const linkCards = (s) => {
-		let renderCards = [];
-		if (Object.keys(cards).length === 0) {
-			return renderCards;
-		}
-
-		let tmp = null;
-		for (let key in cards) {
-			if (
-				cards.hasOwnProperty(key) &&
-				!cards[key].parentStoryId &&
-				cards[key].status === s
-			) {
-				tmp = cards[key];
-				break;
+	useEffect(() => {
+		const linkCards = (data, category) => {
+			console.log(data);
+			let renderCards = [];
+			if (Object.keys(data).length === 0) {
+				return renderCards;
 			}
-		}
 
-		let i = 0;
-		while (true) {
-			renderCards.push(
-				<Card
-					key={tmp.id}
-					card={tmp}
-					index={i++}
-					bg={bg}
-					color={color}
-					btnBg={btnBg}
-					btnColor={btnColor}
-				/>
-			);
-			if (!!tmp.childStoryId) tmp = cards[tmp.childStoryId];
-			else break;
-		}
-		return renderCards;
-	};
+			let tmp = null;
+			for (let key in data) {
+				if (
+					cards.hasOwnProperty(key) &&
+					!data[key].parentStoryId &&
+					data[key].status === category
+				) {
+					tmp = data[key];
+					break;
+				}
+			}
 
-	const cardList = linkCards('backlog');
+			let i = 0;
+			while (true) {
+				console.log(tmp);
+				renderCards.push(<Card key={tmp.id} card={tmp} index={i++} bg={bg} color={color} btnBg={btnBg} btnColor={btnColor} />);
+				if (!!tmp.childStoryId) tmp = data[tmp.childStoryId];
+				else break;
+			}
+			console.log(renderCards);
+			return renderCards;
+		};
+		console.log('cardList', cardsRef.current);
+		const tmp = linkCards(cardsRef.current, 'backlog');
+		setCardList(tmp);
+	}, [bg, cards, color]);
 
 	const [winReady, setwinReady] = useState(false);
 

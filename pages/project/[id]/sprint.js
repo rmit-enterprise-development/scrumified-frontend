@@ -82,7 +82,11 @@ const Sprint = ({ authToken }) => {
       <MainContainer>
         <SectionHeader>Active Sprint</SectionHeader>
         {winReady ? (
-          <Board data={data} setData={setData} templateColumns="repeat(3, 1fr)">
+          <Board
+            cards={data}
+            setCards={setData}
+            templateColumns="repeat(3, 1fr)"
+          >
             <Column
               key={0}
               title={"Todo"}

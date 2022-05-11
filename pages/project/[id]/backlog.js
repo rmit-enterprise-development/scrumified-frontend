@@ -139,16 +139,21 @@ const Backlog = ({ authToken }) => {
 		getParticipants().then((data) => setParticipants(data));
 
 		const handleReceiveCard = (e) => {
-			const newCard = JSON.parse(e.data);
-			const newCards = { ...cardsRef.current };
-			newCards[newCard.id] = newCard;
-			if (!!newCard.parentStoryId) {
-				newCards[Number(newCard.parentStoryId)].childStoryId =
-					newCard.id;
-			}
-			cardsRef.current = newCards;
-			setCards(newCards);
-			console.log('new cards', newCards);
+			console.log(e.data);
+			getCards().then((data) => {
+				cardsRef.current = data;
+				return setCards(data);
+			});
+			// const newCard = JSON.parse(e.data);
+			// const newCards = { ...cardsRef.current };
+			// newCards[newCard.id] = newCard;
+			// if (!!newCard.parentStoryId) {
+			// 	newCards[Number(newCard.parentStoryId)].childStoryId =
+			// 		newCard.id;
+			// }
+			// cardsRef.current = newCards;
+			// setCards(newCards);
+			// console.log('new cards', newCards);
 		};
 
 		const uri = `https://scrumified-dev-bakend.herokuapp.com/backlog?projectId=${projectId}`;
@@ -164,7 +169,7 @@ const Backlog = ({ authToken }) => {
 		eventSource.onmessage = (e) => {
 			console.log('on message', e.data);
 		};
-		eventSource.addEventListener('created', handleReceiveCard);
+		eventSource.addEventListener('update', handleReceiveCard);
 		return () => {
 			eventSource.close();
 		};

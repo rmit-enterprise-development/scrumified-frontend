@@ -93,6 +93,7 @@ const BacklogController = ({
 				btnColor={btnColor}
 				projectId={projectId}
 				participants={participants}
+				isCard={false}
 			/>
 		</FormControl>
 	);

@@ -27,8 +27,8 @@ const CardModal = ({
 	projectId,
 	participants,
 	prevCard,
+	isCard,
 }) => {
-	console.log(participants);
 	let initCard = {
 		userStory: '',
 		point: '',
@@ -38,7 +38,6 @@ const CardModal = ({
 	};
 	if (!!prevCard) {
 		initCard = prevCard;
-		console.log(prevCard);
 	}
 
 	const [card, setCard] = useState(initCard);
@@ -74,6 +73,34 @@ const CardModal = ({
 				console.error(error);
 			});
 	};
+
+	const updateCard = (submitData) => {
+		const requestOptions = {
+			method: 'PUT',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify(submitData),
+		};
+		console.log('submit:', submitData);
+		fetch(
+			`https://scrumified-dev-bakend.herokuapp.com/stories/${submitData.id}`,
+			requestOptions
+		)
+			.then(async (response) => {
+				const isJson = response.headers
+					.get('content-Type')
+					?.includes('application/json');
+				const data = isJson && (await response.json());
+
+				if (!response.ok) {
+					const error = (data && data.message) || response.status;
+					return Promise.reject(error);
+				}
+			})
+			.catch((error) => {
+				console.error(error);
+			});
+	};
+
 	return (
 		<Modal
 			isCentered
@@ -190,16 +217,29 @@ const CardModal = ({
 								isValidDef &&
 								isValidPoint
 							) {
-								const result = {
-									userStory: card.userStory,
-									point: card.point,
-									category: 'abc',
-									defOfDone: card.defOfDone,
-									status: 'backlog',
-									assignId: card.assignId,
-								};
+								const result = isCard
+									? {
+											id: card.id,
+											userStory: card.userStory,
+											point: card.point,
+											category: 'abc',
+											defOfDone: card.defOfDone,
+											status: 'backlog',
+											assignId: card.assignId,
+									  }
+									: {
+											userStory: card.userStory,
+											point: card.point,
+											category: 'abc',
+											defOfDone: card.defOfDone,
+											status: 'backlog',
+											assignId: card.assignId,
+									  };
 
-								createCard(result);
+								isCard
+									? updateCard(result)
+									: createCard(result);
+
 								setCard({
 									userStory: '',
 									point: '',
@@ -216,7 +256,7 @@ const CardModal = ({
 							}
 						}}
 					>
-						Submit
+						{isCard ? 'Update' : 'Create'}
 					</Button>
 				</ModalFooter>
 			</ModalContent>

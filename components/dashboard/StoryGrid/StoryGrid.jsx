@@ -23,7 +23,8 @@ const StoryGrid = ({
       )}
       boxShadow="base"
       borderRadius={"1rem"}
-      py={4}
+      py={2.5}
+      px={4}
     >
       <Text
         textAlign={"center"}

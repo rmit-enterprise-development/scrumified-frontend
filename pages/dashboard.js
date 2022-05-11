@@ -1,34 +1,37 @@
+import { Search2Icon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
   Flex,
   Input,
+  InputGroup,
+  InputLeftElement,
   Select,
   useBreakpointValue,
   useColorModeValue,
-} from '@chakra-ui/react';
-import jsonwebtoken from 'jsonwebtoken';
-import md5 from 'md5';
-import cookies from 'next-cookies';
-import Head from 'next/head';
-import { useEffect, useState } from 'react';
-import { GoChecklist, GoProject } from 'react-icons/go';
-import userAPI from '../api/services/userAPI';
-import { LoggedUserProvider } from '../components/common/LoggedUserProvider';
-import NoItem from '../components/common/NoItem/NoItem';
-import Pagination from '../components/common/Pagination/Pagination';
-import SectionHeader from '../components/common/SectionHeader/SectionHeader';
-import CreateProjectModal from '../components/dashboard/CreateProjectModal/CreateProjectModal';
-import ProjectGrid from '../components/dashboard/ProjectGrid/ProjectGrid';
-import StoryGrid from '../components/dashboard/StoryGrid/StoryGrid';
-import MainContainer from '../components/layout/MainContainer';
-import { digFind } from '../utils/object';
+} from "@chakra-ui/react";
+import jsonwebtoken from "jsonwebtoken";
+import md5 from "md5";
+import cookies from "next-cookies";
+import Head from "next/head";
+import { useEffect, useState } from "react";
+import { GoChecklist, GoProject } from "react-icons/go";
+import userAPI from "../api/services/userAPI";
+import { LoggedUserProvider } from "../components/common/LoggedUserProvider";
+import NoItem from "../components/common/NoItem/NoItem";
+import Pagination from "../components/common/Pagination/Pagination";
+import SectionHeader from "../components/common/SectionHeader/SectionHeader";
+import CreateProjectModal from "../components/dashboard/CreateProjectModal/CreateProjectModal";
+import ProjectGrid from "../components/dashboard/ProjectGrid/ProjectGrid";
+import StoryGrid from "../components/dashboard/StoryGrid/StoryGrid";
+import MainContainer from "../components/layout/MainContainer";
+import { digFind } from "../utils/object";
 
 const Dashboard = ({ authToken }) => {
   // Get current user from cookies
   const loggedUser = jsonwebtoken.verify(
     authToken,
-    md5('EmChiXemAnhLa_#BanNhauMaThoi')
+    md5("EmChiXemAnhLa_#BanNhauMaThoi")
   );
 
   const PAGE_LIMIT_PROJECT = 4;
@@ -44,18 +47,18 @@ const Dashboard = ({ authToken }) => {
 
   // Init current project name
   const [currentProjectName, setCurrentProjectName] = useState(
-    projectData.projectList.length > 0 ? projectData.projectList[0].title : ''
+    projectData.projectList.length > 0 ? projectData.projectList[0].title : ""
   );
 
   // Input search Project
-  const [searchProjectValue, setSearchProjectValue] = useState('');
+  const [searchProjectValue, setSearchProjectValue] = useState("");
   const handleProjectChange = (event) => {
     setSearchProjectValue(event.target.value);
-    if (event.target.value === '') {
+    if (event.target.value === "") {
       let currentFilter = filterProject;
       // Reset default
       currentFilter.page = 0;
-      currentFilter.key = '';
+      currentFilter.key = "";
       setFilterProject(currentFilter);
       fetchProject(filterProject);
     }
@@ -63,7 +66,7 @@ const Dashboard = ({ authToken }) => {
 
   // Filter
   const [filterProject, setFilterProject] = useState({
-    key: '',
+    key: "",
     page: currentProjectPage - 1,
     limit: PAGE_LIMIT_PROJECT,
   });
@@ -76,7 +79,7 @@ const Dashboard = ({ authToken }) => {
         filter
       );
       const data = response.data;
-      const projects = digFind(data, 'content');
+      const projects = digFind(data, "content");
 
       setProjectData({
         projectList: projects,
@@ -91,7 +94,7 @@ const Dashboard = ({ authToken }) => {
       setFilterStory(currentFilter);
       fetchStory(filterStory);
     } catch (error) {
-      console.log('Fail to fetch: ', error);
+      console.log("Fail to fetch: ", error);
     }
   };
 
@@ -118,17 +121,16 @@ const Dashboard = ({ authToken }) => {
     storyList: [],
     totalStory: 0,
   });
-  console.log('storyData: ', storyData);
 
   const [currentStoryPage, setCurrentStoryPage] = useState(1);
   // Input search story
-  const [searchStoryValue, setSearchStoryValue] = useState('');
+  const [searchStoryValue, setSearchStoryValue] = useState("");
   const handleStoryChange = (event) => {
-    if (event.target.value === '') {
+    if (event.target.value === "") {
       let currentFilter = filterStory;
       // Reset default
       currentFilter.page = 0;
-      currentFilter.key = '';
+      currentFilter.key = "";
       setFilterStory(currentFilter);
       fetchStory(filterStory);
     }
@@ -137,10 +139,10 @@ const Dashboard = ({ authToken }) => {
 
   // Filter
   const [filterStory, setFilterStory] = useState({
-    key: '',
+    key: "",
     page: currentStoryPage - 1,
     limit: PAGE_LIMIT_STORY,
-    sortProp: 'points',
+    sortProp: "points",
     ascending: false,
     projectId:
       projectData.projectList.length > 0 ? projectData.projectList[0].id : -1,
@@ -154,19 +156,19 @@ const Dashboard = ({ authToken }) => {
         filter
       );
       const data = response.data;
-      const stories = digFind(data, 'content');
+      const stories = digFind(data, "content");
       setStoryData({
         storyList: stories,
         totalStory: data.totalElements,
       });
     } catch (error) {
-      console.log('Fail to fetch: ', error);
+      console.log("Fail to fetch: ", error);
     }
   };
 
   // Submit search name project
   const handleSearchStory = () => {
-    let currentFilter = filterProject;
+    let currentFilter = filterStory;
     // Reset default
     currentFilter.page = 0;
     currentFilter.key = searchStoryValue;
@@ -178,18 +180,18 @@ const Dashboard = ({ authToken }) => {
     let currentFilter = filterStory;
     // Reset default
     currentFilter.page = 0;
-    currentFilter.key = '';
+    currentFilter.key = "";
 
-    if (type.includes('Dsc')) {
+    if (type.includes("Dsc")) {
       currentFilter.ascending = true;
     } else {
       currentFilter.ascending = false;
     }
 
-    if (type.includes('time')) {
-      currentFilter.sortProp = 'created_date';
+    if (type.includes("time")) {
+      currentFilter.sortProp = "created_date";
     } else {
-      currentFilter.sortProp = 'points';
+      currentFilter.sortProp = "points";
     }
 
     setFilterStory(currentFilter);
@@ -235,24 +237,31 @@ const Dashboard = ({ authToken }) => {
         <SectionHeader>My Projects</SectionHeader>
         <Flex
           justifyContent={useBreakpointValue({
-            base: 'center',
-            md: 'space-between',
+            base: "center",
+            md: "space-between",
           })}
           alignItems="center"
-          py={5}
+          pb={5}
           gap={8}
-          wrap={'wrap'}
+          wrap={"wrap"}
         >
           <Flex gap={6}>
-            <Input
-              placeholder="Search for project name"
-              color={useColorModeValue('#031d46', '#fffdfe')}
-              value={searchProjectValue}
-              onChange={handleProjectChange}
-            ></Input>
+            <InputGroup>
+              <InputLeftElement
+                pointerEvents="none"
+                // eslint-disable-next-line react/no-children-prop
+                children={<Search2Icon color="gray.300" />}
+              />
+              <Input
+                placeholder="Search for project name"
+                color={useColorModeValue("#031d46", "#fffdfe")}
+                value={searchProjectValue}
+                onChange={handleProjectChange}
+              />
+            </InputGroup>
             <Button
               onClick={handleSearchProject}
-              color={useColorModeValue('#031d46', '#fffdfe')}
+              color={useColorModeValue("#031d46", "#fffdfe")}
               px={10}
             >
               Search
@@ -280,23 +289,31 @@ const Dashboard = ({ authToken }) => {
         <SectionHeader>Assigned to me</SectionHeader>
         <Flex
           justifyContent={useBreakpointValue({
-            base: 'center',
-            md: 'space-between',
+            base: "center",
+            md: "space-between",
           })}
-          py={5}
+          pb={5}
           gap={8}
-          wrap={'wrap'}
+          wrap={"wrap"}
         >
           <Flex gap={6}>
-            <Input
-              placeholder="Search for story name"
-              color={useColorModeValue('#031d46', '#fffdfe')}
-              value={searchStoryValue}
-              onChange={handleStoryChange}
-            ></Input>
+            <InputGroup>
+              <InputLeftElement
+                pointerEvents="none"
+                // eslint-disable-next-line react/no-children-prop
+                children={<Search2Icon color="gray.300" />}
+              />
+              <Input
+                placeholder="Search for story name"
+                color={useColorModeValue("#031d46", "#fffdfe")}
+                value={searchStoryValue}
+                onChange={handleStoryChange}
+              />
+            </InputGroup>
             <Button
               onClick={handleSearchStory}
-              color={useColorModeValue('#031d46', '#fffdfe')}
+              color={useColorModeValue("#031d46", "#fffdfe")}
+              px={10}
             >
               Search
             </Button>
@@ -305,7 +322,7 @@ const Dashboard = ({ authToken }) => {
           <Select
             width="auto"
             onChange={(e) => handleSortStory(e.target.value)}
-            color={useColorModeValue('#031d46', '#fffdfe')}
+            color={useColorModeValue("#031d46", "#fffdfe")}
             defaultValue="pointDsc"
           >
             <option value="pointDsc">Point: High to Low</option>
@@ -337,7 +354,7 @@ const Dashboard = ({ authToken }) => {
 
 export async function getServerSideProps(ctx) {
   const { auth } = cookies(ctx);
-  return { props: { authToken: auth || '' } };
+  return { props: { authToken: auth || "" } };
 }
 
 export default Dashboard;

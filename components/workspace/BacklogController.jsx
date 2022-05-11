@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   Flex,
   Spacer,
@@ -16,8 +16,11 @@ import {
   Box,
 } from "@chakra-ui/react";
 
-import { AddIcon, Search2Icon } from "@chakra-ui/icons";
+import { AddIcon, DeleteIcon, Search2Icon } from "@chakra-ui/icons";
 import CardModal from "./CardModal";
+import userAPI from "../../api/services/userAPI";
+import { LoggedUserContext } from "../common/LoggedUserProvider";
+import { digFind } from "../../utils/object";
 
 const BacklogController = ({
   cards,
@@ -28,38 +31,63 @@ const BacklogController = ({
   btnBg,
   projectId,
   participants,
+  setFilteredCard,
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const loggedUser = useContext(LoggedUserContext);
+
+  const totalPoints = Object.values(cards).reduce((accumulator, object) => {
+    return accumulator + object.point;
+  }, 0);
+
   // Filter
-  const [filterStory, setFilterStory] = useState({
+  const defaultFilter = {
     key: "",
     category: "",
-    sortProp: "points",
+    sortProp: "",
     ascending: false,
     projectId: projectId,
-  });
+    limit: 100,
+  };
+  const [filterStory, setFilterStory] = useState(defaultFilter);
+
+  const [isFilter, setIsFilter] = useState(false);
+  const [sortValue, setSortValue] = useState("");
+  const [categoryValue, setCategoryValue] = useState("");
+
+  // Populate Story data
+  const fetchStory = async (filter) => {
+    try {
+      const response = await userAPI.getAllStories(
+        loggedUser.logUserId,
+        filter
+      );
+      const data = response.data;
+      const stories = digFind(data, "content");
+      setFilteredCard(stories);
+    } catch (error) {
+      console.log("Fail to fetch: ", error);
+    }
+  };
+
   // Input search story
   const [searchStoryValue, setSearchStoryValue] = useState("");
   const handleStoryChange = (event) => {
+    let currentFilter = filterStory;
     if (event.target.value === "") {
-      let currentFilter = filterStory;
       // Reset default
       currentFilter.key = "";
-      setFilterStory(currentFilter);
-      // fetchStory(filterStory);
+    } else {
+      currentFilter.key = event.target.value;
     }
     setSearchStoryValue(event.target.value);
-  };
-  // Submit search name project
-  const handleSearchStory = () => {
-    let currentFilter = filterStory;
-    // Reset default
-    currentFilter.key = searchStoryValue;
+    setIsFilter(true);
     setFilterStory(currentFilter);
-    // fetchStory(filterStory);
   };
 
   const handleSortStory = (type) => {
+    setSortValue(type);
     let currentFilter = filterStory;
     // Reset default
     currentFilter.key = "";
@@ -77,17 +105,35 @@ const BacklogController = ({
     }
 
     setFilterStory(currentFilter);
-    // fetchStory(filterStory);
+    setIsFilter(true);
+    fetchStory(filterStory);
   };
 
   const handleCategoryStory = (category) => {
+    setCategoryValue(category);
     let currentFilter = filterStory;
     // Reset default
     currentFilter.key = "";
     currentFilter.category = category;
     setFilterStory(currentFilter);
-    // fetchStory(filterStory);
+    setIsFilter(true);
+    fetchStory(filterStory);
   };
+
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(async () => {
+      if (isFilter) {
+        fetchStory(filterStory);
+      }
+    }, 500);
+
+    return () => clearTimeout(delayDebounceFn);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchStoryValue]);
+
+  useEffect(() => {
+    setFilteredCard([]);
+  }, [isFilter]);
 
   return (
     <>
@@ -110,20 +156,9 @@ const BacklogController = ({
           <Flex gap={2}>
             <Select
               width="auto"
-              onChange={(e) => handleSortStory(e.target.value)}
-              color={useColorModeValue("#031d46", "#fffdfe")}
-              defaultValue="pointDsc"
-            >
-              <option value="pointDsc">Point: High to Low</option>
-              <option value="pointAsc">Point: Low to High</option>
-              <option value="timeDsc">Recently Assigned</option>
-              <option value="timeAsc">Oldest Assigned</option>
-            </Select>
-
-            <Select
-              width="auto"
               onChange={(e) => handleCategoryStory(e.target.value)}
               color={useColorModeValue("#031d46", "#fffdfe")}
+              value={categoryValue}
             >
               <option value="">Category</option>
               <option value="design">Design (UI/UX)</option>
@@ -132,10 +167,37 @@ const BacklogController = ({
               <option value="testing">Testing</option>
               <option value="devops">DevOps</option>
             </Select>
+
+            <Select
+              width="auto"
+              onChange={(e) => handleSortStory(e.target.value)}
+              color={useColorModeValue("#031d46", "#fffdfe")}
+              value={sortValue}
+            >
+              <option value="">Sort by:</option>
+              <option value="pointDsc">Point: High to Low</option>
+              <option value="pointAsc">Point: Low to High</option>
+              <option value="timeDsc">Recently Assigned</option>
+              <option value="timeAsc">Oldest Assigned</option>
+            </Select>
+
+            {isFilter && (
+              <IconButton
+                colorScheme="red"
+                aria-label="Clear Filter"
+                icon={<DeleteIcon />}
+                onClick={() => {
+                  setFilterStory(defaultFilter);
+                  setSortValue("");
+                  setCategoryValue("");
+                  setIsFilter(false);
+                }}
+              />
+            )}
           </Flex>
         </Flex>
         <HStack gap="2">
-          <Text>Total points: 8</Text>
+          <Text>Total points: {totalPoints}</Text>
           <IconButton
             _hover={{ opacity: 0.8 }}
             bg={btnBg}

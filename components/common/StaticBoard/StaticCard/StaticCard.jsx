@@ -1,23 +1,30 @@
+import { AddIcon } from "@chakra-ui/icons";
 import {
   Badge,
   Box,
   Circle,
   Flex,
   Heading,
+  IconButton,
   Text,
+  Tooltip,
   useColorModeValue,
+  useDisclosure,
+  WrapItem,
 } from "@chakra-ui/react";
 import Avvvatars from "avvvatars-react";
 import Router from "next/router";
 import { useContext } from "react";
 import { RouterPage } from "../../../../config/router";
-import { LoggedUserContext } from "../../../common/LoggedUserProvider";
+import CardModal from "../../../workspace/CardModal";
+import { LoggedUserContext } from "../../LoggedUserProvider";
 
-const StoryCardDashboard = ({ card }) => {
+const StaticCard = ({ card, isBacklog, participants }) => {
   const colorScheme = "red" + ".500";
   const user = useContext(LoggedUserContext);
   const userInfo =
     user.firstName + " " + user.lastName + " (" + user.email + ")";
+  const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <Box
       _hover={{
@@ -35,15 +42,37 @@ const StoryCardDashboard = ({ card }) => {
       p={4}
       boxShadow="base"
       onClick={() => {
-        Router.push({
-          pathname: `${RouterPage.PROJECT}/${card.projectId}${RouterPage.BACKLOG}`,
-        });
+        isBacklog
+          ? onOpen()
+          : Router.push({
+              pathname: `${RouterPage.PROJECT}/${card.projectId}${RouterPage.BACKLOG}`,
+            });
       }}
     >
       <Flex alignItems={"center"} justifyContent={"space-between"}>
         <Heading fontSize="xl" isTruncated>
           {card.userStory}
         </Heading>
+
+        {isBacklog && (
+          <WrapItem>
+            <Tooltip label={"Add to sprint 1"} placement={"left-start"}>
+              <IconButton
+                isRound={true}
+                size={"xs"}
+                // eslint-disable-next-line react-hooks/rules-of-hooks
+                bgColor={useColorModeValue("gray.200", "#fffdfe")}
+                _hover={{ opacity: 0.8 }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  console.log("DitMe");
+                }}
+                aria-label="Search database"
+                icon={<AddIcon color="black" />}
+              />
+            </Tooltip>
+          </WrapItem>
+        )}
       </Flex>
       <Flex
         mt={4}
@@ -65,8 +94,19 @@ const StoryCardDashboard = ({ card }) => {
           </Circle>
         </Flex>
       </Flex>
+
+      {isBacklog && (
+        <CardModal
+          isOpen={isOpen}
+          onOpen={onOpen}
+          onClose={onClose}
+          prevCard={card}
+          participants={participants}
+          isCard={true}
+        />
+      )}
     </Box>
   );
 };
 
-export default StoryCardDashboard;
+export default StaticCard;

@@ -23,7 +23,7 @@ import Pagination from "../components/common/Pagination/Pagination";
 import SectionHeader from "../components/common/SectionHeader/SectionHeader";
 import CreateProjectModal from "../components/dashboard/CreateProjectModal/CreateProjectModal";
 import ProjectGrid from "../components/dashboard/ProjectGrid/ProjectGrid";
-import StoryGrid from "../components/dashboard/StoryGrid/StoryGrid";
+import StoryGrid from "../components/common/StaticBoard/StaticBoardDashboard";
 import MainContainer from "../components/layout/MainContainer";
 import { digFind } from "../utils/object";
 

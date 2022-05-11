@@ -1,10 +1,10 @@
 import { Flex, Box, Text, useColorModeValue } from "@chakra-ui/react";
 import { GoChecklist } from "react-icons/go";
-import NoItem from "../../common/NoItem/NoItem";
-import Pagination from "../../common/Pagination/Pagination";
-import StoryCardDashboard from "./StoryCardDashboard/StoryCardDashboard";
+import NoItem from "../NoItem/NoItem";
+import Pagination from "../Pagination/Pagination";
+import StoryCardDashboard from "./StaticCard/StaticCard";
 
-const StoryGrid = ({
+const StaticBoardDashboard = ({
   projectTitle,
   storyData,
   currentStoryPage,
@@ -31,7 +31,7 @@ const StoryGrid = ({
         fontSize={"xl"}
         fontWeight={"bold"}
         color={useColorModeValue("#031d46", "#fffdfe")}
-        pb={4}
+        p={4}
       >
         Project: {projectTitle}
       </Text>
@@ -54,4 +54,4 @@ const StoryGrid = ({
   );
 };
 
-export default StoryGrid;
+export default StaticBoardDashboard;

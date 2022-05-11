@@ -75,7 +75,7 @@ const StaticCard = ({ card, isBacklog, participants }) => {
         )}
       </Flex>
       <Flex
-        mt={4}
+        mt={3}
         justifyContent="space-between"
         alignItems={"center"}
         alignContent={"center"}

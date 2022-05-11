@@ -1,8 +1,14 @@
-import { Flex, Box, Text, useColorModeValue } from "@chakra-ui/react";
+import {
+  Flex,
+  Box,
+  Text,
+  useColorModeValue,
+  useBreakpointValue,
+} from "@chakra-ui/react";
 import { GoChecklist } from "react-icons/go";
-import NoItem from "../NoItem/NoItem";
-import Pagination from "../Pagination/Pagination";
-import StoryCardDashboard from "./StaticCard/StaticCard";
+import NoItem from "../../common/NoItem/NoItem";
+import Pagination from "../../common/Pagination/Pagination";
+import StoryCardDashboard from "./StoryCardDashboard/StoryCardDashboard";
 
 const StaticBoardDashboard = ({
   projectTitle,
@@ -13,8 +19,9 @@ const StaticBoardDashboard = ({
 }) => {
   return (
     <Flex
+      maxH="17.5rem"
+      mb={useBreakpointValue({ base: "2rem", md: 0 })}
       flexDir={"column"}
-      dir="column"
       boxSizing="border-box"
       overflow="hidden"
       bgGradient={useColorModeValue(
@@ -31,7 +38,7 @@ const StaticBoardDashboard = ({
         fontSize={"xl"}
         fontWeight={"bold"}
         color={useColorModeValue("#031d46", "#fffdfe")}
-        p={4}
+        pb={4}
       >
         Project: {projectTitle}
       </Text>

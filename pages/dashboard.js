@@ -311,6 +311,7 @@ const Dashboard = ({ authToken }) => {
               />
             </InputGroup>
             <Button
+              px={10}
               onClick={handleSearchStory}
               color={useColorModeValue("#031d46", "#fffdfe")}
               px={10}

@@ -295,6 +295,7 @@ const Dashboard = ({ authToken }) => {
               onChange={handleStoryChange}
             ></Input>
             <Button
+              px={10}
               onClick={handleSearchStory}
               color={useColorModeValue('#031d46', '#fffdfe')}
             >

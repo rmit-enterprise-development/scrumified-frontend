@@ -16,11 +16,11 @@ import Avvvatars from 'avvvatars-react';
 import { Draggable } from 'react-beautiful-dnd';
 import CardModal from './CardModal';
 
-const Card = ({ bg, color, btnColor, btnBg, ...props }) => {
+const Card = ({ participants, bg, color, btnColor, btnBg, card, ...props }) => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const colorScheme = 'red' + '.500';
 	return (
-		<Draggable draggableId={'' + props.card.id} index={props.index}>
+		<Draggable draggableId={'' + card.id} index={props.index}>
 			{(provided) => (
 				<>
 					<Box
@@ -44,7 +44,7 @@ const Card = ({ bg, color, btnColor, btnBg, ...props }) => {
 							justifyContent={'space-between'}
 						>
 							<Heading fontSize="xl" isTruncated>
-								{props.card.userStory}
+								{card.userStory}
 							</Heading>
 
 							<WrapItem>
@@ -83,7 +83,7 @@ const Card = ({ bg, color, btnColor, btnBg, ...props }) => {
 									borderRadius={'4px'}
 									marginRight={2}
 								>
-									{props.card.category}
+									{card.category}
 								</Badge>
 
 								<Circle
@@ -92,7 +92,7 @@ const Card = ({ bg, color, btnColor, btnBg, ...props }) => {
 									color="white"
 									p={'10px'}
 								>
-									{props.card.point}
+									{card.point}
 								</Circle>
 							</Flex>
 						</Flex>
@@ -101,6 +101,8 @@ const Card = ({ bg, color, btnColor, btnBg, ...props }) => {
 						isOpen={isOpen}
 						onOpen={onOpen}
 						onClose={onClose}
+						prevCard={card}
+						participants={participants}
 					/>
 				</>
 			)}
@@ -109,41 +111,3 @@ const Card = ({ bg, color, btnColor, btnBg, ...props }) => {
 };
 
 export default Card;
-
-const ComponentName = (props) => {
-	const handleCancel = (event) => {
-		stopEventPropagationTry(event);
-
-		// do something here
-	};
-
-	const handleConfirmButton = (event) => {
-		stopEventPropagationTry(event);
-
-		// do something here
-	};
-
-	// so elements with multiple event handlers aren't unnecessarily
-	// called more than once(ie. SyntheticEvent Bubbling)
-	const stopEventPropagationTry = (event) => {
-		if (event.target === event.currentTarget) {
-			event.stopPropagation();
-		}
-	};
-
-	return;
-	<div onClick={handleCancel} className="ui dimmer modals visible active">
-		<div className="ui tiny modal visible active">
-			<div className="header">{[EXAMPLE_PLACEHOLDER]}</div>
-			<div className="content">{[EXAMPLE_PLACEHOLDER]}</div>
-			<div className="actions">
-				<button onClick={handleCancel} className="ui button">
-					{[EXAMPLE_PLACEHOLDER]}
-				</button>
-				<button onClick={handleConfirmButton} className="ui red button">
-					{[EXAMPLE_PLACEHOLDER]}
-				</button>
-			</div>
-		</div>
-	</div>;
-};

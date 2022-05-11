@@ -43,13 +43,13 @@ const Card = ({ participants, bg, color, btnColor, btnBg, card, ...props }) => {
 							alignItems={'center'}
 							justifyContent={'space-between'}
 						>
-							<Heading fontSize="xl" isTruncated>
+							<Heading fontSize="lg" isTruncated>
 								{card.userStory}
 							</Heading>
 
 							<WrapItem>
 								<Tooltip
-									label={'Add to sprint 1'}
+									label={'Add to sprint'}
 									placement={'left-start'}
 								>
 									<IconButton

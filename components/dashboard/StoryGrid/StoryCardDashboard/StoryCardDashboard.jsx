@@ -46,7 +46,7 @@ const StoryCardDashboard = ({ card }) => {
         </Heading>
       </Flex>
       <Flex
-        mt={4}
+        mt={3}
         justifyContent="space-between"
         alignItems={"center"}
         alignContent={"center"}

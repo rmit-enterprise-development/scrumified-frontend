@@ -22,7 +22,7 @@ const Card = ({ participants, bg, color, btnColor, btnBg, card, ...props }) => {
   const colorScheme = "red" + ".500";
 
   const getUserInfoValue = (id) => {
-    if (participants) {
+    if (participants.length > 0) {
       const user = Object.values(participants).find((p) => p.id === id);
       return textUtils.getFirstLetters(user.firstName + " " + user.lastName);
     }

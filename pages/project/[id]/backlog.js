@@ -13,81 +13,6 @@ import Board from "../../../components/workspace/Board";
 import Card from "../../../components/workspace/Card";
 import Column from "../../../components/workspace/Column";
 
-const initData = {
-  2: {
-    id: 2,
-    userStory: "Border",
-    category: "category",
-    point: 4,
-    status: "backlog",
-    parentStoryId: null,
-    childStoryId: 1,
-    projectId: 1,
-    sprintId: null,
-    assignId: 2,
-    links: [
-      {
-        rel: "self",
-        href: "https://scrumified-dev-bakend.herokuapp.com/stories/2",
-      },
-    ],
-  },
-  4: {
-    id: 4,
-    userStory: "Dunky",
-    category: "category",
-    point: 4,
-    status: "backlog",
-    parentStoryId: 3,
-    childStoryId: null,
-    projectId: 1,
-    sprintId: null,
-    assignId: 2,
-    links: [
-      {
-        rel: "self",
-        href: "https://scrumified-dev-bakend.herokuapp.com/stories/4",
-      },
-    ],
-  },
-  1: {
-    id: 1,
-    userStory: "Achor",
-    category: "category",
-    point: 2,
-    status: "backlog",
-    parentStoryId: 2,
-    childStoryId: 3,
-    projectId: 1,
-    sprintId: null,
-    assignId: 1,
-    links: [
-      {
-        rel: "self",
-        href: "https://scrumified-dev-bakend.herokuapp.com/stories/1",
-      },
-    ],
-  },
-  3: {
-    id: 3,
-    userStory: "Catine",
-    category: "category",
-    point: 2,
-    status: "backlog",
-    parentStoryId: 1,
-    childStoryId: 4,
-    projectId: 1,
-    sprintId: null,
-    assignId: 1,
-    links: [
-      {
-        rel: "self",
-        href: "https://scrumified-dev-bakend.herokuapp.com/stories/3",
-      },
-    ],
-  },
-};
-
 var isEvtSrcOpenedOnce = false;
 
 const Backlog = ({ authToken }) => {
@@ -105,21 +30,30 @@ const Backlog = ({ authToken }) => {
   const projectId = asPath.split("/")[2];
 
   const getParticipants = async () => {
-    const response = await projectAPI.getProject(projectId);
-    const json = response.data;
-    if (json.participants) {
-      return [json.owner, ...json.participants];
-    } else {
-      return [json.owner];
+    try {
+      const response = await projectAPI.getProject(projectId);
+      const json = response.data;
+      if (json.participants) {
+        setParticipants([json.owner, ...json.participants]);
+      } else {
+        setParticipants([json.owner]);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
   const getCards = async () => {
-    const response = await projectAPI.getAllStories(projectId, {
-      isBacklog: true,
-    });
-    const json = response.data;
-    return json;
+    try {
+      const response = await projectAPI.getAllStories(projectId, {
+        isBacklog: true,
+      });
+      const json = response.data;
+      cardsRef.current = json;
+      setCards(json);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const [cards, setCards] = useState({});
@@ -127,19 +61,20 @@ const Backlog = ({ authToken }) => {
   const [cardList, setCardList] = useState([]);
   const [participants, setParticipants] = useState([]);
 
+  const [winReady, setwinReady] = useState(false);
+  // Filtered Card (from Backlog Controller)
+  const [filteredCard, setFilteredCard] = useState([]);
+
   useEffect(() => {
-    getCards().then((data) => {
-      cardsRef.current = data;
-      return setCards(data);
-    });
-    getParticipants().then((data) => setParticipants(data));
+    setwinReady(true);
+    getParticipants(); // Always get participants first
+  }, []);
+
+  useEffect(() => {
+    getCards();
 
     const handleReceiveCard = (e) => {
-      console.log(e.data);
-      getCards().then((data) => {
-        cardsRef.current = data;
-        return setCards(data);
-      });
+      getCards();
       // const newCard = JSON.parse(e.data);
       // const newCards = { ...cardsRef.current };
       // newCards[newCard.id] = newCard;
@@ -169,11 +104,11 @@ const Backlog = ({ authToken }) => {
     return () => {
       eventSource.close();
     };
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [participants]); // Always make sure participants available first
 
   useEffect(() => {
     const linkCards = (data, category) => {
-      console.log(data);
       let renderCards = [];
       if (Object.keys(data).length === 0) {
         return renderCards;
@@ -192,6 +127,7 @@ const Backlog = ({ authToken }) => {
       }
 
       let i = 0;
+
       while (true) {
         renderCards.push(
           <Card
@@ -208,22 +144,13 @@ const Backlog = ({ authToken }) => {
         if (!!tmp.childStoryId) tmp = data[tmp.childStoryId];
         else break;
       }
-      console.log(renderCards);
+
       return renderCards;
     };
-    console.log("cardList", cardsRef.current);
     const tmp = linkCards(cardsRef.current, "backlog");
     setCardList(tmp);
-  }, [bg, cards, color]);
-
-  const [winReady, setwinReady] = useState(false);
-
-  // Filtered Card (from Backlog Controller)
-  const [filteredCard, setFilteredCard] = useState([]);
-
-  useEffect(() => {
-    setwinReady(true);
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cards]);
 
   return (
     <LoggedUserProvider authToken={authToken}>

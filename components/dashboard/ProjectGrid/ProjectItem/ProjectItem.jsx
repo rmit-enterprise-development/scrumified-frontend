@@ -45,7 +45,11 @@ const ProjectItem = ({
 
   useEffect(() => {
     getNumberOfStories();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+
+    return () => {
+      setOpenTask(0); // Reduce memory leaked warning? Idk :<
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

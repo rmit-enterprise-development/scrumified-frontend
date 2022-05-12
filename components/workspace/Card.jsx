@@ -14,6 +14,7 @@ import {
 } from "@chakra-ui/react";
 import Avvvatars from "avvvatars-react";
 import { Draggable } from "react-beautiful-dnd";
+import textUtils from "../../utils/text";
 import CardModal from "./CardModal";
 
 const Card = ({ participants, bg, color, btnColor, btnBg, card, ...props }) => {
@@ -21,8 +22,10 @@ const Card = ({ participants, bg, color, btnColor, btnBg, card, ...props }) => {
   const colorScheme = "red" + ".500";
 
   const getUserInfoValue = (id) => {
-    const user = participants.find((p) => p.id === id);
-    return user.firstName + " " + user.lastName + " (" + user.email + ")";
+    if (participants.length > 0) {
+      const user = Object.values(participants).find((p) => p.id === id);
+      return textUtils.getFirstLetters(user.firstName + " " + user.lastName);
+    }
   };
   return (
     <Draggable draggableId={"" + card.id} index={props.index}>

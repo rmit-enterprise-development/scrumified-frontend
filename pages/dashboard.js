@@ -35,7 +35,7 @@ const Dashboard = ({ authToken }) => {
   );
 
   const PAGE_LIMIT_PROJECT = 4;
-  const PAGE_LIMIT_STORY = 2;
+  const PAGE_LIMIT_STORY = 3;
 
   //----------------Project Setting-----------------------//
   // Init projectData & its pagination
@@ -183,9 +183,9 @@ const Dashboard = ({ authToken }) => {
     currentFilter.key = "";
 
     if (type.includes("Dsc")) {
-      currentFilter.ascending = true;
-    } else {
       currentFilter.ascending = false;
+    } else {
+      currentFilter.ascending = true;
     }
 
     if (type.includes("time")) {

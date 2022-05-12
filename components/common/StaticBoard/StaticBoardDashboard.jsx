@@ -19,7 +19,8 @@ const StaticBoardDashboard = ({
 }) => {
   return (
     <Flex
-      maxH="17.5rem"
+      // maxH="17.5rem"
+      h="100%"
       mb={useBreakpointValue({ base: "2rem", md: 0 })}
       flexDir={"column"}
       boxSizing="border-box"

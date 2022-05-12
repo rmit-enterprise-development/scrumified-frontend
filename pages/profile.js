@@ -1,21 +1,23 @@
-import { Flex } from '@chakra-ui/react';
-import Head from 'next/head';
-import { useState, useEffect } from 'react';
-import SectionHeader from '../components/common/SectionHeader/SectionHeader';
-import MainContainer from '../components/layout/MainContainer';
-import EditProfileModal from '../components/profile/EditProfileModal';
-import ProfileCard from '../components/profile/ProfileCard';
-import LogOutButton from '../components/profile/LogOutButton';
-import jsonwebtoken from 'jsonwebtoken';
-import md5 from 'md5';
-import cookies from 'next-cookies';
-import EditPasswordModal from '../components/profile/EditPasswordModal';
-import { LoggedUserProvider } from '../components/common/LoggedUserProvider';
+import { Flex } from "@chakra-ui/react";
+import Head from "next/head";
+import { useState, useEffect } from "react";
+import SectionHeader from "../components/common/SectionHeader/SectionHeader";
+import MainContainer from "../components/layout/MainContainer";
+import EditProfileModal from "../components/profile/EditProfileModal";
+import ProfileCard from "../components/profile/ProfileCard";
+import LogOutButton from "../components/profile/LogOutButton";
+import jsonwebtoken from "jsonwebtoken";
+import md5 from "md5";
+import cookies from "next-cookies";
+import EditPasswordModal from "../components/profile/EditPasswordModal";
+import { LoggedUserProvider } from "../components/common/LoggedUserProvider";
+import NoItem from "../components/common/NoItem/NoItem";
+import { AiOutlineFieldTime } from "react-icons/ai";
 
 const Profile = ({ authToken }) => {
   const loggedUser = jsonwebtoken.verify(
     authToken,
-    md5('EmChiXemAnhLa_#BanNhauMaThoi')
+    md5("EmChiXemAnhLa_#BanNhauMaThoi")
   );
   console.log(loggedUser);
   return (
@@ -27,7 +29,7 @@ const Profile = ({ authToken }) => {
       <MainContainer user={loggedUser}>
         <SectionHeader>Profile</SectionHeader>
 
-        <Flex justifyContent="space-around" mt={10}>
+        <Flex justifyContent="space-around" mt={10} pb={6}>
           <ProfileCard
             fname={loggedUser.firstName}
             lname={loggedUser.lastName}
@@ -50,7 +52,8 @@ const Profile = ({ authToken }) => {
           </Flex>
         </Flex>
 
-        <SectionHeader>My Projects</SectionHeader>
+        <SectionHeader>Activity Analytics</SectionHeader>
+        <NoItem icon={AiOutlineFieldTime}>Coming Soon!</NoItem>
       </MainContainer>
     </LoggedUserProvider>
   );
@@ -58,7 +61,7 @@ const Profile = ({ authToken }) => {
 
 export async function getServerSideProps(ctx) {
   const { auth } = cookies(ctx);
-  return { props: { authToken: auth || '' } };
+  return { props: { authToken: auth || "" } };
 }
 
 export default Profile;

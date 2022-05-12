@@ -24,6 +24,7 @@ import { AiOutlineEdit } from "react-icons/ai";
 import projectAPI from "../../../../../api/services/projectAPI";
 import userAPI from "../../../../../api/services/userAPI";
 import { digFind } from "../../../../../utils/object";
+import textUtils from "../../../../../utils/text";
 import { LoggedUserContext } from "../../../../common/LoggedUserProvider";
 
 const EditOption = ({ id, name, participants, fetchUpdatedProject }) => {
@@ -71,9 +72,11 @@ const EditOption = ({ id, name, participants, fetchUpdatedProject }) => {
   );
 
   const customRender = (selected) => {
+    const nameOnly = selected.label.split("(")[0];
+
     return (
       <Flex flexDir="row" alignItems="center">
-        <Avvvatars value={selected.label} />
+        <Avvvatars value={textUtils.getFirstLetters(nameOnly)} />
 
         {colorMode === "dark" ? (
           <Text pl={5} color="#fffdfe">

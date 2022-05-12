@@ -23,9 +23,9 @@ import Pagination from "../components/common/Pagination/Pagination";
 import SectionHeader from "../components/common/SectionHeader/SectionHeader";
 import CreateProjectModal from "../components/dashboard/CreateProjectModal/CreateProjectModal";
 import ProjectGrid from "../components/dashboard/ProjectGrid/ProjectGrid";
-import StoryGrid from "../components/common/StaticBoard/StaticBoardDashboard";
 import MainContainer from "../components/layout/MainContainer";
 import { digFind } from "../utils/object";
+import StaticBoardDashboard from "../components/common/StaticBoard/StaticBoardDashboard";
 
 const Dashboard = ({ authToken }) => {
   // Get current user from cookies
@@ -314,7 +314,6 @@ const Dashboard = ({ authToken }) => {
               px={10}
               onClick={handleSearchStory}
               color={useColorModeValue("#031d46", "#fffdfe")}
-              px={10}
             >
               Search
             </Button>
@@ -339,7 +338,7 @@ const Dashboard = ({ authToken }) => {
               No task found in any project. Enjoy your day!
             </NoItem>
           ) : (
-            <StoryGrid
+            <StaticBoardDashboard
               storyData={storyData}
               projectTitle={currentProjectName}
               currentStoryPage={currentStoryPage}

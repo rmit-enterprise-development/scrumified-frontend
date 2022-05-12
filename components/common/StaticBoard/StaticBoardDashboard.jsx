@@ -8,7 +8,7 @@ import {
 import { GoChecklist } from "react-icons/go";
 import NoItem from "../../common/NoItem/NoItem";
 import Pagination from "../../common/Pagination/Pagination";
-import StoryCardDashboard from "./StoryCardDashboard/StoryCardDashboard";
+import StaticCard from "./StaticCard/StaticCard";
 
 const StaticBoardDashboard = ({
   projectTitle,
@@ -47,7 +47,7 @@ const StaticBoardDashboard = ({
         <NoItem icon={GoChecklist}>No task found in this project!</NoItem>
       )}
       {storyData.storyList.map((story) => (
-        <StoryCardDashboard key={story.id} card={story} />
+        <StaticCard key={story.id} card={story} />
       ))}
       <Pagination
         currentPage={currentStoryPage}

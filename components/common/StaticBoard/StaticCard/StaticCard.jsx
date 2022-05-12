@@ -40,6 +40,7 @@ const StaticCard = ({ card, isBacklog, participants }) => {
       color={useColorModeValue("#031d46", "#fffdfe")}
       mb={4}
       p={4}
+      minH={93}
       boxShadow="base"
       onClick={() => {
         isBacklog

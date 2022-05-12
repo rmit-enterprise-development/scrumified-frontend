@@ -4,13 +4,8 @@ import {
   Box,
   Circle,
   Flex,
-  Heading,
-  Text,
-  useDisclosure,
-  WrapItem,
-  Tooltip,
-  IconButton,
-  useColorModeValue,
+  Heading, IconButton, Text, Tooltip, useDisclosure,
+  WrapItem
 } from '@chakra-ui/react';
 import Avvvatars from 'avvvatars-react';
 import { Draggable } from 'react-beautiful-dnd';
@@ -46,6 +41,10 @@ const Card = ({ participants, bg, color, btnColor, btnBg, card, ...props }) => {
             mb={4}
             p={4}
             boxShadow="base"
+            _hover={{
+              boxShadow: '0 0 5px 5px #e6e6e7',
+              transition: 'all 0.4s linear',
+            }}
           >
             <Flex alignItems={'center'} justifyContent={'space-between'}>
               <Heading fontSize="lg" isTruncated>
@@ -69,6 +68,7 @@ const Card = ({ participants, bg, color, btnColor, btnBg, card, ...props }) => {
                 </Tooltip>
               </WrapItem>
             </Flex>
+
             <Flex
               mt={3}
               justifyContent="space-between"

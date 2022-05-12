@@ -14,9 +14,13 @@ const Column = ({ title, id, cardList, color, bgGradient }) => {
       boxShadow="base"
       borderRadius={'1rem'}
       py={2.5}
+      transition="all 0.5s linear"
       px={4}
       mb={5}
-      maxH="77vh"
+      maxH="24.5vh"
+      _hover={{
+        maxHeight: '77vh',
+      }}
       overflow="scroll"
     >
       <Text

@@ -17,6 +17,7 @@ import {
   useColorMode,
   useColorModeValue,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import Avvvatars from "avvvatars-react";
 import { CUIAutoComplete } from "chakra-ui-autocomplete";
@@ -31,6 +32,7 @@ import { LoggedUserContext } from "../../common/LoggedUserProvider";
 const CreateProjectModal = () => {
   const { colorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const toast = useToast();
   const [searchTerm, setSearchTerm] = useState("");
   const [isExisted, setIsExisted] = useState(true);
   const [isValid, setIsValid] = useState(true);
@@ -102,7 +104,12 @@ const CreateProjectModal = () => {
 
           // Push to project backlog with new ID
           const projectID = response.data.id;
-
+          toast({
+            title: "Create project successfully!",
+            status: "success",
+            duration: 2000,
+            isClosable: true,
+          });
           Router.push({
             pathname: `${RouterPage.PROJECT}/${projectID}${RouterPage.BACKLOG}`,
           });

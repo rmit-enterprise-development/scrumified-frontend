@@ -8,7 +8,11 @@ import SideBar from '../common/SideBar/SideBar';
 
 export default function MainContainer({ children }) {
   return (
-    <Flex flexDir={useBreakpointValue({ base: 'column', md: 'row' })}>
+    <Flex
+      maxH="100vh"
+      overflow="scroll"
+      flexDir={useBreakpointValue({ base: 'column', md: 'row' })}
+    >
       <SideBar />
       <Box flexGrow="1" bg={useColorModeValue('#FFFDFE', '#031E49')}>
         <Box

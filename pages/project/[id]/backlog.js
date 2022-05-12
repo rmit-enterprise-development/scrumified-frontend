@@ -2,7 +2,7 @@ import { Box, useColorModeValue } from "@chakra-ui/react";
 import cookies from "next-cookies";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import projectAPI from "../../../api/services/projectAPI";
 import { LoggedUserProvider } from "../../../components/common/LoggedUserProvider";
 import SectionHeader from "../../../components/common/SectionHeader/SectionHeader";
@@ -68,6 +68,7 @@ const Backlog = ({ authToken }) => {
   useEffect(() => {
     setwinReady(true);
     getParticipants(); // Always get participants first
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

@@ -48,7 +48,7 @@ const Card = ({ participants, bg, color, btnColor, btnBg, card, ...props }) => {
             boxShadow="base"
           >
             <Flex alignItems={'center'} justifyContent={'space-between'}>
-              <Heading fontSize="xl" isTruncated>
+              <Heading fontSize="lg" isTruncated>
                 {card.userStory}
               </Heading>
 

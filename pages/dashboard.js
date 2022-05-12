@@ -35,7 +35,7 @@ const Dashboard = ({ authToken }) => {
   );
 
   const PAGE_LIMIT_PROJECT = 4;
-  const PAGE_LIMIT_STORY = 3;
+  const PAGE_LIMIT_STORY = 2;
 
   //----------------Project Setting-----------------------//
   // Init projectData & its pagination

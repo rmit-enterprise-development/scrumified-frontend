@@ -1,37 +1,27 @@
-import { Text, Box, Flex, Grid, useColorModeValue } from '@chakra-ui/react';
+import { Flex, Text } from '@chakra-ui/react';
 import React from 'react';
 import { Droppable } from 'react-beautiful-dnd';
 import { GoTasklist } from 'react-icons/go';
 import NoItem from '../common/NoItem/NoItem';
-import Card from './Card';
 
-const Column = ({
-  title,
-  id,
-  cards,
-  setCards,
-  cardList,
-  bg,
-  color,
-  btnBg,
-  btnColor,
-  bgGradient,
-}) => {
+const Column = ({ title, id, cardList, color, bgGradient }) => {
   return (
     <Flex
       flexDir={'column'}
       dir="column"
       boxSizing="border-box"
-      overflow="hidden"
       bgGradient={bgGradient}
       boxShadow="base"
       borderRadius={'1rem'}
       py={2.5}
       px={4}
+      mb={5}
+      maxH="77vh"
+      overflow="scroll"
     >
       <Text
         textAlign={'center'}
-        fontSize={'xl'}
+        fontSize={'1.5rem'}
         fontWeight={'bold'}
         color={color}
         p={4}
@@ -39,7 +29,7 @@ const Column = ({
         {title}
       </Text>
 
-      {cardList.length === 0 && (
+      {cardList && cardList.length === 0 && (
         <NoItem icon={GoTasklist}>
           No item found. Create your first story!
         </NoItem>

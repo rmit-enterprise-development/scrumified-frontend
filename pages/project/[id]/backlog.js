@@ -122,13 +122,11 @@ const Backlog = ({ authToken }) => {
 	};
 
 	const [cards, setCards] = useState({});
-	const cardsRef = useRef(cards);
 	const [cardList, setCardList] = useState([]);
 	const [participants, setParticipants] = useState([]);
 
 	useEffect(() => {
 		getCards().then((data) => {
-			cardsRef.current = data;
 			return setCards(data);
 		});
 		getParticipants().then((data) => setParticipants(data));
@@ -136,19 +134,8 @@ const Backlog = ({ authToken }) => {
 		const handleReceiveCard = (e) => {
 			console.log(e.data);
 			getCards().then((data) => {
-				cardsRef.current = data;
 				return setCards(data);
 			});
-			// const newCard = JSON.parse(e.data);
-			// const newCards = { ...cardsRef.current };
-			// newCards[newCard.id] = newCard;
-			// if (!!newCard.parentStoryId) {
-			// 	newCards[Number(newCard.parentStoryId)].childStoryId =
-			// 		newCard.id;
-			// }
-			// cardsRef.current = newCards;
-			// setCards(newCards);
-			// console.log('new cards', newCards);
 		};
 
 		const uri = `https://scrumified-dev-bakend.herokuapp.com/backlog?projectId=${projectId}`;
@@ -210,8 +197,7 @@ const Backlog = ({ authToken }) => {
 			console.log(renderCards);
 			return renderCards;
 		};
-		console.log('cardList', cardsRef.current);
-		const tmp = linkCards(cardsRef.current, 'backlog');
+		const tmp = linkCards(cards, 'backlog');
 		setCardList(tmp);
 	}, [bg, cards, color]);
 

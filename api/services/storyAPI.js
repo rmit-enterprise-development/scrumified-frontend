@@ -12,9 +12,9 @@ const storyAPI = {
 	 * @param {*} params {userStory(String), category(String), point(int), status(String), assignId(Long)}
 	 * @returns
 	 */
-	putStory: (id, params, isDragged) => {
-		const url = `/stories/${id}?isDragged=${isDragged}`;
-		return axiosClient.put(url, params);
+	putStory: (id, data, params) => {
+		const url = `/stories/${id}`;
+		return axiosClient.put(url, data, params);
 	},
 
 	deleteStory: (id) => {

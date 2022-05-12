@@ -13,9 +13,6 @@ export default function linkCards(cards, category) {
 		},
 	];
 	let renderCards = [];
-	if (Object.keys(cards).length === 0) {
-		return renderCards;
-	}
 
 	let tmp = null;
 	for (let key in cards) {
@@ -28,6 +25,10 @@ export default function linkCards(cards, category) {
 			tmp = cards[key];
 			break;
 		}
+	}
+
+	if (!tmp) {
+		return renderCards;
 	}
 
 	let i = 0;

@@ -1,10 +1,16 @@
-import { Flex, Box, Text, useColorModeValue } from "@chakra-ui/react";
+import {
+  Flex,
+  Box,
+  Text,
+  useColorModeValue,
+  useBreakpointValue,
+} from "@chakra-ui/react";
 import { GoChecklist } from "react-icons/go";
 import NoItem from "../../common/NoItem/NoItem";
 import Pagination from "../../common/Pagination/Pagination";
-import StoryCardDashboard from "./StoryCardDashboard/StoryCardDashboard";
+import StaticCard from "./StaticCard/StaticCard";
 
-const StoryGrid = ({
+const StaticBoardDashboard = ({
   projectTitle,
   storyData,
   currentStoryPage,
@@ -13,8 +19,9 @@ const StoryGrid = ({
 }) => {
   return (
     <Flex
+      maxH="17.5rem"
+      mb={useBreakpointValue({ base: "2rem", md: 0 })}
       flexDir={"column"}
-      dir="column"
       boxSizing="border-box"
       overflow="hidden"
       bgGradient={useColorModeValue(
@@ -23,7 +30,8 @@ const StoryGrid = ({
       )}
       boxShadow="base"
       borderRadius={"1rem"}
-      py={4}
+      py={2.5}
+      px={4}
     >
       <Text
         textAlign={"center"}
@@ -39,7 +47,7 @@ const StoryGrid = ({
         <NoItem icon={GoChecklist}>No task found in this project!</NoItem>
       )}
       {storyData.storyList.map((story) => (
-        <StoryCardDashboard key={story.id} card={story} />
+        <StaticCard key={story.id} card={story} />
       ))}
       <Pagination
         currentPage={currentStoryPage}
@@ -53,4 +61,4 @@ const StoryGrid = ({
   );
 };
 
-export default StoryGrid;
+export default StaticBoardDashboard;

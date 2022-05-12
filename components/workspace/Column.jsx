@@ -1,52 +1,60 @@
-import { Text, Box, Flex, Grid } from '@chakra-ui/react';
+import { Flex, Text } from '@chakra-ui/react';
 import React from 'react';
 import { Droppable } from 'react-beautiful-dnd';
-import Card from './Card';
+import { GoTasklist } from 'react-icons/go';
+import NoItem from '../common/NoItem/NoItem';
 
-const Column = ({ title, id, cards }) => {
-	console.log(cards);
-	return (
-		<Flex
-			flexDir={'column'}
-			// w={{ base: '20%', md: '40%' }}
-			dir="column"
-			boxSizing="border-box"
-			overflow="hidden"
-			// bg={'white'}
-			boxShadow="base"
-			borderRadius={'1rem'}
-		>
-			<Box padding={'4'}>
-				<Text
-					textAlign={'center'}
-					// color={'white'}
-					fontSize={'xl'}
-					fontWeight={'bold'}
-				>
-					{title}
-				</Text>
-			</Box>
-			<Droppable droppableId={id}>
-				{(provided) => (
-					<Box
-						flexGrow={1}
-						ref={provided.innerRef}
-						{...provided.droppableProps}
-						padding={'2'}
-					>
-						{cards.map((card) => (
-							<Card
-								key={card.id}
-								card={card}
-								index={card.position}
-							/>
-						))}
-						{provided.placeholder}
-					</Box>
-				)}
-			</Droppable>
-		</Flex>
-	);
+const Column = ({ title, id, cardList, color, bgGradient }) => {
+  return (
+    <Flex
+      flexDir={'column'}
+      dir="column"
+      boxSizing="border-box"
+      bgGradient={bgGradient}
+      boxShadow="base"
+      borderRadius={'1rem'}
+      py={2.5}
+      transition="all 0.5s linear"
+      px={4}
+      mb={5}
+      maxH="24.5vh"
+      _hover={{
+        maxHeight: '77vh',
+      }}
+      overflow="scroll"
+    >
+      <Text
+        textAlign={'center'}
+        fontSize={'1.5rem'}
+        fontWeight={'bold'}
+        color={color}
+        p={4}
+      >
+        {title}
+      </Text>
+
+      {cardList && cardList.length === 0 && (
+        <NoItem icon={GoTasklist}>
+          No item found. Create your first story!
+        </NoItem>
+      )}
+
+      <Droppable droppableId={id}>
+        {(provided) => (
+          <Flex
+            flexDirection={'column'}
+            flexGrow={1}
+            ref={provided.innerRef}
+            {...provided.droppableProps}
+            padding={'2'}
+          >
+            {cardList}
+            {provided.placeholder}
+          </Flex>
+        )}
+      </Droppable>
+    </Flex>
+  );
 };
 
 export default Column;

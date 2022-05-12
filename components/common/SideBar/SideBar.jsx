@@ -6,6 +6,7 @@ import {
   IconButton,
   useColorMode,
   useColorModeValue,
+  useBreakpointValue,
   useDisclosure,
 } from "@chakra-ui/react";
 import React from "react";
@@ -17,7 +18,11 @@ export default function Sidebar({ children }) {
   const { toggleColorMode } = useColorMode();
 
   return (
-    <Box minH="100vh" bg={useColorModeValue("#FFFDFE", "#031E49")}>
+    <Box
+      minH={useBreakpointValue({ base: "0.5rem", md: "100vh" })}
+      bg={useColorModeValue("#FFFDFE", "#031E49")}
+      h="100%"
+    >
       <SidebarContent
         onClose={() => onClose}
         toggleColorMode={toggleColorMode}
@@ -40,9 +45,7 @@ export default function Sidebar({ children }) {
       <Box>
         {/* mobilenav */}
         <MobileNav display={{ base: "flex", md: "none" }} onOpen={onOpen} />
-        <Box ml={{ base: 0, md: 60 }} p="4">
-          {children}
-        </Box>
+        <Box ml={{ base: 0, md: 60 }}>{children}</Box>
       </Box>
     </Box>
   );
@@ -51,12 +54,15 @@ export default function Sidebar({ children }) {
 const MobileNav = ({ onOpen, ...rest }) => {
   return (
     <Flex
+      position="absolute"
+      top="-5px"
+      right="14px"
       ml={{ base: 0, md: 60 }}
       px={{ base: 4, md: 24 }}
       height="20"
       alignItems="center"
       borderBottomColor={useColorModeValue("gray.200", "gray.700")}
-      justifyContent="flex-start"
+      justifyContent="flex-end"
       {...rest}
     >
       <IconButton

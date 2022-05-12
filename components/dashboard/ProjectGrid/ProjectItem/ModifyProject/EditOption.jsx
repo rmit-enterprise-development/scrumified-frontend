@@ -1,4 +1,3 @@
-import { AddIcon } from "@chakra-ui/icons";
 import {
   Button,
   CircularProgress,
@@ -17,22 +16,20 @@ import {
   useColorMode,
   useColorModeValue,
   useDisclosure,
-  useToast,
 } from "@chakra-ui/react";
 import Avvvatars from "avvvatars-react";
 import { CUIAutoComplete } from "chakra-ui-autocomplete";
-import Router from "next/router";
 import { useContext, useEffect, useRef, useState } from "react";
-import userAPI from "../../../api/services/userAPI";
-import { digFind } from "../../../utils/object";
-import textUtils from "../../../utils/text";
-import { RouterPage } from "../../../config/router";
-import { LoggedUserContext } from "../../common/LoggedUserProvider";
+import { AiOutlineEdit } from "react-icons/ai";
+import projectAPI from "../../../../../api/services/projectAPI";
+import userAPI from "../../../../../api/services/userAPI";
+import { digFind } from "../../../../../utils/object";
+import textUtils from "../../../../../utils/text";
+import { LoggedUserContext } from "../../../../common/LoggedUserProvider";
 
-const CreateProjectModal = () => {
+const EditOption = ({ id, name, participants, fetchUpdatedProject }) => {
   const { colorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const toast = useToast();
   const [searchTerm, setSearchTerm] = useState("");
   const [isExisted, setIsExisted] = useState(true);
   const [isValid, setIsValid] = useState(true);
@@ -43,7 +40,15 @@ const CreateProjectModal = () => {
   const finalRef = useRef();
 
   const [pickerItems, setPickerItems] = useState([]);
-  const [selectedItems, setSelectedItems] = useState([]);
+  const [selectedItems, setSelectedItems] = useState(
+    participants
+      ? participants.map((a) => {
+          const userInfo =
+            a.firstName + " " + a.lastName + " (" + a.email + ")";
+          return { value: a.id, label: userInfo };
+        })
+      : []
+  );
 
   const user = useContext(LoggedUserContext);
 
@@ -53,7 +58,7 @@ const CreateProjectModal = () => {
     }
   };
 
-  const [text, setText] = useState("");
+  const [text, setText] = useState(name);
   const handleTextChange = (event) => setText(event.target.value);
 
   const customInputRender = (inputProps) => (
@@ -100,19 +105,11 @@ const CreateProjectModal = () => {
       if (user) {
         try {
           setIsSubmitting(true);
-          const response = await userAPI.postProject(user.logUserId, request);
+          const response = await projectAPI.putProject(id, request);
 
-          // Push to project backlog with new ID
-          const projectID = response.data.id;
-          toast({
-            title: "Create project successfully!",
-            status: "success",
-            duration: 2000,
-            isClosable: true,
-          });
-          Router.push({
-            pathname: `${RouterPage.PROJECT}/${projectID}${RouterPage.BACKLOG}`,
-          });
+          if (response) {
+            fetchUpdatedProject();
+          }
         } catch (error) {
           console.error("There was an error: ", error);
         } finally {
@@ -125,7 +122,7 @@ const CreateProjectModal = () => {
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(async () => {
-      if (searchTerm !== "" && searchTerm.length >= 2) {
+      if (searchTerm !== "" && searchTerm.length >= 3) {
         // Send Axios request here
         try {
           const response = await userAPI.getAll({ key: searchTerm });
@@ -163,12 +160,16 @@ const CreateProjectModal = () => {
   return (
     <>
       <Button
-        leftIcon={<AddIcon />}
-        colorScheme="teal"
-        onClick={onOpen}
-        color={useColorModeValue("#FFFDFE", "#2d4046")}
+        variant="ghost"
+        rightIcon={<AiOutlineEdit />}
+        justifyContent="space-between"
+        fontWeight="normal"
+        onClick={(e) => {
+          e.stopPropagation();
+          onOpen();
+        }}
       >
-        Create Project
+        Edit Project
       </Button>
 
       <Modal
@@ -180,7 +181,7 @@ const CreateProjectModal = () => {
         <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px)" />
         <ModalContent>
           <ModalHeader color={useColorModeValue("#031e49", "#fffdfe")}>
-            Create your project
+            Edit your project
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
@@ -197,7 +198,7 @@ const CreateProjectModal = () => {
               />
             </FormControl>
 
-            <FormControl mt={4}>
+            <FormControl mt={4} isRequired>
               <CUIAutoComplete
                 tagStyleProps={{
                   rounded: "full",
@@ -248,15 +249,21 @@ const CreateProjectModal = () => {
             {isSubmitting && (
               <CircularProgress isIndeterminate color="green.300" />
             )}
-            <Button onClick={onClose} disabled={isSubmitting} mr={3}>
+            <Button
+              onClick={onClose}
+              disabled={isSubmitting}
+              mr={3}
+              color={useColorModeValue("#031e49", "#fffdfe")}
+            >
               Cancel
             </Button>
             <Button
               colorScheme="blue"
               onClick={handleSubmit}
               disabled={isSubmitting}
+              color={useColorModeValue("#031e49", "#fffdfe")}
             >
-              Create
+              Edit
             </Button>
           </ModalFooter>
         </ModalContent>
@@ -265,4 +272,4 @@ const CreateProjectModal = () => {
   );
 };
 
-export default CreateProjectModal;
+export default EditOption;

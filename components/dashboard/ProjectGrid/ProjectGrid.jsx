@@ -1,7 +1,11 @@
 import { SimpleGrid } from "@chakra-ui/react";
 import ProjectItem from "./ProjectItem/ProjectItem";
 
-const ProjectGrid = ({ projectData, taskData }) => {
+const ProjectGrid = ({
+  projectData,
+  fetchUpdatedProject,
+  fetchProjectStory,
+}) => {
   const randomColor = [
     "green",
     "yellow",
@@ -12,19 +16,16 @@ const ProjectGrid = ({ projectData, taskData }) => {
     "red",
   ];
 
+  // openTasks={taskData.filter((obj) => obj.id === project.id).length} // Mock for now
   return (
-    <SimpleGrid columns={[1, 2, 4]} gap={5} py={2}>
+    <SimpleGrid columns={[1, 2, 2, 4]} gap={5} pb={7}>
       {projectData.map((project) => (
         <ProjectItem
           key={project.id}
-          id={project.id}
-          name={project.title}
-          author={project.owner.firstName + " " + project.owner.lastName}
-          createdTime={new Date(project.createdDate * 1000).toLocaleDateString(
-            "en-IN"
-          )}
+          project={project}
           color={randomColor[project.id % randomColor.length]} // Mock for now
-          openTasks={taskData.filter((obj) => obj.id === project.id).length} // Mock for now
+          fetchUpdatedProject={fetchUpdatedProject}
+          fetchProjectStory={fetchProjectStory}
         />
       ))}
     </SimpleGrid>

@@ -1,9 +1,10 @@
 import { Button } from "@chakra-ui/react";
 
-const NumberButton = ({ children }) => {
+const NumberButton = ({ id, openTask, fetchProjectStory }) => {
   const customToggle = (e) => {
     e.stopPropagation();
     // Fetch user task here
+    fetchProjectStory(id);
   };
   return (
     <>
@@ -14,12 +15,13 @@ const NumberButton = ({ children }) => {
         bg="red.500"
         color="white"
         w={2}
-        boxShadow={
-          "0px 1px 25px -5px rgb(66 153 225 / 48%), 0 10px 10px -5px rgb(66 153 225 / 43%)"
-        }
         onClick={(e) => customToggle(e)}
+        _hover={{
+          boxShadow:
+            "0px 1px 25px -5px rgb(66 153 225 / 48%), 0 10px 10px -5px rgb(66 153 225 / 43%)",
+        }}
       >
-        {children}
+        {openTask}
       </Button>
     </>
   );

@@ -21,10 +21,12 @@ import { Field, Form, Formik } from 'formik';
 import { useRef } from 'react';
 import * as Yup from 'yup';
 import userAPI from '../../api/services/userAPI';
+import { useRouter } from 'next/router';
 
-const EditPasswordModal = ({ id, fname, lname, email, bio }) => {
+const EditPasswordModal = ({ id, email }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
+  const router = useRouter();
   const initialRef = useRef();
   const finalRef = useRef();
   const initialValues = {};
@@ -36,36 +38,40 @@ const EditPasswordModal = ({ id, fname, lname, email, bio }) => {
       const loginServiceStatus = await userAPI.login(verifyData);
 
       // successfully verify password
-      if (loginServiceStatus.data.isSuccess) {
-        // update new user info
-        const updateData = { password: values.newPassword };
-        const updateServiceStatus = await userAPI.putUser(id, updateData);
-        if (updateServiceStatus.status === 200) {
-          toast({
-            title: 'Password changed',
-            description: 'Your password has been changed',
-            status: 'success',
-            duration: 3000,
-            isClosable: true,
-          })
-          onClose();
-        } else {
-          toast({
-            title: 'Service Failure',
-            description: 'Application failed to perform task!',
-            status: 'error',
-            duration: 3000,
-            isClosable: true,
-          })
-          throw new Error(
-            `Login service failed, msg: ${updateServiceStatus.statusText}`
-          );
-        }
-      } else {
-        alert('Incorrect password confirmation!');
-      }
+      if (!loginServiceStatus.data.isSuccess)
+        throw `Incorrect confirm password`;
+
+      // update new user info
+      const updateData = { password: values.newPassword };
+      const updateServiceStatus = await userAPI.putUser(id, updateData);
+
+      // update data failure
+      if (updateServiceStatus.status !== 200)
+        throw `There has been an error updating your password: ${updateServiceStatus.statusText}`;
+
+      await toast({
+        title: 'Update Password',
+        description: 'Your password has been updated. Refreshing ...',
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+      });
+
+      await onClose();
+      setTimeout(() => {
+        router.reload();
+      }, 2000);
     } catch (error) {
-      console.log(error);
+      await toast({
+        title: 'Update Password',
+        description:
+          typeof error !== 'string'
+            ? 'Server error, cannot update password'
+            : error,
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
     }
   };
 
@@ -118,7 +124,9 @@ const EditPasswordModal = ({ id, fname, lname, email, bio }) => {
                   <Field name="oldPassword">
                     {({ field, form }) => (
                       <FormControl
-                        isInvalid={form.errors.oldPassword && form.touched.oldPassword}
+                        isInvalid={
+                          form.errors.oldPassword && form.touched.oldPassword
+                        }
                       >
                         <FormLabel
                           htmlFor="oldPassword"

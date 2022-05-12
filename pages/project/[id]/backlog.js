@@ -1,104 +1,206 @@
-import { Box } from "@chakra-ui/react";
+import { Box, useColorModeValue } from "@chakra-ui/react";
+import cookies from "next-cookies";
 import Head from "next/head";
-import React, { useEffect, useState } from "react";
-// import projectAPI from "../../../api/services/projectAPI";
+import { useRouter } from "next/router";
+import React, { useEffect, useRef, useState } from "react";
+import projectAPI from "../../../api/services/projectAPI";
+import { LoggedUserProvider } from "../../../components/common/LoggedUserProvider";
 import SectionHeader from "../../../components/common/SectionHeader/SectionHeader";
+import StaticBoardBacklog from "../../../components/common/StaticBoard/StaticBoardBacklog";
 import MainContainer from "../../../components/layout/MainContainer";
 import BacklogController from "../../../components/workspace/BacklogController";
 import Board from "../../../components/workspace/Board";
+import Card from "../../../components/workspace/Card";
 import Column from "../../../components/workspace/Column";
 
-import cookies from "next-cookies";
-import { LoggedUserProvider } from "../../../components/common/LoggedUserProvider";
+var isEvtSrcOpenedOnce = false;
 
-const Backlog = ({ cards, authToken }) => {
-  const initData = [
-    {
-      id: "1",
-      userStory: "Card1",
-      category: "Hello",
-      point: "12",
-      position: 2,
-      status: "backlog",
-    },
-    {
-      id: "2",
-      userStory: "Card2",
-      category: "Hello",
-      point: "12",
-      position: 0,
-      status: "backlog",
-    },
-    {
-      id: "3",
-      userStory: "Card3",
-      category: "Hello",
-      point: "12",
-      position: 1,
-      status: "backlog",
-    },
-  ];
+const Backlog = ({ authToken }) => {
+	let bg = useColorModeValue('white', '#405A7D');
+	let color = useColorModeValue('#031d46', '#fffdfe');
+	let btnBg = useColorModeValue('gray.200', '#fffdfe');
+	let btnColor = 'black';
+	let bgGradient = useColorModeValue(
+		'linear(gray.50 0%, gray.100 100%)',
+		'linear(blue.800 0%, blue.900 100%)'
+	);
 
-  const [data, setData] = useState(initData);
+	const { asPath } = useRouter();
 
-  const filterCards = (s) => {
-    const cards = data.filter((card) => card.status === s);
-    cards = cards.sort((a, b) => a.position - b.position);
-    return cards;
+	const projectId = asPath.split('/')[2];
+
+  const getParticipants = async () => {
+    try {
+      const response = await projectAPI.getProject(projectId);
+      const json = response.data;
+      if (json.participants) {
+        setParticipants([json.owner, ...json.participants]);
+      } else {
+        setParticipants([json.owner]);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
+  const getCards = async () => {
+    try {
+      const response = await projectAPI.getAllStories(projectId, {
+        isBacklog: true,
+      });
+      const json = response.data;
+      setCards(json);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+	const [cards, setCards] = useState({});
+	const [cardList, setCardList] = useState([]);
+	const [participants, setParticipants] = useState([]);
+
   const [winReady, setwinReady] = useState(false);
+  // Filtered Card (from Backlog Controller)
+  const [filteredCard, setFilteredCard] = useState([]);
+
   useEffect(() => {
     setwinReady(true);
+    getParticipants(); // Always get participants first
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return (
-    <LoggedUserProvider authToken={authToken}>
-      <Head>
-        <title>Backlog</title>
-      </Head>
-      <MainContainer>
-        <Box>
-          <SectionHeader>Backlog</SectionHeader>
-          <BacklogController data={data} setData={setData} />
-          {winReady ? (
-            <Board data={data} setData={setData}>
-              <Column
-                key={0}
-                title={"Backlog"}
-                id={"backlog"}
-                cards={filterCards("backlog")}
-              />
-            </Board>
-          ) : null}
-        </Box>
-      </MainContainer>
-    </LoggedUserProvider>
-  );
+  useEffect(() => {
+    getCards();
+
+    const handleReceiveCard = (e) => {
+      getCards();
+    };
+
+    const uri = `https://scrumified-dev-bakend.herokuapp.com/backlog?projectId=${projectId}`;
+    let eventSource = new EventSource(uri);
+    eventSource.onopen = (e) => {
+      if (isEvtSrcOpenedOnce) {
+        // eventSource.close();
+      } else {
+        isEvtSrcOpenedOnce = true;
+      }
+      console.log("Open Backlog Event Source!");
+    };
+    eventSource.onmessage = (e) => {
+      console.log("on message", e.data);
+    };
+    eventSource.addEventListener("update", handleReceiveCard);
+    return () => {
+      eventSource.close();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [participants]); // Always make sure participants available first
+
+  useEffect(() => {
+    const linkCards = (data, category) => {
+      let renderCards = [];
+      if (Object.keys(data).length === 0) {
+        return renderCards;
+      }
+
+			let tmp = null;
+			for (let key in data) {
+				if (
+					cards.hasOwnProperty(key) &&
+					!data[key].parentStoryId &&
+					data[key].status === category
+				) {
+					tmp = data[key];
+					break;
+				}
+			}
+
+      let i = 0;
+
+      while (true) {
+        renderCards.push(
+          <Card
+            key={tmp.id}
+            card={tmp}
+            index={i++}
+            participants={participants}
+            bg={bg}
+            color={color}
+            btnBg={btnBg}
+            btnColor={btnColor}
+          />
+        );
+        if (!!tmp.childStoryId) tmp = data[tmp.childStoryId];
+        else break;
+      }
+
+      return renderCards;
+    };
+    const tmp = linkCards(cards, "backlog");
+    setCardList(tmp);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cards]);
+
+	return (
+		<LoggedUserProvider authToken={authToken}>
+			<Head>
+				<title>Backlog</title>
+			</Head>
+			<MainContainer>
+				<Box>
+					<SectionHeader>Backlog</SectionHeader>
+					<BacklogController
+						cards={cards}
+						setCards={setCards}
+						bg={bg}
+						color={color}
+						btnBg={btnBg}
+						btnColor={btnColor}
+						projectId={projectId}
+						participants={participants}
+						setFilteredCard={setFilteredCard}
+					/>
+
+					{filteredCard.length > 0 ? (
+						<StaticBoardBacklog
+							storyList={filteredCard}
+							participants={participants}
+						/>
+					) : winReady ? (
+						<Board
+							cards={cards}
+							setCards={setCards}
+							cardList={cardList}
+							isBacklog={true}
+						>
+							<Column
+								key={0}
+								title={'Stories'}
+								id={'backlog'}
+								cards={cards}
+								setCards={setCards}
+								cardList={cardList}
+								bg={bg}
+								color={color}
+								btnBg={btnBg}
+								btnColor={btnColor}
+								bgGradient={bgGradient}
+							/>
+						</Board>
+					) : null}
+				</Box>
+			</MainContainer>
+		</LoggedUserProvider>
+	);
 };
 
 export async function getServerSideProps(ctx) {
-  const { auth } = cookies(ctx);
-  return { props: { authToken: auth || "" } };
+	const { auth } = cookies(ctx);
+	return {
+		props: {
+			authToken: auth || '',
+		},
+	};
 }
 
 export default Backlog;
-
-// export async function getStaticProps() {
-// 	const res = await fetch('http://127.0.0.1:8989/projects/1/stories');
-// 	const cards = await res.json();
-// 	if (cards['_embedded']) {
-// 		return {
-// 			props: {
-// 				cards: cards['_embedded'].storyDtoList,
-// 			},
-// 			revalidate: 5,
-// 		};
-// 	}
-// 	return {
-// 		props: {
-// 			cards: [],
-// 		},
-// 		revalidate: 5,
-// 	};
-// }

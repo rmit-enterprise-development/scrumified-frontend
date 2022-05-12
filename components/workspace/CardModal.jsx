@@ -1,395 +1,300 @@
 import {
-	Modal,
-	ModalOverlay,
-	ModalContent,
-	ModalHeader,
-	ModalBody,
-	ModalFooter,
 	Button,
+	Flex,
 	FormControl,
 	FormLabel,
 	Input,
-	Flex,
-	Textarea,
+	Modal,
+	ModalBody,
+	ModalContent,
+	ModalFooter,
+	ModalHeader,
+	ModalOverlay,
 	Select,
-	Text,
-	useColorMode,
-	useColorModeValue,
+	Textarea,
 } from '@chakra-ui/react';
-import Avvvatars from 'avvvatars-react';
-import { CUIAutoComplete } from 'chakra-ui-autocomplete';
 import React, { useState } from 'react';
+import projectAPI from '../../api/services/projectAPI';
+import storyAPI from '../../api/services/storyAPI';
 
-const CardModal = ({ isOpen, onOpen, onClose, data, setData }) => {
-	const [userList, setUserList] = useState([
-		{
-			id: '1',
-			name: 'Minh Pham',
-			email: 'pcminh0505@gmail.com',
-		},
-		{
-			id: '3',
-			name: 'Thach Ho',
-			email: 'thachho@123@gmail.com',
-		},
-		{
-			id: '2',
-			name: 'Khang Nguyen',
-			email: 'khangnguyen111101@gmail.com',
-		},
-		{
-			id: '5',
-			name: 'Duong Nguyen',
-			email: 'duongnguyen123@gmail.com',
-		},
-		{
-			id: '4',
-			name: 'An Le',
-			email: 'andrew123@gmail.com',
-		},
-	]);
-	const [categories, setCategories] = useState([
-		'backend',
-		'frontend',
-		'left',
-		'right',
-		'center',
-	]);
-
-	const categoryList = categories.map((category) => {
-		return { value: category, label: category };
-	});
-
-	const [sortedCategory, setSortedCategory] = useState(
-		categoryList.sort((a, b) => a.label.localeCompare(b.label))
-	);
-
-	const [selectedCategory, setSelectedCategory] = useState([]);
-
-	const participantList = userList.map((a) => {
-		const userInfo = a.name + ' (' + a.email + ')';
-		return { value: a.id, label: userInfo };
-	});
-
-	const [selectedItems, setSelectedItems] = useState([]);
-
-	const { colorMode } = useColorMode();
-
-	const [pickerItems, setPickerItems] = useState(
-		participantList.sort((a, b) => a.label.localeCompare(b.label))
-	);
-
-	const handleSelectedItemsChange = (selectedItems) => {
-		if (selectedItems) {
-			setSelectedItems(selectedItems);
-		}
-	};
-
-	const customRender = (selected) => {
-		return (
-			<Flex flexDir="row" alignItems={'center'}>
-				<Avvvatars value={selected.label} />
-
-				{colorMode === 'dark' ? (
-					<Text pl={5} color="#fffdfe">
-						{selected.label}
-					</Text>
-				) : (
-					<Text pl={5} color="#031d46">
-						{selected.label}
-					</Text>
-				)}
-			</Flex>
-		);
-	};
-
-	const customCreateItemRender = (value) => {
-		return (
-			<Text as="span" color="red.500" fontWeight="bold">
-				User not found!
-			</Text>
-		);
-	};
-
-	const [card, setCard] = useState({
-		asA: '',
-		iNeed: '',
-		soThat: '',
+const CardModal = ({
+	isOpen,
+	onClose,
+	cards,
+	setCards,
+	color,
+	bg,
+	btnBg,
+	btnColor,
+	projectId,
+	participants,
+	prevCard,
+	isCard,
+}) => {
+	let initCard = {
+		userStory: '',
 		point: '',
 		category: '',
-		def: '',
-	});
-
-	const [isValidAsA, setIsValidAsA] = useState(false);
-	const [isValidINeed, setIsValidINeed] = useState(false);
-	const [isValidSoThat, setIsValidSoThat] = useState(false);
-	const [isValidPoint, setIsValidPoint] = useState(false);
-	const [isValidDef, setIsValidDef] = useState(false);
+		defOfDone: '',
+		assignId: '',
+	};
+	if (!!prevCard) {
+		initCard = prevCard;
+	}
 
 	const isValidInput = (value) => value.length > 0;
 
-	const createCard = (submitData) => {
-		const requestOptions = {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify(submitData),
-		};
+	const [card, setCard] = useState(initCard);
 
-		fetch('http://127.0.0.1:8989/projects/1/stories', requestOptions)
+	const [isValidUserStory, setIsValidUserStory] = useState(isCard);
+	const [isValidPoint, setIsValidPoint] = useState(isCard);
+	const [isValidDef, setIsValidDef] = useState(isCard);
+	const [isValidCateogry, setIsValidCateogry] = useState(isCard);
+	const [isValidAssignee, setIsValidAssignee] = useState(isCard);
+
+	const createCard = (card) => {
+		projectAPI
+			.postStory(projectId, card)
 			.then(async (response) => {
-				const isJson = response.headers
-					.get('content-Type')
-					?.includes('application/json');
-				const data = isJson && (await response.json());
-
-				if (!response.ok) {
-					const error = (data && data.message) || response.status;
-					return Promise.reject(error);
+				if (response.status !== 200) {
+					return Promise.reject(response.data);
 				}
 			})
 			.catch((error) => {
 				console.error(error);
 			});
 	};
+
+	const updateCard = (card) => {
+		storyAPI
+			.putStory(card.id, card, { isDragged: false })
+			.then(async (response) => {
+				if (response.status !== 200) {
+					return Promise.reject(response.data);
+				}
+			})
+			.catch((error) => {
+				console.error(error);
+			});
+	};
+
+	const deleteCard = (id) => {
+		storyAPI
+			.deleteStory(id)
+			.then(async (response) => {
+				if (response.status !== 200) {
+					return Promise.reject(response.data);
+				}
+			})
+			.catch((error) => {
+				console.error(error);
+			});
+	};
+
 	return (
 		<Modal
 			isCentered
 			isOpen={isOpen}
-			onClose={onClose}
-			width={'100%'}
-			height={'100%'}
+			onClose={() => {
+				setCard(initCard);
+				onClose();
+			}}
+			scrollBehavior={'inside'}
 		>
 			<ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px)" />
 			<ModalContent borderRadius={'1rem'} padding={'1rem'}>
-				<ModalHeader>Create User Story</ModalHeader>
-				<ModalBody>
-					<FormControl isRequired>
-						<Flex>
-							<FormLabel htmlFor="person" fontSize={'2xl'}>
-								As a
-							</FormLabel>
-							<Input
-								id="person"
-								flex={1}
-								variant="flushed"
-								placeholder="User"
-								onChange={(e) => {
-									setCard({ ...card, asA: e.target.value });
-									setIsValidAsA(isValidInput(e.target.value));
-								}}
-							/>
-						</Flex>
+				<ModalHeader color={color}>Create User Story</ModalHeader>
+				<ModalBody color={color}>
+					<FormControl mt={4}>
+						<FormLabel htmlFor="userStory" fontSize={'lg'}>
+							User Story
+						</FormLabel>
+						<Textarea
+							id="userStory"
+							defaultValue={card.userStory}
+							placeholder="As a ... I need ... So that ..."
+							resize={'none'}
+							onChange={(e) => {
+								setCard({ ...card, userStory: e.target.value });
+								setIsValidUserStory(
+									isValidInput(e.target.value)
+								);
+							}}
+						/>
 					</FormControl>
 
-					<FormControl mt={4} isRequired>
-						<Flex>
-							<FormLabel htmlFor="todo" fontSize={'2xl'}>
-								I need
-							</FormLabel>
-							<Input
-								id="todo"
-								flex={1}
-								variant="flushed"
-								placeholder="Todo task"
-								onChange={(e) => {
-									setCard({ ...card, iNeed: e.target.value });
-									setIsValidINeed(
-										isValidInput(e.target.value)
-									);
-								}}
-							/>
-						</Flex>
-					</FormControl>
-
-					<FormControl mt={4} isRequired>
-						<Flex>
-							<FormLabel htmlFor="explaination" fontSize={'2xl'}>
-								So that
-							</FormLabel>
-							<Input
-								id="explaination"
-								flex={1}
-								variant="flushed"
-								placeholder="Explaination"
-								onChange={(e) => {
-									setCard({
-										...card,
-										soThat: e.target.value,
-									});
-									console.log(isValidInput(e.target.value));
-									setIsValidSoThat(
-										isValidInput(e.target.value)
-									);
-								}}
-							/>
-						</Flex>
-					</FormControl>
-
-					<FormControl mt={4} isRequired>
-						<FormLabel htmlFor="definition" fontSize={'2xl'}>
+					<FormControl mt={4}>
+						<FormLabel htmlFor="definition" fontSize={'lg'}>
 							Definition of Done
 						</FormLabel>
 						<Textarea
 							id="definition"
-							placeholder="Here is a sample placeholder"
+							defaultValue={card.defOfDone}
+							placeholder="Requirement to complete a task"
 							resize={'none'}
 							onChange={(e) => {
-								setCard({ ...card, def: e.target.value });
+								setCard({ ...card, defOfDone: e.target.value });
 								setIsValidDef(isValidInput(e.target.value));
 							}}
 						/>
 					</FormControl>
 
-					<FormControl mt={4} isRequired>
-						<FormLabel htmlFor="point" fontSize={'2xl'}>
+					<FormControl mt={4}>
+						<FormLabel htmlFor="point" fontSize={'lg'}>
 							Story point:
 						</FormLabel>
 						<Select
 							id="point"
+							defaultValue={card.point}
 							placeholder="Select point"
 							onChange={(e) => {
 								setCard({ ...card, point: e.target.value });
 								setIsValidPoint(isValidInput(e.target.value));
 							}}
 						>
-							<option value="1">1 point</option>
-							<option value="2">2 point</option>
-							<option value="3">3 point</option>
-							<option value="5">5 point</option>
-							<option value="8">8 point</option>
-							<option value="13">13 point</option>
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+							<option value="5">5</option>
+							<option value="8">8</option>
+							<option value="13">13</option>
 						</Select>
 					</FormControl>
 
-					<FormControl mt={4} isRequired>
-						<CUIAutoComplete
-							tagStyleProps={{
-								rounded: 'full',
-							}}
-							label="Category"
-							placeholder="Enter the category"
-							onCreateItem={() => {}} //Empty because don't want to add option in list. Please see the example in "https://www.npmjs.com/package/chakra-ui-autocomplete"
-							items={sortedCategory}
-							itemRenderer={customRender}
-							// createItemRenderer={customCreateItemRender}
-							selectedItems={selectedCategory}
-							onSelectedItemsChange={(changes) => {
-								console.log(changes);
-								return handleSelectedCategoryChange(
-									changes.selectedItems
+					<FormControl mt={4}>
+						<FormLabel htmlFor="category" fontSize={'lg'}>
+							Category:
+						</FormLabel>
+						<Select
+							id="category"
+							defaultValue={card.category}
+							placeholder="Select category"
+							onChange={(e) => {
+								setCard({ ...card, category: e.target.value });
+								setIsValidCateogry(
+									isValidInput(e.target.value)
 								);
 							}}
-							hideToggleButton={true}
-							listStyleProps={{
-								maxHeight: '200',
-								overflow: 'auto',
-								bg: useColorModeValue('', '#2D3748'),
-							}}
-							listItemStyleProps={{
-								cursor: 'pointer',
-								_hover: {
-									bg: useColorModeValue('', '#031e49'),
-								},
-							}}
-							labelStyleProps={{
-								color: useColorModeValue('#031e49', '#fffdfe'),
-							}}
-							inputStyleProps={{
-								color: useColorModeValue('#031d46', '#fffdfe'),
-							}}
-						/>
+						>
+							<option value="Front-end">Front-end</option>
+							<option value="Back-end">Back-end</option>
+							<option value="Design(UI/UX)">
+								Design (UI/UX)
+							</option>
+							<option value="DevOps">DevOps</option>
+							<option value="Testing">Testing</option>
+						</Select>
 					</FormControl>
 
-					<FormControl mt={4} isRequired>
-						<CUIAutoComplete
-							tagStyleProps={{
-								rounded: 'full',
-							}}
-							label="Participants"
-							placeholder="Enter a participant's email"
-							onCreateItem={() => {}} //Empty because don't want to add option in list. Please see the example in "https://www.npmjs.com/package/chakra-ui-autocomplete"
-							items={pickerItems}
-							itemRenderer={customRender}
-							createItemRenderer={customCreateItemRender}
-							selectedItems={selectedItems}
-							onSelectedItemsChange={(changes) => {
-								console.log(changes);
-								return handleSelectedItemsChange(
-									changes.selectedItems
+					<FormControl mt={4}>
+						<FormLabel htmlFor="participant" fontSize={'lg'}>
+							Assignee:
+						</FormLabel>
+						<Select
+							id="participant"
+							defaultValue={card.assignId}
+							placeholder="Select participant"
+							onChange={(e) => {
+								setCard({
+									...card,
+									assignId: e.target.value,
+								});
+								setIsValidAssignee(
+									isValidInput(e.target.value)
 								);
 							}}
-							hideToggleButton={true}
-							listStyleProps={{
-								maxHeight: '200',
-								overflow: 'auto',
-								bg: useColorModeValue('', '#2D3748'),
-							}}
-							listItemStyleProps={{
-								cursor: 'pointer',
-								_hover: {
-									bg: useColorModeValue('', '#031e49'),
-								},
-							}}
-							labelStyleProps={{
-								color: useColorModeValue('#031e49', '#fffdfe'),
-							}}
-							inputStyleProps={{
-								color: useColorModeValue('#031d46', '#fffdfe'),
-							}}
-						/>
+						>
+							{participants &&
+								participants.map((participant, idx) => (
+									<option key={idx} value={participant.id}>
+										{participant.email}
+									</option>
+								))}
+						</Select>
 					</FormControl>
 				</ModalBody>
 				<ModalFooter>
-					<Button onClick={onClose} mr={4}>
+					{isCard && (
+						<Button
+							colorScheme={'red'}
+							variant={'outline'}
+							onClick={() => {
+								deleteCard(card.id);
+								onClose();
+							}}
+							mr={4}
+						>
+							Delete
+						</Button>
+					)}
+					<Button
+						colorScheme={'gray'}
+						variant={'outline'}
+						onClick={onClose}
+						mr={4}
+					>
 						Close
 					</Button>
 					<Button
+						colorScheme={'telegram'}
+						isDisabled={
+							!(
+								isValidUserStory &&
+								isValidDef &&
+								isValidPoint &&
+								isValidAssignee &&
+								isValidCateogry
+							)
+						}
 						onClick={() => {
 							if (
-								isValidAsA &&
-								isValidINeed &&
-								isValidSoThat &&
+								isValidUserStory &&
 								isValidDef &&
-								isValidPoint
+								isValidPoint &&
+								isValidAssignee &&
+								isValidCateogry
 							) {
-								const result = {
-									// id: Math.floor(Math.random() * 10000),
-									userStory:
-										'As a ' +
-										card.asA +
-										', I need ' +
-										card.iNeed +
-										'. So that, ' +
-										card.soThat,
-									point: card.point,
-									category: 'abc',
-									def: card.def,
-									status: 'backlog',
-									position: data.filter(
-										(card) => card.status === 'backlog'
-									).length,
-									assignId: 1,
-								};
-								setData([...data, result]);
-								createCard(result);
-								setCard({
-									asA: '',
-									iNeed: '',
-									soThat: '',
-									point: '',
-									category: '',
-									def: '',
-								});
-								setIsValidAsA(false);
-								setIsValidINeed(false);
-								setIsValidSoThat(false);
-								setIsValidPoint(false);
-								setIsValidDef(false);
+								const result = isCard
+									? {
+											id: card.id,
+											userStory: card.userStory,
+											point: card.point,
+											category: card.category,
+											defOfDone: card.defOfDone,
+											status: 'backlog',
+											assignId: card.assignId,
+									  }
+									: {
+											userStory: card.userStory,
+											point: card.point,
+											category: card.category,
+											defOfDone: card.defOfDone,
+											status: 'backlog',
+											assignId: card.assignId,
+									  };
+
+								isCard
+									? updateCard(result)
+									: createCard(result);
+								if (!isCard) {
+									setCard({
+										userStory: '',
+										point: '',
+										category: '',
+										defOfDone: '',
+										assignId: '',
+									});
+
+									setIsValidUserStory(false);
+									setIsValidPoint(false);
+									setIsValidDef(false);
+									setIsValidAssignee(false);
+								}
 								onClose();
 							}
 						}}
 					>
-						Submit
+						{isCard ? 'Update' : 'Create'}
 					</Button>
 				</ModalFooter>
 			</ModalContent>
@@ -398,22 +303,3 @@ const CardModal = ({ isOpen, onOpen, onClose, data, setData }) => {
 };
 
 export default CardModal;
-
-// export async function getStaticProps() {
-// 	const res = await fetch('http://127.0.0.1:8989/users/');
-// 	const cards = await res.json();
-// 	if (cards['_embedded']) {
-// 		return {
-// 			props: {
-// 				cards: cards['_embedded'].storyDtoList,
-// 			},
-// 			revalidate: 5,
-// 		};
-// 	}
-// 	return {
-// 		props: {
-// 			cards: [],
-// 		},
-// 		revalidate: 5,
-// 	};
-// }

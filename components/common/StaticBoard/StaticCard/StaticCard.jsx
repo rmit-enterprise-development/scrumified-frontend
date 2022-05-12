@@ -16,14 +16,17 @@ import Avvvatars from "avvvatars-react";
 import Router from "next/router";
 import { useContext } from "react";
 import { RouterPage } from "../../../../config/router";
+import textUtils from "../../../../utils/text";
 import CardModal from "../../../workspace/CardModal";
 import { LoggedUserContext } from "../../LoggedUserProvider";
 
 const StaticCard = ({ card, isBacklog, participants }) => {
   const colorScheme = "red" + ".500";
   const user = useContext(LoggedUserContext);
-  const userInfo =
-    user.firstName + " " + user.lastName + " (" + user.email + ")";
+  const userInfo = textUtils.getFirstLetters(
+    user.firstName + " " + user.lastName
+  );
+
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <Box

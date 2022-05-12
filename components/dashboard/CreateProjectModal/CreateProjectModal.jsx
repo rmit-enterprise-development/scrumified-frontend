@@ -17,6 +17,7 @@ import {
   useColorMode,
   useColorModeValue,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import Avvvatars from "avvvatars-react";
 import { CUIAutoComplete } from "chakra-ui-autocomplete";
@@ -24,12 +25,14 @@ import Router from "next/router";
 import { useContext, useEffect, useRef, useState } from "react";
 import userAPI from "../../../api/services/userAPI";
 import { digFind } from "../../../utils/object";
+import textUtils from "../../../utils/text";
 import { RouterPage } from "../../../config/router";
 import { LoggedUserContext } from "../../common/LoggedUserProvider";
 
 const CreateProjectModal = () => {
   const { colorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const toast = useToast();
   const [searchTerm, setSearchTerm] = useState("");
   const [isExisted, setIsExisted] = useState(true);
   const [isValid, setIsValid] = useState(true);
@@ -64,9 +67,11 @@ const CreateProjectModal = () => {
   );
 
   const customRender = (selected) => {
+    const nameOnly = selected.label.split("(")[0];
+
     return (
       <Flex flexDir="row" alignItems="center">
-        <Avvvatars value={selected.label} />
+        <Avvvatars value={textUtils.getFirstLetters(nameOnly)} />
 
         {colorMode === "dark" ? (
           <Text pl={5} color="#fffdfe">
@@ -99,7 +104,12 @@ const CreateProjectModal = () => {
 
           // Push to project backlog with new ID
           const projectID = response.data.id;
-
+          toast({
+            title: "Create project successfully!",
+            status: "success",
+            duration: 2000,
+            isClosable: true,
+          });
           Router.push({
             pathname: `${RouterPage.PROJECT}/${projectID}${RouterPage.BACKLOG}`,
           });
@@ -115,7 +125,7 @@ const CreateProjectModal = () => {
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(async () => {
-      if (searchTerm !== "" && searchTerm.length >= 3) {
+      if (searchTerm !== "" && searchTerm.length >= 2) {
         // Send Axios request here
         try {
           const response = await userAPI.getAll({ key: searchTerm });

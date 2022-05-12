@@ -13,45 +13,45 @@ import {
 	useColorModeValue,
 	Tag,
 } from '@chakra-ui/react';
-import Avvvatars from 'avvvatars-react';
-import { Draggable } from 'react-beautiful-dnd';
-import CardModal from './CardModal';
+import Avvvatars from "avvvatars-react";
+import { Draggable } from "react-beautiful-dnd";
+import textUtils from "../../utils/text";
+import CardModal from "./CardModal";
 
 const Card = ({ participants, bg, color, btnColor, btnBg, card, ...props }) => {
 	const { isOpen, onOpen, onClose } = useDisclosure();
 	const colorScheme = 'red' + '.500';
 
-	const getUserInfoValue = (id) => {
-		const user = participants.find((p) => p.id === id);
-		return user.firstName + ' ' + user.lastName + ' (' + user.email + ')';
-	};
-	return (
-		<Draggable draggableId={'' + card.id} index={props.index}>
-			{(provided) => (
-				<>
-					<Box
-						{...provided.draggableProps}
-						{...provided.dragHandleProps}
-						ref={provided.innerRef}
-						onClick={(e) => {
-							onOpen();
-						}}
-						boxSizing="border-box"
-						borderRadius="1rem"
-						overflow="hidden"
-						bg={bg}
-						color={color}
-						mb={4}
-						p={4}
-						boxShadow="base"
-					>
-						<Flex
-							alignItems={'center'}
-							justifyContent={'space-between'}
-						>
-							<Heading fontSize="xl" isTruncated>
-								{card.userStory}
-							</Heading>
+  const getUserInfoValue = (id) => {
+    if (participants.length > 0) {
+      const user = Object.values(participants).find((p) => p.id === id);
+      return textUtils.getFirstLetters(user.firstName + " " + user.lastName);
+    }
+  };
+  return (
+    <Draggable draggableId={"" + card.id} index={props.index}>
+      {(provided) => (
+        <>
+          <Box
+            {...provided.draggableProps}
+            {...provided.dragHandleProps}
+            ref={provided.innerRef}
+            onClick={(e) => {
+              onOpen();
+            }}
+            boxSizing="border-box"
+            borderRadius="1rem"
+            overflow="hidden"
+            bg={bg}
+            color={color}
+            mb={4}
+            p={4}
+            boxShadow="base"
+          >
+            <Flex alignItems={"center"} justifyContent={"space-between"}>
+              <Heading fontSize="xl" isTruncated>
+                {card.userStory}
+              </Heading>
 
 							<WrapItem>
 								<Tooltip

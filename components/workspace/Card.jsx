@@ -15,7 +15,6 @@ import CardModal from './CardModal';
 const Card = ({ participants, bg, color, btnColor, btnBg, card, ...props }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const colorScheme = 'red' + '.500';
-
   const getUserInfoValue = (id) => {
     if (participants.length > 0) {
       const user = Object.values(participants).find((p) => p.id === id);

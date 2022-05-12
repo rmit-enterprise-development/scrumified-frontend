@@ -82,7 +82,7 @@ const initData = {
 		point: 4,
 		defOfDone: 'abc',
 		status: 'inProgress',
-		parentStoryId: 10,
+		parentStoryId: 8,
 		childStoryId: null,
 		projectId: 2,
 		sprintId: 4,
@@ -118,15 +118,6 @@ const initData = {
 var isEvtSrcOpenedOnce = false;
 
 const Sprint = ({ authToken }) => {
-	let bg = useColorModeValue('white', '#405A7D');
-	let color = useColorModeValue('#031d46', '#fffdfe');
-	let btnBg = useColorModeValue('gray.200', '#fffdfe');
-	let btnColor = 'black';
-	let bgGradient = useColorModeValue(
-		'linear(gray.50 0%, gray.100 100%)',
-		'linear(blue.800 0%, blue.900 100%)'
-	);
-
 	const { asPath } = useRouter();
 
 	const projectId = asPath.split('/')[2];
@@ -225,11 +216,6 @@ const Sprint = ({ authToken }) => {
 								cards={cards}
 								setCards={setCards}
 								cardList={cardListTodo}
-								bg={bg}
-								color={color}
-								btnBg={btnBg}
-								btnColor={btnColor}
-								bgGradient={bgGradient}
 							/>
 							<Column
 								key={1}
@@ -238,11 +224,6 @@ const Sprint = ({ authToken }) => {
 								cards={cards}
 								setCards={setCards}
 								cardList={cardListinProgress}
-								bg={bg}
-								color={color}
-								btnBg={btnBg}
-								btnColor={btnColor}
-								bgGradient={bgGradient}
 							/>
 							<Column
 								key={2}
@@ -251,11 +232,6 @@ const Sprint = ({ authToken }) => {
 								cards={cards}
 								setCards={setCards}
 								cardList={cardListDone}
-								bg={bg}
-								color={color}
-								btnBg={btnBg}
-								btnColor={btnColor}
-								bgGradient={bgGradient}
 							/>
 						</Board>
 					) : null}

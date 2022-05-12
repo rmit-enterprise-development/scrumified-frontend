@@ -56,28 +56,47 @@ const Board = ({
 		};
 
 		// add card back to the list
-		const addDND = (srcIdx, destIdx, srcId, destId, newCards) => {
-			if (srcIdx < destIdx) {
-				console.log(srcId, destId);
-				newCards[srcId].childStoryId = !newCards[destId].childStoryId
-					? null
-					: Number(newCards[destId].childStoryId);
-				newCards[destId].childStoryId = Number(srcId);
-				newCards[srcId].parentStoryId = Number(destId);
-				const childOfSrc = newCards[srcId].childStoryId;
-				if (!!childOfSrc) {
-					newCards[childOfSrc].parentStoryId = Number(srcId);
-				}
-			} else if (srcIdx > destIdx) {
-				newCards[srcId].parentStoryId = !newCards[destId].parentStoryId
-					? null
-					: Number(newCards[destId].parentStoryId);
-				newCards[destId].parentStoryId = Number(srcId);
-				newCards[srcId].childStoryId = Number(destId);
-				const parentOfSrc = newCards[srcId].parentStoryId;
-				if (!!parentOfSrc) {
-					newCards[parentOfSrc].childStoryId = Number(srcId);
-				}
+		const insertTopDND = (srcId, destId, newCards) => {
+			newCards[srcId].childStoryId = destId;
+			newCards[srcId].parentStoryId = null;
+			newCards[destId].parentStoryId = srcId;
+		};
+
+		const insertBottomDND = (srcId, destIdx, newCards) => {
+			const lastElementId =
+				cardList[newCards[srcId].status][destIdx - 1]?.key;
+			if (lastElementId) {
+				newCards[srcId].parentStoryId = lastElementId;
+				newCards[srcId].childStoryId = null;
+				newCards[lastElementId].childStoryId = srcId;
+			} else {
+				newCards[srcId].parentStoryId = null;
+				newCards[srcId].childStoryId = null;
+			}
+		};
+
+		const insertOnTopDest = (srcId, destId, newCards) => {
+			newCards[srcId].parentStoryId = !newCards[destId].parentStoryId
+				? null
+				: Number(newCards[destId].parentStoryId);
+			newCards[destId].parentStoryId = Number(srcId);
+			newCards[srcId].childStoryId = Number(destId);
+			const parentOfSrc = newCards[srcId].parentStoryId;
+			if (!!parentOfSrc) {
+				newCards[parentOfSrc].childStoryId = Number(srcId);
+			}
+		};
+
+		const insertBelowDest = () => {
+			console.log(srcId, destId);
+			newCards[srcId].childStoryId = !newCards[destId].childStoryId
+				? null
+				: Number(newCards[destId].childStoryId);
+			newCards[destId].childStoryId = Number(srcId);
+			newCards[srcId].parentStoryId = Number(destId);
+			const childOfSrc = newCards[srcId].childStoryId;
+			if (!!childOfSrc) {
+				newCards[childOfSrc].parentStoryId = Number(srcId);
 			}
 		};
 
@@ -97,14 +116,28 @@ const Board = ({
 		const srcId = draggableId;
 		const destId = isBacklog
 			? cardList[destination.index].key
-			: cardList[destination.droppableId][destination.index].key;
+			: cardList[destination.droppableId][destination.index]?.key;
+
+		console.log(srcId, destId);
 
 		if (destination.droppableId === source.droppableId) {
 			removeDND(srcId);
 
 			// add card back to the list
-			addDND(source.index, destination.index, srcId, destId, newCards);
+			if (source.index < destination.index) {
+				insertBelowDest(srcId, destId, newCards);
+			} else if (source.index > destination.index) {
+				insertOnTopDest(srcId, destId, newCards);
+			}
 		} else {
+			removeDND(srcId);
+			newCards[srcId].status = destination.droppableId;
+			// add card back to the new column
+			if (destId && !newCards[destId].parentStoryId)
+				insertTopDND(srcId, destId, newCards);
+			else if (!destId)
+				insertBottomDND(srcId, destination.index, newCards);
+			else insertOnTopDest(srcId, destId, newCards);
 		}
 		setCards(newCards);
 		// updateCardOrder(srcId, destId, source.index < destination.index);

@@ -1,92 +1,17 @@
-import { Box, useColorModeValue } from '@chakra-ui/react';
-import cookies from 'next-cookies';
-import Head from 'next/head';
-import { useRouter } from 'next/router';
-import React, { useEffect, useState, useRef } from 'react';
-import projectAPI from '../../../api/services/projectAPI';
-import { LoggedUserProvider } from '../../../components/common/LoggedUserProvider';
-import SectionHeader from '../../../components/common/SectionHeader/SectionHeader';
-import StaticBoardBacklog from '../../../components/common/StaticBoard/StaticBoardBacklog';
-import MainContainer from '../../../components/layout/MainContainer';
-import BacklogController from '../../../components/workspace/BacklogController';
-import Board from '../../../components/workspace/Board';
-import Card from '../../../components/workspace/Card';
-import Column from '../../../components/workspace/Column';
-
-const initData = {
-	2: {
-		id: 2,
-		userStory: 'Border',
-		category: 'category',
-		point: 4,
-		status: 'backlog',
-		parentStoryId: null,
-		childStoryId: 1,
-		projectId: 1,
-		sprintId: null,
-		assignId: 2,
-		links: [
-			{
-				rel: 'self',
-				href: 'https://scrumified-dev-bakend.herokuapp.com/stories/2',
-			},
-		],
-	},
-	4: {
-		id: 4,
-		userStory: 'Dunky',
-		category: 'category',
-		point: 4,
-		status: 'backlog',
-		parentStoryId: 3,
-		childStoryId: null,
-		projectId: 1,
-		sprintId: null,
-		assignId: 2,
-		links: [
-			{
-				rel: 'self',
-				href: 'https://scrumified-dev-bakend.herokuapp.com/stories/4',
-			},
-		],
-	},
-	1: {
-		id: 1,
-		userStory: 'Achor',
-		category: 'category',
-		point: 2,
-		status: 'backlog',
-		parentStoryId: 2,
-		childStoryId: 3,
-		projectId: 1,
-		sprintId: null,
-		assignId: 1,
-		links: [
-			{
-				rel: 'self',
-				href: 'https://scrumified-dev-bakend.herokuapp.com/stories/1',
-			},
-		],
-	},
-	3: {
-		id: 3,
-		userStory: 'Catine',
-		category: 'category',
-		point: 2,
-		status: 'backlog',
-		parentStoryId: 1,
-		childStoryId: 4,
-		projectId: 1,
-		sprintId: null,
-		assignId: 1,
-		links: [
-			{
-				rel: 'self',
-				href: 'https://scrumified-dev-bakend.herokuapp.com/stories/3',
-			},
-		],
-	},
-};
+import { Box, useColorModeValue } from "@chakra-ui/react";
+import cookies from "next-cookies";
+import Head from "next/head";
+import { useRouter } from "next/router";
+import React, { useEffect, useRef, useState } from "react";
+import projectAPI from "../../../api/services/projectAPI";
+import { LoggedUserProvider } from "../../../components/common/LoggedUserProvider";
+import SectionHeader from "../../../components/common/SectionHeader/SectionHeader";
+import StaticBoardBacklog from "../../../components/common/StaticBoard/StaticBoardBacklog";
+import MainContainer from "../../../components/layout/MainContainer";
+import BacklogController from "../../../components/workspace/BacklogController";
+import Board from "../../../components/workspace/Board";
+import Card from "../../../components/workspace/Card";
+import Column from "../../../components/workspace/Column";
 
 var isEvtSrcOpenedOnce = false;
 
@@ -141,6 +66,7 @@ const Backlog = ({ authToken }) => {
   useEffect(() => {
     setwinReady(true);
     getParticipants(); // Always get participants first
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {

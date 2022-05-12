@@ -54,7 +54,7 @@ const StaticCard = ({ card, isBacklog, participants }) => {
       }}
     >
       <Flex alignItems={"center"} justifyContent={"space-between"}>
-        <Heading fontSize="xl" isTruncated>
+        <Heading fontSize="lg" isTruncated>
           {card.userStory}
         </Heading>
 

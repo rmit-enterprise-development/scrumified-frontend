@@ -1,26 +1,22 @@
-import { useContext, useEffect, useState } from "react";
+import { AddIcon, DeleteIcon, Search2Icon } from '@chakra-ui/icons';
 import {
   Flex,
-  Spacer,
-  Text,
-  FormControl,
-  Select,
   HStack,
-  useDisclosure,
   IconButton,
+  Input,
   InputGroup,
   InputLeftElement,
-  Input,
-  Button,
+  Select,
+  Text,
   useColorModeValue,
-  Box,
-} from "@chakra-ui/react";
-
-import { AddIcon, DeleteIcon, Search2Icon } from "@chakra-ui/icons";
-import CardModal from "./CardModal";
-import userAPI from "../../api/services/userAPI";
-import { LoggedUserContext } from "../common/LoggedUserProvider";
-import { digFind } from "../../utils/object";
+  useDisclosure,
+  useBreakpointValue,
+} from '@chakra-ui/react';
+import { useContext, useEffect, useState } from 'react';
+import userAPI from '../../api/services/userAPI';
+import { digFind } from '../../utils/object';
+import { LoggedUserContext } from '../common/LoggedUserProvider';
+import CardModal from './CardModal';
 
 const BacklogController = ({
   cards,
@@ -43,9 +39,9 @@ const BacklogController = ({
 
   // Filter
   const defaultFilter = {
-    key: "",
-    category: "",
-    sortProp: "",
+    key: '',
+    category: '',
+    sortProp: '',
     ascending: false,
     projectId: projectId,
     limit: 100,
@@ -53,8 +49,8 @@ const BacklogController = ({
   const [filterStory, setFilterStory] = useState(defaultFilter);
 
   const [isFilter, setIsFilter] = useState(false);
-  const [sortValue, setSortValue] = useState("");
-  const [categoryValue, setCategoryValue] = useState("");
+  const [sortValue, setSortValue] = useState('');
+  const [categoryValue, setCategoryValue] = useState('');
 
   // Populate Story data
   const fetchStory = async (filter) => {
@@ -64,20 +60,20 @@ const BacklogController = ({
         filter
       );
       const data = response.data;
-      const stories = digFind(data, "content");
+      const stories = digFind(data, 'content');
       setFilteredCard(stories);
     } catch (error) {
-      console.log("Fail to fetch: ", error);
+      console.log('Fail to fetch: ', error);
     }
   };
 
   // Input search story
-  const [searchStoryValue, setSearchStoryValue] = useState("");
+  const [searchStoryValue, setSearchStoryValue] = useState('');
   const handleStoryChange = (event) => {
     let currentFilter = filterStory;
-    if (event.target.value === "") {
+    if (event.target.value === '') {
       // Reset default
-      currentFilter.key = "";
+      currentFilter.key = '';
     } else {
       currentFilter.key = event.target.value;
     }
@@ -90,18 +86,18 @@ const BacklogController = ({
     setSortValue(type);
     let currentFilter = filterStory;
     // Reset default
-    currentFilter.key = "";
+    currentFilter.key = '';
 
-    if (type.includes("Dsc")) {
+    if (type.includes('Dsc')) {
       currentFilter.ascending = false;
     } else {
       currentFilter.ascending = true;
     }
 
-    if (type.includes("time")) {
-      currentFilter.sortProp = "created_date";
+    if (type.includes('time')) {
+      currentFilter.sortProp = 'created_date';
     } else {
-      currentFilter.sortProp = "points";
+      currentFilter.sortProp = 'points';
     }
 
     setFilterStory(currentFilter);
@@ -113,7 +109,7 @@ const BacklogController = ({
     setCategoryValue(category);
     let currentFilter = filterStory;
     // Reset default
-    currentFilter.key = "";
+    currentFilter.key = '';
     currentFilter.category = category;
     setFilterStory(currentFilter);
     setIsFilter(true);
@@ -137,8 +133,23 @@ const BacklogController = ({
 
   return (
     <>
-      <Flex justifyContent="space-between" flexWrap="wrap" pb={5}>
-        <Flex gap={2} flex={1} flexWrap="wrap">
+      <Flex
+        mt={useBreakpointValue({ base: '1rem', md: 0 })}
+        flexDir={useBreakpointValue({ base: 'column', md: 'row' })}
+        justifyContent="center"
+        flexWrap="wrap"
+        pb={5}
+        gap={useBreakpointValue({ base: '2rem', md: 0 })}
+      >
+        <Flex
+          gap={useBreakpointValue({ base: '1.5rem', md: '1rem' })}
+          flex={1}
+          flexWrap="wrap"
+          justifyContent={useBreakpointValue({
+            base: 'center',
+            md: 'flex-start',
+          })}
+        >
           <InputGroup maxW={250}>
             <InputLeftElement
               pointerEvents="none"
@@ -147,7 +158,7 @@ const BacklogController = ({
             />
             <Input
               placeholder="Search for story name"
-              color={useColorModeValue("#031d46", "#fffdfe")}
+              color={useColorModeValue('#031d46', '#fffdfe')}
               value={searchStoryValue}
               onChange={handleStoryChange}
             />
@@ -157,7 +168,7 @@ const BacklogController = ({
             <Select
               width="auto"
               onChange={(e) => handleCategoryStory(e.target.value)}
-              color={useColorModeValue("#031d46", "#fffdfe")}
+              color={useColorModeValue('#031d46', '#fffdfe')}
               value={categoryValue}
             >
               <option value="">Category</option>
@@ -171,7 +182,7 @@ const BacklogController = ({
             <Select
               width="auto"
               onChange={(e) => handleSortStory(e.target.value)}
-              color={useColorModeValue("#031d46", "#fffdfe")}
+              color={useColorModeValue('#031d46', '#fffdfe')}
               value={sortValue}
             >
               <option value="">Sort by:</option>
@@ -188,15 +199,22 @@ const BacklogController = ({
                 icon={<DeleteIcon />}
                 onClick={() => {
                   setFilterStory(defaultFilter);
-                  setSortValue("");
-                  setCategoryValue("");
+                  setSortValue('');
+                  setCategoryValue('');
                   setIsFilter(false);
                 }}
               />
             )}
           </Flex>
         </Flex>
-        <HStack gap="2">
+
+        <HStack
+          gap="2"
+          justifyContent={useBreakpointValue({
+            base: 'center',
+            md: 'flex-start',
+          })}
+        >
           <Text>Total points: {totalPoints}</Text>
           <IconButton
             _hover={{ opacity: 0.8 }}

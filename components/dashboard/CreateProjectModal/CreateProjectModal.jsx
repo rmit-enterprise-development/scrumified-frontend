@@ -24,6 +24,7 @@ import Router from "next/router";
 import { useContext, useEffect, useRef, useState } from "react";
 import userAPI from "../../../api/services/userAPI";
 import { digFind } from "../../../utils/object";
+import textUtils from "../../../utils/text";
 import { RouterPage } from "../../../config/router";
 import { LoggedUserContext } from "../../common/LoggedUserProvider";
 
@@ -64,9 +65,11 @@ const CreateProjectModal = () => {
   );
 
   const customRender = (selected) => {
+    const nameOnly = selected.label.split("(")[0];
+
     return (
       <Flex flexDir="row" alignItems="center">
-        <Avvvatars value={selected.label} />
+        <Avvvatars value={textUtils.getFirstLetters(nameOnly)} />
 
         {colorMode === "dark" ? (
           <Text pl={5} color="#fffdfe">
@@ -115,7 +118,7 @@ const CreateProjectModal = () => {
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(async () => {
-      if (searchTerm !== "" && searchTerm.length >= 3) {
+      if (searchTerm !== "" && searchTerm.length >= 2) {
         // Send Axios request here
         try {
           const response = await userAPI.getAll({ key: searchTerm });

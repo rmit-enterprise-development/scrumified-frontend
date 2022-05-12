@@ -183,9 +183,9 @@ const Dashboard = ({ authToken }) => {
     currentFilter.key = "";
 
     if (type.includes("Dsc")) {
-      currentFilter.ascending = true;
-    } else {
       currentFilter.ascending = false;
+    } else {
+      currentFilter.ascending = true;
     }
 
     if (type.includes("time")) {

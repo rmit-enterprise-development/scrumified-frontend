@@ -61,7 +61,7 @@ const initData = {
 		createdDate: 1652171796,
 		point: 4,
 		defOfDone: null,
-		status: 'inProcess',
+		status: 'inProgress',
 		parentStoryId: null,
 		childStoryId: 10,
 		projectId: 2,
@@ -81,7 +81,7 @@ const initData = {
 		createdDate: 1652282226,
 		point: 4,
 		defOfDone: 'abc',
-		status: 'inProcess',
+		status: 'inProgress',
 		parentStoryId: 10,
 		childStoryId: null,
 		projectId: 2,
@@ -151,7 +151,7 @@ const Sprint = ({ authToken }) => {
 
 	const [cards, setCards] = useState(initData);
 	const [cardListTodo, setCardListTodo] = useState([]);
-	const [cardListInProcess, setcardListInProcess] = useState([]);
+	const [cardListinProgress, setcardListinProgress] = useState([]);
 	const [cardListDone, setCardListDone] = useState([]);
 	const [participants, setParticipants] = useState([]);
 
@@ -188,7 +188,7 @@ const Sprint = ({ authToken }) => {
 
 	useEffect(() => {
 		setCardListTodo(linkCards(cards, 'todo'));
-		setcardListInProcess(linkCards(cards, 'inProcess'));
+		setcardListinProgress(linkCards(cards, 'inProgress'));
 		setCardListDone(linkCards(cards, 'done'));
 		// }, [bg, cards, color]);
 	}, [cards]);
@@ -213,7 +213,7 @@ const Sprint = ({ authToken }) => {
 							setCards={setCards}
 							cardList={{
 								todo: cardListTodo,
-								inProcess: cardListInProcess,
+								inProgress: cardListinProgress,
 								done: cardListDone,
 							}}
 							templateColumns="repeat(3, 1fr)"
@@ -237,7 +237,7 @@ const Sprint = ({ authToken }) => {
 								id={'inProgress'}
 								cards={cards}
 								setCards={setCards}
-								cardList={cardListInProcess}
+								cardList={cardListinProgress}
 								bg={bg}
 								color={color}
 								btnBg={btnBg}

@@ -3,10 +3,6 @@ import Avvvatars from "avvvatars-react";
 import textUtils from "../../utils/text";
 
 const ProfileCard = ({ fname, lname, email, description }) => {
-  if (!description) {
-    description = "My description";
-  }
-
   return (
     <Flex>
       <Avvvatars
@@ -18,8 +14,8 @@ const ProfileCard = ({ fname, lname, email, description }) => {
       <Flex flexDir="row" ml={10} justifyContent="space-between">
         <Flex flexDir="column">
           <Text
+            fontSize="2xl"
             fontWeight="medium"
-            fontSize="lg"
             color={useColorModeValue("#031d46", "#fffdfe")}
           >
             {fname + " " + lname}
@@ -27,8 +23,12 @@ const ProfileCard = ({ fname, lname, email, description }) => {
           <Text color={useColorModeValue("#031d46", "#fffdfe")}>{email}</Text>
 
           <Flex mt={10} flexDir="column">
+            <Text color={useColorModeValue("#031d46", "#fffdfe")} as="i">
+              Biography
+            </Text>
+
             <Text color={useColorModeValue("#031d46", "#fffdfe")}>
-              {description}
+              {description ? description : "..."}
             </Text>
           </Flex>
         </Flex>

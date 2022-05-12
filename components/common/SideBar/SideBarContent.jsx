@@ -16,10 +16,14 @@ import { RouterPage } from "../../../config/router";
 import { LinkItems } from "./LinkItems";
 import { SideBarItem } from "./SideBarItem";
 import { LoggedUserContext } from "../LoggedUserProvider";
+import textUtils from "../../../utils/text";
 
 export function SidebarContent({ onClose, toggleColorMode, ...rest }) {
   const SwitchIcon = useColorModeValue(FaSun, FaMoon);
   const user = useContext(LoggedUserContext);
+  const avatarValue = textUtils.getFirstLetters(
+    user.firstName + " " + user.lastName
+  );
 
   return (
     <Box
@@ -71,28 +75,7 @@ export function SidebarContent({ onClose, toggleColorMode, ...rest }) {
         >
           <NextLink href="/profile" passHref>
             <Flex alignItems="center">
-              {/* <IconButton
-                aria-label="Profile"
-                isRound={true}
-                // variant="outline"
-                icon={
-                  <Avvvatars shadow={true} value="Khang Nguyen" />
-                }
-              /> */}
-              <Avvvatars
-                size={40}
-                shadow={true}
-                value={
-                  user
-                    ? user.firstName +
-                      " " +
-                      user.lastName +
-                      " (" +
-                      user.email +
-                      ")"
-                    : "Hello"
-                }
-              />
+              <Avvvatars size={40} shadow={true} value={avatarValue} />
               <Text pl={3} cursor="pointer" color="#FFFDEF">
                 {user ? user.firstName + " " + user.lastName : "Hello"}
               </Text>

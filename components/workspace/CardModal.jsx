@@ -14,6 +14,8 @@ import {
 	Textarea,
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
+import projectAPI from '../../api/services/projectAPI';
+import storyAPI from '../../api/services/storyAPI';
 
 const CardModal = ({
 	isOpen,
@@ -34,7 +36,7 @@ const CardModal = ({
 		point: '',
 		category: '',
 		defOfDone: '',
-		assignId: 0,
+		assignId: '',
 	};
 	if (!!prevCard) {
 		initCard = prevCard;
@@ -47,27 +49,15 @@ const CardModal = ({
 	const [isValidUserStory, setIsValidUserStory] = useState(isCard);
 	const [isValidPoint, setIsValidPoint] = useState(isCard);
 	const [isValidDef, setIsValidDef] = useState(isCard);
+	const [isValidCateogry, setIsValidCateogry] = useState(isCard);
+	const [isValidAssignee, setIsValidAssignee] = useState(isCard);
 
-	const createCard = (submitData) => {
-		const requestOptions = {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify(submitData),
-		};
-		console.log('submit:', submitData);
-		fetch(
-			`https://scrumified-dev-bakend.herokuapp.com/projects/${projectId}/stories`,
-			requestOptions
-		)
+	const createCard = (card) => {
+		projectAPI
+			.postStory(projectId, card)
 			.then(async (response) => {
-				const isJson = response.headers
-					.get('content-Type')
-					?.includes('application/json');
-				const data = isJson && (await response.json());
-
-				if (!response.ok) {
-					const error = (data && data.message) || response.status;
-					return Promise.reject(error);
+				if (response.status !== 200) {
+					return Promise.reject(response.data);
 				}
 			})
 			.catch((error) => {
@@ -75,26 +65,12 @@ const CardModal = ({
 			});
 	};
 
-	const updateCard = (submitData) => {
-		const requestOptions = {
-			method: 'PUT',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify(submitData),
-		};
-		console.log('submit:', submitData);
-		fetch(
-			`https://scrumified-dev-bakend.herokuapp.com/stories/${submitData.id}`,
-			requestOptions
-		)
+	const updateCard = (card) => {
+		storyAPI
+			.putStory(card.id, card, { isDragged: false })
 			.then(async (response) => {
-				const isJson = response.headers
-					.get('content-Type')
-					?.includes('application/json');
-				const data = isJson && (await response.json());
-
-				if (!response.ok) {
-					const error = (data && data.message) || response.status;
-					return Promise.reject(error);
+				if (response.status !== 200) {
+					return Promise.reject(response.data);
 				}
 			})
 			.catch((error) => {
@@ -103,23 +79,11 @@ const CardModal = ({
 	};
 
 	const deleteCard = (id) => {
-		const requestOptions = {
-			method: 'DELETE',
-		};
-		console.log('Delete');
-		fetch(
-			`https://scrumified-dev-bakend.herokuapp.com/stories/${id}`,
-			requestOptions
-		)
+		storyAPI
+			.deleteStory(id)
 			.then(async (response) => {
-				const isJson = response.headers
-					.get('content-Type')
-					?.includes('application/json');
-				const data = isJson && (await response.json());
-
-				if (!response.ok) {
-					const error = (data && data.message) || response.status;
-					return Promise.reject(error);
+				if (response.status !== 200) {
+					return Promise.reject(response.data);
 				}
 			})
 			.catch((error) => {
@@ -150,7 +114,7 @@ const CardModal = ({
 							defaultValue={card.userStory}
 							placeholder="As a ... I need ... So that ..."
 							resize={'none'}
-							onBlur={(e) => {
+							onChange={(e) => {
 								setCard({ ...card, userStory: e.target.value });
 								setIsValidUserStory(
 									isValidInput(e.target.value)
@@ -168,7 +132,7 @@ const CardModal = ({
 							defaultValue={card.defOfDone}
 							placeholder="Requirement to complete a task"
 							resize={'none'}
-							onBlur={(e) => {
+							onChange={(e) => {
 								setCard({ ...card, defOfDone: e.target.value });
 								setIsValidDef(isValidInput(e.target.value));
 							}}
@@ -183,7 +147,7 @@ const CardModal = ({
 							id="point"
 							defaultValue={card.point}
 							placeholder="Select point"
-							onBlur={(e) => {
+							onChange={(e) => {
 								setCard({ ...card, point: e.target.value });
 								setIsValidPoint(isValidInput(e.target.value));
 							}}
@@ -197,7 +161,30 @@ const CardModal = ({
 						</Select>
 					</FormControl>
 
-					<FormControl mt={4}></FormControl>
+					<FormControl mt={4}>
+						<FormLabel htmlFor="category" fontSize={'lg'}>
+							Category:
+						</FormLabel>
+						<Select
+							id="category"
+							defaultValue={card.category}
+							placeholder="Select category"
+							onChange={(e) => {
+								setCard({ ...card, category: e.target.value });
+								setIsValidCateogry(
+									isValidInput(e.target.value)
+								);
+							}}
+						>
+							<option value="Front-end">Front-end</option>
+							<option value="Back-end">Back-end</option>
+							<option value="Design(UI/UX)">
+								Design (UI/UX)
+							</option>
+							<option value="DevOps">DevOps</option>
+							<option value="Testing">Testing</option>
+						</Select>
+					</FormControl>
 
 					<FormControl mt={4}>
 						<FormLabel htmlFor="participant" fontSize={'lg'}>
@@ -207,11 +194,14 @@ const CardModal = ({
 							id="participant"
 							defaultValue={card.assignId}
 							placeholder="Select participant"
-							onBlur={(e) => {
+							onChange={(e) => {
 								setCard({
 									...card,
 									assignId: e.target.value,
 								});
+								setIsValidAssignee(
+									isValidInput(e.target.value)
+								);
 							}}
 						>
 							{participants &&
@@ -248,20 +238,28 @@ const CardModal = ({
 					<Button
 						colorScheme={'telegram'}
 						isDisabled={
-							!(isValidUserStory && isValidDef && isValidPoint)
+							!(
+								isValidUserStory &&
+								isValidDef &&
+								isValidPoint &&
+								isValidAssignee &&
+								isValidCateogry
+							)
 						}
 						onClick={() => {
 							if (
 								isValidUserStory &&
 								isValidDef &&
-								isValidPoint
+								isValidPoint &&
+								isValidAssignee &&
+								isValidCateogry
 							) {
 								const result = isCard
 									? {
 											id: card.id,
 											userStory: card.userStory,
 											point: card.point,
-											category: 'abc',
+											category: card.category,
 											defOfDone: card.defOfDone,
 											status: 'backlog',
 											assignId: card.assignId,
@@ -269,7 +267,7 @@ const CardModal = ({
 									: {
 											userStory: card.userStory,
 											point: card.point,
-											category: 'abc',
+											category: card.category,
 											defOfDone: card.defOfDone,
 											status: 'backlog',
 											assignId: card.assignId,
@@ -278,19 +276,20 @@ const CardModal = ({
 								isCard
 									? updateCard(result)
 									: createCard(result);
+								if (!isCard) {
+									setCard({
+										userStory: '',
+										point: '',
+										category: '',
+										defOfDone: '',
+										assignId: '',
+									});
 
-								setCard({
-									userStory: '',
-									point: '',
-									category: '',
-									defOfDone: '',
-									assignId: 0,
-								});
-
-								setIsValidUserStory(false);
-								setIsValidPoint(false);
-								setIsValidDef(false);
-
+									setIsValidUserStory(false);
+									setIsValidPoint(false);
+									setIsValidDef(false);
+									setIsValidAssignee(false);
+								}
 								onClose();
 							}
 						}}

@@ -3,7 +3,14 @@ import React, { useState } from 'react';
 import { DragDropContext } from 'react-beautiful-dnd';
 import storyAPI from '../../api/services/storyAPI';
 
-const Board = ({ cards, setCards, children, templateColumns, cardList }) => {
+const Board = ({
+	cards,
+	setCards,
+	children,
+	templateColumns,
+	cardList,
+	isBacklog,
+}) => {
 	const updateCardOrder = async (source, target, flag) => {
 		// const updateServiceStatus = await storyAPI.putStory(
 		// 	source,
@@ -34,6 +41,46 @@ const Board = ({ cards, setCards, children, templateColumns, cardList }) => {
 	};
 
 	const onDragEnd = (result) => {
+		// remove card from the list
+		const removeDND = (srcId) => {
+			const parent = newCards[srcId].parentStoryId;
+			const child = newCards[srcId].childStoryId;
+
+			if (!!parent) {
+				newCards[parent].childStoryId = !child ? null : Number(child);
+			}
+
+			if (!!child) {
+				newCards[child].parentStoryId = !parent ? null : Number(parent);
+			}
+		};
+
+		// add card back to the list
+		const addDND = (srcIdx, destIdx, srcId, destId, newCards) => {
+			if (srcIdx < destIdx) {
+				console.log(srcId, destId);
+				newCards[srcId].childStoryId = !newCards[destId].childStoryId
+					? null
+					: Number(newCards[destId].childStoryId);
+				newCards[destId].childStoryId = Number(srcId);
+				newCards[srcId].parentStoryId = Number(destId);
+				const childOfSrc = newCards[srcId].childStoryId;
+				if (!!childOfSrc) {
+					newCards[childOfSrc].parentStoryId = Number(srcId);
+				}
+			} else if (srcIdx > destIdx) {
+				newCards[srcId].parentStoryId = !newCards[destId].parentStoryId
+					? null
+					: Number(newCards[destId].parentStoryId);
+				newCards[destId].parentStoryId = Number(srcId);
+				newCards[srcId].childStoryId = Number(destId);
+				const parentOfSrc = newCards[srcId].parentStoryId;
+				if (!!parentOfSrc) {
+					newCards[parentOfSrc].childStoryId = Number(srcId);
+				}
+			}
+		};
+
 		const { destination, source, draggableId } = result;
 		console.log(destination, source, draggableId);
 		if (!destination) {
@@ -47,46 +94,20 @@ const Board = ({ cards, setCards, children, templateColumns, cardList }) => {
 		}
 
 		let newCards = { ...cards };
-		const destId = cardList[destination.index].key;
 		const srcId = draggableId;
+		const destId = isBacklog
+			? cardList[destination.index].key
+			: cardList[destination.droppableId][destination.index].key;
 
 		if (destination.droppableId === source.droppableId) {
-			// remove card from the list
-			const parent = newCards[srcId].parentStoryId;
-			const child = newCards[srcId].childStoryId;
-			if (!!parent) {
-				newCards[parent].childStoryId = !child ? null : Number(child);
-			}
-
-			if (!!child) {
-				newCards[child].parentStoryId = !parent ? null : Number(parent);
-			}
+			removeDND(srcId);
 
 			// add card back to the list
-			if (source.index < destination.index) {
-				newCards[srcId].childStoryId = !newCards[destId].childStoryId
-					? null
-					: Number(newCards[destId].childStoryId);
-				newCards[destId].childStoryId = Number(srcId);
-				newCards[srcId].parentStoryId = Number(destId);
-				const childOfSrc = newCards[srcId].childStoryId;
-				if (!!childOfSrc) {
-					newCards[childOfSrc].parentStoryId = Number(srcId);
-				}
-			} else if (source.index > destination.index) {
-				newCards[srcId].parentStoryId = !newCards[destId].parentStoryId
-					? null
-					: Number(newCards[destId].parentStoryId);
-				newCards[destId].parentStoryId = Number(srcId);
-				newCards[srcId].childStoryId = Number(destId);
-				const parentOfSrc = newCards[srcId].parentStoryId;
-				if (!!parentOfSrc) {
-					newCards[parentOfSrc].childStoryId = Number(srcId);
-				}
-			}
+			addDND(source.index, destination.index, srcId, destId, newCards);
+		} else {
 		}
 		setCards(newCards);
-		updateCardOrder(srcId, destId, source.index < destination.index);
+		// updateCardOrder(srcId, destId, source.index < destination.index);
 	};
 
 	return (

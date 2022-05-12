@@ -10,8 +10,112 @@ import cookies from 'next-cookies';
 import { LoggedUserProvider } from '../../../components/common/LoggedUserProvider';
 import { Box, useColorModeValue } from '@chakra-ui/react';
 import Card from '../../../components/workspace/Card';
+import projectAPI from '../../../api/services/projectAPI';
+import linkCards from '../../../utils/card/card';
 
-const initData = [];
+const initData = {
+	9: {
+		id: 9,
+		userStory: 'A',
+		category: 'category',
+		createdDate: 1652268620,
+		point: 4,
+		defOfDone: 'abc',
+		status: 'todo',
+		parentStoryId: null,
+		childStoryId: 11,
+		projectId: 2,
+		sprintId: 4,
+		assignId: 2,
+		links: [
+			{
+				rel: 'self',
+				href: 'http://127.0.0.1:8989/stories/9',
+			},
+		],
+	},
+	11: {
+		id: 11,
+		userStory: 'B',
+		category: 'category',
+		createdDate: 1652282290,
+		point: 4,
+		defOfDone: 'abc',
+		status: 'todo',
+		parentStoryId: 9,
+		childStoryId: null,
+		projectId: 2,
+		sprintId: 4,
+		assignId: 2,
+		links: [
+			{
+				rel: 'self',
+				href: 'http://127.0.0.1:8989/stories/11',
+			},
+		],
+	},
+	8: {
+		id: 8,
+		userStory: 'C',
+		category: 'category',
+		createdDate: 1652171796,
+		point: 4,
+		defOfDone: null,
+		status: 'inProcess',
+		parentStoryId: null,
+		childStoryId: 10,
+		projectId: 2,
+		sprintId: 4,
+		assignId: 2,
+		links: [
+			{
+				rel: 'self',
+				href: 'http://127.0.0.1:8989/stories/8',
+			},
+		],
+	},
+	10: {
+		id: 10,
+		userStory: 'D',
+		category: 'category',
+		createdDate: 1652282226,
+		point: 4,
+		defOfDone: 'abc',
+		status: 'inProcess',
+		parentStoryId: 10,
+		childStoryId: null,
+		projectId: 2,
+		sprintId: 4,
+		assignId: 2,
+		links: [
+			{
+				rel: 'self',
+				href: 'http://127.0.0.1:8989/stories/10',
+			},
+		],
+	},
+	12: {
+		id: 12,
+		userStory: 'E',
+		category: 'category',
+		createdDate: 1652282434,
+		point: 4,
+		defOfDone: 'abc',
+		status: 'done',
+		parentStoryId: null,
+		childStoryId: null,
+		projectId: 2,
+		sprintId: 4,
+		assignId: 2,
+		links: [
+			{
+				rel: 'self',
+				href: 'http://127.0.0.1:8989/stories/12',
+			},
+		],
+	},
+};
+var isEvtSrcOpenedOnce = false;
 
 const Sprint = ({ authToken }) => {
 	let bg = useColorModeValue('white', '#405A7D');
@@ -46,85 +150,48 @@ const Sprint = ({ authToken }) => {
 	};
 
 	const [cards, setCards] = useState(initData);
+	const [cardListTodo, setCardListTodo] = useState([]);
+	const [cardListInProcess, setcardListInProcess] = useState([]);
+	const [cardListDone, setCardListDone] = useState([]);
+	const [participants, setParticipants] = useState([]);
+
+	console.log(cards);
 
 	useEffect(() => {
-		getCards().then((data) => {
-			cardsRef.current = data;
-			return setCards(data);
-		});
-		getParticipants().then((data) => setParticipants(data));
-
-		const handleReceiveCard = (e) => {
-			console.log(e.data);
-			getCards().then((data) => {
-				cardsRef.current = data;
-				return setCards(data);
-			});
-		};
-
-		const uri = `https://scrumified-dev-bakend.herokuapp.com/backlog?projectId=${projectId}`;
-		let eventSource = new EventSource(uri);
-		eventSource.onopen = (e) => {
-			if (isEvtSrcOpenedOnce) {
-				// eventSource.close();
-			} else {
-				isEvtSrcOpenedOnce = true;
-			}
-			console.log('Open Backlog Event Source!');
-		};
-		eventSource.onmessage = (e) => {
-			console.log('on message', e.data);
-		};
-		eventSource.addEventListener('update', handleReceiveCard);
-		return () => {
-			eventSource.close();
-		};
+		// getCards().then((data) => {
+		// 	return setCards(data);
+		// });
+		// getParticipants().then((data) => setParticipants(data));
+		// const handleReceiveCard = (e) => {
+		// 	getCards().then((data) => {
+		// 		return setCards(data);
+		// 	});
+		// };
+		// const uri = `https://scrumified-dev-bakend.herokuapp.com/backlog?projectId=${projectId}`;
+		// let eventSource = new EventSource(uri);
+		// eventSource.onopen = (e) => {
+		// 	if (isEvtSrcOpenedOnce) {
+		// 		// eventSource.close();
+		// 	} else {
+		// 		isEvtSrcOpenedOnce = true;
+		// 	}
+		// 	console.log('Open Backlog Event Source!');
+		// };
+		// eventSource.onmessage = (e) => {
+		// 	console.log('on message', e.data);
+		// };
+		// eventSource.addEventListener('update', handleReceiveCard);
+		// return () => {
+		// 	eventSource.close();
+		// };
 	}, []);
 
 	useEffect(() => {
-		const linkCards = (data, category) => {
-			console.log(data);
-			let renderCards = [];
-			if (Object.keys(data).length === 0) {
-				return renderCards;
-			}
-
-			let tmp = null;
-			for (let key in data) {
-				if (
-					cards.hasOwnProperty(key) &&
-					!data[key].parentStoryId &&
-					data[key].status === category
-				) {
-					tmp = data[key];
-					break;
-				}
-			}
-
-			let i = 0;
-			while (true) {
-				renderCards.push(
-					<Card
-						key={tmp.id}
-						card={tmp}
-						index={i++}
-						participants={participants}
-						bg={bg}
-						color={color}
-						btnBg={btnBg}
-						btnColor={btnColor}
-					/>
-				);
-				if (!!tmp.childStoryId) tmp = data[tmp.childStoryId];
-				else break;
-			}
-			console.log(renderCards);
-			return renderCards;
-		};
-		console.log('cardList', cardsRef.current);
-		const tmp = linkCards(cardsRef.current, 'backlog');
-		setCardList(tmp);
-	}, [bg, cards, color]);
+		setCardListTodo(linkCards(cards, 'todo'));
+		setcardListInProcess(linkCards(cards, 'inProcess'));
+		setCardListDone(linkCards(cards, 'done'));
+		// }, [bg, cards, color]);
+	}, [cards]);
 
 	const [winReady, setwinReady] = useState(false);
 	useEffect(() => {
@@ -144,7 +211,11 @@ const Sprint = ({ authToken }) => {
 						<Board
 							cards={cards}
 							setCards={setCards}
-							cardList={cardList}
+							cardList={{
+								todo: cardListTodo,
+								inProcess: cardListInProcess,
+								done: cardListDone,
+							}}
 							templateColumns="repeat(3, 1fr)"
 						>
 							<Column
@@ -153,7 +224,7 @@ const Sprint = ({ authToken }) => {
 								id={'todo'}
 								cards={cards}
 								setCards={setCards}
-								cardList={cardList}
+								cardList={cardListTodo}
 								bg={bg}
 								color={color}
 								btnBg={btnBg}
@@ -166,7 +237,7 @@ const Sprint = ({ authToken }) => {
 								id={'inProgress'}
 								cards={cards}
 								setCards={setCards}
-								cardList={cardList}
+								cardList={cardListInProcess}
 								bg={bg}
 								color={color}
 								btnBg={btnBg}
@@ -179,7 +250,7 @@ const Sprint = ({ authToken }) => {
 								id={'done'}
 								cards={cards}
 								setCards={setCards}
-								cardList={cardList}
+								cardList={cardListDone}
 								bg={bg}
 								color={color}
 								btnBg={btnBg}

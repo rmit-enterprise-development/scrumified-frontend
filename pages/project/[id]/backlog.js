@@ -1,33 +1,108 @@
-import { Box, useColorModeValue } from "@chakra-ui/react";
-import cookies from "next-cookies";
-import Head from "next/head";
-import { useRouter } from "next/router";
-import React, { useEffect, useState, useRef } from "react";
-import projectAPI from "../../../api/services/projectAPI";
-import { LoggedUserProvider } from "../../../components/common/LoggedUserProvider";
-import SectionHeader from "../../../components/common/SectionHeader/SectionHeader";
-import StaticBoardBacklog from "../../../components/common/StaticBoard/StaticBoardBacklog";
-import MainContainer from "../../../components/layout/MainContainer";
-import BacklogController from "../../../components/workspace/BacklogController";
-import Board from "../../../components/workspace/Board";
-import Card from "../../../components/workspace/Card";
-import Column from "../../../components/workspace/Column";
+import { Box, useColorModeValue } from '@chakra-ui/react';
+import cookies from 'next-cookies';
+import Head from 'next/head';
+import { useRouter } from 'next/router';
+import React, { useEffect, useState, useRef } from 'react';
+import projectAPI from '../../../api/services/projectAPI';
+import { LoggedUserProvider } from '../../../components/common/LoggedUserProvider';
+import SectionHeader from '../../../components/common/SectionHeader/SectionHeader';
+import StaticBoardBacklog from '../../../components/common/StaticBoard/StaticBoardBacklog';
+import MainContainer from '../../../components/layout/MainContainer';
+import BacklogController from '../../../components/workspace/BacklogController';
+import Board from '../../../components/workspace/Board';
+import Card from '../../../components/workspace/Card';
+import Column from '../../../components/workspace/Column';
+
+const initData = {
+	2: {
+		id: 2,
+		userStory: 'Border',
+		category: 'category',
+		point: 4,
+		status: 'backlog',
+		parentStoryId: null,
+		childStoryId: 1,
+		projectId: 1,
+		sprintId: null,
+		assignId: 2,
+		links: [
+			{
+				rel: 'self',
+				href: 'https://scrumified-dev-bakend.herokuapp.com/stories/2',
+			},
+		],
+	},
+	4: {
+		id: 4,
+		userStory: 'Dunky',
+		category: 'category',
+		point: 4,
+		status: 'backlog',
+		parentStoryId: 3,
+		childStoryId: null,
+		projectId: 1,
+		sprintId: null,
+		assignId: 2,
+		links: [
+			{
+				rel: 'self',
+				href: 'https://scrumified-dev-bakend.herokuapp.com/stories/4',
+			},
+		],
+	},
+	1: {
+		id: 1,
+		userStory: 'Achor',
+		category: 'category',
+		point: 2,
+		status: 'backlog',
+		parentStoryId: 2,
+		childStoryId: 3,
+		projectId: 1,
+		sprintId: null,
+		assignId: 1,
+		links: [
+			{
+				rel: 'self',
+				href: 'https://scrumified-dev-bakend.herokuapp.com/stories/1',
+			},
+		],
+	},
+	3: {
+		id: 3,
+		userStory: 'Catine',
+		category: 'category',
+		point: 2,
+		status: 'backlog',
+		parentStoryId: 1,
+		childStoryId: 4,
+		projectId: 1,
+		sprintId: null,
+		assignId: 1,
+		links: [
+			{
+				rel: 'self',
+				href: 'https://scrumified-dev-bakend.herokuapp.com/stories/3',
+			},
+		],
+	},
+};
 
 var isEvtSrcOpenedOnce = false;
 
 const Backlog = ({ authToken }) => {
-  let bg = useColorModeValue("white", "#405A7D");
-  let color = useColorModeValue("#031d46", "#fffdfe");
-  let btnBg = useColorModeValue("gray.200", "#fffdfe");
-  let btnColor = "black";
-  let bgGradient = useColorModeValue(
-    "linear(gray.50 0%, gray.100 100%)",
-    "linear(blue.800 0%, blue.900 100%)"
-  );
+	let bg = useColorModeValue('white', '#405A7D');
+	let color = useColorModeValue('#031d46', '#fffdfe');
+	let btnBg = useColorModeValue('gray.200', '#fffdfe');
+	let btnColor = 'black';
+	let bgGradient = useColorModeValue(
+		'linear(gray.50 0%, gray.100 100%)',
+		'linear(blue.800 0%, blue.900 100%)'
+	);
 
-  const { asPath } = useRouter();
+	const { asPath } = useRouter();
 
-  const projectId = asPath.split("/")[2];
+	const projectId = asPath.split('/')[2];
 
   const getParticipants = async () => {
     try {
@@ -49,17 +124,15 @@ const Backlog = ({ authToken }) => {
         isBacklog: true,
       });
       const json = response.data;
-      cardsRef.current = json;
       setCards(json);
     } catch (error) {
       console.log(error);
     }
   };
 
-  const [cards, setCards] = useState({});
-  const cardsRef = useRef(cards);
-  const [cardList, setCardList] = useState([]);
-  const [participants, setParticipants] = useState([]);
+	const [cards, setCards] = useState({});
+	const [cardList, setCardList] = useState([]);
+	const [participants, setParticipants] = useState([]);
 
   const [winReady, setwinReady] = useState(false);
   // Filtered Card (from Backlog Controller)
@@ -75,16 +148,6 @@ const Backlog = ({ authToken }) => {
 
     const handleReceiveCard = (e) => {
       getCards();
-      // const newCard = JSON.parse(e.data);
-      // const newCards = { ...cardsRef.current };
-      // newCards[newCard.id] = newCard;
-      // if (!!newCard.parentStoryId) {
-      // 	newCards[Number(newCard.parentStoryId)].childStoryId =
-      // 		newCard.id;
-      // }
-      // cardsRef.current = newCards;
-      // setCards(newCards);
-      // console.log('new cards', newCards);
     };
 
     const uri = `https://scrumified-dev-bakend.herokuapp.com/backlog?projectId=${projectId}`;
@@ -114,17 +177,17 @@ const Backlog = ({ authToken }) => {
         return renderCards;
       }
 
-      let tmp = null;
-      for (let key in data) {
-        if (
-          cards.hasOwnProperty(key) &&
-          !data[key].parentStoryId &&
-          data[key].status === category
-        ) {
-          tmp = data[key];
-          break;
-        }
-      }
+			let tmp = null;
+			for (let key in data) {
+				if (
+					cards.hasOwnProperty(key) &&
+					!data[key].parentStoryId &&
+					data[key].status === category
+				) {
+					tmp = data[key];
+					break;
+				}
+			}
 
       let i = 0;
 
@@ -147,66 +210,71 @@ const Backlog = ({ authToken }) => {
 
       return renderCards;
     };
-    const tmp = linkCards(cardsRef.current, "backlog");
+    const tmp = linkCards(cards, "backlog");
     setCardList(tmp);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cards]);
 
-  return (
-    <LoggedUserProvider authToken={authToken}>
-      <Head>
-        <title>Backlog</title>
-      </Head>
-      <MainContainer>
-        <Box>
-          <SectionHeader>Backlog</SectionHeader>
-          <BacklogController
-            cards={cards}
-            setCards={setCards}
-            bg={bg}
-            color={color}
-            btnBg={btnBg}
-            btnColor={btnColor}
-            projectId={projectId}
-            participants={participants}
-            setFilteredCard={setFilteredCard}
-          />
+	return (
+		<LoggedUserProvider authToken={authToken}>
+			<Head>
+				<title>Backlog</title>
+			</Head>
+			<MainContainer>
+				<Box>
+					<SectionHeader>Backlog</SectionHeader>
+					<BacklogController
+						cards={cards}
+						setCards={setCards}
+						bg={bg}
+						color={color}
+						btnBg={btnBg}
+						btnColor={btnColor}
+						projectId={projectId}
+						participants={participants}
+						setFilteredCard={setFilteredCard}
+					/>
 
-          {filteredCard.length > 0 ? (
-            <StaticBoardBacklog
-              storyList={filteredCard}
-              participants={participants}
-            />
-          ) : winReady ? (
-            <Board cards={cards} setCards={setCards} cardList={cardList}>
-              <Column
-                key={0}
-                title={"Stories"}
-                id={"backlog"}
-                cards={cards}
-                setCards={setCards}
-                cardList={cardList}
-                bg={bg}
-                color={color}
-                btnBg={btnBg}
-                btnColor={btnColor}
-                bgGradient={bgGradient}
-              />
-            </Board>
-          ) : null}
-        </Box>
-      </MainContainer>
-    </LoggedUserProvider>
-  );
+					{filteredCard.length > 0 ? (
+						<StaticBoardBacklog
+							storyList={filteredCard}
+							participants={participants}
+						/>
+					) : winReady ? (
+						<Board
+							cards={cards}
+							setCards={setCards}
+							cardList={cardList}
+							isBacklog={true}
+						>
+							<Column
+								key={0}
+								title={'Stories'}
+								id={'backlog'}
+								cards={cards}
+								setCards={setCards}
+								cardList={cardList}
+								bg={bg}
+								color={color}
+								btnBg={btnBg}
+								btnColor={btnColor}
+								bgGradient={bgGradient}
+							/>
+						</Board>
+					) : null}
+				</Box>
+			</MainContainer>
+		</LoggedUserProvider>
+	);
 };
 
 export async function getServerSideProps(ctx) {
-  const { auth } = cookies(ctx);
-  return {
-    props: {
-      authToken: auth || "",
-    },
-  };
+	const { auth } = cookies(ctx);
+	return {
+		props: {
+			authToken: auth || '',
+		},
+	};
 }
 
 export default Backlog;

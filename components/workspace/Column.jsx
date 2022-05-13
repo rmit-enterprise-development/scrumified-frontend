@@ -39,7 +39,7 @@ const Column = ({ title, id, cardList, color }) => {
             ref={provided.innerRef}
             {...provided.droppableProps}
             padding={'2'}
-            overflow={'scroll'}
+            overflow={'auto'}
             h="20rem"
           >
             {cardList && cardList.length === 0 && (

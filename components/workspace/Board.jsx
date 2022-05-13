@@ -4,40 +4,26 @@ import { DragDropContext } from 'react-beautiful-dnd';
 import storyAPI from '../../api/services/storyAPI';
 
 const Board = ({
-  cards,
-  setCards,
-  children,
-  templateColumns,
-  cardList,
-  isBacklog,
+	cards,
+	setCards,
+	children,
+	templateColumns,
+	cardList,
+	isBacklog,
 }) => {
-	const updateCardOrder = async (source, target, flag) => {
-		// const updateServiceStatus = await storyAPI.putStory(
-		// 	source,
-		// 	{
-		// 		replaceStoryId: target,
-		// 		status: 'backlog',
-		// 	},
-		// 	true
-		// );
-		// console.log(updateServiceStatus.data);
-
-		const response = await fetch(
-			`http://127.0.0.1:8989/stories/${source}?isDragged=true&isTopDown=${flag}`,
+	const updateCardOrder = async (source, target, status, flag) => {
+		const updateServiceStatus = await storyAPI.putStory(
+			source,
 			{
-				method: 'PUT',
-				mode: 'cors',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({
-					replaceStoryId: target,
-					status: 'backlog',
-				}),
+				replaceStoryId: target,
+				status: status,
+			},
+			{
+				isDragged: true,
+				isTopDown: flag,
 			}
 		);
-		const json = response.json();
-		console.log(json);
+		console.log(updateServiceStatus.data);
 	};
 
 	const onDragEnd = (result) => {
@@ -122,7 +108,6 @@ const Board = ({
 
 		removeDND(srcId);
 		if (destination.droppableId === source.droppableId) {
-
 			// add card back to the list
 			if (source.index < destination.index) {
 				insertBelowDest(srcId, destId, newCards);
@@ -139,7 +124,12 @@ const Board = ({
 			else insertOnTopDest(srcId, destId, newCards);
 		}
 		setCards(newCards);
-		// updateCardOrder(srcId, destId, source.index < destination.index);
+		updateCardOrder(
+			srcId,
+			destId,
+			destination.droppableId,
+			source.index < destination.index
+		);
 	};
 
 	return (

@@ -26,7 +26,7 @@ const Column = ({ title, id, cardList, color }) => {
 					// maxHeight: '77vh',
 				}
 			}
-			overflow="scroll"
+			// overflow="scroll"
 		>
 			<Text
 				textAlign={'center'}
@@ -45,6 +45,8 @@ const Column = ({ title, id, cardList, color }) => {
 						ref={provided.innerRef}
 						{...provided.droppableProps}
 						padding={'2'}
+						overflow={'scroll'}
+						minHeight={'min-content'}
 					>
 						{cardList && cardList.length === 0 && (
 							<NoItem icon={GoTasklist}>

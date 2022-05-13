@@ -39,7 +39,6 @@ const Backlog = ({ authToken }) => {
 				returnArray: false,
 			});
 			const json = response.data;
-			console.log('json: ', json);
 			setCards(json);
 		} catch (error) {
 			console.log(error);
@@ -74,9 +73,6 @@ const Backlog = ({ authToken }) => {
 		let eventSource = new EventSource(uri);
 		eventSource.onopen = (e) => {
 			console.log('Open Backlog Event Source!');
-		};
-		eventSource.onmessage = (e) => {
-			console.log('on message', e.data);
 		};
 		eventSource.addEventListener('update', handleReceiveCard);
 		return () => {

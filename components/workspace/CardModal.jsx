@@ -31,7 +31,6 @@ const CardModal = ({
 	isCard,
 }) => {
 	let color = useColorModeValue('#031d46', '#fffdfe');
-	console.log('participants: ', participants);
 	let initCard = {
 		userStory: '',
 		point: '',

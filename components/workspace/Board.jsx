@@ -23,7 +23,6 @@ const Board = ({
 				isTopDown: flag,
 			}
 		);
-		console.log(updateServiceStatus.data);
 	};
 
 	const onDragEnd = (result) => {
@@ -74,7 +73,6 @@ const Board = ({
 		};
 
 		const insertBelowDest = () => {
-			console.log(srcId, destId);
 			newCards[srcId].childStoryId = !newCards[destId].childStoryId
 				? null
 				: Number(newCards[destId].childStoryId);
@@ -87,7 +85,6 @@ const Board = ({
 		};
 
 		const { destination, source, draggableId } = result;
-		console.log(destination, source, draggableId);
 		if (!destination) {
 			return;
 		}
@@ -103,8 +100,6 @@ const Board = ({
 		const destId = isBacklog
 			? cardList[destination.index].key
 			: cardList[destination.droppableId][destination.index]?.key;
-
-		console.log(srcId, destId);
 
 		removeDND(srcId);
 		if (destination.droppableId === source.droppableId) {

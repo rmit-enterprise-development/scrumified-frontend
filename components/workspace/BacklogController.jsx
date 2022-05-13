@@ -143,6 +143,7 @@ const BacklogController = ({
 					gap={useBreakpointValue({ base: '1.5rem', md: '1rem' })}
 					flex={1}
 					flexWrap="wrap"
+					alignItems={'center'}
 					justifyContent={useBreakpointValue({
 						base: 'center',
 						md: 'flex-start',
@@ -171,7 +172,7 @@ const BacklogController = ({
 							color={useColorModeValue('#031d46', '#fffdfe')}
 							value={categoryValue}
 						>
-							<option value="">Category</option>
+							<option value="" disabled>Category</option>
 							<option value="Design(UI/UX)">Design(UI/UX)</option>
 							<option value="Front-end">Front-end</option>
 							<option value="Back-end">Back-end</option>
@@ -186,7 +187,7 @@ const BacklogController = ({
 							color={useColorModeValue('#031d46', '#fffdfe')}
 							value={sortValue}
 						>
-							<option value="">Sort by:</option>
+							<option value="" disabled>Sort by</option>
 							<option value="pointDsc">Point: High to Low</option>
 							<option value="pointAsc">Point: Low to High</option>
 							<option value="timeDsc">Recently Assigned</option>

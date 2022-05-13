@@ -58,7 +58,7 @@ const StaticCard = ({ card, isBacklog, participants }) => {
 
         {isBacklog && (
           <WrapItem>
-            <Tooltip label={"Add to sprint 1"} placement={"left-start"}>
+            <Tooltip label={"Add to sprint"} placement={"left-start"}>
               <IconButton
                 isRound={true}
                 size={"xs"}

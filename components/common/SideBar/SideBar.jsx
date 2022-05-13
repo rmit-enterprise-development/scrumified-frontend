@@ -21,7 +21,7 @@ export default function Sidebar({ children }) {
     <Box
       minH={useBreakpointValue({ base: "0.5rem", md: "100vh" })}
       bg={useColorModeValue("#FFFDFE", "#031E49")}
-      h="100%"
+
     >
       <SidebarContent
         onClose={() => onClose}

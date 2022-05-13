@@ -12,6 +12,7 @@ import BacklogController from "../../../components/workspace/BacklogController";
 import Board from "../../../components/workspace/Board";
 import Card from "../../../components/workspace/Card";
 import Column from "../../../components/workspace/Column";
+import linkCards from "../../../utils/card/card";
 
 var isEvtSrcOpenedOnce = false;
 
@@ -97,46 +98,7 @@ const Backlog = ({ authToken }) => {
   }, [participants]); // Always make sure participants available first
 
   useEffect(() => {
-    const linkCards = (data, category) => {
-      let renderCards = [];
-      if (Object.keys(data).length === 0) {
-        return renderCards;
-      }
-
-			let tmp = null;
-			for (let key in data) {
-				if (
-					cards.hasOwnProperty(key) &&
-					!data[key].parentStoryId &&
-					data[key].status === category
-				) {
-					tmp = data[key];
-					break;
-				}
-			}
-
-      let i = 0;
-
-      while (true) {
-        renderCards.push(
-          <Card
-            key={tmp.id}
-            card={tmp}
-            index={i++}
-            participants={participants}
-            bg={bg}
-            color={color}
-            btnBg={btnBg}
-            btnColor={btnColor}
-          />
-        );
-        if (!!tmp.childStoryId) tmp = data[tmp.childStoryId];
-        else break;
-      }
-
-      return renderCards;
-    };
-    const tmp = linkCards(cards, "backlog");
+    const tmp = linkCards(cards, 'backlog');
     setCardList(tmp);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cards]);

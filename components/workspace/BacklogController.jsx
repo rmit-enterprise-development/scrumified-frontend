@@ -46,6 +46,7 @@ const BacklogController = ({
     projectId: projectId,
     limit: PAGE_SIZE_BACKLOG,
     isBacklog: true,
+    returnArray: true, // Avoid auto sort by object key from browser
   };
   const [filterStory, setFilterStory] = useState(defaultFilter);
 
@@ -58,10 +59,10 @@ const BacklogController = ({
     try {
       const response = await projectAPI.getAllStories(projectId, filter);
       const data = response.data;
-      console.log("data: ", data);
+      const cardList = digFind(data, "storyDtoList");
       setFilteredCard({
         isFilter: true,
-        cardList: Object.values(data),
+        cardList: cardList ? cardList : [],
       });
     } catch (error) {
       console.log("Fail to fetch: ", error);
@@ -122,7 +123,7 @@ const BacklogController = ({
       if (isFilter) {
         fetchStory(filterStory);
       }
-    }, 500);
+    }, 200);
 
     return () => clearTimeout(delayDebounceFn);
     // eslint-disable-next-line react-hooks/exhaustive-deps

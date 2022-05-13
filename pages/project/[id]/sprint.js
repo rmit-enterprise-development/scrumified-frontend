@@ -178,9 +178,48 @@ const Sprint = ({ authToken }) => {
 	}, []);
 
 	useEffect(() => {
-		setCardListTodo(linkCards(cards, 'todo'));
-		setcardListinProgress(linkCards(cards, 'inProgress'));
-		setCardListDone(linkCards(cards, 'done'));
+		const participants = [
+			{
+				id: 2,
+				firstName: 'Uncle',
+				lastName: 'HoHo',
+				email: 'abc@gmail.com',
+				description: null,
+			},
+		];
+		setCardListTodo(
+			linkCards(cards, 'todo', [
+				{
+					id: 2,
+					firstName: 'Uncle',
+					lastName: 'HoHo',
+					email: 'abc@gmail.com',
+					description: null,
+				},
+			])
+		);
+		setcardListinProgress(
+			linkCards(cards, 'inProgress', [
+				{
+					id: 2,
+					firstName: 'Uncle',
+					lastName: 'HoHo',
+					email: 'abc@gmail.com',
+					description: null,
+				},
+			])
+		);
+		setCardListDone(
+			linkCards(cards, 'done', [
+				{
+					id: 2,
+					firstName: 'Uncle',
+					lastName: 'HoHo',
+					email: 'abc@gmail.com',
+					description: null,
+				},
+			])
+		);
 		// }, [bg, cards, color]);
 	}, [cards]);
 

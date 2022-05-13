@@ -1,17 +1,8 @@
 import { useColorModeValue } from '@chakra-ui/react';
 import Card from '../../components/workspace/Card';
 
-export default function linkCards(cards, category) {
+export default function linkCards(cards, category, participants) {
 	console.log(cards);
-	const participants = [
-		{
-			id: 2,
-			firstName: 'Uncle',
-			lastName: 'HoHo',
-			email: 'abc@gmail.com',
-			description: null,
-		},
-	];
 	let renderCards = [];
 
 	let tmp = null;

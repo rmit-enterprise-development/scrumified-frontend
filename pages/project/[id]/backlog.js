@@ -98,7 +98,7 @@ const Backlog = ({ authToken }) => {
   }, [participants]); // Always make sure participants available first
 
   useEffect(() => {
-    const tmp = linkCards(cards, 'backlog');
+    const tmp = linkCards(cards, 'backlog', participants);
     setCardList(tmp);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cards]);

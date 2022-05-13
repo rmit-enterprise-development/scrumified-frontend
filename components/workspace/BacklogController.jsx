@@ -35,6 +35,7 @@ const BacklogController = ({
   const totalPoints = Object.values(cards).reduce((accumulator, object) => {
     return accumulator + object.point;
   }, 0);
+  const PAGE_SIZE_BACKLOG = 1000; // Backlog story need to be all shown
 
   // Filter
   const defaultFilter = {
@@ -43,6 +44,7 @@ const BacklogController = ({
     sortProp: "",
     ascending: false,
     projectId: projectId,
+    limit: PAGE_SIZE_BACKLOG,
     isBacklog: true,
   };
   const [filterStory, setFilterStory] = useState(defaultFilter);
@@ -53,12 +55,14 @@ const BacklogController = ({
 
   // Populate Story data
   const fetchStory = async (filter) => {
-    console.log("filter: ", filter);
     try {
       const response = await projectAPI.getAllStories(projectId, filter);
       const data = response.data;
       console.log("data: ", data);
-      setFilteredCard(data);
+      setFilteredCard({
+        isFilter: true,
+        cardList: Object.values(data),
+      });
     } catch (error) {
       console.log("Fail to fetch: ", error);
     }
@@ -125,7 +129,7 @@ const BacklogController = ({
   }, [searchStoryValue]);
 
   useEffect(() => {
-    setFilteredCard([]);
+    setFilteredCard({ cardList: [], isFilter: false });
   }, [isFilter]);
 
   return (

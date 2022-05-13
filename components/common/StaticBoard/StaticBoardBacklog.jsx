@@ -9,7 +9,6 @@ const StaticBoardBacklog = ({ storyList, participants }) => {
       flexDir={"column"}
       dir="column"
       boxSizing="border-box"
-      overflow="hidden"
       bgGradient={useColorModeValue(
         "linear(gray.50 0%, gray.100 100%)",
         "linear(blue.800 0%, blue.900 100%)"
@@ -17,11 +16,20 @@ const StaticBoardBacklog = ({ storyList, participants }) => {
       boxShadow="base"
       borderRadius={"1rem"}
       py={2.5}
+      transition="all 0.5s linear"
       px={4}
+      mb={5}
+      // maxH="24.5vh"
+      _hover={
+        {
+          // maxHeight: '77vh',
+        }
+      }
+      // overflow="scroll"
     >
       <Text
         textAlign={"center"}
-        fontSize={"xl"}
+        fontSize={"1.5rem"}
         fontWeight={"bold"}
         color={useColorModeValue("#031d46", "#fffdfe")}
         p={4}
@@ -29,7 +37,13 @@ const StaticBoardBacklog = ({ storyList, participants }) => {
         Result Filtered Stories
       </Text>
 
-      <Flex flexDirection="column" flexGrow={1} padding={2}>
+      <Flex
+        flexDirection="column"
+        flexGrow={1}
+        padding={2}
+        overflow="scroll"
+        minHeight="min-content"
+      >
         {storyList.length === 0 && (
           <NoItem icon={GoChecklist}>No story found!</NoItem>
         )}

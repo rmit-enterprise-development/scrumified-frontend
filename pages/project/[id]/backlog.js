@@ -17,18 +17,18 @@ import linkCards from "../../../utils/card/card";
 var isEvtSrcOpenedOnce = false;
 
 const Backlog = ({ authToken }) => {
-	let bg = useColorModeValue('white', '#405A7D');
-	let color = useColorModeValue('#031d46', '#fffdfe');
-	let btnBg = useColorModeValue('gray.200', '#fffdfe');
-	let btnColor = 'black';
-	let bgGradient = useColorModeValue(
-		'linear(gray.50 0%, gray.100 100%)',
-		'linear(blue.800 0%, blue.900 100%)'
-	);
+  let bg = useColorModeValue("white", "#405A7D");
+  let color = useColorModeValue("#031d46", "#fffdfe");
+  let btnBg = useColorModeValue("gray.200", "#fffdfe");
+  let btnColor = "black";
+  let bgGradient = useColorModeValue(
+    "linear(gray.50 0%, gray.100 100%)",
+    "linear(blue.800 0%, blue.900 100%)"
+  );
 
-	const { asPath } = useRouter();
+  const { asPath } = useRouter();
 
-	const projectId = asPath.split('/')[2];
+  const projectId = asPath.split("/")[2];
 
   const getParticipants = async () => {
     try {
@@ -50,24 +50,28 @@ const Backlog = ({ authToken }) => {
         isBacklog: true,
       });
       const json = response.data;
+      console.log("json: ", json);
       setCards(json);
     } catch (error) {
       console.log(error);
     }
   };
 
-	const [cards, setCards] = useState({});
-	const [cardList, setCardList] = useState([]);
-	const [participants, setParticipants] = useState([]);
+  const [cards, setCards] = useState({});
+  const [cardList, setCardList] = useState([]);
+  const [participants, setParticipants] = useState([]);
 
   const [winReady, setwinReady] = useState(false);
   // Filtered Card (from Backlog Controller)
-  const [filteredCard, setFilteredCard] = useState([]);
+  const [filteredCard, setFilteredCard] = useState({
+    isFilter: false,
+    cardList: [],
+  });
 
   useEffect(() => {
     setwinReady(true);
     getParticipants(); // Always get participants first
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -98,71 +102,71 @@ const Backlog = ({ authToken }) => {
   }, [participants]); // Always make sure participants available first
 
   useEffect(() => {
-    const tmp = linkCards(cards, 'backlog', participants);
+    const tmp = linkCards(cards, "backlog", participants);
     setCardList(tmp);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cards]);
 
-	return (
-		<LoggedUserProvider authToken={authToken}>
-			<Head>
-				<title>Backlog</title>
-			</Head>
-			<MainContainer>
-				<Box>
-					<SectionHeader>Backlog</SectionHeader>
-					<BacklogController
-						cards={cards}
-						setCards={setCards}
-						bg={bg}
-						color={color}
-						btnBg={btnBg}
-						btnColor={btnColor}
-						projectId={projectId}
-						participants={participants}
-						setFilteredCard={setFilteredCard}
-					/>
+  return (
+    <LoggedUserProvider authToken={authToken}>
+      <Head>
+        <title>Backlog</title>
+      </Head>
+      <MainContainer>
+        <Box>
+          <SectionHeader>Backlog</SectionHeader>
+          <BacklogController
+            cards={cards}
+            setCards={setCards}
+            bg={bg}
+            color={color}
+            btnBg={btnBg}
+            btnColor={btnColor}
+            projectId={projectId}
+            participants={participants}
+            setFilteredCard={setFilteredCard}
+          />
 
-					{filteredCard.length > 0 ? (
-						<StaticBoardBacklog
-							storyList={filteredCard}
-							participants={participants}
-						/>
-					) : winReady ? (
-						<Board
-							cards={cards}
-							setCards={setCards}
-							cardList={cardList}
-							isBacklog={true}
-						>
-							<Column
-								key={0}
-								title={'Stories'}
-								id={'backlog'}
-								cards={cards}
-								setCards={setCards}
-								cardList={cardList}
-								bg={bg}
-								color={color}
-								btnBg={btnBg}
-								btnColor={btnColor}
-								bgGradient={bgGradient}
-							/>
-						</Board>
-					) : null}
-				</Box>
-			</MainContainer>
-		</LoggedUserProvider>
-	);
+          {filteredCard.isFilter ? (
+            <StaticBoardBacklog
+              storyList={filteredCard.cardList}
+              participants={participants}
+            />
+          ) : winReady ? (
+            <Board
+              cards={cards}
+              setCards={setCards}
+              cardList={cardList}
+              isBacklog={true}
+            >
+              <Column
+                key={0}
+                title={"Stories"}
+                id={"backlog"}
+                cards={cards}
+                setCards={setCards}
+                cardList={cardList}
+                bg={bg}
+                color={color}
+                btnBg={btnBg}
+                btnColor={btnColor}
+                bgGradient={bgGradient}
+              />
+            </Board>
+          ) : null}
+        </Box>
+      </MainContainer>
+    </LoggedUserProvider>
+  );
 };
 
 export async function getServerSideProps(ctx) {
-	const { auth } = cookies(ctx);
-	return {
-		props: {
-			authToken: auth || '',
-		},
-	};
+  const { auth } = cookies(ctx);
+  return {
+    props: {
+      authToken: auth || "",
+    },
+  };
 }
 
 export default Backlog;

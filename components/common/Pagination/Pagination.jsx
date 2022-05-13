@@ -58,11 +58,11 @@ const Pagination = (props) => {
           return (
             <Button
               key={pageNumber}
-              colorScheme={pageNumber === currentPage ? "teal" : "gray"}
+              colorScheme={pageNumber === currentPage ? "blue" : "gray"}
               onClick={() => onPageChange(pageNumber)}
               color={
                 pageNumber === currentPage
-                  ? "#2d4046"
+                  ? useColorModeValue("#fffdfe", "#2d4046")
                   : useColorModeValue("#031d46", "#fffdfe")
               }
             >

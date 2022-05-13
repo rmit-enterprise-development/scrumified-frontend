@@ -4,7 +4,7 @@ const SectionHeader = ({ children }) => {
   return (
     <>
       <Text
-        fontSize="2xl"
+        fontSize="3xl"
         fontWeight="bold"
         color={useColorModeValue("#031d46", "#fffdfe")}
         py={3}

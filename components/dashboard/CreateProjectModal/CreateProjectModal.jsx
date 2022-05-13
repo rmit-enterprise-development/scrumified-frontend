@@ -4,6 +4,8 @@ import {
   CircularProgress,
   Flex,
   FormControl,
+  FormErrorMessage,
+  FormHelperText,
   FormLabel,
   Input,
   Modal,
@@ -33,11 +35,11 @@ const CreateProjectModal = () => {
   const { colorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTermParticipant, setSearchTermParticipant] = useState("");
   const [isExisted, setIsExisted] = useState(true);
   const [isValid, setIsValid] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState("");
+  const [errorName, setErrorName] = useState("");
 
   const initialRef = useRef();
   const finalRef = useRef();
@@ -53,15 +55,15 @@ const CreateProjectModal = () => {
     }
   };
 
-  const [text, setText] = useState("");
-  const handleTextChange = (event) => setText(event.target.value);
+  const [searchName, setSearchName] = useState("");
+  const handleSearchNameChange = (event) => setSearchName(event.target.value);
 
   const customInputRender = (inputProps) => (
     <Input
       {...inputProps}
-      value={searchTerm}
+      value={searchTermParticipant}
       onChange={(e) => {
-        setSearchTerm(e.target.value);
+        setSearchTermParticipant(e.target.value);
       }}
     />
   );
@@ -87,48 +89,69 @@ const CreateProjectModal = () => {
   };
 
   const handleSubmit = async () => {
-    if (text === "") {
-      setIsValid(false);
-      setError("Project name can't be empty");
-    } else {
-      setIsValid(true);
-      const request = {
-        title: text,
-        participantsId: selectedItems.map((a) => a.value),
-      };
+    if (isValid && isExisted) {
+      try {
+        const request = {
+          title: searchName,
+          participantsId: selectedItems.map((a) => a.value),
+        };
+        setIsSubmitting(true);
+        const response = await userAPI.postProject(user.logUserId, request);
 
-      if (user) {
-        try {
-          setIsSubmitting(true);
-          const response = await userAPI.postProject(user.logUserId, request);
-
-          // Push to project backlog with new ID
-          const projectID = response.data.id;
-          toast({
-            title: "Create project successfully!",
-            status: "success",
-            duration: 2000,
-            isClosable: true,
-          });
-          Router.push({
-            pathname: `${RouterPage.PROJECT}/${projectID}${RouterPage.BACKLOG}`,
-          });
-        } catch (error) {
-          console.error("There was an error: ", error);
-        } finally {
-          setIsSubmitting(false);
-          onClose();
-        }
+        // Push to project backlog with new ID
+        const projectID = response.data.id;
+        toast({
+          title: "Create project successfully!",
+          status: "success",
+          duration: 2000,
+          isClosable: true,
+        });
+        Router.push({
+          pathname: `${RouterPage.PROJECT}/${projectID}${RouterPage.BACKLOG}`,
+        });
+        setIsSubmitting(false);
+        onClose();
+      } catch (error) {
+        console.error("There was an error: ", error);
       }
     }
   };
-
+  // For checking project name is existed for that user
   useEffect(() => {
     const delayDebounceFn = setTimeout(async () => {
-      if (searchTerm !== "" && searchTerm.length >= 2) {
+      if (searchName === "") {
+        setIsValid(false);
+        setErrorName("Project name can't be empty");
+      } else {
         // Send Axios request here
         try {
-          const response = await userAPI.getAll({ key: searchTerm });
+          const response = await userAPI.getAllProjects(user.logUserId, {
+            key: searchName,
+          });
+          const data = response.data;
+          if (data && data.totalElements !== 0) {
+            setIsValid(false);
+            setErrorName("You've already joined a project with a same name");
+          } else {
+            setIsValid(true);
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    }, 500);
+
+    return () => clearTimeout(delayDebounceFn);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchName]);
+
+  // For finding participant info across the system
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(async () => {
+      if (searchTermParticipant !== "" && searchTermParticipant.length >= 2) {
+        // Send Axios request here
+        try {
+          const response = await userAPI.getAll({ key: searchTermParticipant });
           const data = response.data;
           const userList = digFind(data, "userDtoList");
 
@@ -144,7 +167,6 @@ const CreateProjectModal = () => {
             );
           } else {
             setIsExisted(false);
-            setError("User not found!");
             setPickerItems([]);
           }
         } catch (error) {
@@ -158,7 +180,7 @@ const CreateProjectModal = () => {
 
     return () => clearTimeout(delayDebounceFn);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchTerm]);
+  }, [searchTermParticipant]);
 
   return (
     <>
@@ -184,20 +206,26 @@ const CreateProjectModal = () => {
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
-            <FormControl isRequired>
+            <FormControl isRequired isInvalid={!isValid}>
               <FormLabel color={useColorModeValue("#031e49", "#fffdfe")}>
                 Project name
               </FormLabel>
               <Input
                 ref={initialRef}
-                placeholder="Project name"
                 color={useColorModeValue("#031d46", "#fffdfe")}
-                value={text}
-                onChange={handleTextChange}
+                value={searchName}
+                onChange={handleSearchNameChange}
               />
+              {isValid ? (
+                <FormHelperText sx={{ color: "green.500" }}>
+                  Your project name is unique and valid!
+                </FormHelperText>
+              ) : (
+                <FormErrorMessage>{errorName}</FormErrorMessage>
+              )}
             </FormControl>
 
-            <FormControl mt={4}>
+            <FormControl mt={4} isInvalid={!isExisted}>
               <CUIAutoComplete
                 tagStyleProps={{
                   rounded: "full",
@@ -231,17 +259,16 @@ const CreateProjectModal = () => {
                 renderCustomInput={customInputRender}
                 disableCreateItem
               />
+              {!isExisted ? (
+                <FormErrorMessage>User not found!</FormErrorMessage>
+              ) : (
+                selectedItems.length === 0 && (
+                  <FormHelperText>
+                    You can left this empty for now and edit later in Dashboard.
+                  </FormHelperText>
+                )
+              )}
             </FormControl>
-            {!isExisted && (
-              <Text as="span" color="red.500" fontWeight="bold">
-                {error}
-              </Text>
-            )}
-            {!isValid && (
-              <Text as="span" color="red.500" fontWeight="bold">
-                {error}
-              </Text>
-            )}
           </ModalBody>
 
           <ModalFooter>

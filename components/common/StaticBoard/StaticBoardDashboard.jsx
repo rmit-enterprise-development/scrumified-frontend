@@ -39,13 +39,16 @@ const StaticBoardDashboard = ({
         fontSize={"xl"}
         fontWeight={"bold"}
         color={useColorModeValue("#031d46", "#fffdfe")}
-        pb={4}
+        pt={2}
+        pb={3}
       >
-        Project: {projectTitle}
+        {projectTitle}
       </Text>
 
       {storyData.storyList.length === 0 && (
-        <NoItem icon={GoChecklist}>No task found in this project!</NoItem>
+        <NoItem icon={GoChecklist}>
+          No assigned task found in this project!
+        </NoItem>
       )}
       {storyData.storyList.map((story) => (
         <StaticCard key={story.id} card={story} />

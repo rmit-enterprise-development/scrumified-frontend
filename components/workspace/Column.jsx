@@ -1,27 +1,26 @@
-import { Flex, Text } from '@chakra-ui/react';
+import { Flex, Text, useColorModeValue } from '@chakra-ui/react';
 import React from 'react';
 import { Droppable } from 'react-beautiful-dnd';
 import { GoTasklist } from 'react-icons/go';
 import NoItem from '../common/NoItem/NoItem';
 
-const Column = ({ title, id, cardList, color, bgGradient }) => {
+const Column = ({ title, id, cardList, color }) => {
   return (
     <Flex
       flexDir={'column'}
       dir="column"
       boxSizing="border-box"
-      bgGradient={bgGradient}
+      bgGradient={useColorModeValue(
+        'linear(gray.50 0%, gray.100 100%)',
+        'linear(blue.800 0%, blue.900 100%)'
+      )}
       boxShadow="base"
       borderRadius={'1rem'}
       py={2.5}
       transition="all 0.5s linear"
       px={4}
       mb={5}
-      maxH="24.5vh"
-      _hover={{
-        maxHeight: '77vh',
-      }}
-      overflow="scroll"
+      h="77vh"
     >
       <Text
         textAlign={'center'}
@@ -32,13 +31,6 @@ const Column = ({ title, id, cardList, color, bgGradient }) => {
       >
         {title}
       </Text>
-
-      {cardList && cardList.length === 0 && (
-        <NoItem icon={GoTasklist}>
-          No item found. Create your first story!
-        </NoItem>
-      )}
-
       <Droppable droppableId={id}>
         {(provided) => (
           <Flex
@@ -47,7 +39,14 @@ const Column = ({ title, id, cardList, color, bgGradient }) => {
             ref={provided.innerRef}
             {...provided.droppableProps}
             padding={'2'}
+            overflow={'scroll'}
+            h="20rem"
           >
+            {cardList && cardList.length === 0 && (
+              <NoItem icon={GoTasklist}>
+                No item found. Create your first story!
+              </NoItem>
+            )}
             {cardList}
             {provided.placeholder}
           </Flex>

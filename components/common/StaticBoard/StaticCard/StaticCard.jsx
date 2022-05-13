@@ -26,15 +26,11 @@ const StaticCard = ({ card, isBacklog, participants }) => {
   const userInfo = textUtils.getFirstLetters(
     user.firstName + " " + user.lastName
   );
+  const color = useColorModeValue("#031d46", "#fffdfe");
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <Box
-      _hover={{
-        boxShadow:
-          "0px 1px 25px -5px rgb(66 153 225 / 48%), 0 10px 10px -5px rgb(66 153 225 / 43%)",
-      }}
-      transition="all 0.2s linear"
       cursor="pointer"
       boxSizing="border-box"
       borderRadius="1rem"
@@ -43,8 +39,12 @@ const StaticCard = ({ card, isBacklog, participants }) => {
       color={useColorModeValue("#031d46", "#fffdfe")}
       mb={4}
       p={4}
-      minH={93}
       boxShadow="base"
+      _hover={{
+        boxShadow: "0 0 5px 5px #e6e6e7",
+        transition: "all 0.4s linear",
+      }}
+      minH="6rem"
       onClick={() => {
         isBacklog
           ? onOpen()
@@ -60,7 +60,7 @@ const StaticCard = ({ card, isBacklog, participants }) => {
 
         {isBacklog && (
           <WrapItem>
-            <Tooltip label={"Add to sprint 1"} placement={"left-start"}>
+            <Tooltip label={"Add to sprint"} placement={"left-start"}>
               <IconButton
                 isRound={true}
                 size={"xs"}
@@ -107,6 +107,7 @@ const StaticCard = ({ card, isBacklog, participants }) => {
           prevCard={card}
           participants={participants}
           isCard={true}
+          color={color}
         />
       )}
     </Box>

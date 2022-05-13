@@ -41,7 +41,7 @@ const projectAPI = {
    */
   getAllStories: (id, params) => {
     const url = `/projects/${id}/stories`;
-    return axiosClient.get(url, params);
+    return axiosClient.get(url, { params });
   },
 
   /**

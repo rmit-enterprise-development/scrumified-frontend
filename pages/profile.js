@@ -19,7 +19,6 @@ const Profile = ({ authToken }) => {
     authToken,
     md5("EmChiXemAnhLa_#BanNhauMaThoi")
   );
-  console.log(loggedUser);
   return (
     <LoggedUserProvider authToken={authToken}>
       <Head>

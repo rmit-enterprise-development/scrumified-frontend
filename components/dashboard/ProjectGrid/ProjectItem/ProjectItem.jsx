@@ -109,7 +109,7 @@ const ProjectItem = ({
 
         <Flex alignItems="center" pt={4}>
           <Text pr={2} color={useColorModeValue("#031d46", "#fffdfe")}>
-            My task
+            Assigned task
           </Text>
 
           <NumberButton

@@ -10,7 +10,7 @@ export default function MainContainer({ children }) {
   return (
     <Flex
       h="100vh"
-      overflow="scroll"
+      overflow="auto"
       flexDir={useBreakpointValue({ base: "column", md: "row" })}
     >
       <SideBar />

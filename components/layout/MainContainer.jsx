@@ -9,7 +9,7 @@ import SideBar from "../common/SideBar/SideBar";
 export default function MainContainer({ children }) {
   return (
     <Flex
-      maxH="100vh"
+      h="100vh"
       overflow="scroll"
       flexDir={useBreakpointValue({ base: "column", md: "row" })}
     >

@@ -19,13 +19,7 @@ const StaticBoardBacklog = ({ storyList, participants }) => {
       transition="all 0.5s linear"
       px={4}
       mb={5}
-      // maxH="24.5vh"
-      _hover={
-        {
-          // maxHeight: '77vh',
-        }
-      }
-      // overflow="scroll"
+      h="77vh"
     >
       <Text
         textAlign={"center"}
@@ -38,13 +32,13 @@ const StaticBoardBacklog = ({ storyList, participants }) => {
       </Text>
 
       <Flex
-        flexDirection="column"
+        flexDirection={"column"}
         flexGrow={1}
-        padding={2}
-        overflow="scroll"
-        minHeight="min-content"
+        padding={"2"}
+        overflow={"scroll"}
+        h="20rem"
       >
-        {storyList.length === 0 && (
+        {storyList && storyList.length === 0 && (
           <NoItem icon={GoChecklist}>No story found!</NoItem>
         )}
         {storyList.map((story) => (

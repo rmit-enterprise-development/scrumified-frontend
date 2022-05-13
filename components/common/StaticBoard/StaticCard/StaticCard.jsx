@@ -26,6 +26,7 @@ const StaticCard = ({ card, isBacklog, participants }) => {
   const userInfo = textUtils.getFirstLetters(
     user.firstName + " " + user.lastName
   );
+  const color = useColorModeValue("#031d46", "#fffdfe");
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
@@ -43,6 +44,7 @@ const StaticCard = ({ card, isBacklog, participants }) => {
         boxShadow: "0 0 5px 5px #e6e6e7",
         transition: "all 0.4s linear",
       }}
+      minH="6rem"
       onClick={() => {
         isBacklog
           ? onOpen()
@@ -105,6 +107,7 @@ const StaticCard = ({ card, isBacklog, participants }) => {
           prevCard={card}
           participants={participants}
           isCard={true}
+          color={color}
         />
       )}
     </Box>

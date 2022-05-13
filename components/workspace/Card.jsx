@@ -1,4 +1,4 @@
-import { AddIcon } from '@chakra-ui/icons';
+import { AddIcon } from "@chakra-ui/icons";
 import {
   Badge,
   Box,
@@ -11,28 +11,28 @@ import {
   useDisclosure,
   WrapItem,
   useColorModeValue,
-} from '@chakra-ui/react';
-import Avvvatars from 'avvvatars-react';
-import { Draggable } from 'react-beautiful-dnd';
-import textUtils from '../../utils/text';
-import CardModal from './CardModal';
+} from "@chakra-ui/react";
+import Avvvatars from "avvvatars-react";
+import { Draggable } from "react-beautiful-dnd";
+import textUtils from "../../utils/text";
+import CardModal from "./CardModal";
 
 const Card = ({ participants, card, ...props }) => {
-  let color = useColorModeValue('#031d46', '#fffdfe');
-  let bg = useColorModeValue('white', '#405A7D');
-  let btnBg = useColorModeValue('gray.200', '#fffdfe');
-  let btnColor = 'black';
+  let color = useColorModeValue("#031d46", "#fffdfe");
+  let bg = useColorModeValue("white", "#405A7D");
+  let btnBg = useColorModeValue("gray.200", "#fffdfe");
+  let btnColor = "black";
 
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const colorScheme = 'red' + '.500';
+  const colorScheme = "red" + ".500";
   const getUserInfoValue = (id) => {
     if (participants.length > 0) {
       const user = Object.values(participants).find((p) => p.id === id);
-      return textUtils.getFirstLetters(user.firstName + ' ' + user.lastName);
+      return textUtils.getFirstLetters(user.firstName + " " + user.lastName);
     }
   };
   return (
-    <Draggable draggableId={'' + card.id} index={props.index}>
+    <Draggable draggableId={"" + card.id} index={props.index}>
       {(provided) => (
         <>
           <Box
@@ -51,26 +51,26 @@ const Card = ({ participants, card, ...props }) => {
             p={4}
             boxShadow="base"
             _hover={{
-              boxShadow: '0 0 5px 5px #e6e6e7',
-              transition: 'all 0.4s linear',
+              boxShadow: "0 0 5px 5px #e6e6e7",
+              transition: "all 0.4s linear",
             }}
             minH="6rem"
           >
-            <Flex alignItems={'center'} justifyContent={'space-between'}>
+            <Flex alignItems={"center"} justifyContent={"space-between"}>
               <Heading fontSize="lg" isTruncated>
                 {card.userStory}
               </Heading>
 
               <WrapItem>
-                <Tooltip label={'Add to sprint'} placement={'left-start'}>
+                <Tooltip label={"Add to sprint"} placement={"left-start"}>
                   <IconButton
                     isRound={true}
-                    size={'xs'}
+                    size={"xs"}
                     bgColor={btnBg}
                     _hover={{ opacity: 0.8 }}
                     onClick={(e) => {
                       e.stopPropagation();
-                      console.log('DitMe');
+                      console.log("DitMe");
                     }}
                     aria-label="Search database"
                     icon={<AddIcon color={btnColor} />}
@@ -82,19 +82,19 @@ const Card = ({ participants, card, ...props }) => {
             <Flex
               mt={3}
               justifyContent="space-between"
-              alignItems={'center'}
-              alignContent={'center'}
+              alignItems={"center"}
+              alignContent={"center"}
             >
-              <Flex alignItems={'center'}>
+              <Flex alignItems={"center"}>
                 <Text paddingRight={2}>Assignees:</Text>
                 <Avvvatars value={getUserInfoValue(card.assignId)} size="25" />
               </Flex>
-              <Flex alignItems={'center'}>
-                <Badge colorScheme="green" borderRadius={'4px'} marginRight={2}>
+              <Flex alignItems={"center"}>
+                <Badge colorScheme="green" borderRadius={"4px"} marginRight={2}>
                   {card.category}
                 </Badge>
 
-                <Circle size="25px" bg={colorScheme} color="white" p={'10px'}>
+                <Circle size="25px" bg={colorScheme} color="white" p={"10px"}>
                   {card.point}
                 </Circle>
               </Flex>
@@ -104,6 +104,7 @@ const Card = ({ participants, card, ...props }) => {
             isOpen={isOpen}
             onOpen={onOpen}
             onClose={onClose}
+            color={color}
             prevCard={card}
             participants={participants}
             isCard={true}

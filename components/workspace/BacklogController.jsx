@@ -131,6 +131,7 @@ const BacklogController = ({
 
   useEffect(() => {
     setFilteredCard({ cardList: [], isFilter: false });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFilter]);
 
   return (
@@ -177,8 +178,9 @@ const BacklogController = ({
               <option value="Design(UI/UX)">Design(UI/UX)</option>
               <option value="Front-end">Front-end</option>
               <option value="Back-end">Back-end</option>
-              <option value="Testing">Testing</option>
               <option value="DevOps">DevOps</option>
+              <option value="Testing">Testing</option>
+              <option value="Others">Others</option>
             </Select>
 
             <Select

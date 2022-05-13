@@ -1,4 +1,7 @@
-import { AddIcon, DeleteIcon, Search2Icon } from "@chakra-ui/icons";
+import {
+  AddIcon,
+  DeleteIcon, Search2Icon
+} from "@chakra-ui/icons";
 import {
   Flex,
   HStack,
@@ -7,16 +10,12 @@ import {
   InputGroup,
   InputLeftElement,
   Select,
-  Text,
-  useColorModeValue,
-  useDisclosure,
-  useBreakpointValue,
+  Text, useBreakpointValue, useColorModeValue,
+  useDisclosure
 } from "@chakra-ui/react";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import projectAPI from "../../api/services/projectAPI";
-import userAPI from "../../api/services/userAPI";
 import { digFind } from "../../utils/object";
-import { LoggedUserContext } from "../common/LoggedUserProvider";
 import CardModal from "./CardModal";
 
 const BacklogController = ({
@@ -131,6 +130,7 @@ const BacklogController = ({
 
   useEffect(() => {
     setFilteredCard({ cardList: [], isFilter: false });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFilter]);
 
   return (
@@ -166,7 +166,7 @@ const BacklogController = ({
             />
           </InputGroup>
 
-          <Flex gap={2}>
+          <Flex gap={2} alignItems="center">
             <Select
               width="auto"
               onChange={(e) => handleCategoryStory(e.target.value)}
@@ -177,8 +177,9 @@ const BacklogController = ({
               <option value="Design(UI/UX)">Design(UI/UX)</option>
               <option value="Front-end">Front-end</option>
               <option value="Back-end">Back-end</option>
-              <option value="Testing">Testing</option>
               <option value="DevOps">DevOps</option>
+              <option value="Testing">Testing</option>
+              <option value="Others">Others</option>
             </Select>
 
             <Select

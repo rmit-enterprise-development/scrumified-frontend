@@ -47,8 +47,9 @@ const Backlog = ({ authToken }) => {
   const getCards = async () => {
     try {
       const response = await projectAPI.getAllStories(projectId, {
-        isBacklog: true,
-      });
+			isBacklog: true,
+			returnArray: false,
+		});
       const json = response.data;
       console.log("json: ", json);
       setCards(json);

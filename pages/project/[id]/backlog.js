@@ -49,6 +49,7 @@ const Backlog = ({ authToken }) => {
   const isPending = currentDate < currentSprint.startDate;
 
   const getCurrentSprint = async () => {
+    setIsLoading(true);
     try {
       const response = await projectAPI.getCurrentSprint(projectId);
       const json = response.data;
@@ -67,6 +68,7 @@ const Backlog = ({ authToken }) => {
   };
 
   const getParticipants = async () => {
+    setIsLoading(true);
     try {
       const response = await projectAPI.getProject(projectId);
       const json = response.data;
@@ -75,12 +77,14 @@ const Backlog = ({ authToken }) => {
       } else {
         setParticipants([json.owner]);
       }
+      setIsLoading(false);
     } catch (error) {
       console.log(error);
     }
   };
 
   const getCards = async () => {
+    setIsLoading(true);
     try {
       const response = await projectAPI.getAllStories(projectId, {
         isBacklog: true,
@@ -88,6 +92,7 @@ const Backlog = ({ authToken }) => {
       });
       const json = response.data;
       setCards(json);
+      setIsLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -202,15 +207,17 @@ const Backlog = ({ authToken }) => {
               cardList={cardList}
               isBacklog={true}
             >
-              <Column
-                key={0}
-                title={"Stories"}
-                id={"backlog"}
-                cards={cards}
-                setCards={setCards}
-                cardList={cardList}
-                columnColor={"gray.500"}
-              />
+              <Skeleton isLoaded={!isLoading}>
+                <Column
+                  key={0}
+                  title={"Stories"}
+                  id={"backlog"}
+                  cards={cards}
+                  setCards={setCards}
+                  cardList={cardList}
+                  columnColor={"gray.500"}
+                />
+              </Skeleton>
             </Board>
           ) : null}
         </Box>

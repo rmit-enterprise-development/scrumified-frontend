@@ -7,6 +7,7 @@ import {
   InputGroup,
   InputLeftElement,
   Select,
+  Skeleton,
   useBreakpointValue,
   useColorModeValue,
 } from "@chakra-ui/react";
@@ -36,6 +37,7 @@ const Dashboard = ({ authToken }) => {
 
   const PAGE_LIMIT_PROJECT = 4;
   const PAGE_LIMIT_STORY = 2;
+  const [isLoading, setIsLoading] = useState(true);
 
   //----------------Project Setting-----------------------//
   // Init projectData & its pagination
@@ -93,6 +95,7 @@ const Dashboard = ({ authToken }) => {
       currentFilter.projectId = projects[0].id;
       setFilterStory(currentFilter);
       fetchStory(filterStory);
+      setIsLoading(false);
     } catch (error) {
       console.log("Fail to fetch: ", error);
     }
@@ -270,22 +273,24 @@ const Dashboard = ({ authToken }) => {
 
           <CreateProjectModal />
         </Flex>
-        {projectData.projectList.length === 0 && (
-          <NoItem icon={GoProject}>No project found!</NoItem>
-        )}
-        <ProjectGrid
-          projectData={projectData.projectList}
-          fetchUpdatedProject={fetchUpdatedProject}
-          fetchProjectStory={fetchProjectStory}
-        />
-        <Pagination
-          currentPage={currentProjectPage}
-          totalCount={projectData.totalProject}
-          pageSize={PAGE_LIMIT_PROJECT} // Fixed size
-          onPageChange={(page) => {
-            setCurrentProjectPage(page);
-          }}
-        />
+        <Skeleton isLoaded={!isLoading}>
+          {projectData.projectList.length === 0 && (
+            <NoItem icon={GoProject}>No project found!</NoItem>
+          )}
+          <ProjectGrid
+            projectData={projectData.projectList}
+            fetchUpdatedProject={fetchUpdatedProject}
+            fetchProjectStory={fetchProjectStory}
+          />
+          <Pagination
+            currentPage={currentProjectPage}
+            totalCount={projectData.totalProject}
+            pageSize={PAGE_LIMIT_PROJECT} // Fixed size
+            onPageChange={(page) => {
+              setCurrentProjectPage(page);
+            }}
+          />
+        </Skeleton>
         <SectionHeader>Assigned to me</SectionHeader>
         <Flex
           justifyContent={useBreakpointValue({
@@ -332,21 +337,23 @@ const Dashboard = ({ authToken }) => {
           </Select>
         </Flex>
 
-        <Box h="100%">
-          {projectData.projectList.length === 0 ? (
-            <NoItem icon={GoChecklist}>
-              No task found in any project. Enjoy your day!
-            </NoItem>
-          ) : (
-            <StaticBoardDashboard
-              storyData={storyData}
-              projectTitle={currentProjectName}
-              currentStoryPage={currentStoryPage}
-              setCurrentStoryPage={setCurrentStoryPage}
-              pageLimit={PAGE_LIMIT_STORY}
-            />
-          )}
-        </Box>
+        <Skeleton isLoaded={!isLoading}>
+          <Box h="100%">
+            {projectData.projectList.length === 0 ? (
+              <NoItem icon={GoChecklist}>
+                No task found in any project. Enjoy your day!
+              </NoItem>
+            ) : (
+              <StaticBoardDashboard
+                storyData={storyData}
+                projectTitle={currentProjectName}
+                currentStoryPage={currentStoryPage}
+                setCurrentStoryPage={setCurrentStoryPage}
+                pageLimit={PAGE_LIMIT_STORY}
+              />
+            )}
+          </Box>
+        </Skeleton>
       </MainContainer>
     </LoggedUserProvider>
   );

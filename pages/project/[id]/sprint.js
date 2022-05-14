@@ -156,37 +156,52 @@ const Sprint = ({ authToken }) => {
 			},
 		];
 		setCardListTodo(
-			linkCards(cards, 'todo', [
-				{
-					id: 2,
-					firstName: 'Uncle',
-					lastName: 'HoHo',
-					email: 'abc@gmail.com',
-					description: null,
-				},
-			])
+			linkCards(
+				cards,
+				'todo',
+				[
+					{
+						id: 2,
+						firstName: 'Uncle',
+						lastName: 'HoHo',
+						email: 'abc@gmail.com',
+						description: null,
+					},
+				],
+				true
+			)
 		);
 		setcardListinProgress(
-			linkCards(cards, 'inProgress', [
-				{
-					id: 2,
-					firstName: 'Uncle',
-					lastName: 'HoHo',
-					email: 'abc@gmail.com',
-					description: null,
-				},
-			])
+			linkCards(
+				cards,
+				'inProgress',
+				[
+					{
+						id: 2,
+						firstName: 'Uncle',
+						lastName: 'HoHo',
+						email: 'abc@gmail.com',
+						description: null,
+					},
+				],
+				true
+			)
 		);
 		setCardListDone(
-			linkCards(cards, 'done', [
-				{
-					id: 2,
-					firstName: 'Uncle',
-					lastName: 'HoHo',
-					email: 'abc@gmail.com',
-					description: null,
-				},
-			])
+			linkCards(
+				cards,
+				'done',
+				[
+					{
+						id: 2,
+						firstName: 'Uncle',
+						lastName: 'HoHo',
+						email: 'abc@gmail.com',
+						description: null,
+					},
+				],
+				true
+			)
 		);
 		// }, [bg, cards, color]);
 	}, [cards]);

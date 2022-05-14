@@ -8,15 +8,16 @@ const GanttChart = ({data}) => {
       height: chartHeight,
       gantt: {
         labelStyle: {
-          fontName: 'Arial',
-          fontSize: "md"
+          fontName: `Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol"`,
+          fontSize: "18px",
+          fontWeight: "500"
         },
         trackHeight: 40,
         criticalPathEnabled: false,
-        innerGridTrack: { fill: useColorModeValue("white","#031d46") },
+        innerGridTrack: { fill: useColorModeValue("white","#354A6D") },
       },
       backgroundColor: {
-        fill: useColorModeValue("white", 'yellow')
+        fill: useColorModeValue("white", '#354A6D')
       },
       hAxis: {
         titleTextStyle: {

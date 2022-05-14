@@ -8,7 +8,7 @@ import {
 import { GoChecklist } from "react-icons/go";
 import NoItem from "../../common/NoItem/NoItem";
 import Pagination from "../../common/Pagination/Pagination";
-import StaticCard from "./StaticCard/StaticCard";
+import { StaticCard } from "./StaticCard/StaticCard";
 
 const StaticBoardDashboard = ({
   projectTitle,

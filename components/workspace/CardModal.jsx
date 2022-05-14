@@ -198,12 +198,12 @@ const CardModal = ({
                 setIsValidCategory(isValidInput(e.target.value));
               }}
             >
-              <option value="Front-end">Front-end</option>
-              <option value="Back-end">Back-end</option>
-              <option value="Design(UI/UX)">Design (UI/UX)</option>
-              <option value="DevOps">DevOps</option>
-              <option value="Testing">Testing</option>
-              <option value="Others">Others</option>
+              <option value="DESIGN">Design(UI/UX)</option>
+              <option value="FRONTEND">Front-end</option>
+              <option value="BACKEND">Back-end</option>
+              <option value="DEVOPS">DevOps</option>
+              <option value="TEST">Testing</option>
+              <option value="OTHERS">Others</option>
             </Select>
             {!isValidCategory && (
               <FormErrorMessage>Must select one category</FormErrorMessage>

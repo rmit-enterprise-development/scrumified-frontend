@@ -14,6 +14,7 @@ import {
 } from "@chakra-ui/react";
 import Avvvatars from "avvvatars-react";
 import { Draggable } from "react-beautiful-dnd";
+import { BadgeColor, Category } from "../../config/constants";
 import textUtils from "../../utils/text";
 import CardModal from "./CardModal";
 
@@ -24,7 +25,6 @@ const Card = ({ participants, card, ...props }) => {
   let btnColor = "black";
 
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const colorScheme = "red" + ".500";
   const getUserInfoValue = (id) => {
     if (participants.length > 0) {
       const user = Object.values(participants).find((p) => p.id === id);
@@ -108,11 +108,15 @@ const Card = ({ participants, card, ...props }) => {
                 </WrapItem>
               </Flex>
               <Flex alignItems={"center"}>
-                <Badge colorScheme="green" borderRadius={"4px"} marginRight={2}>
-                  {card.category}
+                <Badge
+                  colorScheme={BadgeColor[card.category]}
+                  borderRadius={"4px"}
+                  marginRight={2}
+                >
+                  {Category[card.category]}
                 </Badge>
 
-                <Circle size="25px" bg={colorScheme} color="white" p={"10px"}>
+                <Circle size="25px" bg="red.500" color="white" p={"10px"}>
                   {card.point}
                 </Circle>
               </Flex>

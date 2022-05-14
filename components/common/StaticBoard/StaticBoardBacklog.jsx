@@ -1,7 +1,7 @@
 import { Flex, Text, useColorModeValue } from "@chakra-ui/react";
 import { GoChecklist } from "react-icons/go";
 import NoItem from "../NoItem/NoItem";
-import StaticCard from "./StaticCard/StaticCard";
+import { StaticCardBacklog } from "./StaticCard/StaticCard";
 
 const StaticBoardBacklog = ({ storyList, participants }) => {
   return (
@@ -42,10 +42,9 @@ const StaticBoardBacklog = ({ storyList, participants }) => {
           <NoItem icon={GoChecklist}>No story found!</NoItem>
         )}
         {storyList.map((story) => (
-          <StaticCard
+          <StaticCardBacklog
             key={story.id}
             card={story}
-            isBacklog={true}
             participants={participants}
           />
         ))}

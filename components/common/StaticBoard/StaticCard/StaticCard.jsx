@@ -1,4 +1,4 @@
-import { AddIcon } from "@chakra-ui/icons";
+import { AddIcon, MinusIcon } from "@chakra-ui/icons";
 import {
   Badge,
   Box,
@@ -14,7 +14,7 @@ import {
 } from "@chakra-ui/react";
 import Avvvatars from "avvvatars-react";
 import Router from "next/router";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { BadgeColor, Category } from "../../../../config/constants";
 import { RouterPage } from "../../../../config/router";
 import textUtils from "../../../../utils/text";
@@ -35,9 +35,11 @@ const StaticCardBacklog = ({ card, participants }) => {
     }
   };
 
-  const color = useColorModeValue("#031d46", "#fffdfe");
+  const textColor = useColorModeValue("#031d46", "#fffdfe");
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const [isAdded, setIsAdded] = useState(false);
   return (
     <Box
       cursor="pointer"
@@ -45,7 +47,7 @@ const StaticCardBacklog = ({ card, participants }) => {
       borderRadius="1rem"
       overflow="hidden"
       bg={useColorModeValue("#fffdfe", "#405A7D")}
-      color={useColorModeValue("#031d46", "#fffdfe")}
+      color={textColor}
       mb={4}
       p={4}
       boxShadow="base"
@@ -64,7 +66,10 @@ const StaticCardBacklog = ({ card, participants }) => {
         </Heading>
 
         <WrapItem>
-          <Tooltip label={"Add to sprint"} placement={"left-start"}>
+          <Tooltip
+            label={!isAdded ? "Add to sprint" : "Remove from sprint"}
+            placement={"left-start"}
+          >
             <IconButton
               isRound={true}
               size={"xs"}
@@ -73,10 +78,13 @@ const StaticCardBacklog = ({ card, participants }) => {
               _hover={{ opacity: 0.8 }}
               onClick={(e) => {
                 e.stopPropagation();
-                console.log("DitMe");
+                setIsAdded(!isAdded);
+                console.log("DitMe"); // Set action
               }}
               aria-label="Search database"
-              icon={<AddIcon color="black" />}
+              icon={
+                !isAdded ? <AddIcon color="green" /> : <MinusIcon color="red" />
+              }
             />
           </Tooltip>
         </WrapItem>
@@ -122,7 +130,7 @@ const StaticCardBacklog = ({ card, participants }) => {
         prevCard={card}
         participants={participants}
         isCard={true}
-        color={color}
+        color={textColor}
       />
     </Box>
   );

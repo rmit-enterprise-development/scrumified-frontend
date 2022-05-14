@@ -1,4 +1,4 @@
-import { AddIcon, Icon, RepeatClockIcon } from "@chakra-ui/icons";
+import { AddIcon, Icon, MinusIcon, RepeatClockIcon } from "@chakra-ui/icons";
 import {
   Badge,
   Box,
@@ -13,6 +13,7 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import Avvvatars from "avvvatars-react";
+import { useState } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import { BadgeColor, Category } from "../../config/constants";
 import textUtils from "../../utils/text";
@@ -22,7 +23,6 @@ const Card = ({ participants, card, ...props }) => {
   let color = useColorModeValue("#031d46", "#fffdfe");
   let bg = useColorModeValue("white", "#405A7D");
   let btnBg = useColorModeValue("gray.200", "#fffdfe");
-  let btnColor = "black";
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const getUserInfoValue = (id) => {
@@ -37,6 +37,8 @@ const Card = ({ participants, card, ...props }) => {
       return `${user.firstName} ${user.lastName}`;
     }
   };
+
+  const [isAdded, setIsAdded] = useState(false);
   return (
     <Draggable draggableId={"" + card.id} index={props.index}>
       {(provided) => (
@@ -68,18 +70,29 @@ const Card = ({ participants, card, ...props }) => {
               </Heading>
 
               <WrapItem>
-                <Tooltip label={"Add to sprint"} placement={"left-start"}>
+                <Tooltip
+                  label={!isAdded ? "Add to sprint" : "Remove from sprint"}
+                  placement={"left-start"}
+                >
                   <IconButton
                     isRound={true}
                     size={"xs"}
+                    // eslint-disable-next-line react-hooks/rules-of-hooks
                     bgColor={btnBg}
                     _hover={{ opacity: 0.8 }}
                     onClick={(e) => {
                       e.stopPropagation();
-                      console.log("DitMe");
+                      setIsAdded(!isAdded);
+                      console.log("DitMe"); // Set action
                     }}
                     aria-label="Search database"
-                    icon={<AddIcon color={btnColor} />}
+                    icon={
+                      !isAdded ? (
+                        <AddIcon color="green" />
+                      ) : (
+                        <MinusIcon color="red" />
+                      )
+                    }
                   />
                 </Tooltip>
               </WrapItem>

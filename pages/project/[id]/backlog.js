@@ -17,7 +17,7 @@ import MainContainer from "../../../components/layout/MainContainer";
 import BacklogController from "../../../components/workspace/BacklogController";
 import Board from "../../../components/workspace/Board";
 import Column from "../../../components/workspace/Column";
-import CreateSprintDrawer from "../../../components/workspace/CreateSprint";
+import CreateSprintDrawer from "../../../components/workspace/CreateSprintDrawer";
 import linkCards from "../../../utils/card/card";
 
 var isEvtSrcOpenedOnce = false;
@@ -170,7 +170,11 @@ const Backlog = ({ authToken }) => {
           ) : null}
         </Box>
 
-        <CreateSprintDrawer onClose={onClose} isOpen={isOpen} />
+        <CreateSprintDrawer
+          projectId={projectId}
+          onClose={onClose}
+          isOpen={isOpen}
+        />
       </MainContainer>
     </LoggedUserProvider>
   );

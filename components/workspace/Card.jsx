@@ -1,157 +1,174 @@
-import { AddIcon } from '@chakra-ui/icons';
+import { AddIcon, Icon, MinusIcon, RepeatClockIcon } from "@chakra-ui/icons";
 import {
-	Badge,
-	Box,
-	Circle,
-	Flex,
-	Heading,
-	IconButton,
-	Text,
-	Tooltip,
-	useColorModeValue,
-	useDisclosure,
-	WrapItem,
-} from '@chakra-ui/react';
-import Avvvatars from 'avvvatars-react';
-import { Draggable } from 'react-beautiful-dnd';
-import textUtils from '../../utils/text';
-import CardModal from './CardModal';
+  Badge,
+  Box,
+  Circle,
+  Flex,
+  Heading,
+  IconButton,
+  Text,
+  Tooltip,
+  useDisclosure,
+  WrapItem,
+  useColorModeValue,
+} from "@chakra-ui/react";
+import Avvvatars from "avvvatars-react";
+import { useState } from "react";
+import { Draggable } from "react-beautiful-dnd";
+import storyAPI from "../../api/services/storyAPI";
+import { BadgeColor, Category } from "../../config/constants";
+import textUtils from "../../utils/text";
+import CardModal from "./CardModal";
 
-const Card = ({ participants, card, disableModal, ...props }) => {
-	let color = useColorModeValue('#031d46', '#fffdfe');
-	let bg = useColorModeValue('white', '#405A7D');
-	let btnBg = useColorModeValue('gray.200', '#fffdfe');
-	let btnColor = 'black';
+const Card = ({ participants, card, disableModal, sprintId, ...props }) => {
+  let color = useColorModeValue("#031d46", "#fffdfe");
+  let bg = useColorModeValue("white", "#405A7D");
+  let btnBg = useColorModeValue("gray.200", "#fffdfe");
 
-	const { isOpen, onOpen, onClose } = useDisclosure();
-	const colorScheme = 'red' + '.500';
-	const getUserInfoValue = (id) => {
-		if (participants.length > 0) {
-			const user = Object.values(participants).find((p) => p.id === id);
-			return textUtils.getFirstLetters(
-				user.firstName + ' ' + user.lastName
-			);
-		}
-	};
-	const getUserInfoFull = (id) => {
-		if (participants.length > 0) {
-			const user = Object.values(participants).find((p) => p.id === id);
-			return `${user.firstName} ${user.lastName}`;
-		}
-	};
-	return (
-		<Draggable draggableId={'' + card.id} index={props.index}>
-			{(provided) => (
-				<>
-					<Box
-						{...provided.draggableProps}
-						{...provided.dragHandleProps}
-						ref={provided.innerRef}
-						onClick={(e) => {
-							onOpen();
-						}}
-						boxSizing="border-box"
-						borderRadius="1rem"
-						overflow="hidden"
-						bg={bg}
-						color={color}
-						mb={4}
-						p={4}
-						boxShadow="base"
-						_hover={{
-							boxShadow: '0 0 5px 5px #e6e6e7',
-							transition: 'all 0.4s linear',
-						}}
-						minH="6rem"
-					>
-						<Flex
-							alignItems={'center'}
-							justifyContent={'space-between'}
-						>
-							<Heading fontSize="lg" isTruncated>
-								{card.userStory}
-							</Heading>
-							{!disableModal && (
-								<WrapItem>
-									<Tooltip
-										label={'Add to sprint'}
-										placement={'left-start'}
-									>
-										<IconButton
-											isRound={true}
-											size={'xs'}
-											bgColor={btnBg}
-											_hover={{ opacity: 0.8 }}
-											onClick={(e) => {
-												e.stopPropagation();
-												console.log('DitMe');
-											}}
-											aria-label="Search database"
-											icon={<AddIcon color={btnColor} />}
-										/>
-									</Tooltip>
-								</WrapItem>
-							)}
-						</Flex>
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const getUserInfoValue = (id) => {
+    if (participants.length > 0) {
+      const user = Object.values(participants).find((p) => p.id === id);
+      return textUtils.getFirstLetters(user.firstName + " " + user.lastName);
+    }
+  };
+  const getUserInfoFull = (id) => {
+    if (participants.length > 0) {
+      const user = Object.values(participants).find((p) => p.id === id);
+      return `${user.firstName} ${user.lastName}`;
+    }
+  };
 
-						<Flex
-							mt={3}
-							justifyContent="space-between"
-							alignItems={'center'}
-							alignContent={'center'}
-						>
-							<Flex alignItems={'center'}>
-								<Text paddingRight={2}>Assignee:</Text>
-								<WrapItem>
-									<Tooltip
-										label={getUserInfoFull(card.assignId)}
-										placement={'right-start'}
-									>
-										<Box>
-											<Avvvatars
-												value={getUserInfoValue(
-													card.assignId
-												)}
-												size="25"
-											/>
-										</Box>
-									</Tooltip>
-								</WrapItem>
-							</Flex>
-							<Flex alignItems={'center'}>
-								<Badge
-									colorScheme="green"
-									borderRadius={'4px'}
-									marginRight={2}
-								>
-									{card.category}
-								</Badge>
+  const handleUpdateStatus = async () => {
+    if (sprintId) {
+      try {
+        const response = storyAPI.putStory(card.id, {
+          ...card,
+          status: "todo",
+          sprintId: sprintId,
+        });
+        console.log(response);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
 
-								<Circle
-									size="25px"
-									bg={colorScheme}
-									color="white"
-									p={'10px'}
-								>
-									{card.point}
-								</Circle>
-							</Flex>
-						</Flex>
-					</Box>
-					<CardModal
-						isOpen={isOpen}
-						onOpen={onOpen}
-						onClose={onClose}
-						color={color}
-						prevCard={card}
-						participants={participants}
-						isCard={true}
-						disableModal={disableModal}
-					/>
-				</>
-			)}
-		</Draggable>
-	);
+  return (
+    <Draggable draggableId={"" + card.id} index={props.index}>
+      {(provided) => (
+        <>
+          <Box
+            {...provided.draggableProps}
+            {...provided.dragHandleProps}
+            ref={provided.innerRef}
+            onClick={(e) => {
+              onOpen();
+            }}
+            boxSizing="border-box"
+            borderRadius="1rem"
+            overflow="hidden"
+            bg={bg}
+            color={color}
+            mb={4}
+            p={4}
+            boxShadow="base"
+            _hover={{
+              boxShadow: "0 0 5px 5px #e6e6e7",
+              transition: "all 0.4s linear",
+            }}
+            minH="6rem"
+          >
+            <Flex alignItems={"center"} justifyContent={"space-between"}>
+              <Heading fontSize="lg" isTruncated>
+                {card.userStory}
+              </Heading>
+
+              {sprintId && (
+                <WrapItem>
+                  <Tooltip
+                    label={
+                      card.status === "backlog"
+                        ? "Add to sprint"
+                        : "Remove from sprint"
+                    }
+                    placement={"left-start"}
+                  >
+                    <IconButton
+                      isRound={true}
+                      size={"xs"}
+                      // eslint-disable-next-line react-hooks/rules-of-hooks
+                      bgColor={btnBg}
+                      _hover={{ opacity: 0.8 }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleUpdateStatus();
+                      }}
+                      aria-label="Search database"
+                      icon={
+                        card.status === "backlog" ? (
+                          <AddIcon color="green" />
+                        ) : (
+                          <MinusIcon color="red" />
+                        )
+                      }
+                    />
+                  </Tooltip>
+                </WrapItem>
+              )}
+            </Flex>
+
+            <Flex
+              mt={3}
+              justifyContent="space-between"
+              alignItems={"center"}
+              alignContent={"center"}
+            >
+              <Flex alignItems={"center"}>
+                <Text paddingRight={2}>Assignees:</Text>
+                <WrapItem>
+                  <Tooltip
+                    label={getUserInfoFull(card.assignId)}
+                    placement={"right-start"}
+                  >
+                    <Box>
+                      <Avvvatars
+                        value={getUserInfoValue(card.assignId)}
+                        size="25"
+                      />
+                    </Box>
+                  </Tooltip>
+                </WrapItem>
+              </Flex>
+              <Flex alignItems={"center"}>
+                <Badge
+                  colorScheme={BadgeColor[card.category]}
+                  borderRadius={"4px"}
+                  marginRight={2}
+                >
+                  {Category[card.category]}
+                </Badge>
+
+                <Circle size="25px" bg="red.500" color="white" p={"10px"}>
+                  {card.point}
+                </Circle>
+              </Flex>
+            </Flex>
+          </Box>
+          <CardModal
+            isOpen={isOpen}
+            onOpen={onOpen}
+            onClose={onClose}
+            color={color}
+            prevCard={card}
+            participants={participants}
+            isCard={true}
+            disableModal={disableModal}
+          />
+        </>
+      )}
+    </Draggable>
+  );
 };
 
 export default Card;

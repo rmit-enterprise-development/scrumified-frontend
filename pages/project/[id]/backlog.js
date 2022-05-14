@@ -1,6 +1,9 @@
 import {
+  Badge,
   Box,
   Button,
+  Flex,
+  Tag,
   useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
@@ -17,7 +20,7 @@ import MainContainer from "../../../components/layout/MainContainer";
 import BacklogController from "../../../components/workspace/BacklogController";
 import Board from "../../../components/workspace/Board";
 import Column from "../../../components/workspace/Column";
-import CreateSprintDrawer from "../../../components/workspace/CreateSprintDrawer";
+import SprintDrawer from "../../../components/workspace/SprintDrawer";
 import linkCards from "../../../utils/card/card";
 
 const Backlog = ({ authToken }) => {
@@ -117,7 +120,19 @@ const Backlog = ({ authToken }) => {
           <FaChevronLeft size="1rem" color="white" />
         </Button>
         <Box>
-          <SectionHeader>Backlog</SectionHeader>
+          <Flex alignItems="center">
+            <SectionHeader>Backlog</SectionHeader>
+            <Tag
+              textAlign="center"
+              variant="outline"
+              ml={3}
+              size="md"
+              colorScheme="red"
+              // borderRadius="full"
+            >
+              NO SPRINT
+            </Tag>
+          </Flex>
           <BacklogController
             cards={cards}
             setCards={setCards}
@@ -151,11 +166,7 @@ const Backlog = ({ authToken }) => {
           ) : null}
         </Box>
 
-        <CreateSprintDrawer
-          projectId={projectId}
-          onClose={onClose}
-          isOpen={isOpen}
-        />
+        <SprintDrawer projectId={projectId} onClose={onClose} isOpen={isOpen} />
       </MainContainer>
     </LoggedUserProvider>
   );

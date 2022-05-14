@@ -99,7 +99,7 @@ const ProjectItem = ({
           </Flex>
 
           <Text color={useColorModeValue("#031d46", "#fffdfe")}>
-            Created at:
+            Created at:&nbsp;
             {new Date(project.createdDate * 1000).toLocaleDateString("en-IN")}
           </Text>
           <Text color={useColorModeValue("#031d46", "#fffdfe")}>

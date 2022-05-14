@@ -24,9 +24,7 @@ import DatePicker from "react-datepicker";
 // import required css from library
 import "react-datepicker/dist/react-datepicker.css";
 
-// import date-picker.css
-
-const CreateSprintDrawer = ({ projectId, onClose, isOpen }) => {
+const SprintDrawer = ({ projectId, onClose, isOpen }) => {
   const isValidInput = (value) => value.length > 0;
 
   const [isValidGoal, setIsValidGoal] = useState(true);
@@ -197,4 +195,4 @@ const CreateSprintDrawer = ({ projectId, onClose, isOpen }) => {
     </Drawer>
   );
 };
-export default CreateSprintDrawer;
+export default SprintDrawer;

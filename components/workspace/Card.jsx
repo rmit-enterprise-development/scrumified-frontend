@@ -71,26 +71,27 @@ const Card = ({ participants, card, disableModal, ...props }) => {
 							<Heading fontSize="lg" isTruncated>
 								{card.userStory}
 							</Heading>
-
-							<WrapItem>
-								<Tooltip
-									label={'Add to sprint'}
-									placement={'left-start'}
-								>
-									<IconButton
-										isRound={true}
-										size={'xs'}
-										bgColor={btnBg}
-										_hover={{ opacity: 0.8 }}
-										onClick={(e) => {
-											e.stopPropagation();
-											console.log('DitMe');
-										}}
-										aria-label="Search database"
-										icon={<AddIcon color={btnColor} />}
-									/>
-								</Tooltip>
-							</WrapItem>
+							{!disableModal && (
+								<WrapItem>
+									<Tooltip
+										label={'Add to sprint'}
+										placement={'left-start'}
+									>
+										<IconButton
+											isRound={true}
+											size={'xs'}
+											bgColor={btnBg}
+											_hover={{ opacity: 0.8 }}
+											onClick={(e) => {
+												e.stopPropagation();
+												console.log('DitMe');
+											}}
+											aria-label="Search database"
+											icon={<AddIcon color={btnColor} />}
+										/>
+									</Tooltip>
+								</WrapItem>
+							)}
 						</Flex>
 
 						<Flex

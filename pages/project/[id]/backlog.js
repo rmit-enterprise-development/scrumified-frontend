@@ -95,7 +95,7 @@ const Backlog = ({ authToken }) => {
     eventSource.onopen = (e) => {
       console.log('Open Backlog Event Source!');
     };
-    eventSource.addEventListener('update', handleReceiveCard);
+    eventSource.addEventListener('update', getCards);
     return () => {
       eventSource.close();
     };

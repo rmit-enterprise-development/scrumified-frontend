@@ -19,7 +19,7 @@ import { BadgeColor, Category } from "../../config/constants";
 import textUtils from "../../utils/text";
 import CardModal from "./CardModal";
 
-const Card = ({ participants, card, ...props }) => {
+const Card = ({ participants, card, disableModal, ...props }) => {
   let color = useColorModeValue("#031d46", "#fffdfe");
   let bg = useColorModeValue("white", "#405A7D");
   let btnBg = useColorModeValue("gray.200", "#fffdfe");
@@ -69,33 +69,35 @@ const Card = ({ participants, card, ...props }) => {
                 {card.userStory}
               </Heading>
 
-              <WrapItem>
-                <Tooltip
-                  label={!isAdded ? "Add to sprint" : "Remove from sprint"}
-                  placement={"left-start"}
-                >
-                  <IconButton
-                    isRound={true}
-                    size={"xs"}
-                    // eslint-disable-next-line react-hooks/rules-of-hooks
-                    bgColor={btnBg}
-                    _hover={{ opacity: 0.8 }}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setIsAdded(!isAdded);
-                      console.log("DitMe"); // Set action
-                    }}
-                    aria-label="Search database"
-                    icon={
-                      !isAdded ? (
-                        <AddIcon color="green" />
-                      ) : (
-                        <MinusIcon color="red" />
-                      )
-                    }
-                  />
-                </Tooltip>
-              </WrapItem>
+              {!disableModal && (
+                <WrapItem>
+                  <Tooltip
+                    label={!isAdded ? "Add to sprint" : "Remove from sprint"}
+                    placement={"left-start"}
+                  >
+                    <IconButton
+                      isRound={true}
+                      size={"xs"}
+                      // eslint-disable-next-line react-hooks/rules-of-hooks
+                      bgColor={btnBg}
+                      _hover={{ opacity: 0.8 }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setIsAdded(!isAdded);
+                        console.log("DitMe"); // Set action
+                      }}
+                      aria-label="Search database"
+                      icon={
+                        !isAdded ? (
+                          <AddIcon color="green" />
+                        ) : (
+                          <MinusIcon color="red" />
+                        )
+                      }
+                    />
+                  </Tooltip>
+                </WrapItem>
+              )}
             </Flex>
 
             <Flex
@@ -143,6 +145,7 @@ const Card = ({ participants, card, ...props }) => {
             prevCard={card}
             participants={participants}
             isCard={true}
+            disableModal={disableModal}
           />
         </>
       )}

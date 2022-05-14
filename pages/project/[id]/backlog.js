@@ -7,7 +7,7 @@ import {
 import cookies from "next-cookies";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { FaChevronLeft } from "react-icons/fa";
 import projectAPI from "../../../api/services/projectAPI";
 import { LoggedUserProvider } from "../../../components/common/LoggedUserProvider";
@@ -20,18 +20,7 @@ import Column from "../../../components/workspace/Column";
 import CreateSprintDrawer from "../../../components/workspace/CreateSprintDrawer";
 import linkCards from "../../../utils/card/card";
 
-var isEvtSrcOpenedOnce = false;
-
 const Backlog = ({ authToken }) => {
-  let bg = useColorModeValue("white", "#405A7D");
-  let color = useColorModeValue("#031d46", "#fffdfe");
-  let btnBg = useColorModeValue("gray.200", "#fffdfe");
-  let btnColor = "black";
-  let bgGradient = useColorModeValue(
-    "linear(gray.50 0%, gray.100 100%)",
-    "linear(blue.800 0%, blue.900 100%)"
-  );
-
   const { asPath } = useRouter();
   const projectId = asPath.split("/")[2];
   const [cards, setCards] = useState({});
@@ -96,7 +85,7 @@ const Backlog = ({ authToken }) => {
   }, [participants]); // Always make sure participants available first
 
   useEffect(() => {
-    const tmp = linkCards(cards, "backlog", participants);
+    const tmp = linkCards(cards, "backlog", participants, false);
     setCardList(tmp);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cards]);
@@ -132,10 +121,6 @@ const Backlog = ({ authToken }) => {
           <BacklogController
             cards={cards}
             setCards={setCards}
-            bg={bg}
-            color={color}
-            btnBg={btnBg}
-            btnColor={btnColor}
             projectId={projectId}
             participants={participants}
             setFilteredCard={setFilteredCard}
@@ -160,11 +145,7 @@ const Backlog = ({ authToken }) => {
                 cards={cards}
                 setCards={setCards}
                 cardList={cardList}
-                bg={bg}
-                color={color}
-                btnBg={btnBg}
-                btnColor={btnColor}
-                bgGradient={bgGradient}
+                columnColor={"gray.500"}
               />
             </Board>
           ) : null}

@@ -1,6 +1,6 @@
 import Card from "../../components/workspace/Card";
 
-export default function linkCards(cards, category, participants) {
+export default function linkCards(cards, category, participants, disableModal) {
   let renderCards = [];
   let tmp = null;
   for (let key in cards) {
@@ -21,7 +21,13 @@ export default function linkCards(cards, category, participants) {
   let i = 0;
   while (true) {
     renderCards.push(
-      <Card key={tmp.id} card={tmp} index={i++} participants={participants} />
+      <Card
+        key={tmp.id}
+        card={tmp}
+        index={i++}
+        participants={participants}
+        disableModal={disableModal}
+      />
     );
     if (!!tmp.childStoryId) tmp = cards[tmp.childStoryId];
     else break;

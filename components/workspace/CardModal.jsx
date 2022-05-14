@@ -29,6 +29,7 @@ const CardModal = ({
   participants,
   prevCard,
   isCard,
+  disableModal,
 }) => {
   let color = useColorModeValue("#031d46", "#fffdfe");
   let initCard = {
@@ -118,6 +119,7 @@ const CardModal = ({
                 setCard({ ...card, userStory: e.target.value });
                 setIsValidUserStory(isValidInput(e.target.value));
               }}
+              disabled={disableModal}
             />
             {!isValidUserStory ? (
               <FormErrorMessage>Must be defined</FormErrorMessage>
@@ -141,6 +143,7 @@ const CardModal = ({
                 setCard({ ...card, defOfDone: e.target.value });
                 setIsValidDef(isValidInput(e.target.value));
               }}
+              disabled={disableModal}
             />
             {!isValidDef ? (
               <FormErrorMessage>Must be defined</FormErrorMessage>
@@ -161,6 +164,7 @@ const CardModal = ({
                 setCard({ ...card, point: e.target.value });
                 setIsValidPoint(isValidInput(e.target.value));
               }}
+              disabled={disableModal}
             >
               <option value="1">1</option>
               <option value="2">2</option>
@@ -197,6 +201,7 @@ const CardModal = ({
                 setCard({ ...card, category: e.target.value });
                 setIsValidCategory(isValidInput(e.target.value));
               }}
+              disabled={disableModal}
             >
               <option value="DESIGN">Design(UI/UX)</option>
               <option value="FRONTEND">Front-end</option>
@@ -225,6 +230,7 @@ const CardModal = ({
                 });
                 setIsValidAssignee(isValidInput(e.target.value));
               }}
+              disabled={disableModal}
             >
               {participants &&
                 participants.map((participant, idx) => (
@@ -243,7 +249,7 @@ const CardModal = ({
             )}
           </FormControl>
         </ModalBody>
-        <ModalFooter>
+        <ModalFooter visibility={disableModal ? "hidden" : "visible"}>
           {isCard && (
             <Button
               colorScheme={"red"}

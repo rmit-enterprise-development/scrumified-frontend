@@ -86,7 +86,16 @@ const StaticCard = ({ card, isBacklog, participants }) => {
       >
         <Flex alignItems={"center"}>
           <Text paddingRight={2}>Assignees:</Text>
-          <Avvvatars value={userInfo} size="25" />
+          <WrapItem>
+            <Tooltip
+              label={user.firstName + " " + user.lastName}
+              placement={"right-start"}
+            >
+              <Box>
+                <Avvvatars value={userInfo} size="25" />
+              </Box>
+            </Tooltip>
+          </WrapItem>
         </Flex>
         <Flex alignItems={"center"}>
           <Badge colorScheme="green" borderRadius={"4px"} marginRight={2}>

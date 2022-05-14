@@ -62,7 +62,6 @@ const Backlog = ({ authToken }) => {
         returnArray: false,
       });
       const json = response.data;
-      console.log('json: ', json);
       setCards(json);
     } catch (error) {
       console.log(error);
@@ -91,22 +90,10 @@ const Backlog = ({ authToken }) => {
   useEffect(() => {
     getCards();
 
-    const handleReceiveCard = (e) => {
-      getCards();
-    };
-
     const uri = `https://scrumified-dev-bakend.herokuapp.com/backlog?projectId=${projectId}`;
     let eventSource = new EventSource(uri);
     eventSource.onopen = (e) => {
-      if (isEvtSrcOpenedOnce) {
-        // eventSource.close();
-      } else {
-        isEvtSrcOpenedOnce = true;
-      }
       console.log('Open Backlog Event Source!');
-    };
-    eventSource.onmessage = (e) => {
-      console.log('on message', e.data);
     };
     eventSource.addEventListener('update', handleReceiveCard);
     return () => {

@@ -14,7 +14,7 @@ const storyAPI = {
 	 */
 	putStory: (id, data, params) => {
 		const url = `/stories/${id}`;
-		return axiosClient.put(url, data, params);
+		return axiosClient.put(url, data, { params });
 	},
 
 	deleteStory: (id) => {

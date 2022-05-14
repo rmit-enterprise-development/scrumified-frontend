@@ -10,23 +10,21 @@ import {
   Text,
   useBreakpointValue,
   useColorModeValue,
-  useDisclosure
+  useDisclosure,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import projectAPI from '../../api/services/projectAPI';
+import { digFind } from '../../utils/object';
 import CardModal from './CardModal';
 
 const BacklogController = ({
   cards,
   setCards,
-  bg,
-  color,
-  btnBg,
-  btnColor,
   projectId,
   participants,
   setFilteredCard,
 }) => {
+  let btnBg = useColorModeValue('gray.200', '#fffdfe');
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const totalPoints = Object.values(cards).reduce((accumulator, object) => {
@@ -43,6 +41,7 @@ const BacklogController = ({
     projectId: projectId,
     limit: PAGE_SIZE_BACKLOG,
     isBacklog: true,
+    returnArray: true, // Avoid auto sort by object key from browser
   };
   const [filterStory, setFilterStory] = useState(defaultFilter);
 
@@ -55,10 +54,10 @@ const BacklogController = ({
     try {
       const response = await projectAPI.getAllStories(projectId, filter);
       const data = response.data;
-      console.log('data: ', data);
+      const cardList = digFind(data, 'storyDtoList');
       setFilteredCard({
         isFilter: true,
-        cardList: Object.values(data),
+        cardList: cardList ? cardList : [],
       });
     } catch (error) {
       console.log('Fail to fetch: ', error);
@@ -119,7 +118,7 @@ const BacklogController = ({
       if (isFilter) {
         fetchStory(filterStory);
       }
-    }, 500);
+    }, 200);
 
     return () => clearTimeout(delayDebounceFn);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -128,7 +127,7 @@ const BacklogController = ({
   useEffect(() => {
     setFilteredCard({ cardList: [], isFilter: false });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [setFilteredCard, isFilter]);
+  }, [isFilter]);
 
   return (
     <>
@@ -144,6 +143,7 @@ const BacklogController = ({
           gap={useBreakpointValue({ base: '1.5rem', md: '1rem' })}
           flex={1}
           flexWrap="wrap"
+          alignItems={'center'}
           justifyContent={useBreakpointValue({
             base: 'center',
             md: 'flex-start',
@@ -163,19 +163,22 @@ const BacklogController = ({
             />
           </InputGroup>
 
-          <Flex gap={2}>
+          <Flex gap={2} alignItems="center">
             <Select
               width="auto"
               onChange={(e) => handleCategoryStory(e.target.value)}
               color={useColorModeValue('#031d46', '#fffdfe')}
               value={categoryValue}
             >
-              <option value="">Category</option>
+              <option value="" disabled>
+                Category
+              </option>
               <option value="Design(UI/UX)">Design(UI/UX)</option>
               <option value="Front-end">Front-end</option>
               <option value="Back-end">Back-end</option>
-              <option value="Testing">Testing</option>
               <option value="DevOps">DevOps</option>
+              <option value="Testing">Testing</option>
+              <option value="Others">Others</option>
             </Select>
 
             <Select
@@ -184,11 +187,13 @@ const BacklogController = ({
               color={useColorModeValue('#031d46', '#fffdfe')}
               value={sortValue}
             >
-              <option value="">Sort by:</option>
+              <option value="" disabled>
+                Sort by
+              </option>
               <option value="pointDsc">Point: High to Low</option>
               <option value="pointAsc">Point: Low to High</option>
-              <option value="timeDsc">Recently Assigned</option>
-              <option value="timeAsc">Oldest Assigned</option>
+              <option value="timeDsc">Recently Created</option>
+              <option value="timeAsc">Oldest Created</option>
             </Select>
 
             {isFilter && (
@@ -235,10 +240,6 @@ const BacklogController = ({
         onClose={onClose}
         cards={cards}
         setCards={setCards}
-        color={color}
-        bg={bg}
-        btnBg={btnBg}
-        btnColor={btnColor}
         projectId={projectId}
         participants={participants}
       />

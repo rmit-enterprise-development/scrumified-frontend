@@ -16,4 +16,10 @@ const BadgeColor = {
   OTHERS: "gray",
 };
 
-export { Category, BadgeColor };
+const SprintColor = {
+  NO_SPRINT: "red",
+  PENDING_SPRINT: "gray",
+  ACTIVE_SPRINT: "green",
+};
+
+export { Category, BadgeColor, SprintColor };

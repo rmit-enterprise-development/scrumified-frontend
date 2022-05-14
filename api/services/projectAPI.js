@@ -55,6 +55,11 @@ const projectAPI = {
     return axiosClient.post(url, params);
   },
 
+  getCurrentSprint: (id) => {
+    const url = `/projects/${id}/sprints/current`;
+    return axiosClient.get(url);
+  },
+
   getAllSprints: (id) => {
     const url = `/projects/${id}/sprints`;
     return axiosClient.get(url);

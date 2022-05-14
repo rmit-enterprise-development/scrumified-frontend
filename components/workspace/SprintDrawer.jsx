@@ -18,43 +18,117 @@ import {
   Text,
   Textarea,
   useColorModeValue,
+  useToast,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 // import required css from library
 import "react-datepicker/dist/react-datepicker.css";
+import projectAPI from "../../api/services/projectAPI";
+import sprintAPI from "../../api/services/sprintAPI";
 
-const SprintDrawer = ({ projectId, onClose, isOpen }) => {
+const SprintDrawer = ({
+  projectId,
+  onClose,
+  isOpen,
+  currentSprint,
+  fetchUpdatedSprint,
+  isSprint,
+}) => {
+  const toast = useToast();
   const isValidInput = (value) => value.length > 0;
 
-  const [isValidGoal, setIsValidGoal] = useState(true);
-  const [isValidDoneDefinition, setIsValidDoneDefinition] = useState(true);
+  const [isValidGoal, setIsValidGoal] = useState(isSprint);
+  const [isValidDoneDefinition, setIsValidDoneDefinition] = useState(isSprint);
 
   const TWO_WEEKS_TIME = 12096e5;
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date(Date.now() + TWO_WEEKS_TIME));
+  const [startDate, setStartDate] = useState(
+    isSprint ? currentSprint.startDate : new Date()
+  );
+  const [endDate, setEndDate] = useState(
+    isSprint ? currentSprint.endDate : new Date(Date.now() + TWO_WEEKS_TIME)
+  );
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const initSprint = {
     goal: "",
     status: "todo",
     defOfDone: "",
-    startDate: startDate,
-    endDate: endDate,
+    startDate: Math.floor(new Date().getTime() / 1000),
+    endDate: Math.floor(new Date(Date.now() + TWO_WEEKS_TIME).getTime() / 1000),
     projectId: projectId,
   };
-  const [sprint, setSprint] = useState(initSprint);
-  const handleSubmit = () => {
-    console.log("Hello");
-    if (isValidGoal && isValidDoneDefinition) {
-    }
-  };
+
+  const [sprint, setSprint] = useState(isSprint ? currentSprint : initSprint);
 
   const CustomInput = forwardRef(({ value, onClick }, ref) => (
     <Flex h="100%" onClick={onClick} ref={ref} alignItems="center">
       <Text color={useColorModeValue("#031d46", "#fffdfe")}>{value}</Text>
     </Flex>
   ));
+
+  const createSprint = async (sprint) => {
+    try {
+      const response = projectAPI.postSprint(projectId, sprint);
+      if (response) {
+        setIsSubmitting(false);
+        toast({
+          title: "Create sprint successfully!",
+          status: "success",
+          duration: 2000,
+          isClosable: true,
+        });
+        fetchUpdatedSprint();
+        onClose();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const updateSprint = (sprint) => {
+    try {
+      const response = sprintAPI.putSprint(sprint.id, sprint);
+      if (response) {
+        setIsSubmitting(false);
+        toast({
+          title: "Update sprint successfully!",
+          status: "success",
+          duration: 2000,
+          isClosable: true,
+        });
+        fetchUpdatedSprint();
+        onClose();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const deleteSprint = (id) => {
+    try {
+      const response = sprintAPI.deleteSprint(id);
+      if (response) {
+        setIsSubmitting(false);
+        toast({
+          title: "Delete sprint successfully!",
+          status: "success",
+          duration: 2000,
+          isClosable: true,
+        });
+        fetchUpdatedSprint();
+        onClose();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    setSprint(isSprint ? currentSprint : initSprint);
+    setIsValidGoal(isSprint);
+    setIsValidDoneDefinition(isSprint);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSprint]);
 
   return (
     <Drawer onClose={onClose} isOpen={isOpen} size={"md"}>
@@ -71,7 +145,7 @@ const SprintDrawer = ({ projectId, onClose, isOpen }) => {
           fontWeight="bold"
           color={useColorModeValue("#031d46", "#fffdfe")}
         >
-          Create new sprint
+          {isSprint ? "Update sprint" : "Create new sprint"}
         </DrawerHeader>
         <DrawerBody>
           <FormControl isRequired isInvalid={!isValidGoal}>
@@ -83,6 +157,7 @@ const SprintDrawer = ({ projectId, onClose, isOpen }) => {
               Sprint goal:
             </FormLabel>
             <Input
+              defaultValue={sprint.goal}
               color={useColorModeValue("#031d46", "#fffdfe")}
               onChange={(e) => {
                 setSprint({ ...sprint, goal: e.target.value });
@@ -103,6 +178,7 @@ const SprintDrawer = ({ projectId, onClose, isOpen }) => {
               Definition of Done:
             </FormLabel>
             <Textarea
+              defaultValue={sprint.defOfDone}
               placeholder="Requirement(s) to complete a sprint"
               resize="none"
               color={useColorModeValue("#031d46", "#fffdfe")}
@@ -128,9 +204,10 @@ const SprintDrawer = ({ projectId, onClose, isOpen }) => {
               id="start-date"
               dateFormat="dd/MM/yyyy"
               selected={startDate}
-              minDate={new Date()}
+              minDate={new Date(Date.now())}
               onChange={(date) => {
                 setStartDate(date);
+                setEndDate(new Date(date.getTime() + TWO_WEEKS_TIME));
                 setSprint({ ...sprint, startDate: date });
               }}
               selectsStart
@@ -173,6 +250,18 @@ const SprintDrawer = ({ projectId, onClose, isOpen }) => {
           {isSubmitting && (
             <CircularProgress isIndeterminate color="green.300" />
           )}
+          {isSprint && (
+            <Button
+              colorScheme={"red"}
+              variant={"outline"}
+              onClick={() => {
+                deleteSprint(sprint.id);
+              }}
+              mr={4}
+            >
+              Delete
+            </Button>
+          )}
 
           <Button
             colorScheme={"gray"}
@@ -185,10 +274,27 @@ const SprintDrawer = ({ projectId, onClose, isOpen }) => {
           </Button>
           <Button
             colorScheme="blue"
-            onClick={handleSubmit}
+            isDisabled={!(isValidDoneDefinition && isValidGoal)}
+            onClick={() => {
+              setIsSubmitting(true);
+              if (isValidDoneDefinition && isValidGoal) {
+                const result = isSprint
+                  ? {
+                      ...sprint,
+                      id: sprint.id,
+                    }
+                  : sprint;
+                isSprint ? updateSprint(result) : createSprint(result);
+                if (!isSprint) {
+                  setSprint(initSprint);
+                  setIsValidDoneDefinition(false);
+                  setIsValidGoal(false);
+                }
+              }
+            }}
             disabled={isSubmitting}
           >
-            Create
+            {isSprint ? "Update" : "Create"}
           </Button>
         </DrawerFooter>
       </DrawerContent>

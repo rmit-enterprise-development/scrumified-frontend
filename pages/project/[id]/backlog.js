@@ -21,6 +21,7 @@ import BacklogController from "../../../components/workspace/BacklogController";
 import Board from "../../../components/workspace/Board";
 import Column from "../../../components/workspace/Column";
 import SprintDrawer from "../../../components/workspace/SprintDrawer";
+import { SprintColor } from "../../../config/constants";
 import linkCards from "../../../utils/card/card";
 
 const Backlog = ({ authToken }) => {
@@ -38,6 +39,26 @@ const Backlog = ({ authToken }) => {
   });
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const [currentSprint, setCurrentSprint] = useState({});
+  const [isSprint, setIsSprint] = useState(false);
+
+  const getCurrentSprint = async () => {
+    try {
+      const response = await projectAPI.getCurrentSprint(projectId);
+      const json = response.data;
+      setCurrentSprint(json);
+      setIsSprint(
+        Object.keys(json).length !== 0 && json.constructor === Object
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchUpdatedSprint = () => {
+    getCurrentSprint();
+  };
 
   const getParticipants = async () => {
     try {
@@ -69,6 +90,7 @@ const Backlog = ({ authToken }) => {
   useEffect(() => {
     setwinReady(true);
     getParticipants(); // Always get participants first
+    getCurrentSprint();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -127,10 +149,11 @@ const Backlog = ({ authToken }) => {
               variant="outline"
               ml={3}
               size="md"
-              colorScheme="red"
-              // borderRadius="full"
+              colorScheme={
+                isSprint ? SprintColor.ACTIVE_SPRINT : SprintColor.NO_SPRINT
+              }
             >
-              NO SPRINT
+              {isSprint ? "ACTIVE SPRINT" : "NO SPRINT"}
             </Tag>
           </Flex>
           <BacklogController
@@ -166,7 +189,14 @@ const Backlog = ({ authToken }) => {
           ) : null}
         </Box>
 
-        <SprintDrawer projectId={projectId} onClose={onClose} isOpen={isOpen} />
+        <SprintDrawer
+          projectId={projectId}
+          onClose={onClose}
+          isOpen={isOpen}
+          currentSprint={currentSprint}
+          fetchUpdatedSprint={fetchUpdatedSprint}
+          isSprint={isSprint}
+        />
       </MainContainer>
     </LoggedUserProvider>
   );

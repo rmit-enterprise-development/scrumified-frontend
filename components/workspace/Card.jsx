@@ -15,6 +15,7 @@ import {
 import Avvvatars from "avvvatars-react";
 import { useState } from "react";
 import { Draggable } from "react-beautiful-dnd";
+import storyAPI from "../../api/services/storyAPI";
 import { BadgeColor, Category } from "../../config/constants";
 import textUtils from "../../utils/text";
 import CardModal from "./CardModal";
@@ -38,6 +39,13 @@ const Card = ({ participants, card, disableModal, ...props }) => {
     }
   };
 
+  const handleUpdateStatus = async () => {
+    try {
+      const response = storyAPI.putStory(card.id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const [isAdded, setIsAdded] = useState(false);
   return (
     <Draggable draggableId={"" + card.id} index={props.index}>
@@ -88,7 +96,7 @@ const Card = ({ participants, card, disableModal, ...props }) => {
                       }}
                       aria-label="Search database"
                       icon={
-                        !isAdded ? (
+                        card.status === "backlog" ? (
                           <AddIcon color="green" />
                         ) : (
                           <MinusIcon color="red" />

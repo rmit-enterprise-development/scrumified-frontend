@@ -42,9 +42,9 @@ const CardModal = ({
 		initCard = prevCard;
 	}
 
-  const isValidInput = (value) => value.length > 0;
+	const isValidInput = (value) => value.length > 0;
 
-  const [card, setCard] = useState(initCard);
+	const [card, setCard] = useState(initCard);
 
 	const [isValidUserStory, setIsValidUserStory] = useState(isCard);
 	const [isValidPoint, setIsValidPoint] = useState(isCard);
@@ -52,44 +52,44 @@ const CardModal = ({
 	const [isValidCategory, setIsValidCategory] = useState(isCard);
 	const [isValidAssignee, setIsValidAssignee] = useState(isCard);
 
-  const createCard = (card) => {
-    projectAPI
-      .postStory(projectId, card)
-      .then(async (response) => {
-        if (response.status !== 200) {
-          return Promise.reject(response.data);
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
+	const createCard = (card) => {
+		projectAPI
+			.postStory(projectId, card)
+			.then(async (response) => {
+				if (response.status !== 200) {
+					return Promise.reject(response.data);
+				}
+			})
+			.catch((error) => {
+				console.error(error);
+			});
+	};
 
-  const updateCard = (card) => {
-    storyAPI
-      .putStory(card.id, card, { isDragged: false })
-      .then(async (response) => {
-        if (response.status !== 200) {
-          return Promise.reject(response.data);
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
+	const updateCard = (card) => {
+		storyAPI
+			.putStory(card.id, card, { isDragged: false })
+			.then(async (response) => {
+				if (response.status !== 200) {
+					return Promise.reject(response.data);
+				}
+			})
+			.catch((error) => {
+				console.error(error);
+			});
+	};
 
-  const deleteCard = (id) => {
-    storyAPI
-      .deleteStory(id)
-      .then(async (response) => {
-        if (response.status !== 200) {
-          return Promise.reject(response.data);
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
+	const deleteCard = (id) => {
+		storyAPI
+			.deleteStory(id)
+			.then(async (response) => {
+				if (response.status !== 200) {
+					return Promise.reject(response.data);
+				}
+			})
+			.catch((error) => {
+				console.error(error);
+			});
+	};
 
 	return (
 		<Modal
@@ -323,120 +323,33 @@ const CardModal = ({
 											status: 'backlog',
 											assignId: card.assignId,
 									  };
+								isCard
+									? updateCard(result)
+									: createCard(result);
+								if (!isCard) {
+									setCard({
+										userStory: '',
+										point: '',
+										category: '',
+										defOfDone: '',
+										assignId: '',
+									});
 
-          <FormControl mt={4} isInvalid={!isValidAssignee} isRequired>
-            <FormLabel htmlFor="participant" fontSize={"lg"}>
-              Assignee:
-            </FormLabel>
-            <Select
-              id="participant"
-              defaultValue={card.assignId}
-              placeholder="Select participant"
-              onChange={(e) => {
-                setCard({
-                  ...card,
-                  assignId: e.target.value,
-                });
-                setIsValidAssignee(isValidInput(e.target.value));
-              }}
-            >
-              {participants &&
-                participants.map((participant, idx) => (
-                  <option key={idx} value={participant.id}>
-                    {participant.email}
-                  </option>
-                ))}
-            </Select>
-            {!isValidAssignee && (
-              <FormErrorMessage>Must select one person</FormErrorMessage>
-            )}
-          </FormControl>
-        </ModalBody>
-        <ModalFooter>
-          {isCard && (
-            <Button
-              colorScheme={"red"}
-              variant={"outline"}
-              onClick={() => {
-                deleteCard(card.id);
-                onClose();
-              }}
-              mr={4}
-            >
-              Delete
-            </Button>
-          )}
-          <Button
-            colorScheme={"gray"}
-            variant={"outline"}
-            onClick={onClose}
-            mr={4}
-          >
-            Close
-          </Button>
-          <Button
-            colorScheme={"telegram"}
-            isDisabled={
-              !(
-                isValidUserStory &&
-                isValidDef &&
-                isValidPoint &&
-                isValidAssignee &&
-                isValidCategory
-              )
-            }
-            onClick={() => {
-              if (
-                isValidUserStory &&
-                isValidDef &&
-                isValidPoint &&
-                isValidAssignee &&
-                isValidCategory
-              ) {
-                const result = isCard
-                  ? {
-                      id: card.id,
-                      userStory: card.userStory,
-                      point: card.point,
-                      category: card.category,
-                      defOfDone: card.defOfDone,
-                      status: "backlog",
-                      assignId: card.assignId,
-                    }
-                  : {
-                      userStory: card.userStory,
-                      point: card.point,
-                      category: card.category,
-                      defOfDone: card.defOfDone,
-                      status: "backlog",
-                      assignId: card.assignId,
-                    };
-
-                isCard ? updateCard(result) : createCard(result);
-                if (!isCard) {
-                  setCard({
-                    userStory: "",
-                    point: "",
-                    category: "",
-                    defOfDone: "",
-                    assignId: "",
-                  });
-
-                  setIsValidUserStory(false);
-                  setIsValidPoint(false);
-                  setIsValidDef(false);
-                  setIsValidAssignee(false);
-                }
-                onClose();
-              }
-            }}
-          >
-            {isCard ? "Update" : "Create"}
-          </Button>
-        </ModalFooter>
-      </ModalContent>
-    </Modal>
-  );
+									setIsValidUserStory(false);
+									setIsValidPoint(false);
+									setIsValidDef(false);
+									setIsValidAssignee(false);
+								}
+								onClose();
+							}
+						}}
+					>
+						{isCard ? 'Update' : 'Create'}
+					</Button>
+				</ModalFooter>
+			</ModalContent>
+		</Modal>
+	);
 };
 
 export default CardModal;

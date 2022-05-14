@@ -1,5 +1,5 @@
-import { Flex, Grid } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import { Grid } from '@chakra-ui/react';
+import React from 'react';
 import { DragDropContext } from 'react-beautiful-dnd';
 import storyAPI from '../../api/services/storyAPI';
 
@@ -85,6 +85,7 @@ const Board = ({
 		};
 
 		const { destination, source, draggableId } = result;
+		console.log(destination, source, draggableId);
 		if (!destination) {
 			return;
 		}

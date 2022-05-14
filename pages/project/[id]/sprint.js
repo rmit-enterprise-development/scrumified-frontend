@@ -1,18 +1,17 @@
 import Head from 'next/head';
-import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 import SectionHeader from '../../../components/common/SectionHeader/SectionHeader';
 import MainContainer from '../../../components/layout/MainContainer';
 import Board from '../../../components/workspace/Board';
 import Column from '../../../components/workspace/Column';
 
+import { Box } from '@chakra-ui/react';
 import cookies from 'next-cookies';
-import { LoggedUserProvider } from '../../../components/common/LoggedUserProvider';
-import { Box, useColorModeValue } from '@chakra-ui/react';
-import Card from '../../../components/workspace/Card';
 import projectAPI from '../../../api/services/projectAPI';
-import linkCards from '../../../utils/card/card';
+import { LoggedUserProvider } from '../../../components/common/LoggedUserProvider';
 import SprintController from '../../../components/workspace/SprintController';
+import linkCards from '../../../utils/card/card';
 
 const initData = {
 	9: {

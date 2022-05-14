@@ -1,4 +1,4 @@
-import { AddIcon, Icon, RepeatClockIcon } from "@chakra-ui/icons";
+import { AddIcon } from "@chakra-ui/icons";
 import {
   Badge,
   Box,
@@ -7,10 +7,8 @@ import {
   Heading,
   IconButton,
   Text,
-  Tooltip,
-  useDisclosure,
-  WrapItem,
-  useColorModeValue,
+  Tooltip, useColorModeValue, useDisclosure,
+  WrapItem
 } from "@chakra-ui/react";
 import Avvvatars from "avvvatars-react";
 import { Draggable } from "react-beautiful-dnd";
@@ -92,7 +90,7 @@ const Card = ({ participants, card, ...props }) => {
               alignContent={"center"}
             >
               <Flex alignItems={"center"}>
-                <Text paddingRight={2}>Assignees:</Text>
+                <Text paddingRight={2}>Assignee:</Text>
                 <WrapItem>
                   <Tooltip
                     label={getUserInfoFull(card.assignId)}

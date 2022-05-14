@@ -1,5 +1,4 @@
 import { Flex, Tag, Text, useColorModeValue } from '@chakra-ui/react';
-import React from 'react';
 import { Droppable } from 'react-beautiful-dnd';
 import { GoTasklist } from 'react-icons/go';
 import NoItem from '../common/NoItem/NoItem';

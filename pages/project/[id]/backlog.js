@@ -6,14 +6,12 @@ import {
 	DrawerCloseButton,
 	DrawerContent,
 	DrawerHeader,
-	DrawerOverlay,
-	useColorModeValue,
-	useDisclosure,
+	DrawerOverlay, useDisclosure
 } from '@chakra-ui/react';
 import cookies from 'next-cookies';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FaChevronLeft } from 'react-icons/fa';
 import projectAPI from '../../../api/services/projectAPI';
 import { LoggedUserProvider } from '../../../components/common/LoggedUserProvider';
@@ -24,8 +22,6 @@ import BacklogController from '../../../components/workspace/BacklogController';
 import Board from '../../../components/workspace/Board';
 import Column from '../../../components/workspace/Column';
 import linkCards from '../../../utils/card/card';
-
-var isEvtSrcOpenedOnce = false;
 
 const Backlog = ({ authToken }) => {
 	const { asPath } = useRouter();

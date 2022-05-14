@@ -1,6 +1,7 @@
 import {
   Button,
   Flex,
+  Skeleton,
   Tag,
   Text,
   Tooltip,
@@ -9,7 +10,8 @@ import {
   WrapItem,
 } from "@chakra-ui/react";
 
-const SprintController = ({ isPending }) => {
+const SprintController = ({ isPending, isLoading }) => {
+  console.log("isLoading: ", isLoading);
   let color = useColorModeValue("#031d46", "#fffdfe");
   let btnBg = useColorModeValue("gray.200", "#fffdfe");
   let btnColor = "black";
@@ -81,13 +83,15 @@ const SprintController = ({ isPending }) => {
             </Tooltip>
           </WrapItem>
         </Flex>
-        <Button
-          colorScheme={isPending ? "telegram" : "teal"}
-          // color={useColorModeValue("#FFFDFE", "#2d4046")}
-          onClick={isPending ? handleStartSprint : handleCompleteSprint}
-        >
-          {isPending ? "Start Sprint" : "Complete Sprint"}
-        </Button>
+        <Skeleton isLoaded={!isLoading}>
+          <Button
+            colorScheme={isPending ? "telegram" : "teal"}
+            // color={useColorModeValue("#FFFDFE", "#2d4046")}
+            onClick={isPending ? handleStartSprint : handleCompleteSprint}
+          >
+            {isPending ? "Start Sprint" : "Complete Sprint"}
+          </Button>
+        </Skeleton>
       </Flex>
     </>
   );

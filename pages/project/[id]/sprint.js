@@ -232,6 +232,7 @@ const Sprint = ({ authToken }) => {
   useEffect(() => {
     setwinReady(true);
     getCurrentSprint();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -270,7 +271,7 @@ const Sprint = ({ authToken }) => {
               )}
             </Skeleton>
           </Flex>
-          <SprintController isPending={isPending} />
+          <SprintController isPending={isPending} isLoading={isLoading} />
           {winReady ? (
             <Board
               cards={cards}

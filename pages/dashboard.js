@@ -37,7 +37,8 @@ const Dashboard = ({ authToken }) => {
 
   const PAGE_LIMIT_PROJECT = 4;
   const PAGE_LIMIT_STORY = 2;
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingProject, setIsLoadingProject] = useState(true);
+  const [isLoadingStory, setIsLoadingStory] = useState(true);
 
   //----------------Project Setting-----------------------//
   // Init projectData & its pagination
@@ -95,7 +96,7 @@ const Dashboard = ({ authToken }) => {
       currentFilter.projectId = projects[0].id;
       setFilterStory(currentFilter);
       fetchStory(filterStory);
-      setIsLoading(false);
+      setIsLoadingProject(false);
     } catch (error) {
       console.log("Fail to fetch: ", error);
     }
@@ -153,6 +154,7 @@ const Dashboard = ({ authToken }) => {
 
   // Populate Story data
   const fetchStory = async (filter) => {
+    setIsLoadingStory(true);
     try {
       const response = await userAPI.getAllStories(
         loggedUser.logUserId,
@@ -164,6 +166,7 @@ const Dashboard = ({ authToken }) => {
         storyList: stories,
         totalStory: data.totalElements,
       });
+      setIsLoadingStory(false);
     } catch (error) {
       console.log("Fail to fetch: ", error);
     }
@@ -273,7 +276,7 @@ const Dashboard = ({ authToken }) => {
 
           <CreateProjectModal />
         </Flex>
-        <Skeleton isLoaded={!isLoading}>
+        <Skeleton isLoaded={!isLoadingProject}>
           {projectData.projectList.length === 0 && (
             <NoItem icon={GoProject}>No project found!</NoItem>
           )}
@@ -337,7 +340,7 @@ const Dashboard = ({ authToken }) => {
           </Select>
         </Flex>
 
-        <Skeleton isLoaded={!isLoading}>
+        <Skeleton isLoaded={!isLoadingStory}>
           <Box h="100%">
             {projectData.projectList.length === 0 ? (
               <NoItem icon={GoChecklist}>

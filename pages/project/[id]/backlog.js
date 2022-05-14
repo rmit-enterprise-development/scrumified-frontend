@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   Flex,
+  Skeleton,
   Tag,
   useColorModeValue,
   useDisclosure,
@@ -42,6 +43,10 @@ const Backlog = ({ authToken }) => {
 
   const [currentSprint, setCurrentSprint] = useState({});
   const [isSprint, setIsSprint] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const currentTime = new Date(Date.now()).getTime();
+  const currentDate = Math.floor(currentTime / 1000);
+  const isPending = currentDate < currentSprint.startDate;
 
   const getCurrentSprint = async () => {
     try {
@@ -51,6 +56,7 @@ const Backlog = ({ authToken }) => {
       setIsSprint(
         Object.keys(json).length !== 0 && json.constructor === Object
       );
+      setIsLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -110,7 +116,13 @@ const Backlog = ({ authToken }) => {
   }, [participants]); // Always make sure participants available first
 
   useEffect(() => {
-    const tmp = linkCards(cards, "backlog", participants, false);
+    const tmp = linkCards(
+      cards,
+      "backlog",
+      participants,
+      false,
+      currentSprint.id
+    );
     setCardList(tmp);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cards]);
@@ -144,17 +156,31 @@ const Backlog = ({ authToken }) => {
         <Box>
           <Flex alignItems="center">
             <SectionHeader>Backlog</SectionHeader>
-            <Tag
-              textAlign="center"
-              variant="outline"
-              ml={3}
-              size="md"
-              colorScheme={
-                isSprint ? SprintColor.ACTIVE_SPRINT : SprintColor.NO_SPRINT
-              }
-            >
-              {isSprint ? "ACTIVE SPRINT" : "NO SPRINT"}
-            </Tag>
+            <Skeleton isLoaded={!isLoading} ml={3}>
+              {!isSprint ? (
+                <Tag
+                  textAlign="center"
+                  variant="outline"
+                  size="md"
+                  colorScheme={SprintColor.NO_SPRINT}
+                >
+                  EMPTY SPRINT
+                </Tag>
+              ) : (
+                <Tag
+                  textAlign="center"
+                  variant="outline"
+                  size="md"
+                  colorScheme={
+                    isPending
+                      ? SprintColor.PENDING_SPRINT
+                      : SprintColor.ACTIVE_SPRINT
+                  }
+                >
+                  {isPending ? "PENDING SPRINT" : "ACTIVE SPRINT"}
+                </Tag>
+              )}
+            </Skeleton>
           </Flex>
           <BacklogController
             cards={cards}

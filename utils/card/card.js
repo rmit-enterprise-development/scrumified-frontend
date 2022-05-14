@@ -1,6 +1,12 @@
 import Card from "../../components/workspace/Card";
 
-export default function linkCards(cards, category, participants, disableModal) {
+export default function linkCards(
+  cards,
+  category,
+  participants,
+  disableModal,
+  sprintId
+) {
   let renderCards = [];
   let tmp = null;
   for (let key in cards) {
@@ -27,6 +33,7 @@ export default function linkCards(cards, category, participants, disableModal) {
         index={i++}
         participants={participants}
         disableModal={disableModal}
+        sprintId={sprintId}
       />
     );
     if (!!tmp.childStoryId) tmp = cards[tmp.childStoryId];

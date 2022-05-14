@@ -208,7 +208,10 @@ const SprintDrawer = ({
               onChange={(date) => {
                 setStartDate(date);
                 setEndDate(new Date(date.getTime() + TWO_WEEKS_TIME));
-                setSprint({ ...sprint, startDate: date });
+                setSprint({
+                  ...sprint,
+                  startDate: Math.floor(date.getTime() / 1000),
+                });
               }}
               selectsStart
               startDate={startDate}
@@ -232,7 +235,10 @@ const SprintDrawer = ({
               selected={endDate}
               onChange={(date) => {
                 setEndDate(date);
-                setSprint({ ...sprint, endDate: date });
+                setSprint({
+                  ...sprint,
+                  endDate: Math.floor(date.getTime() / 1000),
+                });
               }}
               selectsEnd
               startDate={startDate}

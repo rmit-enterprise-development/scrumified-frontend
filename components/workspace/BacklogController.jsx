@@ -1,5 +1,6 @@
 import { AddIcon, DeleteIcon, Search2Icon } from "@chakra-ui/icons";
 import {
+  Circle,
   Flex,
   HStack,
   IconButton,
@@ -7,6 +8,7 @@ import {
   InputGroup,
   InputLeftElement,
   Select,
+  Tag,
   Text,
   useBreakpointValue,
   useColorModeValue,
@@ -220,7 +222,16 @@ const BacklogController = ({
           })}
         >
           <Text color={useColorModeValue("#031d46", "#fffdfe")}>
-            Total points: {totalPoints}
+            Total points{" "}
+            <Tag
+              borderRadius={"full"}
+              size="md"
+              p={"6px"}
+              color={"white"}
+              bgColor={"gray"}
+            >
+              {totalPoints}
+            </Tag>
           </Text>
           <IconButton
             _hover={{ opacity: 0.8 }}

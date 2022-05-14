@@ -20,7 +20,7 @@ import { BadgeColor, Category } from "../../config/constants";
 import textUtils from "../../utils/text";
 import CardModal from "./CardModal";
 
-const Card = ({ participants, card, disableModal, ...props }) => {
+const Card = ({ participants, card, disableModal, sprintId, ...props }) => {
   let color = useColorModeValue("#031d46", "#fffdfe");
   let bg = useColorModeValue("white", "#405A7D");
   let btnBg = useColorModeValue("gray.200", "#fffdfe");
@@ -40,13 +40,20 @@ const Card = ({ participants, card, disableModal, ...props }) => {
   };
 
   const handleUpdateStatus = async () => {
-    try {
-      const response = storyAPI.putStory(card.id);
-    } catch (error) {
-      console.log(error);
+    if (sprintId) {
+      try {
+        const response = storyAPI.putStory(card.id, {
+          ...card,
+          status: "todo",
+          sprintId: sprintId,
+        });
+        console.log(response);
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
-  const [isAdded, setIsAdded] = useState(false);
+
   return (
     <Draggable draggableId={"" + card.id} index={props.index}>
       {(provided) => (
@@ -77,10 +84,14 @@ const Card = ({ participants, card, disableModal, ...props }) => {
                 {card.userStory}
               </Heading>
 
-              {!disableModal && (
+              {sprintId && (
                 <WrapItem>
                   <Tooltip
-                    label={!isAdded ? "Add to sprint" : "Remove from sprint"}
+                    label={
+                      card.status === "backlog"
+                        ? "Add to sprint"
+                        : "Remove from sprint"
+                    }
                     placement={"left-start"}
                   >
                     <IconButton
@@ -91,8 +102,7 @@ const Card = ({ participants, card, disableModal, ...props }) => {
                       _hover={{ opacity: 0.8 }}
                       onClick={(e) => {
                         e.stopPropagation();
-                        setIsAdded(!isAdded);
-                        console.log("DitMe"); // Set action
+                        handleUpdateStatus();
                       }}
                       aria-label="Search database"
                       icon={

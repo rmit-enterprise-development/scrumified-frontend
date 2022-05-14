@@ -12,6 +12,7 @@ import { Box, useColorModeValue } from '@chakra-ui/react';
 import Card from '../../../components/workspace/Card';
 import projectAPI from '../../../api/services/projectAPI';
 import linkCards from '../../../utils/card/card';
+import SprintController from '../../../components/workspace/SprintController';
 
 const initData = {
 	9: {
@@ -115,7 +116,6 @@ const initData = {
 		],
 	},
 };
-var isEvtSrcOpenedOnce = false;
 
 const Sprint = ({ authToken }) => {
 	const { asPath } = useRouter();
@@ -145,37 +145,6 @@ const Sprint = ({ authToken }) => {
 	const [cardListinProgress, setcardListinProgress] = useState([]);
 	const [cardListDone, setCardListDone] = useState([]);
 	const [participants, setParticipants] = useState([]);
-
-	console.log(cards);
-
-	useEffect(() => {
-		// getCards().then((data) => {
-		// 	return setCards(data);
-		// });
-		// getParticipants().then((data) => setParticipants(data));
-		// const handleReceiveCard = (e) => {
-		// 	getCards().then((data) => {
-		// 		return setCards(data);
-		// 	});
-		// };
-		// const uri = `https://scrumified-dev-bakend.herokuapp.com/backlog?projectId=${projectId}`;
-		// let eventSource = new EventSource(uri);
-		// eventSource.onopen = (e) => {
-		// 	if (isEvtSrcOpenedOnce) {
-		// 		// eventSource.close();
-		// 	} else {
-		// 		isEvtSrcOpenedOnce = true;
-		// 	}
-		// 	console.log('Open Backlog Event Source!');
-		// };
-		// eventSource.onmessage = (e) => {
-		// 	console.log('on message', e.data);
-		// };
-		// eventSource.addEventListener('update', handleReceiveCard);
-		// return () => {
-		// 	eventSource.close();
-		// };
-	}, []);
 
 	useEffect(() => {
 		const participants = [
@@ -237,6 +206,7 @@ const Sprint = ({ authToken }) => {
 			<MainContainer>
 				<Box>
 					<SectionHeader>Active Sprint</SectionHeader>
+					<SprintController />
 					{winReady ? (
 						<Board
 							cards={cards}
@@ -255,6 +225,7 @@ const Sprint = ({ authToken }) => {
 								cards={cards}
 								setCards={setCards}
 								cardList={cardListTodo}
+								columnColor={'red.500'}
 							/>
 							<Column
 								key={1}
@@ -263,6 +234,7 @@ const Sprint = ({ authToken }) => {
 								cards={cards}
 								setCards={setCards}
 								cardList={cardListinProgress}
+								columnColor={'blue.500'}
 							/>
 							<Column
 								key={2}
@@ -271,6 +243,7 @@ const Sprint = ({ authToken }) => {
 								cards={cards}
 								setCards={setCards}
 								cardList={cardListDone}
+								columnColor={'green.500'}
 							/>
 						</Board>
 					) : null}

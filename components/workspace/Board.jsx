@@ -119,12 +119,12 @@ const Board = ({
 			else insertOnTopDest(srcId, destId, newCards);
 		}
 		setCards(newCards);
-		updateCardOrder(
-			srcId,
-			destId,
-			destination.droppableId,
-			source.index < destination.index
-		);
+		// updateCardOrder(
+		// 	srcId,
+		// 	destId,
+		// 	destination.droppableId,
+		// 	source.index < destination.index
+		// );
 	};
 
 	return (

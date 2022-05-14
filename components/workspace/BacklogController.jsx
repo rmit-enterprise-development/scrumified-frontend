@@ -10,7 +10,7 @@ import {
   Text,
   useBreakpointValue,
   useColorModeValue,
-  useDisclosure,
+  useDisclosure
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import projectAPI from '../../api/services/projectAPI';

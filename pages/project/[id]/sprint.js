@@ -1,16 +1,16 @@
 import Head from 'next/head';
-import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 import SectionHeader from '../../../components/common/SectionHeader/SectionHeader';
 import MainContainer from '../../../components/layout/MainContainer';
 import Board from '../../../components/workspace/Board';
 import Column from '../../../components/workspace/Column';
 
+import { Box } from '@chakra-ui/react';
 import cookies from 'next-cookies';
-import { LoggedUserProvider } from '../../../components/common/LoggedUserProvider';
-import { Box, useColorModeValue } from '@chakra-ui/react';
-import Card from '../../../components/workspace/Card';
 import projectAPI from '../../../api/services/projectAPI';
+import { LoggedUserProvider } from '../../../components/common/LoggedUserProvider';
+import SprintController from '../../../components/workspace/SprintController';
 import linkCards from '../../../utils/card/card';
 
 const initData = {
@@ -115,7 +115,6 @@ const initData = {
 		],
 	},
 };
-var isEvtSrcOpenedOnce = false;
 
 const Sprint = ({ authToken }) => {
 	const { asPath } = useRouter();
@@ -146,37 +145,6 @@ const Sprint = ({ authToken }) => {
 	const [cardListDone, setCardListDone] = useState([]);
 	const [participants, setParticipants] = useState([]);
 
-	console.log(cards);
-
-	useEffect(() => {
-		// getCards().then((data) => {
-		// 	return setCards(data);
-		// });
-		// getParticipants().then((data) => setParticipants(data));
-		// const handleReceiveCard = (e) => {
-		// 	getCards().then((data) => {
-		// 		return setCards(data);
-		// 	});
-		// };
-		// const uri = `https://scrumified-dev-bakend.herokuapp.com/backlog?projectId=${projectId}`;
-		// let eventSource = new EventSource(uri);
-		// eventSource.onopen = (e) => {
-		// 	if (isEvtSrcOpenedOnce) {
-		// 		// eventSource.close();
-		// 	} else {
-		// 		isEvtSrcOpenedOnce = true;
-		// 	}
-		// 	console.log('Open Backlog Event Source!');
-		// };
-		// eventSource.onmessage = (e) => {
-		// 	console.log('on message', e.data);
-		// };
-		// eventSource.addEventListener('update', handleReceiveCard);
-		// return () => {
-		// 	eventSource.close();
-		// };
-	}, []);
-
 	useEffect(() => {
 		const participants = [
 			{
@@ -188,37 +156,52 @@ const Sprint = ({ authToken }) => {
 			},
 		];
 		setCardListTodo(
-			linkCards(cards, 'todo', [
-				{
-					id: 2,
-					firstName: 'Uncle',
-					lastName: 'HoHo',
-					email: 'abc@gmail.com',
-					description: null,
-				},
-			])
+			linkCards(
+				cards,
+				'todo',
+				[
+					{
+						id: 2,
+						firstName: 'Uncle',
+						lastName: 'HoHo',
+						email: 'abc@gmail.com',
+						description: null,
+					},
+				],
+				true
+			)
 		);
 		setcardListinProgress(
-			linkCards(cards, 'inProgress', [
-				{
-					id: 2,
-					firstName: 'Uncle',
-					lastName: 'HoHo',
-					email: 'abc@gmail.com',
-					description: null,
-				},
-			])
+			linkCards(
+				cards,
+				'inProgress',
+				[
+					{
+						id: 2,
+						firstName: 'Uncle',
+						lastName: 'HoHo',
+						email: 'abc@gmail.com',
+						description: null,
+					},
+				],
+				true
+			)
 		);
 		setCardListDone(
-			linkCards(cards, 'done', [
-				{
-					id: 2,
-					firstName: 'Uncle',
-					lastName: 'HoHo',
-					email: 'abc@gmail.com',
-					description: null,
-				},
-			])
+			linkCards(
+				cards,
+				'done',
+				[
+					{
+						id: 2,
+						firstName: 'Uncle',
+						lastName: 'HoHo',
+						email: 'abc@gmail.com',
+						description: null,
+					},
+				],
+				true
+			)
 		);
 		// }, [bg, cards, color]);
 	}, [cards]);
@@ -237,6 +220,7 @@ const Sprint = ({ authToken }) => {
 			<MainContainer>
 				<Box>
 					<SectionHeader>Active Sprint</SectionHeader>
+					<SprintController />
 					{winReady ? (
 						<Board
 							cards={cards}
@@ -255,6 +239,7 @@ const Sprint = ({ authToken }) => {
 								cards={cards}
 								setCards={setCards}
 								cardList={cardListTodo}
+								columnColor={'red.500'}
 							/>
 							<Column
 								key={1}
@@ -263,6 +248,7 @@ const Sprint = ({ authToken }) => {
 								cards={cards}
 								setCards={setCards}
 								cardList={cardListinProgress}
+								columnColor={'blue.500'}
 							/>
 							<Column
 								key={2}
@@ -271,6 +257,7 @@ const Sprint = ({ authToken }) => {
 								cards={cards}
 								setCards={setCards}
 								cardList={cardListDone}
+								columnColor={'green.500'}
 							/>
 						</Board>
 					) : null}

@@ -32,24 +32,12 @@ const SprintDrawer = ({
   onClose,
   isOpen,
   currentSprint,
-  fetchUpdatedSprint,
   isSprint,
 }) => {
   const toast = useToast();
+  const TWO_WEEKS_TIME = 12096e5;
   const isValidInput = (value) => value.length > 0;
 
-  const [isValidGoal, setIsValidGoal] = useState(isSprint);
-  const [isValidDoneDefinition, setIsValidDoneDefinition] = useState(isSprint);
-
-  const TWO_WEEKS_TIME = 12096e5;
-  const [startDate, setStartDate] = useState(
-    isSprint ? currentSprint.startDate : new Date()
-  );
-  const [endDate, setEndDate] = useState(
-    isSprint ? currentSprint.endDate : new Date(Date.now() + TWO_WEEKS_TIME)
-  );
-
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const initSprint = {
     goal: "",
     status: "todo",
@@ -60,6 +48,19 @@ const SprintDrawer = ({
   };
 
   const [sprint, setSprint] = useState(isSprint ? currentSprint : initSprint);
+  const [isValidGoal, setIsValidGoal] = useState(isSprint);
+  const [isValidDoneDefinition, setIsValidDoneDefinition] = useState(isSprint);
+
+  const [startDate, setStartDate] = useState(
+    isSprint ? new Date(currentSprint.startDate * 1000) : new Date()
+  );
+
+  const [endDate, setEndDate] = useState(
+    isSprint
+      ? new Date(currentSprint.endDate * 1000)
+      : new Date(Date.now() + TWO_WEEKS_TIME)
+  );
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const CustomInput = forwardRef(({ value, onClick }, ref) => (
     <Flex h="100%" onClick={onClick} ref={ref} alignItems="center">
@@ -78,7 +79,6 @@ const SprintDrawer = ({
           duration: 2000,
           isClosable: true,
         });
-        fetchUpdatedSprint();
         onClose();
       }
     } catch (error) {
@@ -96,7 +96,6 @@ const SprintDrawer = ({
           duration: 2000,
           isClosable: true,
         });
-        fetchUpdatedSprint();
         onClose();
       }
     } catch (error) {
@@ -115,7 +114,6 @@ const SprintDrawer = ({
           duration: 2000,
           isClosable: true,
         });
-        fetchUpdatedSprint();
         onClose();
       }
     } catch (error) {
@@ -127,6 +125,14 @@ const SprintDrawer = ({
     setSprint(isSprint ? currentSprint : initSprint);
     setIsValidGoal(isSprint);
     setIsValidDoneDefinition(isSprint);
+    setStartDate(
+      isSprint ? new Date(currentSprint.startDate * 1000) : new Date()
+    );
+    setEndDate(
+      isSprint
+        ? new Date(currentSprint.endDate * 1000)
+        : new Date(Date.now() + TWO_WEEKS_TIME)
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSprint]);
 

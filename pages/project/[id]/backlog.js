@@ -47,26 +47,26 @@ const Backlog = ({ authToken }) => {
   const currentTime = new Date(Date.now()).getTime();
   const currentDate = Math.floor(currentTime / 1000);
 
-  const isPending = currentDate < currentSprint.startDate;
+  const [isPending, setIsPending] = useState(false);
 
   const getCurrentSprint = async () => {
     setIsLoading(true);
     try {
       const response = await projectAPI.getCurrentSprint(projectId);
       const json = response.data;
-      console.log("json: ", json);
       setCurrentSprint(json);
       setIsSprint(
         Object.keys(json).length !== 0 && json.constructor === Object
       );
+
+      const currentTime = new Date(Date.now()).getTime();
+      const currentDate = Math.floor(currentTime / 1000);
+
+      setIsPending(currentDate < json.startDate);
       setIsLoading(false);
     } catch (error) {
       console.log(error);
     }
-  };
-
-  const fetchUpdatedSprint = () => {
-    getCurrentSprint();
   };
 
   const getParticipants = async () => {
@@ -134,7 +134,7 @@ const Backlog = ({ authToken }) => {
     );
     setCardList(tmp);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cards]);
+  }, [cards, currentSprint]);
 
   return (
     <LoggedUserProvider authToken={authToken}>
@@ -204,6 +204,7 @@ const Backlog = ({ authToken }) => {
             <StaticBoardBacklog
               storyList={filteredCard.cardList}
               participants={participants}
+              sprintId={currentSprint.id}
             />
           ) : winReady ? (
             <Board
@@ -232,7 +233,6 @@ const Backlog = ({ authToken }) => {
           onClose={onClose}
           isOpen={isOpen}
           currentSprint={currentSprint}
-          fetchUpdatedSprint={fetchUpdatedSprint}
           isSprint={isSprint}
         />
       </MainContainer>

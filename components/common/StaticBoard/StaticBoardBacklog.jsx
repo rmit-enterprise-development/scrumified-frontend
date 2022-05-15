@@ -3,7 +3,7 @@ import { GoChecklist } from "react-icons/go";
 import NoItem from "../NoItem/NoItem";
 import { StaticCardBacklog } from "./StaticCard/StaticCard";
 
-const StaticBoardBacklog = ({ storyList, participants }) => {
+const StaticBoardBacklog = ({ storyList, participants, sprintId }) => {
   return (
     <Flex
       flexDir={"column"}
@@ -46,6 +46,7 @@ const StaticBoardBacklog = ({ storyList, participants }) => {
             key={story.id}
             card={story}
             participants={participants}
+            sprintId={sprintId}
           />
         ))}
       </Flex>

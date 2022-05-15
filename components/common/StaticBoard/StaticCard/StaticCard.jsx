@@ -15,13 +15,15 @@ import {
 import Avvvatars from "avvvatars-react";
 import Router from "next/router";
 import { useContext, useState } from "react";
+import storyAPI from "../../../../api/services/storyAPI";
 import { BadgeColor, Category } from "../../../../config/constants";
 import { RouterPage } from "../../../../config/router";
 import textUtils from "../../../../utils/text";
 import CardModal from "../../../workspace/CardModal";
 import { LoggedUserContext } from "../../LoggedUserProvider";
 
-const StaticCardBacklog = ({ card, participants }) => {
+const StaticCardBacklog = ({ card, participants, sprintId }) => {
+  console.log("sprintId: ", sprintId);
   const getUserInfoValue = (id) => {
     if (participants.length > 0) {
       const user = Object.values(participants).find((p) => p.id === id);
@@ -43,6 +45,27 @@ const StaticCardBacklog = ({ card, participants }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [isAdded, setIsAdded] = useState(false);
+  const handleUpdateStatus = async () => {
+    if (sprintId) {
+      try {
+        const response = storyAPI.putStory(
+          // Specialized params for add/remove story from sprint
+          card.id,
+          {
+            replaceStoryId: null,
+            sprintId: sprintId,
+            status: "todo",
+          },
+          {
+            isDragged: true,
+          }
+        );
+        console.log(response);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
   return (
     <Box
       cursor="pointer"
@@ -82,7 +105,7 @@ const StaticCardBacklog = ({ card, participants }) => {
               onClick={(e) => {
                 e.stopPropagation();
                 setIsAdded(!isAdded);
-                console.log("DitMe"); // Set action
+                handleUpdateStatus();
               }}
               aria-label="Search database"
               icon={

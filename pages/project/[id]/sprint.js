@@ -174,7 +174,7 @@ const Sprint = ({ authToken }) => {
 
   const getStories = async () => {
     try {
-      const response = await sprintAPI.getAllStories(89);
+      const response = await sprintAPI.getAllStories(2);
       console.log(response.data);
       s;
     } catch (error) {

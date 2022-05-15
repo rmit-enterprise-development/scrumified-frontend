@@ -46,6 +46,7 @@ const Backlog = ({ authToken }) => {
   const [isLoading, setIsLoading] = useState(true);
   const currentTime = new Date(Date.now()).getTime();
   const currentDate = Math.floor(currentTime / 1000);
+
   const isPending = currentDate < currentSprint.startDate;
 
   const getCurrentSprint = async () => {
@@ -53,6 +54,7 @@ const Backlog = ({ authToken }) => {
     try {
       const response = await projectAPI.getCurrentSprint(projectId);
       const json = response.data;
+      console.log("json: ", json);
       setCurrentSprint(json);
       setIsSprint(
         Object.keys(json).length !== 0 && json.constructor === Object
@@ -107,13 +109,15 @@ const Backlog = ({ authToken }) => {
 
   useEffect(() => {
     getCards();
+    getCurrentSprint();
 
     const uri = `https://scrumified-dev-bakend.herokuapp.com/backlog?projectId=${projectId}`;
     let eventSource = new EventSource(uri);
     eventSource.onopen = (e) => {
       console.log("Open Backlog Event Source!");
     };
-    eventSource.addEventListener("update", getCards);
+    eventSource.addEventListener("updateCards", getCards);
+    eventSource.addEventListener("updateSprint", getCurrentSprint);
     return () => {
       eventSource.close();
     };
@@ -193,6 +197,7 @@ const Backlog = ({ authToken }) => {
             projectId={projectId}
             participants={participants}
             setFilteredCard={setFilteredCard}
+            isLoading={isLoading}
           />
 
           {filteredCard.isFilter ? (

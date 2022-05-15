@@ -30,6 +30,7 @@ const Profile = ({ authToken }) => {
 
         <Flex justifyContent="space-around" mt={10} pb={6}>
           <ProfileCard
+            id={loggedUser.logUserId}
             fname={loggedUser.firstName}
             lname={loggedUser.lastName}
             email={loggedUser.email}

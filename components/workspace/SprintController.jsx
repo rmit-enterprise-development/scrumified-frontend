@@ -11,7 +11,6 @@ import {
 } from "@chakra-ui/react";
 
 const SprintController = ({ isPending, isLoading }) => {
-  console.log("isLoading: ", isLoading);
   let color = useColorModeValue("#031d46", "#fffdfe");
   let btnBg = useColorModeValue("gray.200", "#fffdfe");
   let btnColor = "black";

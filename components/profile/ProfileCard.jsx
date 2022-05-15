@@ -2,13 +2,13 @@ import { Flex, Text, useColorModeValue } from "@chakra-ui/react";
 import Avvvatars from "avvvatars-react";
 import textUtils from "../../utils/text";
 
-const ProfileCard = ({ fname, lname, email, description }) => {
+const ProfileCard = ({ id, fname, lname, email, description }) => {
   return (
     <Flex>
       <Avvvatars
         shadow={true}
         size="150"
-        value={textUtils.getFirstLetters(fname + " " + lname)}
+        value={textUtils.getFirstLetters(fname + " " + lname) + " " + id}
       />
 
       <Flex flexDir="row" ml={10} justifyContent="space-between">

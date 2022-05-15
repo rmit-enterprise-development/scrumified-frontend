@@ -13,6 +13,7 @@ import { LoggedUserProvider } from "../../../components/common/LoggedUserProvide
 import SprintController from "../../../components/workspace/SprintController";
 import linkCards from "../../../utils/card/card";
 import { SprintColor } from "../../../config/constants";
+import sprintAPI from "../../../api/services/sprintAPI";
 
 const initData = {
   9: {
@@ -161,7 +162,21 @@ const Sprint = ({ authToken }) => {
       setIsSprint(
         Object.keys(json).length !== 0 && json.constructor === Object
       );
+
+      const responseStories = await sprintAPI.getAllStories(json.id);
+      console.log(responseStories.data);
+
       setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getStories = async () => {
+    try {
+      const response = await sprintAPI.getAllStories(89);
+      console.log(response.data);
+      s;
     } catch (error) {
       console.log(error);
     }
@@ -232,6 +247,7 @@ const Sprint = ({ authToken }) => {
   useEffect(() => {
     setwinReady(true);
     getCurrentSprint();
+    getStories();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

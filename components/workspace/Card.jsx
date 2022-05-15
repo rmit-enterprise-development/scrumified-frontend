@@ -29,7 +29,10 @@ const Card = ({ participants, card, disableModal, sprintId, ...props }) => {
   const getUserInfoValue = (id) => {
     if (participants.length > 0) {
       const user = Object.values(participants).find((p) => p.id === id);
-      return textUtils.getFirstLetters(user.firstName + " " + user.lastName);
+      return (
+        textUtils.getFirstLetters(user.firstName + " " + user.lastName) +
+        user.id
+      );
     }
   };
   const getUserInfoFull = (id) => {
@@ -42,11 +45,18 @@ const Card = ({ participants, card, disableModal, sprintId, ...props }) => {
   const handleUpdateStatus = async () => {
     if (sprintId) {
       try {
-        const response = storyAPI.putStory(card.id, {
-          ...card,
-          status: "todo",
-          sprintId: sprintId,
-        });
+        const response = storyAPI.putStory(
+          // Specialized params for add/remove story from sprint
+          card.id,
+          {
+            replaceStoryId: null,
+            sprintId: sprintId,
+            status: "todo",
+          },
+          {
+            isDragged: true,
+          }
+        );
         console.log(response);
       } catch (error) {
         console.log(error);

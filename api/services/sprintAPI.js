@@ -6,11 +6,16 @@ const sprintAPI = {
     return axiosClient.get(url);
   },
 
+  getAllStories: (sprintId) => {
+    const url = `/sprints/${sprintId}/stories`;
+    return axiosClient.get(url);
+  },
+
   /**
-   * 
+   *
    * @param {*} id sprintId(Long)
    * @param {*} params {goal(String), status(String), defOfDone(String)}
-   * @returns 
+   * @returns
    */
   putSprint: (id, params) => {
     const url = `/sprints/${id}`;
@@ -30,8 +35,7 @@ const sprintAPI = {
   deleteStory: (storyId, sprintId) => {
     const url = `/projects/${sprintId}/stories`;
     return axiosClient.delete(url, storyId);
-  }
-  
+  },
 };
 
 export default sprintAPI;

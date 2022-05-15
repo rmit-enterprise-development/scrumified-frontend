@@ -89,11 +89,11 @@ const Dashboard = ({ authToken }) => {
         totalProject: data.totalElements,
       });
       // Set current project name
-      setCurrentProjectName(projects[0].title);
+      setCurrentProjectName(projects.length > 0 ? projects[0].title : "");
       // Set current story
       let currentFilter = filterStory;
       currentFilter.page = 0;
-      currentFilter.projectId = projects[0].id;
+      currentFilter.projectId = projects.length > 0 ? projects[0].id : "";
       setFilterStory(currentFilter);
       fetchStory(filterStory);
       setIsLoadingProject(false);

@@ -21,9 +21,9 @@ import textUtils from "../../../utils/text";
 export function SidebarContent({ onClose, toggleColorMode, ...rest }) {
   const SwitchIcon = useColorModeValue(FaSun, FaMoon);
   const user = useContext(LoggedUserContext);
-  const avatarValue = textUtils.getFirstLetters(
-    user.firstName + " " + user.lastName
-  );
+  const avatarValue =
+    textUtils.getFirstLetters(user.firstName + " " + user.lastName) +
+    user.logUserId;
 
   return (
     <Box

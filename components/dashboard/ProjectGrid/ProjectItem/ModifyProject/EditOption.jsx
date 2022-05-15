@@ -76,7 +76,9 @@ const EditOption = ({ id, name, participants, fetchUpdatedProject }) => {
 
     return (
       <Flex flexDir="row" alignItems="center">
-        <Avvvatars value={textUtils.getFirstLetters(nameOnly)} />
+        <Avvvatars
+          value={textUtils.getFirstLetters(nameOnly) + " " + selected.value}
+        />
 
         {colorMode === "dark" ? (
           <Text pl={5} color="#fffdfe">
@@ -127,7 +129,7 @@ const EditOption = ({ id, name, participants, fetchUpdatedProject }) => {
         try {
           const response = await userAPI.getAll({ key: searchTerm });
           const data = response.data;
-          const userList = digFind(data, "userDtoList");
+          const userList = digFind(data, "userDtoes");
 
           if (userList) {
             const participantList = userList.map((a) => {

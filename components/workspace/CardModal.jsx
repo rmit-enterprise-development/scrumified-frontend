@@ -15,6 +15,7 @@ import {
   Select,
   Textarea,
   useColorModeValue,
+  useToast,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import projectAPI from "../../api/services/projectAPI";
@@ -44,6 +45,7 @@ const CardModal = ({
   }
 
   const isValidInput = (value) => value.length > 0;
+  const toast = useToast();
 
   const [card, setCard] = useState(initCard);
 
@@ -60,6 +62,12 @@ const CardModal = ({
         if (response.status !== 200) {
           return Promise.reject(response.data);
         }
+        toast({
+          title: "Create story successfully!",
+          status: "success",
+          duration: 1500,
+          isClosable: true,
+        });
       })
       .catch((error) => {
         console.error(error);
@@ -73,6 +81,12 @@ const CardModal = ({
         if (response.status !== 200) {
           return Promise.reject(response.data);
         }
+        toast({
+          title: "Update story successfully!",
+          status: "success",
+          duration: 1500,
+          isClosable: true,
+        });
       })
       .catch((error) => {
         console.error(error);
@@ -86,6 +100,12 @@ const CardModal = ({
         if (response.status !== 200) {
           return Promise.reject(response.data);
         }
+        toast({
+          title: "Delete story successfully!",
+          status: "success",
+          duration: 1500,
+          isClosable: true,
+        });
       })
       .catch((error) => {
         console.error(error);

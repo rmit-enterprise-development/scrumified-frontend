@@ -25,7 +25,10 @@ const StaticCardBacklog = ({ card, participants }) => {
   const getUserInfoValue = (id) => {
     if (participants.length > 0) {
       const user = Object.values(participants).find((p) => p.id === id);
-      return textUtils.getFirstLetters(user.firstName + " " + user.lastName);
+      return (
+        textUtils.getFirstLetters(user.firstName + " " + user.lastName) +
+        user.logUserId
+      );
     }
   };
   const getUserInfoFull = (id) => {
@@ -138,10 +141,9 @@ const StaticCardBacklog = ({ card, participants }) => {
 
 const StaticCard = ({ card }) => {
   const user = useContext(LoggedUserContext);
-  const userInfo = textUtils.getFirstLetters(
-    user.firstName + " " + user.lastName
-  );
-
+  const userInfo =
+    textUtils.getFirstLetters(user.firstName + " " + user.lastName) +
+    user.logUserId;
   return (
     <Box
       cursor="pointer"

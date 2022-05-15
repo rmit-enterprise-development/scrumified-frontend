@@ -8,6 +8,7 @@ import {
   InputGroup,
   InputLeftElement,
   Select,
+  Skeleton,
   Tag,
   Text,
   useBreakpointValue,
@@ -25,6 +26,7 @@ const BacklogController = ({
   projectId,
   participants,
   setFilteredCard,
+  isLoading,
 }) => {
   let btnBg = useColorModeValue("gray.200", "#fffdfe");
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -56,7 +58,7 @@ const BacklogController = ({
     try {
       const response = await projectAPI.getAllStories(projectId, filter);
       const data = response.data;
-      const cardList = digFind(data, "storyDtoList");
+      const cardList = digFind(data, "storyDtoes");
       setFilteredCard({
         isFilter: true,
         cardList: cardList ? cardList : [],
@@ -221,18 +223,11 @@ const BacklogController = ({
             md: "flex-start",
           })}
         >
-          <Text color={useColorModeValue("#031d46", "#fffdfe")}>
-            Total points{" "}
-            <Tag
-              borderRadius={"full"}
-              size="md"
-              p={"6px"}
-              color={"white"}
-              bgColor={"gray"}
-            >
-              {totalPoints}
+          <Skeleton isLoaded={!isLoading}>
+            <Tag isRound={true} size="lg" p="6px" color="white" bgColor="gray">
+              Total points: {totalPoints}
             </Tag>
-          </Text>
+          </Skeleton>
           <IconButton
             _hover={{ opacity: 0.8 }}
             bg={btnBg}

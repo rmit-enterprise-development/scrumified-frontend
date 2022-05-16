@@ -18,7 +18,7 @@ import {
   Text,
   Textarea,
   useColorModeValue,
-  useToast
+  useToast,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
@@ -33,6 +33,7 @@ const SprintDrawer = ({
   isOpen,
   currentSprint,
   isSprint,
+  refetchCurrentSprint,
 }) => {
   const toast = useToast();
   const TWO_WEEKS_TIME = 12096e5;
@@ -83,6 +84,8 @@ const SprintDrawer = ({
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      refetchCurrentSprint();
     }
   };
   const updateSprint = (sprint) => {
@@ -100,6 +103,8 @@ const SprintDrawer = ({
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      refetchCurrentSprint();
     }
   };
 
@@ -118,6 +123,8 @@ const SprintDrawer = ({
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      refetchCurrentSprint("delete");
     }
   };
 
@@ -286,7 +293,6 @@ const SprintDrawer = ({
           </Button>
           <Button
             colorScheme="blue"
-            isDisabled={!(isValidDoneDefinition && isValidGoal)}
             onClick={() => {
               setIsSubmitting(true);
               if (isValidDoneDefinition && isValidGoal) {
@@ -304,7 +310,7 @@ const SprintDrawer = ({
                 }
               }
             }}
-            disabled={isSubmitting}
+            disabled={!(isValidDoneDefinition && isValidGoal) || isSubmitting}
           >
             {isSprint ? "Update" : "Create"}
           </Button>

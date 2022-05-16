@@ -1,5 +1,6 @@
 import {
   Button,
+  Circle,
   Flex,
   Skeleton,
   Tag,
@@ -10,7 +11,7 @@ import {
   WrapItem,
 } from "@chakra-ui/react";
 
-const SprintController = ({ isSprint, isPending }) => {
+const SprintController = ({ isSprint, isPending, points }) => {
   let color = useColorModeValue("#031d46", "#fffdfe");
   let btnBg = useColorModeValue("gray.200", "#fffdfe");
   let btnColor = "black";
@@ -44,41 +45,23 @@ const SprintController = ({ isSprint, isPending }) => {
           <Text color={color}>Points:</Text>
           <WrapItem>
             <Tooltip label={"Todo points"} placement={"bottom"}>
-              <Tag
-                borderRadius={"full"}
-                size={"6"}
-                p={"6px"}
-                bgColor={"red.500"}
-                color={"white"}
-              >
-                10
-              </Tag>
+              <Circle size={6} color={"white"} bgColor={"red.500"}>
+                {points.todo}
+              </Circle>
             </Tooltip>
           </WrapItem>
           <WrapItem>
             <Tooltip label={"In Progress points"} placement={"bottom"}>
-              <Tag
-                borderRadius={"full"}
-                size={"6"}
-                p={"6px"}
-                bgColor={"blue.500"}
-                color={"white"}
-              >
-                10
-              </Tag>
+              <Circle size={6} color={"white"} bgColor={"blue.500"}>
+                {points.inProgress}
+              </Circle>
             </Tooltip>
           </WrapItem>
           <WrapItem>
             <Tooltip label={"Done points"} placement={"bottom"}>
-              <Tag
-                borderRadius={"full"}
-                size={"6"}
-                p={"6px"}
-                color={"white"}
-                bgColor={"green.500"}
-              >
-                10
-              </Tag>
+              <Circle size={6} color={"white"} bgColor={"green.500"}>
+                {points.done}
+              </Circle>
             </Tooltip>
           </WrapItem>
         </Flex>

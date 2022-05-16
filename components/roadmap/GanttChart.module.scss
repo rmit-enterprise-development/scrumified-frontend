@@ -1,7 +1,6 @@
 .darkChart svg {
     /* Chart Settings */
     g:nth-child(3) {
-
         text {
         /* Hotizontal Labels */
         fill: white;
@@ -14,7 +13,6 @@
     /* Side Labels */
     g:nth-child(9) {
         text {
-            /* Hotizontal Labels */
             font-family: Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol" !important;
             font-weight: normal !important;
             font-size: 15px !important;
@@ -34,9 +32,7 @@
 .lightChart svg {
     /* Chart Settings */
     g:nth-child(3) {
-
         text {
-        /* Hotizontal Labels */
         fill: black;
         font-family: Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol" !important;
         font-weight: normal !important;
@@ -47,14 +43,12 @@
     /* Side Labels */
     g:nth-child(9) {
         text {
-            /* Hotizontal Labels */
             font-family: Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol" !important;
             font-weight: normal !important;
             font-size: 15px !important;
         }
     }
     
-    /* Tooltips */
     /* Tooltips */
     g:nth-child(10) {
         text {

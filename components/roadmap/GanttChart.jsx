@@ -68,11 +68,11 @@ const GanttChart = ({data}) => {
       gantt: {
         trackHeight: 40,
         criticalPathEnabled: false,
-        innerGridTrack: { fill: useColorModeValue("white","#354A6D") },
+        innerGridTrack: { fill: useColorModeValue("white","#031d46") },
         palette: palette,
       },
       backgroundColor: {
-        fill: useColorModeValue("white", '#354A6D')
+        fill: useColorModeValue("white", '#031d46')
       },
   };
   return (

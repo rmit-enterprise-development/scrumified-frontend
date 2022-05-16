@@ -60,9 +60,9 @@ const projectAPI = {
     return axiosClient.get(url);
   },
 
-  getAllSprints: (id) => {
+  getAllSprints: (id, params) => {
     const url = `/projects/${id}/sprints`;
-    return axiosClient.get(url);
+    return axiosClient.get(url, { params });
   },
 
   getAllPoints: (id) => {

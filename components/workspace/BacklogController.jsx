@@ -1,4 +1,4 @@
-import { AddIcon, DeleteIcon, Search2Icon } from "@chakra-ui/icons";
+import { AddIcon, DeleteIcon, Search2Icon } from '@chakra-ui/icons';
 import {
   Circle,
   Flex,
@@ -14,11 +14,11 @@ import {
   useBreakpointValue,
   useColorModeValue,
   useDisclosure,
-} from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import projectAPI from "../../api/services/projectAPI";
-import { digFind } from "../../utils/object";
-import CardModal from "./CardModal";
+} from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
+import projectAPI from '../../api/services/projectAPI';
+import { digFind } from '../../utils/object';
+import CardModal from './CardModal';
 
 const BacklogController = ({
   cards,
@@ -28,7 +28,7 @@ const BacklogController = ({
   setFilteredCard,
   isLoading,
 }) => {
-  let btnBg = useColorModeValue("gray.200", "#fffdfe");
+  let btnBg = useColorModeValue('gray.200', '#fffdfe');
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const totalPoints = Object.values(cards).reduce((accumulator, object) => {
@@ -38,9 +38,9 @@ const BacklogController = ({
 
   // Filter
   const defaultFilter = {
-    key: "",
-    category: "",
-    sortProp: "",
+    key: '',
+    category: '',
+    sortProp: '',
     ascending: false,
     projectId: projectId,
     limit: PAGE_SIZE_BACKLOG,
@@ -50,31 +50,31 @@ const BacklogController = ({
   const [filterStory, setFilterStory] = useState(defaultFilter);
 
   const [isFilter, setIsFilter] = useState(false);
-  const [sortValue, setSortValue] = useState("");
-  const [categoryValue, setCategoryValue] = useState("");
+  const [sortValue, setSortValue] = useState('');
+  const [categoryValue, setCategoryValue] = useState('');
 
   // Populate Story data
   const fetchStory = async (filter) => {
     try {
       const response = await projectAPI.getAllStories(projectId, filter);
       const data = response.data;
-      const cardList = digFind(data, "storyDtoes");
+      const cardList = digFind(data, 'storyDtoes');
       setFilteredCard({
         isFilter: true,
         cardList: cardList ? cardList : [],
       });
     } catch (error) {
-      console.log("Fail to fetch: ", error);
+      console.log('Fail to fetch: ', error);
     }
   };
 
   // Input search story
-  const [searchStoryValue, setSearchStoryValue] = useState("");
+  const [searchStoryValue, setSearchStoryValue] = useState('');
   const handleStoryChange = (event) => {
     let currentFilter = filterStory;
-    if (event.target.value === "") {
+    if (event.target.value === '') {
       // Reset default
-      currentFilter.key = "";
+      currentFilter.key = '';
     } else {
       currentFilter.key = event.target.value;
     }
@@ -87,18 +87,18 @@ const BacklogController = ({
     setSortValue(type);
     let currentFilter = filterStory;
     // Reset default
-    currentFilter.key = "";
+    currentFilter.key = '';
 
-    if (type.includes("Dsc")) {
+    if (type.includes('Dsc')) {
       currentFilter.ascending = false;
     } else {
       currentFilter.ascending = true;
     }
 
-    if (type.includes("time")) {
-      currentFilter.sortProp = "created_date";
+    if (type.includes('time')) {
+      currentFilter.sortProp = 'created_date';
     } else {
-      currentFilter.sortProp = "points";
+      currentFilter.sortProp = 'points';
     }
 
     setFilterStory(currentFilter);
@@ -110,7 +110,7 @@ const BacklogController = ({
     setCategoryValue(category);
     let currentFilter = filterStory;
     // Reset default
-    currentFilter.key = "";
+    currentFilter.key = '';
     currentFilter.category = category;
     setFilterStory(currentFilter);
     setIsFilter(true);
@@ -136,21 +136,21 @@ const BacklogController = ({
   return (
     <>
       <Flex
-        mt={useBreakpointValue({ base: "1rem", md: 0 })}
-        flexDir={useBreakpointValue({ base: "column", md: "row" })}
+        mt={useBreakpointValue({ base: '1rem', md: 0 })}
+        flexDir={useBreakpointValue({ base: 'column', md: 'row' })}
         justifyContent="center"
         flexWrap="wrap"
         pb={5}
-        gap={useBreakpointValue({ base: "2rem", md: 0 })}
+        gap={useBreakpointValue({ base: '2rem', md: 0 })}
       >
         <Flex
-          gap={useBreakpointValue({ base: "1.5rem", md: "1rem" })}
+          gap={useBreakpointValue({ base: '1.5rem', md: '1rem' })}
           flex={1}
           flexWrap="wrap"
-          alignItems={"center"}
+          alignItems={'center'}
           justifyContent={useBreakpointValue({
-            base: "center",
-            md: "flex-start",
+            base: 'center',
+            md: 'flex-start',
           })}
         >
           <InputGroup maxW={250}>
@@ -161,7 +161,7 @@ const BacklogController = ({
             />
             <Input
               placeholder="Search for story name"
-              color={useColorModeValue("#031d46", "#fffdfe")}
+              color={useColorModeValue('#031d46', '#fffdfe')}
               value={searchStoryValue}
               onChange={handleStoryChange}
             />
@@ -171,7 +171,7 @@ const BacklogController = ({
             <Select
               width="auto"
               onChange={(e) => handleCategoryStory(e.target.value)}
-              color={useColorModeValue("#031d46", "#fffdfe")}
+              color={useColorModeValue('#031d46', '#fffdfe')}
               value={categoryValue}
             >
               <option value="" disabled>
@@ -188,7 +188,7 @@ const BacklogController = ({
             <Select
               width="auto"
               onChange={(e) => handleSortStory(e.target.value)}
-              color={useColorModeValue("#031d46", "#fffdfe")}
+              color={useColorModeValue('#031d46', '#fffdfe')}
               value={sortValue}
             >
               <option value="" disabled>
@@ -207,8 +207,8 @@ const BacklogController = ({
                 icon={<DeleteIcon />}
                 onClick={() => {
                   setFilterStory(defaultFilter);
-                  setSortValue("");
-                  setCategoryValue("");
+                  setSortValue('');
+                  setCategoryValue('');
                   setIsFilter(false);
                 }}
               />
@@ -219,12 +219,12 @@ const BacklogController = ({
         <HStack
           gap="2"
           justifyContent={useBreakpointValue({
-            base: "center",
-            md: "flex-start",
+            base: 'center',
+            md: 'flex-start',
           })}
         >
           <Skeleton isLoaded={!isLoading}>
-            <Tag isRound={true} size="lg" p="6px" color="white" bgColor="gray">
+            <Tag size="lg" px="20px" py="6px" color="white" bgColor="gray">
               Total points: {totalPoints}
             </Tag>
           </Skeleton>

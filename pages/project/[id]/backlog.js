@@ -1,12 +1,9 @@
 import {
-  Badge,
   Box,
   Button,
   Flex,
   Skeleton,
-  Tag,
-  useColorModeValue,
-  useDisclosure,
+  Tag, useDisclosure
 } from "@chakra-ui/react";
 import cookies from "next-cookies";
 import Head from "next/head";

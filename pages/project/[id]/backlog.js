@@ -225,17 +225,16 @@ const Backlog = ({ authToken }) => {
               cardList={cardList}
               isBacklog={true}
             >
-              <Skeleton isLoaded={!isLoading}>
-                <Column
-                  key={0}
-                  title={"Stories"}
-                  id={"backlog"}
-                  cards={cards}
-                  setCards={setCards}
-                  cardList={cardList}
-                  columnColor={"gray.500"}
-                />
-              </Skeleton>
+              <Column
+                key={0}
+                title={"Stories"}
+                id={"backlog"}
+                cards={cards}
+                setCards={setCards}
+                cardList={cardList}
+                columnColor={"gray.500"}
+                isLoading={isLoading}
+              />
             </Board>
           ) : null}
         </Box>

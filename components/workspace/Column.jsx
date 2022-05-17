@@ -1,9 +1,16 @@
-import { Flex, Tag, Text, useColorModeValue } from "@chakra-ui/react";
+import { Flex, Skeleton, Tag, Text, useColorModeValue } from "@chakra-ui/react";
 import { Droppable } from "react-beautiful-dnd";
 import { GoTasklist } from "react-icons/go";
 import NoItem from "../common/NoItem/NoItem";
 
-const Column = ({ title, id, cardList, columnColor, pointerEvent }) => {
+const Column = ({
+  title,
+  id,
+  cardList,
+  columnColor,
+  isLoading,
+  isDragDisabled,
+}) => {
   let color = useColorModeValue("#031d46", "#fffdfe");
   return (
     <Flex
@@ -21,7 +28,6 @@ const Column = ({ title, id, cardList, columnColor, pointerEvent }) => {
       px={4}
       mb={4}
       h="77vh"
-      pointerEvents={pointerEvent ? pointerEvent : "auto"}
     >
       <Flex alignItems={"center"}>
         <Text
@@ -46,27 +52,30 @@ const Column = ({ title, id, cardList, columnColor, pointerEvent }) => {
           {cardList.length === 1 ? `1 card` : `${cardList.length} cards`}
         </Tag>
       </Flex>
-      <Droppable droppableId={id}>
-        {(provided) => (
-          <Flex
-            flexDirection={"column"}
-            flexGrow={1}
-            ref={provided.innerRef}
-            {...provided.droppableProps}
-            padding={"2"}
-            overflow={"auto"}
-            h="20rem"
-          >
-            {cardList && cardList.length === 0 && (
-              <NoItem icon={GoTasklist}>
-                No item found. Add stories from backlog and start a sprint!
-              </NoItem>
-            )}
-            {cardList}
-            {provided.placeholder}
-          </Flex>
-        )}
-      </Droppable>
+
+      <Skeleton isLoaded={!isLoading}>
+        <Droppable droppableId={id} isDropDisabled={isDragDisabled}>
+          {(provided) => (
+            <Flex
+              flexDirection={"column"}
+              flexGrow={1}
+              ref={provided.innerRef}
+              {...provided.droppableProps}
+              padding={"2"}
+              // overflow={"auto"}
+              h="20rem"
+            >
+              {cardList && cardList.length === 0 && (
+                <NoItem icon={GoTasklist}>
+                  No item found. Create some inside backlog!
+                </NoItem>
+              )}
+              {cardList}
+              {provided.placeholder}
+            </Flex>
+          )}
+        </Droppable>
+      </Skeleton>
     </Flex>
   );
 };

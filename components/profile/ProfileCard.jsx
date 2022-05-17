@@ -8,7 +8,7 @@ const ProfileCard = ({ id, fname, lname, email, description }) => {
       <Avvvatars
         shadow={true}
         size="150"
-        value={textUtils.getFirstLetters(fname + " " + lname) + " " + id}
+        value={textUtils.getFirstLetters(fname + " " + lname) + id}
       />
 
       <Flex flexDir="row" ml={10} justifyContent="space-between">

@@ -50,8 +50,8 @@ const Card = ({ participants, card, disableModal, sprintId, ...props }) => {
           card.id,
           {
             replaceStoryId: null,
-            sprintId: sprintId,
-            status: "todo",
+            sprintId: card.status === "backlog" ? sprintId : null,
+            status: card.status === "backlog" ? "todo" : "backlog",
           },
           {
             isDragged: true,
@@ -133,6 +133,7 @@ const Card = ({ participants, card, disableModal, sprintId, ...props }) => {
               justifyContent="space-between"
               alignItems={"center"}
               alignContent={"center"}
+              gap={3}
             >
               <Flex alignItems={"center"}>
                 <Text paddingRight={2}>Assignees:</Text>

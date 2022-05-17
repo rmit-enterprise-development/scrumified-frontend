@@ -16,134 +16,11 @@ import { SprintColor } from "../../../config/constants";
 import sprintAPI from "../../../api/services/sprintAPI";
 import calculatePointsAllColumn from "../../../utils/card/point";
 
-const initData = {
-  9: {
-    id: 9,
-    userStory: "A",
-    category: "category",
-    createdDate: 1652268620,
-    point: 4,
-    defOfDone: "abc",
-    status: "todo",
-    parentStoryId: null,
-    childStoryId: 11,
-    projectId: 2,
-    sprintId: 4,
-    assignId: 2,
-    links: [
-      {
-        rel: "self",
-        href: "http://127.0.0.1:8989/stories/9",
-      },
-    ],
-  },
-  11: {
-    id: 11,
-    userStory: "B",
-    category: "category",
-    createdDate: 1652282290,
-    point: 4,
-    defOfDone: "abc",
-    status: "todo",
-    parentStoryId: 9,
-    childStoryId: 8,
-    projectId: 2,
-    sprintId: 4,
-    assignId: 2,
-    links: [
-      {
-        rel: "self",
-        href: "http://127.0.0.1:8989/stories/11",
-      },
-    ],
-  },
-  8: {
-    id: 8,
-    userStory: "C",
-    category: "category",
-    createdDate: 1652171796,
-    point: 4,
-    defOfDone: null,
-    status: "todo",
-    parentStoryId: 11,
-    childStoryId: 10,
-    projectId: 2,
-    sprintId: 4,
-    assignId: 2,
-    links: [
-      {
-        rel: "self",
-        href: "http://127.0.0.1:8989/stories/8",
-      },
-    ],
-  },
-  10: {
-    id: 10,
-    userStory: "D",
-    category: "category",
-    createdDate: 1652282226,
-    point: 4,
-    defOfDone: "abc",
-    status: "todo",
-    parentStoryId: 8,
-    childStoryId: 12,
-    projectId: 2,
-    sprintId: 4,
-    assignId: 2,
-    links: [
-      {
-        rel: "self",
-        href: "http://127.0.0.1:8989/stories/10",
-      },
-    ],
-  },
-  12: {
-    id: 12,
-    userStory: "E",
-    category: "category",
-    createdDate: 1652282434,
-    point: 4,
-    defOfDone: "abc",
-    status: "todo",
-    parentStoryId: 12,
-    childStoryId: null,
-    projectId: 2,
-    sprintId: 4,
-    assignId: 2,
-    links: [
-      {
-        rel: "self",
-        href: "http://127.0.0.1:8989/stories/12",
-      },
-    ],
-  },
-};
-
 const Sprint = ({ authToken }) => {
   const { asPath } = useRouter();
 
   const projectId = asPath.split("/")[2];
-
-  const getParticipants = async () => {
-    const response = await projectAPI.getProject(projectId);
-    const json = response.data;
-    if (json.participants) {
-      return [json.owner, ...json.participants];
-    } else {
-      return [json.owner];
-    }
-  };
-
-  const getCards = async () => {
-    const response = await projectAPI.getAllStories(projectId, {
-      isBacklog: true,
-    });
-    const json = response.data;
-    return json;
-  };
-
-  const [cards, setCards] = useState(initData);
-  console.log("cards: ", cards);
+  const [cards, setCards] = useState([]);
   const [cardListTodo, setCardListTodo] = useState([]);
   const [cardListinProgress, setcardListinProgress] = useState([]);
   const [cardListDone, setCardListDone] = useState([]);
@@ -156,8 +33,21 @@ const Sprint = ({ authToken }) => {
   const currentDate = Math.floor(currentTime / 1000);
   const isPending = currentDate < currentSprint.startDate;
 
-  const points = calculatePointsAllColumn(cards);
-  console.log("points: ", points);
+  const getParticipants = async () => {
+    setIsLoading(true);
+    try {
+      const response = await projectAPI.getProject(projectId);
+      const json = response.data;
+      if (json.participants) {
+        setParticipants([json.owner, ...json.participants]);
+      } else {
+        setParticipants([json.owner]);
+      }
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const getCurrentSprint = async () => {
     try {
@@ -168,89 +58,50 @@ const Sprint = ({ authToken }) => {
         Object.keys(json).length !== 0 && json.constructor === Object
       );
 
+      const responseStories = await sprintAPI.getAllStories(json.id);
+      setCards(responseStories.data);
+
       setIsLoading(false);
     } catch (error) {
       console.log(error);
     }
   };
 
-  const getStories = async () => {
-    try {
-      const response = await sprintAPI.getAllStories(2);
-      console.log(response.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    const participants = [
-      {
-        id: 2,
-        firstName: "Uncle",
-        lastName: "HoHo",
-        email: "abc@gmail.com",
-        description: null,
-      },
-    ];
-    setCardListTodo(
-      linkCards(
-        cards,
-        "todo",
-        [
-          {
-            id: 2,
-            firstName: "Uncle",
-            lastName: "HoHo",
-            email: "abc@gmail.com",
-            description: null,
-          },
-        ],
-        true
-      )
-    );
-    setcardListinProgress(
-      linkCards(
-        cards,
-        "inProgress",
-        [
-          {
-            id: 2,
-            firstName: "Uncle",
-            lastName: "HoHo",
-            email: "abc@gmail.com",
-            description: null,
-          },
-        ],
-        true
-      )
-    );
-    setCardListDone(
-      linkCards(
-        cards,
-        "done",
-        [
-          {
-            id: 2,
-            firstName: "Uncle",
-            lastName: "HoHo",
-            email: "abc@gmail.com",
-            description: null,
-          },
-        ],
-        true
-      )
-    );
-    // }, [bg, cards, color]);
-  }, [cards]);
+  const points = calculatePointsAllColumn(cards);
 
   const [winReady, setwinReady] = useState(false);
   useEffect(() => {
     setwinReady(true);
+    getParticipants();
     getCurrentSprint();
-    getStories();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    const uri = `https://scrumified-dev-bakend.herokuapp.com/backlog?projectId=${projectId}`;
+    let eventSource = new EventSource(uri);
+    eventSource.onopen = (e) => {
+      console.log("Open Sprint Event Source!");
+    };
+    eventSource.addEventListener("updateCards", getCurrentSprint);
+    return () => {
+      eventSource.close();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [participants]); // Always make sure participants available first
+
+  useEffect(() => {
+    setCardListTodo(
+      linkCards(cards, "todo", participants, true, currentSprint.id)
+    );
+    setcardListinProgress(
+      linkCards(cards, "inProgress", participants, true, currentSprint.id)
+    );
+    setCardListDone(
+      linkCards(cards, "done", participants, true, currentSprint.id)
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cards, currentSprint]);
 
   return (
     <LoggedUserProvider authToken={authToken}>
@@ -312,6 +163,7 @@ const Sprint = ({ authToken }) => {
                 setCards={setCards}
                 cardList={cardListTodo}
                 columnColor={"red.500"}
+                isLoading={isLoading}
               />
               <Column
                 key={1}
@@ -321,7 +173,8 @@ const Sprint = ({ authToken }) => {
                 setCards={setCards}
                 cardList={cardListinProgress}
                 columnColor={"blue.500"}
-                pointerEvent={!isSprint || isPending ? "none" : "auto"}
+                isLoading={isLoading}
+                isDragDisabled={!isSprint || isPending}
               />
               <Column
                 key={2}
@@ -331,7 +184,8 @@ const Sprint = ({ authToken }) => {
                 setCards={setCards}
                 cardList={cardListDone}
                 columnColor={"green.500"}
-                pointerEvent={!isSprint || isPending ? "none" : "auto"}
+                isLoading={isLoading}
+                isDragDisabled={!isSprint || isPending}
               />
             </Board>
           ) : null}

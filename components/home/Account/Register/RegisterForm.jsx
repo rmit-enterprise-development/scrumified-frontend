@@ -110,10 +110,15 @@ const RegisterForm = ({
       // off laoding
       await setIsSignUpLoading(false);
 
+      const errorContent =
+        (await typeof error) !== 'string' ? error.toString() : error;
+
       // toast msg
       await toast({
         title: 'Registration',
-        description: typeof error !== 'string'? error.toString() : error,
+        description: errorContent.includes('400')
+          ? 'Your email has been used. Please try another one.'
+          : errorContent,
         status: 'error',
         duration: 3000,
         isClosable: true,

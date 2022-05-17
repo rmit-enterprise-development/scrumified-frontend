@@ -100,7 +100,7 @@ const Card = ({
             }}
             boxSizing="border-box"
             borderRadius="1rem"
-            overflow="hidden"
+            // overflow="hidden"
             bg={bg}
             color={color}
             mb={4}

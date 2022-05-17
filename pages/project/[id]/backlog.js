@@ -42,9 +42,6 @@ const Backlog = ({ authToken }) => {
   const [currentSprint, setCurrentSprint] = useState({});
   const [isSprint, setIsSprint] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const currentTime = new Date(Date.now()).getTime();
-  const currentDate = Math.floor(currentTime / 1000);
-
   const [isActive, setIsActive] = useState(false);
 
   const getCurrentSprint = async () => {
@@ -57,10 +54,7 @@ const Backlog = ({ authToken }) => {
         Object.keys(json).length !== 0 && json.constructor === Object
       );
 
-      const currentTime = new Date(Date.now()).getTime();
-      const currentDate = Math.floor(currentTime / 1000);
-
-      setIsActive(currentDate >= json.startDate);
+      setIsActive(json.status === "inProgress");
       setIsLoading(false);
     } catch (error) {
       console.log(error);

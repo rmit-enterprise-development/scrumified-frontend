@@ -76,6 +76,8 @@ const SprintDrawer = ({
         setIsSubmitting(false);
         toast({
           title: "Create sprint successfully!",
+          description:
+            "You can add story to sprint and start it in Sprint page",
           status: "success",
           duration: 2000,
           isClosable: true,
@@ -84,6 +86,13 @@ const SprintDrawer = ({
       }
     } catch (error) {
       console.log(error);
+      toast({
+        title: "Create sprint failed!",
+        description: "Please contact your administrator.",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
     } finally {
       refetchCurrentSprint();
     }
@@ -103,6 +112,13 @@ const SprintDrawer = ({
       }
     } catch (error) {
       console.log(error);
+      toast({
+        title: "Update sprint failed!",
+        description: "Please contact your administrator.",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
     } finally {
       refetchCurrentSprint();
     }
@@ -123,6 +139,13 @@ const SprintDrawer = ({
       }
     } catch (error) {
       console.log(error);
+      toast({
+        title: "Delete sprint failed!",
+        description: "Please contact your administrator.",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
     } finally {
       refetchCurrentSprint("delete");
     }

@@ -1,6 +1,7 @@
 import { Flex, Skeleton, Tag, Text, useColorModeValue } from "@chakra-ui/react";
 import { Droppable } from "react-beautiful-dnd";
 import { GoTasklist } from "react-icons/go";
+import { AiOutlineStop } from "react-icons/ai";
 import NoItem from "../common/NoItem/NoItem";
 
 const Column = ({
@@ -9,6 +10,7 @@ const Column = ({
   cardList,
   columnColor,
   isLoading,
+  sprintStatus,
   isDragDisabled,
 }) => {
   let color = useColorModeValue("#031d46", "#fffdfe");
@@ -28,6 +30,8 @@ const Column = ({
       px={4}
       mb={4}
       h="77vh"
+      minW="300px"
+      overflow="auto"
     >
       <Flex alignItems={"center"}>
         <Text
@@ -53,7 +57,7 @@ const Column = ({
         </Tag>
       </Flex>
 
-      <Skeleton isLoaded={!isLoading}>
+      <Skeleton isLoaded={!isLoading} h="100%">
         <Droppable droppableId={id} isDropDisabled={isDragDisabled}>
           {(provided) => (
             <Flex
@@ -62,14 +66,22 @@ const Column = ({
               ref={provided.innerRef}
               {...provided.droppableProps}
               padding={"2"}
-              // overflow={"auto"}
-              h="20rem"
+              overflow="auto"
+              // h="20rem"
             >
-              {cardList && cardList.length === 0 && (
-                <NoItem icon={GoTasklist}>
-                  No item found. Create some inside backlog!
-                </NoItem>
-              )}
+              {cardList &&
+                cardList.length === 0 &&
+                (isDragDisabled ? (
+                  <NoItem icon={AiOutlineStop}>
+                    Please start sprint to drag and drop
+                  </NoItem>
+                ) : sprintStatus === "inProgress" ? (
+                  <></>
+                ) : (
+                  <NoItem icon={GoTasklist}>
+                    No item found. Create some inside backlog!
+                  </NoItem>
+                ))}
               {cardList}
               {provided.placeholder}
             </Flex>

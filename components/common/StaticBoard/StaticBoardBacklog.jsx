@@ -20,6 +20,7 @@ const StaticBoardBacklog = ({ storyList, participants, sprintId }) => {
       px={4}
       mb={5}
       h="77vh"
+      minW="300px"
     >
       <Text
         textAlign={"center"}
@@ -35,7 +36,7 @@ const StaticBoardBacklog = ({ storyList, participants, sprintId }) => {
         flexDirection={"column"}
         flexGrow={1}
         padding={"2"}
-        overflow={"scroll"}
+        overflow="auto"
         h="20rem"
       >
         {storyList && storyList.length === 0 && (

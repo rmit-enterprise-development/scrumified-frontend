@@ -81,6 +81,7 @@ const StaticCardBacklog = ({ card, participants, sprintId }) => {
         transition: "all 0.4s linear",
       }}
       minH="6rem"
+      minW="250px"
       onClick={() => {
         onOpen();
       }}

@@ -5,7 +5,7 @@ import GanttChart from "../../../components/roadmap/GanttChart";
 import projectAPI from "../../../api/services/projectAPI";
 import cookies from "next-cookies";
 import { LoggedUserProvider } from "../../../components/common/LoggedUserProvider";
-import { useRouter } from 'next/router';
+import { useRouter } from "next/router";
 import { GiConsoleController } from "react-icons/gi";
 import { useToast, Skeleton } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
@@ -19,11 +19,11 @@ const Roadmap = ({ authToken }) => {
     { type: "date", label: "End Date" },
     { type: "number", label: "Duration" },
     { type: "number", label: "Percentage done" },
-    { type: "string", lable: "Dependencies"}
+    { type: "string", lable: "Dependencies" },
   ];
 
   const { asPath } = useRouter();
-  const projectId = asPath.split('/')[2];
+  const projectId = asPath.split("/")[2];
   const toast = useToast();
   const [allSprints, setAllSprints] = useState();
   const [isLoading, setIsLoading] = useState(true);
@@ -31,33 +31,33 @@ const Roadmap = ({ authToken }) => {
   const sprintData = async () => {
     try {
       setIsLoading(true);
-      const response = await projectAPI.getAllSprints(projectId, {includePercentage: true});
+      const response = await projectAPI.getAllSprints(projectId, {
+        includePercentage: true,
+      });
       const json = await response.data;
 
       const sprints = [];
       let sprint;
       for (let i = 0; i < response.data.length; i++) {
-        sprint = ['' + json[i].id,
-                  "Sprint " + json[i].id,
-                  null,
-                  new Date(json[i].startDate * 1000),
-                  new Date(json[i].endDate * 1000),
-                  null,
-                  json[i].completePercentage,
-                  null];
+        sprint = [
+          "" + json[i].id,
+          "Sprint: " + json[i].goal,
+          null,
+          new Date(json[i].startDate * 1000),
+          new Date(json[i].endDate * 1000),
+          null,
+          json[i].completePercentage,
+          null,
+        ];
         sprints.push(sprint);
       }
-      console.log(sprint)
+      console.log(sprint);
       setAllSprints(sprints);
       setIsLoading(false);
-    }
-    catch (error) {
+    } catch (error) {
       toast({
         title: "Get Sprint",
-        description:
-          typeof error !== "string"
-            ? "Server error"
-            : error,
+        description: typeof error !== "string" ? "Server error" : error,
         status: "error",
         duration: 3000,
         isClosable: true,
@@ -76,10 +76,12 @@ const Roadmap = ({ authToken }) => {
       </Head>
 
       <MainContainer>
-        <SectionHeader>Project Roadmap</SectionHeader> 
-        {isLoading ? (<Skeleton height="40px"></Skeleton>)
-                    : ( <GanttChart data={[columns, ...allSprints]} />)}
-
+        <SectionHeader>Project Roadmap</SectionHeader>
+        {isLoading ? (
+          <Skeleton height="40px"></Skeleton>
+        ) : (
+          <GanttChart data={[columns, ...allSprints]} />
+        )}
       </MainContainer>
     </LoggedUserProvider>
   );

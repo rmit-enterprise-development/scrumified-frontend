@@ -28,7 +28,6 @@ const Card = ({
   isActive,
   ...props
 }) => {
-  console.log("isActive: ", isActive);
   let color = useColorModeValue("#031d46", "#fffdfe");
   let bg = useColorModeValue("white", "#405A7D");
   let btnBg = useColorModeValue("gray.200", "#fffdfe");
@@ -96,6 +95,7 @@ const Card = ({
               transition: "all 0.4s linear",
             }}
             minH="6rem"
+            minW="250px"
           >
             <Flex alignItems={"center"} justifyContent={"space-between"}>
               <Heading fontSize="lg" isTruncated>

@@ -29,9 +29,7 @@ const Sprint = ({ authToken }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [currentSprint, setCurrentSprint] = useState({});
   const [isSprint, setIsSprint] = useState(false);
-  const currentTime = new Date(Date.now()).getTime();
-  const currentDate = Math.floor(currentTime / 1000);
-  const isActive = currentDate >= currentSprint.startDate;
+  const [isActive, setIsActive] = useState(false);
 
   const getParticipants = async () => {
     setIsLoading(true);
@@ -57,6 +55,7 @@ const Sprint = ({ authToken }) => {
       setIsSprint(
         Object.keys(json).length !== 0 && json.constructor === Object
       );
+      setIsActive(json.status === "inProgress");
 
       const responseStories = await sprintAPI.getAllStories(json.id);
       setCards(responseStories.data);
@@ -147,9 +146,11 @@ const Sprint = ({ authToken }) => {
             </Skeleton>
           </Flex>
           <SprintController
+            sprintId={currentSprint.id}
             isSprint={isSprint}
             isActive={isActive}
             points={points}
+            getCurrentSprint={getCurrentSprint}
           />
           {winReady ? (
             <Board
@@ -171,6 +172,8 @@ const Sprint = ({ authToken }) => {
                 cardList={cardListTodo}
                 columnColor={"red.500"}
                 isLoading={isLoading}
+                sprintStatus={currentSprint.status}
+                isDragDisabled={false}
               />
               <Column
                 key={1}
@@ -181,6 +184,7 @@ const Sprint = ({ authToken }) => {
                 cardList={cardListinProgress}
                 columnColor={"blue.500"}
                 isLoading={isLoading}
+                sprintStatus={currentSprint.status}
                 isDragDisabled={!isSprint || !isActive}
               />
               <Column
@@ -192,6 +196,7 @@ const Sprint = ({ authToken }) => {
                 cardList={cardListDone}
                 columnColor={"green.500"}
                 isLoading={isLoading}
+                sprintStatus={currentSprint.status}
                 isDragDisabled={!isSprint || !isActive}
               />
             </Board>

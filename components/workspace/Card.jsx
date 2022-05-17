@@ -1,4 +1,4 @@
-import { AddIcon, Icon, MinusIcon, RepeatClockIcon } from "@chakra-ui/icons";
+import { AddIcon, MinusIcon } from "@chakra-ui/icons";
 import {
   Badge,
   Box,
@@ -7,11 +7,7 @@ import {
   Heading,
   IconButton,
   Text,
-  Tooltip,
-  useDisclosure,
-  WrapItem,
-  useColorModeValue,
-  useToast,
+  Tooltip, useColorModeValue, useDisclosure, useToast, WrapItem
 } from "@chakra-ui/react";
 import Avvvatars from "avvvatars-react";
 import { useState } from "react";

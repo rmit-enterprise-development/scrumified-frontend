@@ -6,22 +6,13 @@ import projectAPI from "../../../api/services/projectAPI";
 import cookies from "next-cookies";
 import { LoggedUserProvider } from "../../../components/common/LoggedUserProvider";
 import { useRouter } from 'next/router';
-import { GiConsoleController } from "react-icons/gi";
 import { useToast, Skeleton } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
+import NoItem from "../../../components/common/NoItem/NoItem";
+import { GoInfo } from "react-icons/go";
+import CompletedSprints from "../../../components/roadmap/CompletedSprints"
 
 const Roadmap = ({ authToken }) => {
-  const columns = [
-    { type: "string", label: "Task ID" },
-    { type: "string", label: "Task Name" },
-    { type: "string", label: "Resource" },
-    { type: "date", label: "Start Date" },
-    { type: "date", label: "End Date" },
-    { type: "number", label: "Duration" },
-    { type: "number", label: "Percentage done" },
-    { type: "string", lable: "Dependencies"}
-  ];
-
   const { asPath } = useRouter();
   const projectId = asPath.split('/')[2];
   const toast = useToast();
@@ -30,25 +21,10 @@ const Roadmap = ({ authToken }) => {
 
   const sprintData = async () => {
     try {
-      setIsLoading(true);
       const response = await projectAPI.getAllSprints(projectId, {includePercentage: true});
       const json = await response.data;
 
-      const sprints = [];
-      let sprint;
-      for (let i = 0; i < response.data.length; i++) {
-        sprint = ['' + json[i].id,
-                  "Sprint " + json[i].id,
-                  null,
-                  new Date(json[i].startDate * 1000),
-                  new Date(json[i].endDate * 1000),
-                  null,
-                  json[i].completePercentage,
-                  null];
-        sprints.push(sprint);
-      }
-      console.log(sprint)
-      setAllSprints(sprints);
+      setAllSprints(json);
       setIsLoading(false);
     }
     catch (error) {
@@ -78,8 +54,13 @@ const Roadmap = ({ authToken }) => {
       <MainContainer>
         <SectionHeader>Project Roadmap</SectionHeader> 
         {isLoading ? (<Skeleton height="40px"></Skeleton>)
-                    : ( <GanttChart data={[columns, ...allSprints]} />)}
-
+                  : ( allSprints.length > 0 ? <GanttChart data={allSprints} /> : <NoItem icon={GoInfo}>No sprint created</NoItem> )
+        }
+        
+        {isLoading ? (<Skeleton height="40px"></Skeleton>)
+                  : ( <CompletedSprints sprintList={allSprints} /> )
+        }
+        
       </MainContainer>
     </LoggedUserProvider>
   );

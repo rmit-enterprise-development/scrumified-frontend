@@ -1,4 +1,4 @@
-import { AddIcon, Icon, MinusIcon, RepeatClockIcon } from "@chakra-ui/icons";
+import { AddIcon, MinusIcon } from "@chakra-ui/icons";
 import {
   Badge,
   Box,
@@ -7,10 +7,7 @@ import {
   Heading,
   IconButton,
   Text,
-  Tooltip,
-  useDisclosure,
-  WrapItem,
-  useColorModeValue,
+  Tooltip, useColorModeValue, useDisclosure, useToast, WrapItem
 } from "@chakra-ui/react";
 import Avvvatars from "avvvatars-react";
 import { useState } from "react";
@@ -20,12 +17,20 @@ import { BadgeColor, Category } from "../../config/constants";
 import textUtils from "../../utils/text";
 import CardModal from "./CardModal";
 
-const Card = ({ participants, card, disableModal, sprintId, ...props }) => {
+const Card = ({
+  participants,
+  card,
+  disableModal,
+  sprintId,
+  isActive,
+  ...props
+}) => {
   let color = useColorModeValue("#031d46", "#fffdfe");
   let bg = useColorModeValue("white", "#405A7D");
   let btnBg = useColorModeValue("gray.200", "#fffdfe");
-
+  const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const getUserInfoValue = (id) => {
     if (participants.length > 0) {
       const user = Object.values(participants).find((p) => p.id === id);
@@ -44,22 +49,36 @@ const Card = ({ participants, card, disableModal, sprintId, ...props }) => {
 
   const handleUpdateStatus = async () => {
     if (sprintId) {
+      setIsSubmitting(true);
       try {
-        const response = storyAPI.putStory(
+        const response = await storyAPI.putStory(
           // Specialized params for add/remove story from sprint
           card.id,
           {
             replaceStoryId: null,
-            sprintId: sprintId,
-            status: "todo",
+            sprintId: card.status === "backlog" ? sprintId : null,
+            status: card.status === "backlog" ? "todo" : "backlog",
           },
           {
             isDragged: true,
           }
         );
-        console.log(response);
+        if (response) {
+          toast({
+            title: "Update story successfully!",
+            status: "success",
+            duration: 1500,
+            isClosable: true,
+          });
+        }
       } catch (error) {
         console.log(error);
+        toast({
+          title: "Update story failed!",
+          status: "error",
+          duration: 1500,
+          isClosable: true,
+        });
       }
     }
   };
@@ -77,7 +96,7 @@ const Card = ({ participants, card, disableModal, sprintId, ...props }) => {
             }}
             boxSizing="border-box"
             borderRadius="1rem"
-            overflow="hidden"
+            // overflow="hidden"
             bg={bg}
             color={color}
             mb={4}
@@ -88,13 +107,14 @@ const Card = ({ participants, card, disableModal, sprintId, ...props }) => {
               transition: "all 0.4s linear",
             }}
             minH="6rem"
+            minW="250px"
           >
             <Flex alignItems={"center"} justifyContent={"space-between"}>
               <Heading fontSize="lg" isTruncated>
                 {card.userStory}
               </Heading>
 
-              {sprintId && (
+              {sprintId && !isActive && (
                 <WrapItem>
                   <Tooltip
                     label={
@@ -122,6 +142,7 @@ const Card = ({ participants, card, disableModal, sprintId, ...props }) => {
                           <MinusIcon color="red" />
                         )
                       }
+                      disabled={isSubmitting}
                     />
                   </Tooltip>
                 </WrapItem>
@@ -133,6 +154,7 @@ const Card = ({ participants, card, disableModal, sprintId, ...props }) => {
               justifyContent="space-between"
               alignItems={"center"}
               alignContent={"center"}
+              gap={3}
             >
               <Flex alignItems={"center"}>
                 <Text paddingRight={2}>Assignees:</Text>

@@ -36,6 +36,11 @@ const sprintAPI = {
     const url = `/projects/${sprintId}/stories`;
     return axiosClient.delete(url, storyId);
   },
+
+  completeSprint: (sprintId) => {
+    const url = `/sprints/${sprintId}/completed`;
+    return axiosClient.post(url, sprintId);
+  },
 };
 
 export default sprintAPI;

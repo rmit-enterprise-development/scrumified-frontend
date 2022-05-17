@@ -71,11 +71,13 @@ const SprintDrawer = ({
 
   const createSprint = async (sprint) => {
     try {
-      const response = projectAPI.postSprint(projectId, sprint);
+      const response = await projectAPI.postSprint(projectId, sprint);
       if (response) {
         setIsSubmitting(false);
         toast({
           title: "Create sprint successfully!",
+          description:
+            "You can add story to sprint and start it in Sprint page",
           status: "success",
           duration: 2000,
           isClosable: true,
@@ -84,13 +86,20 @@ const SprintDrawer = ({
       }
     } catch (error) {
       console.log(error);
+      toast({
+        title: "Create sprint failed!",
+        description: "Please contact your administrator.",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
     } finally {
       refetchCurrentSprint();
     }
   };
-  const updateSprint = (sprint) => {
+  const updateSprint = async (sprint) => {
     try {
-      const response = sprintAPI.putSprint(sprint.id, sprint);
+      const response = await sprintAPI.putSprint(sprint.id, sprint);
       if (response) {
         setIsSubmitting(false);
         toast({
@@ -103,14 +112,21 @@ const SprintDrawer = ({
       }
     } catch (error) {
       console.log(error);
+      toast({
+        title: "Update sprint failed!",
+        description: "Please contact your administrator.",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
     } finally {
       refetchCurrentSprint();
     }
   };
 
-  const deleteSprint = (id) => {
+  const deleteSprint = async (id) => {
     try {
-      const response = sprintAPI.deleteSprint(id);
+      const response = await sprintAPI.deleteSprint(id);
       if (response) {
         setIsSubmitting(false);
         toast({
@@ -123,6 +139,13 @@ const SprintDrawer = ({
       }
     } catch (error) {
       console.log(error);
+      toast({
+        title: "Delete sprint failed!",
+        description: "Please contact your administrator.",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
     } finally {
       refetchCurrentSprint("delete");
     }

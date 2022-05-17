@@ -8,7 +8,6 @@ const calculatePointsAllColumn = (cards) => {
   for (let key in cards) {
     if (cards[key].status in result) {
       const status = cards[key].status;
-      console.log("status: ", status);
       result[status] += cards[key].point;
     }
   }

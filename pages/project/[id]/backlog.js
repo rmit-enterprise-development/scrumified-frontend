@@ -30,7 +30,7 @@ const Backlog = ({ authToken }) => {
   const [cardList, setCardList] = useState([]);
   const [participants, setParticipants] = useState([]);
 
-  const [winReady, setwinReady] = useState(false);
+  const [winReady, setWinReady] = useState(false);
   // Filtered Card (from Backlog Controller)
   const [filteredCard, setFilteredCard] = useState({
     isFilter: false,
@@ -42,44 +42,7 @@ const Backlog = ({ authToken }) => {
   const [currentSprint, setCurrentSprint] = useState({});
   const [isSprint, setIsSprint] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const currentTime = new Date(Date.now()).getTime();
-  const currentDate = Math.floor(currentTime / 1000);
-
-  const [isPending, setIsPending] = useState(false);
-
-  const getCurrentSprint = async () => {
-    setIsLoading(true);
-    try {
-      const response = await projectAPI.getCurrentSprint(projectId);
-      const json = response.data;
-      setCurrentSprint(json);
-      setIsSprint(
-        Object.keys(json).length !== 0 && json.constructor === Object
-      );
-
-      const currentTime = new Date(Date.now()).getTime();
-      const currentDate = Math.floor(currentTime / 1000);
-
-      setIsPending(currentDate < json.startDate);
-      setIsLoading(false);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const refetchCurrentSprint = (type) => {
-    console.log("type: ", type);
-
-    if (type === "delete") {
-      setIsLoading(true);
-      setCurrentSprint({});
-      setIsSprint(false);
-      setIsLoading(false);
-    } else {
-      getCurrentSprint();
-      setIsSprint(true);
-    }
-  };
+  const [isActive, setIsActive] = useState(false);
 
   const getParticipants = async () => {
     setIsLoading(true);
@@ -97,39 +60,70 @@ const Backlog = ({ authToken }) => {
     }
   };
 
-  const getCards = async () => {
+  const getCurrentSprint = async () => {
     setIsLoading(true);
     try {
-      const response = await projectAPI.getAllStories(projectId, {
+      const response = await projectAPI.getCurrentSprint(projectId);
+      const json = response.data;
+      setCurrentSprint(json);
+      setIsSprint(
+        Object.keys(json).length !== 0 && json.constructor === Object
+      );
+
+      setIsActive(json.status === "inProgress");
+
+      const responseStories = await projectAPI.getAllStories(projectId, {
         isBacklog: true,
         returnArray: false,
       });
-      const json = response.data;
-      setCards(json);
+      setCards(responseStories.data);
       setIsLoading(false);
     } catch (error) {
       console.log(error);
     }
   };
 
+  const refetchCurrentSprint = (type) => {
+    if (type === "delete") {
+      setIsLoading(true);
+      setCurrentSprint({});
+      setIsSprint(false);
+      setIsLoading(false);
+    } else {
+      getCurrentSprint();
+      setIsSprint(true);
+    }
+  };
+
+  // const getCards = async () => {
+  //   setIsLoading(true);
+  //   try {
+  //     const response = await projectAPI.getAllStories(projectId, {
+  //       isBacklog: true,
+  //       returnArray: false,
+  //     });
+  //     const json = response.data;
+  //     setCards(json);
+  //     setIsLoading(false);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
   useEffect(() => {
-    setwinReady(true);
+    setWinReady(true);
     getParticipants(); // Always get participants first
     getCurrentSprint();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    getCards();
-    // getCurrentSprint();
-
     const uri = `https://scrumified-dev-bakend.herokuapp.com/backlog?projectId=${projectId}`;
     let eventSource = new EventSource(uri);
     eventSource.onopen = (e) => {
       console.log("Open Backlog Event Source!");
     };
-    eventSource.addEventListener("updateCards", getCards);
-    eventSource.addEventListener("updateSprint", getCurrentSprint);
+    eventSource.addEventListener("update", getCurrentSprint);
     return () => {
       eventSource.close();
     };
@@ -142,7 +136,8 @@ const Backlog = ({ authToken }) => {
       "backlog",
       participants,
       false,
-      currentSprint.id
+      currentSprint.id,
+      isActive
     );
     setCardList(tmp);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -193,12 +188,12 @@ const Backlog = ({ authToken }) => {
                   variant="outline"
                   size="md"
                   colorScheme={
-                    isPending
-                      ? SprintColor.PENDING_SPRINT
-                      : SprintColor.ACTIVE_SPRINT
+                    isActive
+                      ? SprintColor.ACTIVE_SPRINT
+                      : SprintColor.PENDING_SPRINT
                   }
                 >
-                  {isPending ? "PENDING SPRINT" : "ACTIVE SPRINT"}
+                  {isActive ? "ACTIVE SPRINT" : "PENDING SPRINT"}
                 </Tag>
               )}
             </Skeleton>
@@ -225,17 +220,16 @@ const Backlog = ({ authToken }) => {
               cardList={cardList}
               isBacklog={true}
             >
-              <Skeleton isLoaded={!isLoading}>
-                <Column
-                  key={0}
-                  title={"Stories"}
-                  id={"backlog"}
-                  cards={cards}
-                  setCards={setCards}
-                  cardList={cardList}
-                  columnColor={"gray.500"}
-                />
-              </Skeleton>
+              <Column
+                key={0}
+                title={"Stories"}
+                id={"backlog"}
+                cards={cards}
+                setCards={setCards}
+                cardList={cardList}
+                columnColor={"gray.500"}
+                isLoading={isLoading}
+              />
             </Board>
           ) : null}
         </Box>

@@ -1,9 +1,18 @@
-import { Flex, Tag, Text, useColorModeValue } from "@chakra-ui/react";
+import { Flex, Skeleton, Tag, Text, useColorModeValue } from "@chakra-ui/react";
 import { Droppable } from "react-beautiful-dnd";
 import { GoTasklist } from "react-icons/go";
+import { AiOutlineStop } from "react-icons/ai";
 import NoItem from "../common/NoItem/NoItem";
 
-const Column = ({ title, id, cardList, columnColor, pointerEvent }) => {
+const Column = ({
+  title,
+  id,
+  cardList,
+  columnColor,
+  isLoading,
+  sprintStatus,
+  isDragDisabled,
+}) => {
   let color = useColorModeValue("#031d46", "#fffdfe");
   return (
     <Flex
@@ -21,7 +30,7 @@ const Column = ({ title, id, cardList, columnColor, pointerEvent }) => {
       px={4}
       mb={4}
       h="77vh"
-      pointerEvents={pointerEvent ? pointerEvent : "auto"}
+      minW="350px"
     >
       <Flex alignItems={"center"}>
         <Text
@@ -46,7 +55,8 @@ const Column = ({ title, id, cardList, columnColor, pointerEvent }) => {
           {cardList.length === 1 ? `1 card` : `${cardList.length} cards`}
         </Tag>
       </Flex>
-      <Droppable droppableId={id}>
+
+      <Droppable droppableId={id} isDropDisabled={isDragDisabled}>
         {(provided) => (
           <Flex
             flexDirection={"column"}
@@ -54,14 +64,21 @@ const Column = ({ title, id, cardList, columnColor, pointerEvent }) => {
             ref={provided.innerRef}
             {...provided.droppableProps}
             padding={"2"}
-            overflow={"auto"}
-            h="20rem"
+            overflow="scroll"
           >
-            {cardList && cardList.length === 0 && (
-              <NoItem icon={GoTasklist}>
-                No item found. Add stories from backlog and start a sprint!
-              </NoItem>
-            )}
+            {cardList &&
+              cardList.length === 0 &&
+              (isDragDisabled ? (
+                <NoItem icon={AiOutlineStop}>
+                  Please start sprint to drag and drop
+                </NoItem>
+              ) : sprintStatus === "inProgress" ? (
+                <></>
+              ) : (
+                <NoItem icon={GoTasklist}>
+                  No item found. Create some inside backlog!
+                </NoItem>
+              ))}
             {cardList}
             {provided.placeholder}
           </Flex>

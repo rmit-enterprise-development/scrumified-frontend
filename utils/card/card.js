@@ -5,7 +5,8 @@ export default function linkCards(
   category,
   participants,
   disableModal,
-  sprintId
+  sprintId,
+  isActive
 ) {
   let renderCards = [];
   let tmp = null;
@@ -34,6 +35,7 @@ export default function linkCards(
         participants={participants}
         disableModal={disableModal}
         sprintId={sprintId}
+        isActive={isActive}
       />
     );
     if (!!tmp.childStoryId) tmp = cards[tmp.childStoryId];

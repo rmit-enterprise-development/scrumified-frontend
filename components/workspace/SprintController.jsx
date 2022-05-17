@@ -8,20 +8,76 @@ import {
   Tooltip,
   useBreakpointValue,
   useColorModeValue,
+  useToast,
   WrapItem,
 } from "@chakra-ui/react";
+import sprintAPI from "../../api/services/sprintAPI";
 
-const SprintController = ({ isSprint, isPending, points }) => {
+const SprintController = ({
+  sprintId,
+  isSprint,
+  isActive,
+  points,
+  getCurrentSprint,
+  setCards,
+}) => {
   let color = useColorModeValue("#031d46", "#fffdfe");
   let btnBg = useColorModeValue("gray.200", "#fffdfe");
   let btnColor = "black";
   let bg = useColorModeValue("gray.100", "#405A7D");
-
-  const handleStartSprint = () => {
-    console.log("Start Sprint");
+  const toast = useToast();
+  const handleStartSprint = async () => {
+    try {
+      const response = await sprintAPI.putSprint(sprintId, {
+        status: "inProgress",
+        startDate: Math.floor(new Date().getTime() / 1000),
+      });
+      if (response) {
+        toast({
+          title: "Start sprint successfully!",
+          description: "You can start dragging the cards!",
+          status: "success",
+          duration: 2000,
+          isClosable: true,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      toast({
+        title: "Start sprint failed!",
+        description: "Please contact your administrator.",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
+    } finally {
+      getCurrentSprint();
+    }
   };
-  const handleCompleteSprint = () => {
-    console.log("Complete Sprint");
+  const handleCompleteSprint = async () => {
+    try {
+      const response = await sprintAPI.completeSprint(sprintId);
+      if (response) {
+        toast({
+          title: "Complete sprint successfully!",
+          description: "You can check the archived sprint in Roadmap",
+          status: "success",
+          duration: 2000,
+          isClosable: true,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      toast({
+        title: "Complete sprint failed!",
+        description: "Please contact your administrator.",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
+      });
+    } finally {
+      getCurrentSprint();
+    }
   };
 
   return (
@@ -67,15 +123,15 @@ const SprintController = ({ isSprint, isPending, points }) => {
         </Flex>
         {isSprint && (
           <Button
-            colorScheme={isPending ? "telegram" : "teal"}
+            colorScheme={isActive ? "teal" : "telegram"}
             // color={useColorModeValue("#FFFDFE", "#2d4046")}
-            onClick={isPending ? handleStartSprint : handleCompleteSprint}
+            onClick={isActive ? handleCompleteSprint : handleStartSprint}
             // style={{
-            //   display: isPending ? "none" : "flex",
+            //   display: isActive ? "none" : "flex",
             // }}
             disabled={!isSprint}
           >
-            {isPending ? "Start Sprint" : "Complete Sprint"}
+            {isActive ? "Complete Sprint" : "Start Sprint"}
           </Button>
         )}
       </Flex>

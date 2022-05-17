@@ -10,7 +10,7 @@ import {
   Tooltip,
   useColorModeValue,
   useDisclosure,
-  WrapItem,
+  WrapItem
 } from "@chakra-ui/react";
 import Avvvatars from "avvvatars-react";
 import Router from "next/router";
@@ -47,7 +47,7 @@ const StaticCardBacklog = ({ card, participants, sprintId }) => {
   const handleUpdateStatus = async () => {
     if (sprintId) {
       try {
-        const response = storyAPI.putStory(
+        const response = await storyAPI.putStory(
           // Specialized params for add/remove story from sprint
           card.id,
           {
@@ -81,6 +81,7 @@ const StaticCardBacklog = ({ card, participants, sprintId }) => {
         transition: "all 0.4s linear",
       }}
       minH="6rem"
+      minW="250px"
       onClick={() => {
         onOpen();
       }}

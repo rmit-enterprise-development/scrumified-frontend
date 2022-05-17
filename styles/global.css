@@ -1,3 +1,7 @@
+*{
+  -ms-overflow-style: none;
+}
+
 html {
   scroll-behavior: smooth;
   overscroll-behavior: none;
@@ -6,6 +10,8 @@ html {
 body {
   overscroll-behavior: none;
 }
+
+body::-webkit-scrollbar {display: none;}
 
 .react-datepicker {
   font-family: unset;

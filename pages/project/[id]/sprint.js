@@ -16,150 +16,39 @@ import { SprintColor } from "../../../config/constants";
 import sprintAPI from "../../../api/services/sprintAPI";
 import calculatePointsAllColumn from "../../../utils/card/point";
 
-const initData = {
-  9: {
-    id: 9,
-    userStory: "A",
-    category: "category",
-    createdDate: 1652268620,
-    point: 4,
-    defOfDone: "abc",
-    status: "todo",
-    parentStoryId: null,
-    childStoryId: 11,
-    projectId: 2,
-    sprintId: 4,
-    assignId: 2,
-    links: [
-      {
-        rel: "self",
-        href: "http://127.0.0.1:8989/stories/9",
-      },
-    ],
-  },
-  11: {
-    id: 11,
-    userStory: "B",
-    category: "category",
-    createdDate: 1652282290,
-    point: 4,
-    defOfDone: "abc",
-    status: "todo",
-    parentStoryId: 9,
-    childStoryId: 8,
-    projectId: 2,
-    sprintId: 4,
-    assignId: 2,
-    links: [
-      {
-        rel: "self",
-        href: "http://127.0.0.1:8989/stories/11",
-      },
-    ],
-  },
-  8: {
-    id: 8,
-    userStory: "C",
-    category: "category",
-    createdDate: 1652171796,
-    point: 4,
-    defOfDone: null,
-    status: "todo",
-    parentStoryId: 11,
-    childStoryId: 10,
-    projectId: 2,
-    sprintId: 4,
-    assignId: 2,
-    links: [
-      {
-        rel: "self",
-        href: "http://127.0.0.1:8989/stories/8",
-      },
-    ],
-  },
-  10: {
-    id: 10,
-    userStory: "D",
-    category: "category",
-    createdDate: 1652282226,
-    point: 4,
-    defOfDone: "abc",
-    status: "todo",
-    parentStoryId: 8,
-    childStoryId: 12,
-    projectId: 2,
-    sprintId: 4,
-    assignId: 2,
-    links: [
-      {
-        rel: "self",
-        href: "http://127.0.0.1:8989/stories/10",
-      },
-    ],
-  },
-  12: {
-    id: 12,
-    userStory: "E",
-    category: "category",
-    createdDate: 1652282434,
-    point: 4,
-    defOfDone: "abc",
-    status: "done",
-    parentStoryId: 12,
-    childStoryId: null,
-    projectId: 2,
-    sprintId: 4,
-    assignId: 2,
-    links: [
-      {
-        rel: "self",
-        href: "http://127.0.0.1:8989/stories/12",
-      },
-    ],
-  },
-};
-
 const Sprint = ({ authToken }) => {
   const { asPath } = useRouter();
 
   const projectId = asPath.split("/")[2];
-
-  const getParticipants = async () => {
-    const response = await projectAPI.getProject(projectId);
-    const json = response.data;
-    if (json.participants) {
-      return [json.owner, ...json.participants];
-    } else {
-      return [json.owner];
-    }
-  };
-
-  const getCards = async () => {
-    const response = await projectAPI.getAllStories(projectId, {
-      isBacklog: true,
-    });
-    const json = response.data;
-    return json;
-  };
-
-  const [cards, setCards] = useState(initData);
-  console.log("cards: ", cards);
+  const [cards, setCards] = useState([]);
   const [cardListTodo, setCardListTodo] = useState([]);
-  const [cardListinProgress, setcardListinProgress] = useState([]);
+  const [cardListInProgress, setCardListInProgress] = useState([]);
   const [cardListDone, setCardListDone] = useState([]);
   const [participants, setParticipants] = useState([]);
 
   const [isLoading, setIsLoading] = useState(true);
   const [currentSprint, setCurrentSprint] = useState({});
   const [isSprint, setIsSprint] = useState(false);
-  const currentTime = new Date(Date.now()).getTime();
-  const currentDate = Math.floor(currentTime / 1000);
-  const isPending = currentDate < currentSprint.startDate;
+  const [isActive, setIsActive] = useState(false);
 
-  const points = calculatePointsAllColumn(cards);
-  console.log("points: ", points);
+  const getParticipants = async () => {
+    setIsLoading(true);
+    try {
+      const response = await projectAPI.getProject(projectId);
+      const json = response.data;
+      if (json.participants) {
+        setParticipants([json.owner, ...json.participants]);
+      } else {
+        setParticipants([json.owner]);
+      }
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const getCurrentSprint = async () => {
+    setIsLoading(true);
     try {
       const response = await projectAPI.getCurrentSprint(projectId);
       const json = response.data;
@@ -168,89 +57,63 @@ const Sprint = ({ authToken }) => {
         Object.keys(json).length !== 0 && json.constructor === Object
       );
 
+      // Tear down
+      if (json) {
+        setIsActive(json.status === "inProgress");
+        const responseStories = await sprintAPI.getAllStories(json.id);
+        setCards(responseStories.data);
+      } else {
+        setCards([]);
+      }
+
       setIsLoading(false);
     } catch (error) {
       console.log(error);
     }
   };
 
-  const getStories = async () => {
-    try {
-      const response = await sprintAPI.getAllStories(2);
-      console.log(response.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const points = calculatePointsAllColumn(cards);
+
+  const [winReady, setWinReady] = useState(false);
+  useEffect(() => {
+    setWinReady(true);
+    getParticipants();
+    getCurrentSprint();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
-    const participants = [
-      {
-        id: 2,
-        firstName: "Uncle",
-        lastName: "HoHo",
-        email: "abc@gmail.com",
-        description: null,
-      },
-    ];
+    const uri = `https://scrumified-dev-bakend.herokuapp.com/backlog?projectId=${projectId}`;
+    let eventSource = new EventSource(uri);
+    eventSource.onopen = (e) => {
+      console.log("Open Sprint Event Source!");
+    };
+    eventSource.addEventListener("update", getCurrentSprint);
+    return () => {
+      eventSource.close();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [participants]); // Always make sure participants available first
+
+  useEffect(() => {
     setCardListTodo(
-      linkCards(
-        cards,
-        "todo",
-        [
-          {
-            id: 2,
-            firstName: "Uncle",
-            lastName: "HoHo",
-            email: "abc@gmail.com",
-            description: null,
-          },
-        ],
-        true
-      )
+      linkCards(cards, "todo", participants, true, currentSprint.id, isActive)
     );
-    setcardListinProgress(
+    setCardListInProgress(
       linkCards(
         cards,
         "inProgress",
-        [
-          {
-            id: 2,
-            firstName: "Uncle",
-            lastName: "HoHo",
-            email: "abc@gmail.com",
-            description: null,
-          },
-        ],
-        true
+        participants,
+        true,
+        currentSprint.id,
+        isActive
       )
     );
     setCardListDone(
-      linkCards(
-        cards,
-        "done",
-        [
-          {
-            id: 2,
-            firstName: "Uncle",
-            lastName: "HoHo",
-            email: "abc@gmail.com",
-            description: null,
-          },
-        ],
-        true
-      )
+      linkCards(cards, "done", participants, true, currentSprint.id, isActive)
     );
-    // }, [bg, cards, color]);
-  }, [cards]);
-
-  const [winReady, setwinReady] = useState(false);
-  useEffect(() => {
-    setwinReady(true);
-    getCurrentSprint();
-    getStories();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [cards, currentSprint]);
 
   return (
     <LoggedUserProvider authToken={authToken}>
@@ -278,20 +141,23 @@ const Sprint = ({ authToken }) => {
                   variant="outline"
                   size="md"
                   colorScheme={
-                    isPending
-                      ? SprintColor.PENDING_SPRINT
-                      : SprintColor.ACTIVE_SPRINT
+                    isActive
+                      ? SprintColor.ACTIVE_SPRINT
+                      : SprintColor.PENDING_SPRINT
                   }
                 >
-                  {isPending ? "NOT STARTED" : "ACTIVE"}
+                  {isActive ? "ACTIVE" : "NOT STARTED"}
                 </Tag>
               )}
             </Skeleton>
           </Flex>
           <SprintController
+            sprintId={currentSprint.id}
             isSprint={isSprint}
-            isPending={isPending}
+            isActive={isActive}
             points={points}
+            getCurrentSprint={getCurrentSprint}
+            setCards={setCards}
           />
           {winReady ? (
             <Board
@@ -299,7 +165,7 @@ const Sprint = ({ authToken }) => {
               setCards={setCards}
               cardList={{
                 todo: cardListTodo,
-                inProgress: cardListinProgress,
+                inProgress: cardListInProgress,
                 done: cardListDone,
               }}
               templateColumns="repeat(3, 1fr)"
@@ -312,6 +178,9 @@ const Sprint = ({ authToken }) => {
                 setCards={setCards}
                 cardList={cardListTodo}
                 columnColor={"red.500"}
+                isLoading={isLoading}
+                sprintStatus={currentSprint.status}
+                isDragDisabled={false}
               />
               <Column
                 key={1}
@@ -319,9 +188,11 @@ const Sprint = ({ authToken }) => {
                 id={"inProgress"}
                 cards={cards}
                 setCards={setCards}
-                cardList={cardListinProgress}
+                cardList={cardListInProgress}
                 columnColor={"blue.500"}
-                pointerEvent={!isSprint || isPending ? "none" : "auto"}
+                isLoading={isLoading}
+                sprintStatus={currentSprint.status}
+                isDragDisabled={!isSprint || !isActive}
               />
               <Column
                 key={2}
@@ -331,7 +202,9 @@ const Sprint = ({ authToken }) => {
                 setCards={setCards}
                 cardList={cardListDone}
                 columnColor={"green.500"}
-                pointerEvent={!isSprint || isPending ? "none" : "auto"}
+                isLoading={isLoading}
+                sprintStatus={currentSprint.status}
+                isDragDisabled={!isSprint || !isActive}
               />
             </Board>
           ) : null}

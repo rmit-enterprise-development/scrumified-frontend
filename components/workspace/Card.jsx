@@ -12,6 +12,7 @@ import {
   WrapItem,
   useColorModeValue,
   useToast,
+  Skeleton,
 } from "@chakra-ui/react";
 import Avvvatars from "avvvatars-react";
 import { useState } from "react";
@@ -55,7 +56,7 @@ const Card = ({
     if (sprintId) {
       setIsSubmitting(true);
       try {
-        const response = storyAPI.putStory(
+        const response = await storyAPI.putStory(
           // Specialized params for add/remove story from sprint
           card.id,
           {
@@ -74,7 +75,6 @@ const Card = ({
             duration: 1500,
             isClosable: true,
           });
-          setIsSubmitting(false);
         }
       } catch (error) {
         console.log(error);

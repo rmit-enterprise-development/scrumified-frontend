@@ -19,6 +19,7 @@ const SprintController = ({
   isActive,
   points,
   getCurrentSprint,
+  setCards,
 }) => {
   let color = useColorModeValue("#031d46", "#fffdfe");
   let btnBg = useColorModeValue("gray.200", "#fffdfe");
@@ -26,8 +27,6 @@ const SprintController = ({
   let bg = useColorModeValue("gray.100", "#405A7D");
   const toast = useToast();
   const handleStartSprint = async () => {
-    console.log("Start Sprint");
-    console.log("sprintId: ", sprintId);
     try {
       const response = await sprintAPI.putSprint(sprintId, {
         status: "inProgress",
@@ -55,7 +54,6 @@ const SprintController = ({
     }
   };
   const handleCompleteSprint = async () => {
-    console.log("Complete Sprint");
     try {
       const response = await sprintAPI.completeSprint(sprintId);
       if (response) {

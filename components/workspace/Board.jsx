@@ -12,17 +12,24 @@ const Board = ({
   isBacklog,
 }) => {
   const updateCardOrder = async (source, target, status, flag) => {
-    const updateServiceStatus = await storyAPI.putStory(
-      source, // Card id
-      {
-        replaceStoryId: target,
-        status: status,
-      },
-      {
-        isDragged: true,
-        isTopDown: flag,
+    try {
+      const updateServiceStatus = await storyAPI.putStory(
+        source, // Card id
+        {
+          replaceStoryId: target,
+          status: status,
+        },
+        {
+          isDragged: true,
+          isTopDown: flag,
+        }
+      );
+      if (updateServiceStatus) {
+        console.log("Card position updated!");
       }
-    );
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const onDragEnd = (result) => {

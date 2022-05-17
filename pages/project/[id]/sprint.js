@@ -56,10 +56,15 @@ const Sprint = ({ authToken }) => {
       setIsSprint(
         Object.keys(json).length !== 0 && json.constructor === Object
       );
-      setIsActive(json.status === "inProgress");
 
-      const responseStories = await sprintAPI.getAllStories(json.id);
-      setCards(responseStories.data);
+      // Tear down
+      if (json) {
+        setIsActive(json.status === "inProgress");
+        const responseStories = await sprintAPI.getAllStories(json.id);
+        setCards(responseStories.data);
+      } else {
+        setCards([]);
+      }
 
       setIsLoading(false);
     } catch (error) {
@@ -152,6 +157,7 @@ const Sprint = ({ authToken }) => {
             isActive={isActive}
             points={points}
             getCurrentSprint={getCurrentSprint}
+            setCards={setCards}
           />
           {winReady ? (
             <Board

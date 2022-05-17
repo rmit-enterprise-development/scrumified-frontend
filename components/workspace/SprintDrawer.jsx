@@ -71,7 +71,7 @@ const SprintDrawer = ({
 
   const createSprint = async (sprint) => {
     try {
-      const response = projectAPI.postSprint(projectId, sprint);
+      const response = await projectAPI.postSprint(projectId, sprint);
       if (response) {
         setIsSubmitting(false);
         toast({
@@ -97,9 +97,9 @@ const SprintDrawer = ({
       refetchCurrentSprint();
     }
   };
-  const updateSprint = (sprint) => {
+  const updateSprint = async (sprint) => {
     try {
-      const response = sprintAPI.putSprint(sprint.id, sprint);
+      const response = await sprintAPI.putSprint(sprint.id, sprint);
       if (response) {
         setIsSubmitting(false);
         toast({
@@ -124,9 +124,9 @@ const SprintDrawer = ({
     }
   };
 
-  const deleteSprint = (id) => {
+  const deleteSprint = async (id) => {
     try {
-      const response = sprintAPI.deleteSprint(id);
+      const response = await sprintAPI.deleteSprint(id);
       if (response) {
         setIsSubmitting(false);
         toast({

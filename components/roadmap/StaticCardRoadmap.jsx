@@ -1,12 +1,14 @@
 import {
   Badge,
   Box,
+  Circle,
   Flex,
   Heading,
   useColorModeValue,
 } from "@chakra-ui/react";
+import { BadgeColor, Category } from "../../config/constants";
 
-const StaticCardRoadmap = ({ sprint }) => {
+const StaticCardRoadmap = ({ card }) => {
   const textColor = useColorModeValue("#031d46", "#fffdfe");
 
   return (
@@ -16,37 +18,31 @@ const StaticCardRoadmap = ({ sprint }) => {
       overflow="hidden"
       bg={useColorModeValue("#fffdfe", "#405A7D")}
       color={textColor}
-      mb={4}
       p={4}
       boxShadow="base"
       _hover={{
         boxShadow: "0 0 5px 5px #e6e6e7",
         transition: "all 0.4s linear",
       }}
-      minH="6rem"
       display="flex"
       justifyContent="space-between"
     >
-      <Flex alignItems={"center"} justifyContent={"space-between"}>
-        <Heading fontSize="lg" isTruncated>
-          {"Sprint " + sprint.goal}
-        </Heading>
-      </Flex>
-      <Flex
-        mt={3}
-        justifyContent="space-between"
-        alignItems={"center"}
-        alignContent={"center"}
-      >
-        <Flex alignItems={"center"}>
-          <Badge
-            colorScheme={"green"}
-            borderRadius={"4px"}
-            marginRight={2}
-          >
-            {sprint.status}
-          </Badge>
-        </Flex>
+      <Heading fontSize="lg" isTruncated color={textColor}>
+        {card.userStory}
+      </Heading>
+
+      <Flex alignItems={"center"}>
+        <Badge
+          colorScheme={BadgeColor[card.category]}
+          borderRadius={"4px"}
+          marginRight={2}
+        >
+          {Category[card.category]}
+        </Badge>
+
+        <Circle size="25px" bg="red.500" color="white" p={"10px"}>
+          {card.point}
+        </Circle>
       </Flex>
     </Box>
   );

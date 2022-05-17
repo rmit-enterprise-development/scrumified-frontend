@@ -6,41 +6,41 @@ import projectAPI from "../../../api/services/projectAPI";
 import cookies from "next-cookies";
 import { LoggedUserProvider } from "../../../components/common/LoggedUserProvider";
 import { useRouter } from "next/router";
-import { useToast, Skeleton } from "@chakra-ui/react";
+import { useToast, Skeleton, Text, Flex } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import NoItem from "../../../components/common/NoItem/NoItem";
-import { GoInfo } from "react-icons/go";
-import CompletedSprints from "../../../components/roadmap/CompletedSprints";
+import { BsBarChartSteps } from "react-icons/bs";
+import CompletedSprint from "../../../components/roadmap/CompletedSprint";
 
 const Roadmap = ({ authToken }) => {
   const { asPath } = useRouter();
   const projectId = asPath.split("/")[2];
   const toast = useToast();
-  const [allSprints, setAllSprints] = useState();
-  const [isLoading, setIsLoading] = useState(true);
+  const [allSprints, setAllSprints] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const sprintData = async () => {
+  const getSprints = async () => {
+    setIsLoading(true);
     try {
       const response = await projectAPI.getAllSprints(projectId, {
         includePercentage: true,
       });
-      const json = await response.data;
-
-      setAllSprints(json);
+      const data = await response.data;
+      setAllSprints(data);
       setIsLoading(false);
     } catch (error) {
       toast({
         title: "Get Sprint",
         description: typeof error !== "string" ? "Server error" : error,
         status: "error",
-        duration: 3000,
+        duration: 2000,
         isClosable: true,
       });
     }
   };
 
   useEffect(() => {
-    sprintData();
+    getSprints();
   }, []);
 
   return (
@@ -51,19 +51,25 @@ const Roadmap = ({ authToken }) => {
 
       <MainContainer>
         <SectionHeader>Project Roadmap</SectionHeader>
-        {isLoading ? (
-          <Skeleton height="40px"></Skeleton>
-        ) : allSprints.length > 0 ? (
-          <GanttChart data={allSprints} />
-        ) : (
-          <NoItem icon={GoInfo}>No sprint created</NoItem>
-        )}
+        <Skeleton isLoaded={!isLoading}>
+          {allSprints.length > 0 ? (
+            <GanttChart data={allSprints} />
+          ) : (
+            <NoItem icon={BsBarChartSteps}>No sprint created!</NoItem>
+          )}
+        </Skeleton>
 
-        {isLoading ? (
-          <Skeleton height="40px"></Skeleton>
-        ) : (
-          <CompletedSprints sprintList={allSprints} />
-        )}
+        <SectionHeader>Archived Sprints</SectionHeader>
+        <Skeleton isLoaded={!isLoading}>
+          <Flex cursor="pointer" gap={2} flexDir="column">
+            {allSprints.map(
+              (sprint) =>
+                sprint.status === "done" && (
+                  <CompletedSprint key={sprint.id} sprint={sprint} />
+                )
+            )}
+          </Flex>
+        </Skeleton>
       </MainContainer>
     </LoggedUserProvider>
   );

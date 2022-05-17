@@ -30,7 +30,7 @@ const Column = ({
       px={4}
       mb={4}
       h="77vh"
-      minW="350px"
+      minW="300px"
       // overflow="auto"
     >
       <Flex alignItems={"center"}>
@@ -64,7 +64,7 @@ const Column = ({
             flexGrow={1}
             ref={provided.innerRef}
             {...provided.droppableProps}
-            padding={"2"}
+            padding={'2'}
             overflow="auto"
           >
             {cardList &&

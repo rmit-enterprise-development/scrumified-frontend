@@ -22,7 +22,7 @@ const Sprint = ({ authToken }) => {
   const projectId = asPath.split("/")[2];
   const [cards, setCards] = useState([]);
   const [cardListTodo, setCardListTodo] = useState([]);
-  const [cardListinProgress, setcardListinProgress] = useState([]);
+  const [cardListInProgress, setCardListInProgress] = useState([]);
   const [cardListDone, setCardListDone] = useState([]);
   const [participants, setParticipants] = useState([]);
 
@@ -48,6 +48,7 @@ const Sprint = ({ authToken }) => {
   };
 
   const getCurrentSprint = async () => {
+    setIsLoading(true);
     try {
       const response = await projectAPI.getCurrentSprint(projectId);
       const json = response.data;
@@ -68,9 +69,9 @@ const Sprint = ({ authToken }) => {
 
   const points = calculatePointsAllColumn(cards);
 
-  const [winReady, setwinReady] = useState(false);
+  const [winReady, setWinReady] = useState(false);
   useEffect(() => {
-    setwinReady(true);
+    setWinReady(true);
     getParticipants();
     getCurrentSprint();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -82,7 +83,7 @@ const Sprint = ({ authToken }) => {
     eventSource.onopen = (e) => {
       console.log("Open Sprint Event Source!");
     };
-    eventSource.addEventListener("updateCards", getCurrentSprint);
+    eventSource.addEventListener("update", getCurrentSprint);
     return () => {
       eventSource.close();
     };
@@ -93,7 +94,7 @@ const Sprint = ({ authToken }) => {
     setCardListTodo(
       linkCards(cards, "todo", participants, true, currentSprint.id, isActive)
     );
-    setcardListinProgress(
+    setCardListInProgress(
       linkCards(
         cards,
         "inProgress",
@@ -158,7 +159,7 @@ const Sprint = ({ authToken }) => {
               setCards={setCards}
               cardList={{
                 todo: cardListTodo,
-                inProgress: cardListinProgress,
+                inProgress: cardListInProgress,
                 done: cardListDone,
               }}
               templateColumns="repeat(3, 1fr)"
@@ -181,7 +182,7 @@ const Sprint = ({ authToken }) => {
                 id={"inProgress"}
                 cards={cards}
                 setCards={setCards}
-                cardList={cardListinProgress}
+                cardList={cardListInProgress}
                 columnColor={"blue.500"}
                 isLoading={isLoading}
                 sprintStatus={currentSprint.status}

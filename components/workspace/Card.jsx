@@ -11,6 +11,7 @@ import {
   useDisclosure,
   WrapItem,
   useColorModeValue,
+  useToast,
 } from "@chakra-ui/react";
 import Avvvatars from "avvvatars-react";
 import { useState } from "react";
@@ -31,8 +32,9 @@ const Card = ({
   let color = useColorModeValue("#031d46", "#fffdfe");
   let bg = useColorModeValue("white", "#405A7D");
   let btnBg = useColorModeValue("gray.200", "#fffdfe");
-
+  const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const getUserInfoValue = (id) => {
     if (participants.length > 0) {
       const user = Object.values(participants).find((p) => p.id === id);
@@ -51,6 +53,7 @@ const Card = ({
 
   const handleUpdateStatus = async () => {
     if (sprintId) {
+      setIsSubmitting(true);
       try {
         const response = storyAPI.putStory(
           // Specialized params for add/remove story from sprint
@@ -64,9 +67,23 @@ const Card = ({
             isDragged: true,
           }
         );
-        console.log(response);
+        if (response) {
+          toast({
+            title: "Update story successfully!",
+            status: "success",
+            duration: 1500,
+            isClosable: true,
+          });
+          setIsSubmitting(false);
+        }
       } catch (error) {
         console.log(error);
+        toast({
+          title: "Update story failed!",
+          status: "error",
+          duration: 1500,
+          isClosable: true,
+        });
       }
     }
   };
@@ -130,6 +147,7 @@ const Card = ({
                           <MinusIcon color="red" />
                         )
                       }
+                      disabled={isSubmitting}
                     />
                   </Tooltip>
                 </WrapItem>

@@ -30,7 +30,7 @@ const Backlog = ({ authToken }) => {
   const [cardList, setCardList] = useState([]);
   const [participants, setParticipants] = useState([]);
 
-  const [winReady, setwinReady] = useState(false);
+  const [winReady, setWinReady] = useState(false);
   // Filtered Card (from Backlog Controller)
   const [filteredCard, setFilteredCard] = useState({
     isFilter: false,
@@ -44,6 +44,22 @@ const Backlog = ({ authToken }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isActive, setIsActive] = useState(false);
 
+  const getParticipants = async () => {
+    setIsLoading(true);
+    try {
+      const response = await projectAPI.getProject(projectId);
+      const json = response.data;
+      if (json.participants) {
+        setParticipants([json.owner, ...json.participants]);
+      } else {
+        setParticipants([json.owner]);
+      }
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const getCurrentSprint = async () => {
     setIsLoading(true);
     try {
@@ -55,6 +71,12 @@ const Backlog = ({ authToken }) => {
       );
 
       setIsActive(json.status === "inProgress");
+
+      const responseStories = await projectAPI.getAllStories(projectId, {
+        isBacklog: true,
+        returnArray: false,
+      });
+      setCards(responseStories.data);
       setIsLoading(false);
     } catch (error) {
       console.log(error);
@@ -73,55 +95,35 @@ const Backlog = ({ authToken }) => {
     }
   };
 
-  const getParticipants = async () => {
-    setIsLoading(true);
-    try {
-      const response = await projectAPI.getProject(projectId);
-      const json = response.data;
-      if (json.participants) {
-        setParticipants([json.owner, ...json.participants]);
-      } else {
-        setParticipants([json.owner]);
-      }
-      setIsLoading(false);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const getCards = async () => {
-    setIsLoading(true);
-    try {
-      const response = await projectAPI.getAllStories(projectId, {
-        isBacklog: true,
-        returnArray: false,
-      });
-      const json = response.data;
-      setCards(json);
-      setIsLoading(false);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const getCards = async () => {
+  //   setIsLoading(true);
+  //   try {
+  //     const response = await projectAPI.getAllStories(projectId, {
+  //       isBacklog: true,
+  //       returnArray: false,
+  //     });
+  //     const json = response.data;
+  //     setCards(json);
+  //     setIsLoading(false);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   useEffect(() => {
-    setwinReady(true);
+    setWinReady(true);
     getParticipants(); // Always get participants first
     getCurrentSprint();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    getCards();
-    // getCurrentSprint();
-
     const uri = `https://scrumified-dev-bakend.herokuapp.com/backlog?projectId=${projectId}`;
     let eventSource = new EventSource(uri);
     eventSource.onopen = (e) => {
       console.log("Open Backlog Event Source!");
     };
-    eventSource.addEventListener("updateCards", getCards);
-    eventSource.addEventListener("updateSprint", getCurrentSprint);
+    eventSource.addEventListener("update", getCurrentSprint);
     return () => {
       eventSource.close();
     };

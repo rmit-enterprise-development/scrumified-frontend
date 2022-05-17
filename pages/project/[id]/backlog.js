@@ -45,7 +45,7 @@ const Backlog = ({ authToken }) => {
   const currentTime = new Date(Date.now()).getTime();
   const currentDate = Math.floor(currentTime / 1000);
 
-  const [isPending, setIsPending] = useState(false);
+  const [isActive, setIsActive] = useState(false);
 
   const getCurrentSprint = async () => {
     setIsLoading(true);
@@ -60,7 +60,7 @@ const Backlog = ({ authToken }) => {
       const currentTime = new Date(Date.now()).getTime();
       const currentDate = Math.floor(currentTime / 1000);
 
-      setIsPending(currentDate < json.startDate);
+      setIsActive(currentDate >= json.startDate);
       setIsLoading(false);
     } catch (error) {
       console.log(error);
@@ -68,8 +68,6 @@ const Backlog = ({ authToken }) => {
   };
 
   const refetchCurrentSprint = (type) => {
-    console.log("type: ", type);
-
     if (type === "delete") {
       setIsLoading(true);
       setCurrentSprint({});
@@ -142,7 +140,8 @@ const Backlog = ({ authToken }) => {
       "backlog",
       participants,
       false,
-      currentSprint.id
+      currentSprint.id,
+      isActive
     );
     setCardList(tmp);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -193,12 +192,12 @@ const Backlog = ({ authToken }) => {
                   variant="outline"
                   size="md"
                   colorScheme={
-                    isPending
-                      ? SprintColor.PENDING_SPRINT
-                      : SprintColor.ACTIVE_SPRINT
+                    isActive
+                      ? SprintColor.ACTIVE_SPRINT
+                      : SprintColor.PENDING_SPRINT
                   }
                 >
-                  {isPending ? "PENDING SPRINT" : "ACTIVE SPRINT"}
+                  {isActive ? "ACTIVE SPRINT" : "PENDING SPRINT"}
                 </Tag>
               )}
             </Skeleton>

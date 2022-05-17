@@ -20,7 +20,15 @@ import { BadgeColor, Category } from "../../config/constants";
 import textUtils from "../../utils/text";
 import CardModal from "./CardModal";
 
-const Card = ({ participants, card, disableModal, sprintId, ...props }) => {
+const Card = ({
+  participants,
+  card,
+  disableModal,
+  sprintId,
+  isActive,
+  ...props
+}) => {
+  console.log("isActive: ", isActive);
   let color = useColorModeValue("#031d46", "#fffdfe");
   let bg = useColorModeValue("white", "#405A7D");
   let btnBg = useColorModeValue("gray.200", "#fffdfe");
@@ -94,7 +102,7 @@ const Card = ({ participants, card, disableModal, sprintId, ...props }) => {
                 {card.userStory}
               </Heading>
 
-              {sprintId && (
+              {sprintId && !isActive && (
                 <WrapItem>
                   <Tooltip
                     label={

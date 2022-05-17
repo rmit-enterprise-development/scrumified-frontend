@@ -31,7 +31,7 @@ const Sprint = ({ authToken }) => {
   const [isSprint, setIsSprint] = useState(false);
   const currentTime = new Date(Date.now()).getTime();
   const currentDate = Math.floor(currentTime / 1000);
-  const isPending = currentDate < currentSprint.startDate;
+  const isActive = currentDate >= currentSprint.startDate;
 
   const getParticipants = async () => {
     setIsLoading(true);
@@ -92,13 +92,20 @@ const Sprint = ({ authToken }) => {
 
   useEffect(() => {
     setCardListTodo(
-      linkCards(cards, "todo", participants, true, currentSprint.id)
+      linkCards(cards, "todo", participants, true, currentSprint.id, isActive)
     );
     setcardListinProgress(
-      linkCards(cards, "inProgress", participants, true, currentSprint.id)
+      linkCards(
+        cards,
+        "inProgress",
+        participants,
+        true,
+        currentSprint.id,
+        isActive
+      )
     );
     setCardListDone(
-      linkCards(cards, "done", participants, true, currentSprint.id)
+      linkCards(cards, "done", participants, true, currentSprint.id, isActive)
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cards, currentSprint]);
@@ -129,19 +136,19 @@ const Sprint = ({ authToken }) => {
                   variant="outline"
                   size="md"
                   colorScheme={
-                    isPending
-                      ? SprintColor.PENDING_SPRINT
-                      : SprintColor.ACTIVE_SPRINT
+                    isActive
+                      ? SprintColor.ACTIVE_SPRINT
+                      : SprintColor.PENDING_SPRINT
                   }
                 >
-                  {isPending ? "NOT STARTED" : "ACTIVE"}
+                  {isActive ? "ACTIVE" : "NOT STARTED"}
                 </Tag>
               )}
             </Skeleton>
           </Flex>
           <SprintController
             isSprint={isSprint}
-            isPending={isPending}
+            isActive={isActive}
             points={points}
           />
           {winReady ? (
@@ -174,7 +181,7 @@ const Sprint = ({ authToken }) => {
                 cardList={cardListinProgress}
                 columnColor={"blue.500"}
                 isLoading={isLoading}
-                isDragDisabled={!isSprint || isPending}
+                isDragDisabled={!isSprint || !isActive}
               />
               <Column
                 key={2}
@@ -185,7 +192,7 @@ const Sprint = ({ authToken }) => {
                 cardList={cardListDone}
                 columnColor={"green.500"}
                 isLoading={isLoading}
-                isDragDisabled={!isSprint || isPending}
+                isDragDisabled={!isSprint || !isActive}
               />
             </Board>
           ) : null}

@@ -6,67 +6,41 @@ import projectAPI from "../../../api/services/projectAPI";
 import cookies from "next-cookies";
 import { LoggedUserProvider } from "../../../components/common/LoggedUserProvider";
 import { useRouter } from "next/router";
-import { GiConsoleController } from "react-icons/gi";
-import { useToast, Skeleton } from "@chakra-ui/react";
+import { useToast, Skeleton, Text, Flex } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
+import NoItem from "../../../components/common/NoItem/NoItem";
+import { BsBarChartSteps } from "react-icons/bs";
+import CompletedSprint from "../../../components/roadmap/CompletedSprint";
 
 const Roadmap = ({ authToken }) => {
-  const columns = [
-    { type: "string", label: "Task ID" },
-    { type: "string", label: "Task Name" },
-    { type: "string", label: "Resource" },
-    { type: "date", label: "Start Date" },
-    { type: "date", label: "End Date" },
-    { type: "number", label: "Duration" },
-    { type: "number", label: "Percentage done" },
-    { type: "string", lable: "Dependencies" },
-  ];
-
   const { asPath } = useRouter();
   const projectId = asPath.split("/")[2];
   const toast = useToast();
-  const [allSprints, setAllSprints] = useState();
-  const [isLoading, setIsLoading] = useState(true);
+  const [allSprints, setAllSprints] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const sprintData = async () => {
+  const getSprints = async () => {
+    setIsLoading(true);
     try {
-      setIsLoading(true);
       const response = await projectAPI.getAllSprints(projectId, {
         includePercentage: true,
       });
-      const json = await response.data;
-
-      const sprints = [];
-      let sprint;
-      for (let i = 0; i < response.data.length; i++) {
-        sprint = [
-          "" + json[i].id,
-          "Sprint: " + json[i].goal,
-          null,
-          new Date(json[i].startDate * 1000),
-          new Date(json[i].endDate * 1000),
-          null,
-          json[i].completePercentage,
-          null,
-        ];
-        sprints.push(sprint);
-      }
-      console.log(sprint);
-      setAllSprints(sprints);
+      const data = await response.data;
+      setAllSprints(data);
       setIsLoading(false);
     } catch (error) {
       toast({
         title: "Get Sprint",
         description: typeof error !== "string" ? "Server error" : error,
         status: "error",
-        duration: 3000,
+        duration: 2000,
         isClosable: true,
       });
     }
   };
 
   useEffect(() => {
-    sprintData();
+    getSprints();
   }, []);
 
   return (
@@ -77,11 +51,25 @@ const Roadmap = ({ authToken }) => {
 
       <MainContainer>
         <SectionHeader>Project Roadmap</SectionHeader>
-        {isLoading ? (
-          <Skeleton height="40px"></Skeleton>
-        ) : (
-          <GanttChart data={[columns, ...allSprints]} />
-        )}
+        <Skeleton isLoaded={!isLoading}>
+          {allSprints.length > 0 ? (
+            <GanttChart data={allSprints} />
+          ) : (
+            <NoItem icon={BsBarChartSteps}>No sprint created!</NoItem>
+          )}
+        </Skeleton>
+
+        <SectionHeader>Archived Sprints</SectionHeader>
+        <Skeleton isLoaded={!isLoading}>
+          <Flex cursor="pointer" gap={2} flexDir="column">
+            {allSprints.map(
+              (sprint) =>
+                sprint.status === "done" && (
+                  <CompletedSprint key={sprint.id} sprint={sprint} />
+                )
+            )}
+          </Flex>
+        </Skeleton>
       </MainContainer>
     </LoggedUserProvider>
   );

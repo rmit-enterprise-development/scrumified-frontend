@@ -12,7 +12,6 @@ import {
   WrapItem,
   useColorModeValue,
   useToast,
-  Skeleton,
 } from "@chakra-ui/react";
 import Avvvatars from "avvvatars-react";
 import { useState } from "react";
@@ -101,7 +100,7 @@ const Card = ({
             }}
             boxSizing="border-box"
             borderRadius="1rem"
-            overflow="hidden"
+            // overflow="hidden"
             bg={bg}
             color={color}
             mb={4}
@@ -112,9 +111,14 @@ const Card = ({
               transition: "all 0.4s linear",
             }}
             minH="6rem"
-            minW="250px"
+            display="flex"
+            style={{ flexWrap: "wrap" }}
           >
-            <Flex alignItems={"center"} justifyContent={"space-between"}>
+            <Flex
+              alignItems={"center"}
+              justifyContent={"space-between"}
+              w="full"
+            >
               <Heading fontSize="lg" isTruncated>
                 {card.userStory}
               </Heading>
@@ -155,6 +159,7 @@ const Card = ({
             </Flex>
 
             <Flex
+              w="full"
               mt={3}
               justifyContent="space-between"
               alignItems={"center"}
@@ -192,6 +197,7 @@ const Card = ({
               </Flex>
             </Flex>
           </Box>
+
           <CardModal
             isOpen={isOpen}
             onOpen={onOpen}

@@ -14,7 +14,6 @@ import {
 import { useState } from "react";
 import { GoTasklist } from "react-icons/go";
 import sprintAPI from "../../api/services/sprintAPI";
-import NoItem from "../common/NoItem/NoItem";
 import StaticCardRoadmap from "./StaticCardRoadmap";
 
 const CompletedSprint = ({ sprint }) => {
@@ -45,12 +44,12 @@ const CompletedSprint = ({ sprint }) => {
     <>
       <Flex
         onClick={getCompletedStories}
-        bg={useColorModeValue("gray.200", "#1C345B")}
+        bg={useColorModeValue("#eeeeee", "#1C345B")}
         cursor="pointer"
         display="flex"
         alignItems="center"
         p={2}
-        borderWidth="0.1px"
+        borderColor="#2d4046"
         justifyContent="space-between"
       >
         <Flex alignItems="center">

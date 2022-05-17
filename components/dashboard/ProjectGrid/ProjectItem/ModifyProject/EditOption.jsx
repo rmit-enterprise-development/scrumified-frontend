@@ -1,9 +1,13 @@
+import { InfoIcon } from "@chakra-ui/icons";
 import {
   Button,
   CircularProgress,
   Flex,
   FormControl,
+  FormErrorMessage,
+  FormHelperText,
   FormLabel,
+  Icon,
   Input,
   Modal,
   ModalBody,
@@ -124,7 +128,7 @@ const EditOption = ({ id, name, participants, fetchUpdatedProject }) => {
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(async () => {
-      if (searchTerm !== "" && searchTerm.length >= 3) {
+      if (searchTerm !== "") {
         // Send Axios request here
         try {
           const response = await userAPI.getAll({ key: searchTerm });
@@ -187,7 +191,7 @@ const EditOption = ({ id, name, participants, fetchUpdatedProject }) => {
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
-            <FormControl isRequired>
+            <FormControl isRequired isInvalid={!isValid}>
               <FormLabel color={useColorModeValue("#031e49", "#fffdfe")}>
                 Project name
               </FormLabel>
@@ -198,9 +202,16 @@ const EditOption = ({ id, name, participants, fetchUpdatedProject }) => {
                 value={text}
                 onChange={handleTextChange}
               />
+              {isValid ? (
+                <FormHelperText sx={{ color: "green.500" }}>
+                  Your project name is unique and valid!
+                </FormHelperText>
+              ) : (
+                <FormErrorMessage>{errorName}</FormErrorMessage>
+              )}
             </FormControl>
 
-            <FormControl mt={4} isRequired>
+            <FormControl mt={4} isRequired isInvalid={!isExisted}>
               <CUIAutoComplete
                 tagStyleProps={{
                   rounded: "full",
@@ -234,17 +245,17 @@ const EditOption = ({ id, name, participants, fetchUpdatedProject }) => {
                 renderCustomInput={customInputRender}
                 disableCreateItem
               />
+              {!isExisted ? (
+                <FormErrorMessage>User not found!</FormErrorMessage>
+              ) : (
+                <FormHelperText color="orange.500">
+                  <Icon as={InfoIcon} mr={2} />
+                  Warning: If you remove a user from this project, the current
+                  task of him/her will be automatically assigned to the owner
+                  (yourself)!
+                </FormHelperText>
+              )}
             </FormControl>
-            {!isExisted && (
-              <Text as="span" color="red.500" fontWeight="bold">
-                {error}
-              </Text>
-            )}
-            {!isValid && (
-              <Text as="span" color="red.500" fontWeight="bold">
-                {error}
-              </Text>
-            )}
           </ModalBody>
 
           <ModalFooter>

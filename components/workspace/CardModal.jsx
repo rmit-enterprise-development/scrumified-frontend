@@ -55,61 +55,75 @@ const CardModal = ({
   const [isValidCategory, setIsValidCategory] = useState(isCard);
   const [isValidAssignee, setIsValidAssignee] = useState(isCard);
 
-  const createCard = (card) => {
-    projectAPI
-      .postStory(projectId, card)
-      .then(async (response) => {
-        if (response.status !== 200) {
-          return Promise.reject(response.data);
-        }
+  const createCard = async (card) => {
+    try {
+      const response = await projectAPI.postStory(projectId, card);
+      if (response) {
         toast({
-          title: "Create story successfully!",
+          title: "Create card successfully!",
           status: "success",
           duration: 1500,
           isClosable: true,
         });
-      })
-      .catch((error) => {
-        console.error(error);
+      }
+    } catch (error) {
+      console.log(error);
+      toast({
+        title: "Create card failed!",
+        description: "Please contact your administrator.",
+        status: "error",
+        duration: 2000,
+        isClosable: true,
       });
+    }
   };
 
-  const updateCard = (card) => {
-    storyAPI
-      .putStory(card.id, card, { isDragged: false })
-      .then(async (response) => {
-        if (response.status !== 200) {
-          return Promise.reject(response.data);
-        }
+  const updateCard = async (card) => {
+    try {
+      const response = await storyAPI.putStory(card.id, card, {
+        isDragged: false,
+      });
+      if (response) {
         toast({
-          title: "Update story successfully!",
+          title: "Update card successfully!",
           status: "success",
           duration: 1500,
           isClosable: true,
         });
-      })
-      .catch((error) => {
-        console.error(error);
+      }
+    } catch (error) {
+      console.log(error);
+      toast({
+        title: "Update card failed!",
+        description: "Please contact your administrator.",
+        status: "error",
+        duration: 1500,
+        isClosable: true,
       });
+    }
   };
 
-  const deleteCard = (id) => {
-    storyAPI
-      .deleteStory(id)
-      .then(async (response) => {
-        if (response.status !== 200) {
-          return Promise.reject(response.data);
-        }
+  const deleteCard = async (id) => {
+    try {
+      const response = await storyAPI.deleteStory(id);
+      if (response) {
         toast({
-          title: "Delete story successfully!",
+          title: "Delete card successfully!",
           status: "success",
           duration: 1500,
           isClosable: true,
         });
-      })
-      .catch((error) => {
-        console.error(error);
+      }
+    } catch (error) {
+      console.log(error);
+      toast({
+        title: "Delete card failed!",
+        description: "Please contact your administrator.",
+        status: "error",
+        duration: 1500,
+        isClosable: true,
       });
+    }
   };
 
   return (

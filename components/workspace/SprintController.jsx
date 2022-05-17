@@ -30,6 +30,7 @@ const SprintController = ({
     try {
       const response = await sprintAPI.putSprint(sprintId, {
         status: "inProgress",
+        startDate: Math.floor(new Date().getTime() / 1000),
       });
       if (response) {
         toast({

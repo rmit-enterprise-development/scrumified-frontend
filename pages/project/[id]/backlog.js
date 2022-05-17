@@ -1,11 +1,9 @@
 import {
-  Badge,
   Box,
   Button,
   Flex,
   Skeleton,
   Tag,
-  useColorModeValue,
   useDisclosure,
 } from "@chakra-ui/react";
 import cookies from "next-cookies";
@@ -69,6 +67,20 @@ const Backlog = ({ authToken }) => {
     }
   };
 
+  const refetchCurrentSprint = (type) => {
+    console.log("type: ", type);
+
+    if (type === "delete") {
+      setIsLoading(true);
+      setCurrentSprint({});
+      setIsSprint(false);
+      setIsLoading(false);
+    } else {
+      getCurrentSprint();
+      setIsSprint(true);
+    }
+  };
+
   const getParticipants = async () => {
     setIsLoading(true);
     try {
@@ -109,7 +121,7 @@ const Backlog = ({ authToken }) => {
 
   useEffect(() => {
     getCards();
-    getCurrentSprint();
+    // getCurrentSprint();
 
     const uri = `https://scrumified-dev-bakend.herokuapp.com/backlog?projectId=${projectId}`;
     let eventSource = new EventSource(uri);
@@ -234,6 +246,7 @@ const Backlog = ({ authToken }) => {
           isOpen={isOpen}
           currentSprint={currentSprint}
           isSprint={isSprint}
+          refetchCurrentSprint={refetchCurrentSprint}
         />
       </MainContainer>
     </LoggedUserProvider>

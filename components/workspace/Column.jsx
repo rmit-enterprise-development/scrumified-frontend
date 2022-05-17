@@ -3,9 +3,8 @@ import { Droppable } from "react-beautiful-dnd";
 import { GoTasklist } from "react-icons/go";
 import NoItem from "../common/NoItem/NoItem";
 
-const Column = ({ title, id, cardList, columnColor }) => {
+const Column = ({ title, id, cardList, columnColor, pointerEvent }) => {
   let color = useColorModeValue("#031d46", "#fffdfe");
-
   return (
     <Flex
       flexDir={"column"}
@@ -22,6 +21,7 @@ const Column = ({ title, id, cardList, columnColor }) => {
       px={4}
       mb={4}
       h="77vh"
+      pointerEvents={pointerEvent ? pointerEvent : "auto"}
     >
       <Flex alignItems={"center"}>
         <Text
@@ -59,7 +59,7 @@ const Column = ({ title, id, cardList, columnColor }) => {
           >
             {cardList && cardList.length === 0 && (
               <NoItem icon={GoTasklist}>
-                No item found. Create your first story!
+                No item found. Add stories from backlog and start a sprint!
               </NoItem>
             )}
             {cardList}

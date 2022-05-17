@@ -9,6 +9,7 @@ import {
   InputLeftElement,
   Select,
   Skeleton,
+  SkeletonCircle,
   Tag,
   Text,
   useBreakpointValue,
@@ -223,11 +224,12 @@ const BacklogController = ({
             md: "flex-start",
           })}
         >
-          <Skeleton isLoaded={!isLoading}>
-            <Tag isRound={true} size="lg" p="6px" color="white" bgColor="gray">
-              Total points: {totalPoints}
-            </Tag>
-          </Skeleton>
+          <Text as="span">Total points: </Text>
+          <SkeletonCircle isLoaded={!isLoading}>
+            <Circle size={8} color="white" bgColor="gray">
+              {totalPoints}
+            </Circle>
+          </SkeletonCircle>
           <IconButton
             _hover={{ opacity: 0.8 }}
             bg={btnBg}

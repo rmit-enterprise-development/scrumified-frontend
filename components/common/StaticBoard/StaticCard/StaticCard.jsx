@@ -23,7 +23,6 @@ import CardModal from "../../../workspace/CardModal";
 import { LoggedUserContext } from "../../LoggedUserProvider";
 
 const StaticCardBacklog = ({ card, participants, sprintId }) => {
-  console.log("sprintId: ", sprintId);
   const getUserInfoValue = (id) => {
     if (participants.length > 0) {
       const user = Object.values(participants).find((p) => p.id === id);

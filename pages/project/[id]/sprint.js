@@ -14,6 +14,7 @@ import SprintController from "../../../components/workspace/SprintController";
 import linkCards from "../../../utils/card/card";
 import { SprintColor } from "../../../config/constants";
 import sprintAPI from "../../../api/services/sprintAPI";
+import calculatePointsAllColumn from "../../../utils/card/point";
 
 const initData = {
   9: {
@@ -45,7 +46,7 @@ const initData = {
     defOfDone: "abc",
     status: "todo",
     parentStoryId: 9,
-    childStoryId: null,
+    childStoryId: 8,
     projectId: 2,
     sprintId: 4,
     assignId: 2,
@@ -63,8 +64,8 @@ const initData = {
     createdDate: 1652171796,
     point: 4,
     defOfDone: null,
-    status: "inProgress",
-    parentStoryId: null,
+    status: "todo",
+    parentStoryId: 11,
     childStoryId: 10,
     projectId: 2,
     sprintId: 4,
@@ -83,9 +84,9 @@ const initData = {
     createdDate: 1652282226,
     point: 4,
     defOfDone: "abc",
-    status: "inProgress",
+    status: "todo",
     parentStoryId: 8,
-    childStoryId: null,
+    childStoryId: 12,
     projectId: 2,
     sprintId: 4,
     assignId: 2,
@@ -104,7 +105,7 @@ const initData = {
     point: 4,
     defOfDone: "abc",
     status: "done",
-    parentStoryId: null,
+    parentStoryId: 12,
     childStoryId: null,
     projectId: 2,
     sprintId: 4,
@@ -142,6 +143,7 @@ const Sprint = ({ authToken }) => {
   };
 
   const [cards, setCards] = useState(initData);
+  console.log("cards: ", cards);
   const [cardListTodo, setCardListTodo] = useState([]);
   const [cardListinProgress, setcardListinProgress] = useState([]);
   const [cardListDone, setCardListDone] = useState([]);
@@ -154,6 +156,9 @@ const Sprint = ({ authToken }) => {
   const currentDate = Math.floor(currentTime / 1000);
   const isPending = currentDate < currentSprint.startDate;
 
+  const points = calculatePointsAllColumn(cards);
+  console.log("points: ", points);
+
   const getCurrentSprint = async () => {
     try {
       const response = await projectAPI.getCurrentSprint(projectId);
@@ -162,9 +167,6 @@ const Sprint = ({ authToken }) => {
       setIsSprint(
         Object.keys(json).length !== 0 && json.constructor === Object
       );
-
-      const responseStories = await sprintAPI.getAllStories(json.id);
-      console.log(responseStories.data);
 
       setIsLoading(false);
     } catch (error) {
@@ -176,7 +178,6 @@ const Sprint = ({ authToken }) => {
     try {
       const response = await sprintAPI.getAllStories(2);
       console.log(response.data);
-      s;
     } catch (error) {
       console.log(error);
     }
@@ -287,7 +288,11 @@ const Sprint = ({ authToken }) => {
               )}
             </Skeleton>
           </Flex>
-          <SprintController isPending={isPending} isLoading={isLoading} />
+          <SprintController
+            isSprint={isSprint}
+            isPending={isPending}
+            points={points}
+          />
           {winReady ? (
             <Board
               cards={cards}
@@ -316,6 +321,7 @@ const Sprint = ({ authToken }) => {
                 setCards={setCards}
                 cardList={cardListinProgress}
                 columnColor={"blue.500"}
+                pointerEvent={!isSprint || isPending ? "none" : "auto"}
               />
               <Column
                 key={2}
@@ -325,6 +331,7 @@ const Sprint = ({ authToken }) => {
                 setCards={setCards}
                 cardList={cardListDone}
                 columnColor={"green.500"}
+                pointerEvent={!isSprint || isPending ? "none" : "auto"}
               />
             </Board>
           ) : null}

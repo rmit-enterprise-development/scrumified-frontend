@@ -168,7 +168,7 @@ const BelowMedium = ({
         >
           <chakra.a
             target="_blank"
-            href="https://shorturl.at/iotMP" // TODO: insert tutorial video link here
+            href="https://www.youtube.com/watch?v=SbXFLn_g1xU"
             style={{ transition: 'all 0.5s' }}
             color="gray.500"
             _hover={{

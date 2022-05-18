@@ -171,7 +171,7 @@ const AboveMedium = ({
 
         <chakra.a
           target="_blank"
-          href="https://shorturl.at/iotMP" // TODO: insert tutorial video link here
+          href="https://www.youtube.com/watch?v=SbXFLn_g1xU"
           style={{ transition: 'all 0.5s' }}
           cursor="pointer"
           color={useColorModeValue('gray.500', '#fff')}

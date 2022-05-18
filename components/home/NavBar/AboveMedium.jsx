@@ -168,6 +168,26 @@ const AboveMedium = ({
         >
           Features
         </chakra.a>
+
+        <chakra.a
+          href="#tutorial" // TODO: insert tutorial video link here
+          onClick={handleSectionClick}
+          style={{ transition: 'all 0.5s' }}
+          cursor="pointer"
+          color={useColorModeValue('gray.500', '#fff')}
+          _hover={{
+            color: '#eb0546',
+            textDecoration: 'underline',
+            textDecorationStyle: 'wavy',
+            textUnderlineOffset: '8px',
+            textDecorationThickness: '1.5px',
+          }}
+          aria-label="Tutorial"
+          fontSize="md"
+          w="100%"
+        >
+          Tutorial
+        </chakra.a>
       </Flex>
 
       <Spacer />

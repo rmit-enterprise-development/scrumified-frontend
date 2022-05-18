@@ -121,11 +121,11 @@ const SprintController = ({
             </Tooltip>
           </WrapItem>
         </Flex>
-        {isSprint && isCard && (
+        {isSprint && (
           <Button
             colorScheme={isActive ? 'teal' : 'telegram'}
             onClick={isActive ? handleCompleteSprint : handleStartSprint}
-            disabled={!isSprint}
+            disabled={!isSprint || !isCard}
           >
             {isActive ? 'Complete Sprint' : 'Start Sprint'}
           </Button>

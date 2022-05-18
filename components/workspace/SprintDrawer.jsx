@@ -18,14 +18,15 @@ import {
   Text,
   Textarea,
   useColorModeValue,
-  useToast,
-} from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-import DatePicker from "react-datepicker";
+  useToast
+} from '@chakra-ui/react';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import DatePicker from 'react-datepicker';
 // import required css from library
-import "react-datepicker/dist/react-datepicker.css";
-import projectAPI from "../../api/services/projectAPI";
-import sprintAPI from "../../api/services/sprintAPI";
+import 'react-datepicker/dist/react-datepicker.css';
+import projectAPI from '../../api/services/projectAPI';
+import sprintAPI from '../../api/services/sprintAPI';
 
 const SprintDrawer = ({
   projectId,
@@ -36,13 +37,14 @@ const SprintDrawer = ({
   refetchCurrentSprint,
 }) => {
   const toast = useToast();
+  const router = useRouter();
   const TWO_WEEKS_TIME = 12096e5;
   const isValidInput = (value) => value.length > 0;
 
   const initSprint = {
-    goal: "",
-    status: "todo",
-    defOfDone: "",
+    goal: '',
+    status: 'todo',
+    defOfDone: '',
     startDate: Math.floor(new Date().getTime() / 1000),
     endDate: Math.floor(new Date(Date.now() + TWO_WEEKS_TIME).getTime() / 1000),
     projectId: projectId,
@@ -67,7 +69,7 @@ const SprintDrawer = ({
 
   const CustomInput = forwardRef(({ value, onClick }, ref) => (
     <Flex h="100%" onClick={onClick} ref={ref} alignItems="center">
-      <Text color={useColorModeValue("#031d46", "#fffdfe")}>{value}</Text>
+      <Text color={useColorModeValue('#031d46', '#fffdfe')}>{value}</Text>
     </Flex>
   ));
 
@@ -77,24 +79,25 @@ const SprintDrawer = ({
       if (response) {
         setIsSubmitting(false);
         toast({
-          title: "Create sprint successfully!",
+          title: 'Create sprint successfully!',
           description:
-            "You can add story to sprint and start it in Sprint page",
-          status: "success",
+            'You can add story to sprint and start it in Sprint page',
+          status: 'success',
           duration: 2000,
           isClosable: true,
         });
         onClose();
       }
     } catch (error) {
-      console.log(error);
-      toast({
-        title: "Create sprint failed!",
-        description: "Please contact your administrator.",
-        status: "error",
+      await console.log(error);
+      await toast({
+        title: 'Create sprint failed!',
+        description: 'Please contact your administrator.',
+        status: 'error',
         duration: 2000,
         isClosable: true,
       });
+      await router.reload(router.asPath);
     } finally {
       refetchCurrentSprint();
     }
@@ -105,22 +108,23 @@ const SprintDrawer = ({
       if (response) {
         setIsSubmitting(false);
         toast({
-          title: "Update sprint successfully!",
-          status: "success",
+          title: 'Update sprint successfully!',
+          status: 'success',
           duration: 2000,
           isClosable: true,
         });
         onClose();
       }
     } catch (error) {
-      console.log(error);
-      toast({
-        title: "Update sprint failed!",
-        description: "Please contact your administrator.",
-        status: "error",
+      await console.log(error);
+      await toast({
+        title: 'Update sprint failed!',
+        description: 'Please contact your administrator.',
+        status: 'error',
         duration: 2000,
         isClosable: true,
       });
+      await router.reload(router.asPath);
     } finally {
       refetchCurrentSprint();
     }
@@ -132,24 +136,25 @@ const SprintDrawer = ({
       if (response) {
         setIsSubmitting(false);
         toast({
-          title: "Delete sprint successfully!",
-          status: "success",
+          title: 'Delete sprint successfully!',
+          status: 'success',
           duration: 2000,
           isClosable: true,
         });
         onClose();
       }
     } catch (error) {
-      console.log(error);
-      toast({
-        title: "Delete sprint failed!",
-        description: "Please contact your administrator.",
-        status: "error",
+      await console.log(error);
+      await toast({
+        title: 'Delete sprint failed!',
+        description: 'Please contact your administrator.',
+        status: 'error',
         duration: 2000,
         isClosable: true,
       });
+      await router.reload(router.asPath);
     } finally {
-      refetchCurrentSprint("delete");
+      refetchCurrentSprint('delete');
     }
   };
 
@@ -169,34 +174,34 @@ const SprintDrawer = ({
   }, [isSprint]);
 
   return (
-    <Drawer onClose={onClose} isOpen={isOpen} size={"md"}>
+    <Drawer onClose={onClose} isOpen={isOpen} size={'md'}>
       <DrawerOverlay />
       <DrawerContent>
         <DrawerCloseButton
           size="lg"
           mt="0.75rem"
-          color={useColorModeValue("#031d46", "#fffdfe")}
+          color={useColorModeValue('#031d46', '#fffdfe')}
         />
         <DrawerHeader
           mt="0.25rem"
           fontSize="1.75rem"
           fontWeight="bold"
-          color={useColorModeValue("#031d46", "#fffdfe")}
+          color={useColorModeValue('#031d46', '#fffdfe')}
         >
-          {isSprint ? "Update sprint" : "Create new sprint"}
+          {isSprint ? 'Update sprint' : 'Create new sprint'}
         </DrawerHeader>
         <DrawerBody>
           <FormControl isRequired isInvalid={!isValidGoal}>
             <FormLabel
               htmlFor="goal"
-              fontSize={"lg"}
-              color={useColorModeValue("#031e49", "#fffdfe")}
+              fontSize={'lg'}
+              color={useColorModeValue('#031e49', '#fffdfe')}
             >
               Sprint goal:
             </FormLabel>
             <Input
               defaultValue={sprint.goal}
-              color={useColorModeValue("#031d46", "#fffdfe")}
+              color={useColorModeValue('#031d46', '#fffdfe')}
               onChange={(e) => {
                 setSprint({ ...sprint, goal: e.target.value });
                 setIsValidGoal(isValidInput(e.target.value));
@@ -210,8 +215,8 @@ const SprintDrawer = ({
           <FormControl mt={4} isRequired isInvalid={!isValidDoneDefinition}>
             <FormLabel
               htmlFor="doneDefinition"
-              fontSize={"lg"}
-              color={useColorModeValue("#031e49", "#fffdfe")}
+              fontSize={'lg'}
+              color={useColorModeValue('#031e49', '#fffdfe')}
             >
               Definition of Done:
             </FormLabel>
@@ -219,7 +224,7 @@ const SprintDrawer = ({
               defaultValue={sprint.defOfDone}
               placeholder="Requirement(s) to complete a sprint"
               resize="none"
-              color={useColorModeValue("#031d46", "#fffdfe")}
+              color={useColorModeValue('#031d46', '#fffdfe')}
               onChange={(e) => {
                 setSprint({ ...sprint, defOfDone: e.target.value });
                 setIsValidDoneDefinition(isValidInput(e.target.value));
@@ -233,8 +238,8 @@ const SprintDrawer = ({
           <FormControl mt={4} isRequired>
             <FormLabel
               htmlFor="startDate"
-              fontSize={"lg"}
-              color={useColorModeValue("#031e49", "#fffdfe")}
+              fontSize={'lg'}
+              color={useColorModeValue('#031e49', '#fffdfe')}
             >
               Sprint starts at:
             </FormLabel>
@@ -262,8 +267,8 @@ const SprintDrawer = ({
           <FormControl mt={4} isRequired>
             <FormLabel
               htmlFor="startDate"
-              fontSize={"lg"}
-              color={useColorModeValue("#031e49", "#fffdfe")}
+              fontSize={'lg'}
+              color={useColorModeValue('#031e49', '#fffdfe')}
             >
               Sprint ends at:
             </FormLabel>
@@ -296,8 +301,8 @@ const SprintDrawer = ({
           )}
           {isSprint && (
             <Button
-              colorScheme={"red"}
-              variant={"outline"}
+              colorScheme={'red'}
+              variant={'outline'}
               onClick={() => {
                 deleteSprint(sprint.id);
               }}
@@ -308,8 +313,8 @@ const SprintDrawer = ({
           )}
 
           <Button
-            colorScheme={"gray"}
-            variant={"outline"}
+            colorScheme={'gray'}
+            variant={'outline'}
             onClick={onClose}
             mr={4}
             disabled={isSubmitting}
@@ -337,7 +342,7 @@ const SprintDrawer = ({
             }}
             disabled={!(isValidDoneDefinition && isValidGoal) || isSubmitting}
           >
-            {isSprint ? "Update" : "Create"}
+            {isSprint ? 'Update' : 'Create'}
           </Button>
         </DrawerFooter>
       </DrawerContent>

@@ -1,4 +1,4 @@
-import { ExternalLinkIcon } from "@chakra-ui/icons";
+import { ExternalLinkIcon } from '@chakra-ui/icons';
 import {
   Button,
   FormControl,
@@ -15,30 +15,29 @@ import {
   Select,
   Textarea,
   useColorModeValue,
-  useToast,
-} from "@chakra-ui/react";
-import React, { useState } from "react";
-import projectAPI from "../../api/services/projectAPI";
-import storyAPI from "../../api/services/storyAPI";
+  useToast
+} from '@chakra-ui/react';
+import { useRouter } from 'next/router';
+import React, { useState } from 'react';
+import projectAPI from '../../api/services/projectAPI';
+import storyAPI from '../../api/services/storyAPI';
 
 const CardModal = ({
   isOpen,
   onClose,
-  cards,
-  setCards,
   projectId,
   participants,
   prevCard,
   isCard,
   disableModal,
 }) => {
-  let color = useColorModeValue("#031d46", "#fffdfe");
+  let color = useColorModeValue('#031d46', '#fffdfe');
   let initCard = {
-    userStory: "",
-    point: "",
-    category: "",
-    defOfDone: "",
-    assignId: "",
+    userStory: '',
+    point: '',
+    category: '',
+    defOfDone: '',
+    assignId: '',
   };
   if (!!prevCard) {
     initCard = prevCard;
@@ -46,6 +45,7 @@ const CardModal = ({
 
   const isValidInput = (value) => value.length > 0;
   const toast = useToast();
+  const router = useRouter();
 
   const [card, setCard] = useState(initCard);
 
@@ -60,21 +60,22 @@ const CardModal = ({
       const response = await projectAPI.postStory(projectId, card);
       if (response) {
         toast({
-          title: "Create card successfully!",
-          status: "success",
+          title: 'Create card successfully!',
+          status: 'success',
           duration: 1500,
           isClosable: true,
         });
       }
     } catch (error) {
-      console.log(error);
-      toast({
-        title: "Create card failed!",
-        description: "Please contact your administrator.",
-        status: "error",
+      await console.log(error);
+      await toast({
+        title: 'Create card failed!',
+        description: 'Please contact your administrator.',
+        status: 'error',
         duration: 2000,
         isClosable: true,
       });
+      await router.reload(router.asPath);
     }
   };
 
@@ -85,21 +86,22 @@ const CardModal = ({
       });
       if (response) {
         toast({
-          title: "Update card successfully!",
-          status: "success",
+          title: 'Update card successfully!',
+          status: 'success',
           duration: 1500,
           isClosable: true,
         });
       }
     } catch (error) {
-      console.log(error);
-      toast({
-        title: "Update card failed!",
-        description: "Please contact your administrator.",
-        status: "error",
+      await console.log(error);
+      await toast({
+        title: 'Update card failed!',
+        description: 'Please contact your administrator.',
+        status: 'error',
         duration: 1500,
         isClosable: true,
       });
+      await router.reload(router.asPath);
     }
   };
 
@@ -108,21 +110,22 @@ const CardModal = ({
       const response = await storyAPI.deleteStory(id);
       if (response) {
         toast({
-          title: "Delete card successfully!",
-          status: "success",
+          title: 'Delete card successfully!',
+          status: 'success',
           duration: 1500,
           isClosable: true,
         });
       }
     } catch (error) {
-      console.log(error);
-      toast({
-        title: "Delete card failed!",
-        description: "Please contact your administrator.",
-        status: "error",
+      await console.log(error);
+      await toast({
+        title: 'Delete card failed!',
+        description: 'Please contact your administrator.',
+        status: 'error',
         duration: 1500,
         isClosable: true,
       });
+      await router.reload(router.asPath);
     }
   };
 
@@ -134,21 +137,21 @@ const CardModal = ({
         setCard(initCard);
         onClose();
       }}
-      scrollBehavior={"inside"}
+      scrollBehavior={'inside'}
     >
       <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px)" />
-      <ModalContent borderRadius={"1rem"} padding={"1rem"}>
+      <ModalContent borderRadius={'1rem'} padding={'1rem'}>
         <ModalHeader color={color}>Create User Story</ModalHeader>
         <ModalBody color={color}>
           <FormControl mt={4} isRequired isInvalid={!isValidUserStory}>
-            <FormLabel htmlFor="userStory" fontSize={"lg"}>
+            <FormLabel htmlFor="userStory" fontSize={'lg'}>
               User Story
             </FormLabel>
             <Textarea
               id="userStory"
               defaultValue={card.userStory}
               placeholder="As a ... I need ... So that ..."
-              resize={"none"}
+              resize={'none'}
               onChange={(e) => {
                 setCard({ ...card, userStory: e.target.value });
                 setIsValidUserStory(isValidInput(e.target.value));
@@ -165,14 +168,14 @@ const CardModal = ({
           </FormControl>
 
           <FormControl mt={4} isRequired isInvalid={!isValidDef}>
-            <FormLabel htmlFor="definition" fontSize={"lg"}>
+            <FormLabel htmlFor="definition" fontSize={'lg'}>
               Definition of Done
             </FormLabel>
             <Textarea
               id="definition"
               defaultValue={card.defOfDone}
               placeholder="Requirement to complete a task"
-              resize={"none"}
+              resize={'none'}
               onChange={(e) => {
                 setCard({ ...card, defOfDone: e.target.value });
                 setIsValidDef(isValidInput(e.target.value));
@@ -187,7 +190,7 @@ const CardModal = ({
           </FormControl>
 
           <FormControl mt={4} isRequired isInvalid={!isValidPoint}>
-            <FormLabel htmlFor="point" fontSize={"lg"}>
+            <FormLabel htmlFor="point" fontSize={'lg'}>
               Story point:
             </FormLabel>
             <Select
@@ -224,7 +227,7 @@ const CardModal = ({
           </FormControl>
 
           <FormControl mt={4} isInvalid={!isValidCategory} isRequired>
-            <FormLabel htmlFor="category" fontSize={"lg"}>
+            <FormLabel htmlFor="category" fontSize={'lg'}>
               Category:
             </FormLabel>
             <Select
@@ -250,7 +253,7 @@ const CardModal = ({
           </FormControl>
 
           <FormControl mt={4} isInvalid={!isValidAssignee} isRequired>
-            <FormLabel htmlFor="participant" fontSize={"lg"}>
+            <FormLabel htmlFor="participant" fontSize={'lg'}>
               Assignee:
             </FormLabel>
             <Select
@@ -270,11 +273,11 @@ const CardModal = ({
                 participants.map((participant, idx) => (
                   <option key={idx} value={participant.id}>
                     {participant.firstName +
-                      " " +
+                      ' ' +
                       participant.lastName +
-                      " (" +
+                      ' (' +
                       participant.email +
-                      ")"}
+                      ')'}
                   </option>
                 ))}
             </Select>
@@ -283,11 +286,11 @@ const CardModal = ({
             )}
           </FormControl>
         </ModalBody>
-        <ModalFooter visibility={disableModal ? "hidden" : "visible"}>
+        <ModalFooter visibility={disableModal ? 'hidden' : 'visible'}>
           {isCard && (
             <Button
-              colorScheme={"red"}
-              variant={"outline"}
+              colorScheme={'red'}
+              variant={'outline'}
               onClick={() => {
                 deleteCard(card.id);
                 onClose();
@@ -298,15 +301,15 @@ const CardModal = ({
             </Button>
           )}
           <Button
-            colorScheme={"gray"}
-            variant={"outline"}
+            colorScheme={'gray'}
+            variant={'outline'}
             onClick={onClose}
             mr={4}
           >
             Close
           </Button>
           <Button
-            colorScheme={"telegram"}
+            colorScheme={'telegram'}
             isDisabled={
               !(
                 isValidUserStory &&
@@ -331,7 +334,7 @@ const CardModal = ({
                       point: card.point,
                       category: card.category,
                       defOfDone: card.defOfDone,
-                      status: "backlog",
+                      status: 'backlog',
                       assignId: card.assignId,
                     }
                   : {
@@ -339,17 +342,17 @@ const CardModal = ({
                       point: card.point,
                       category: card.category,
                       defOfDone: card.defOfDone,
-                      status: "backlog",
+                      status: 'backlog',
                       assignId: card.assignId,
                     };
                 isCard ? updateCard(result) : createCard(result);
                 if (!isCard) {
                   setCard({
-                    userStory: "",
-                    point: "",
-                    category: "",
-                    defOfDone: "",
-                    assignId: "",
+                    userStory: '',
+                    point: '',
+                    category: '',
+                    defOfDone: '',
+                    assignId: '',
                   });
 
                   setIsValidUserStory(false);
@@ -361,7 +364,7 @@ const CardModal = ({
               }
             }}
           >
-            {isCard ? "Update" : "Create"}
+            {isCard ? 'Update' : 'Create'}
           </Button>
         </ModalFooter>
       </ModalContent>

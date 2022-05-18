@@ -1,4 +1,4 @@
-import { AddIcon, MinusIcon } from "@chakra-ui/icons";
+import { AddIcon, MinusIcon } from '@chakra-ui/icons';
 import {
   Badge,
   Box,
@@ -12,14 +12,15 @@ import {
   useDisclosure,
   useToast,
   WrapItem,
-} from "@chakra-ui/react";
-import Avvvatars from "avvvatars-react";
-import { useState } from "react";
-import { Draggable } from "react-beautiful-dnd";
-import storyAPI from "../../api/services/storyAPI";
-import { BadgeColor, Category } from "../../config/constants";
-import textUtils from "../../utils/text";
-import CardModal from "./CardModal";
+} from '@chakra-ui/react';
+import Avvvatars from 'avvvatars-react';
+import { useState } from 'react';
+import { Draggable } from 'react-beautiful-dnd';
+import storyAPI from '../../api/services/storyAPI';
+import { BadgeColor, Category } from '../../config/constants';
+import textUtils from '../../utils/text';
+import CardModal from './CardModal';
+import { useRouter } from 'next/router';
 
 const Card = ({
   participants,
@@ -29,17 +30,18 @@ const Card = ({
   isActive,
   ...props
 }) => {
-  let color = useColorModeValue("#031d46", "#fffdfe");
-  let bg = useColorModeValue("white", "#405A7D");
-  let btnBg = useColorModeValue("gray.200", "#fffdfe");
+  let color = useColorModeValue('#031d46', '#fffdfe');
+  let bg = useColorModeValue('white', '#405A7D');
+  let btnBg = useColorModeValue('gray.200', '#fffdfe');
   const toast = useToast();
+  const router = useRouter();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const getUserInfoValue = (id) => {
     if (participants.length > 0) {
       const user = Object.values(participants).find((p) => p.id === id);
       return (
-        textUtils.getFirstLetters(user.firstName + " " + user.lastName) +
+        textUtils.getFirstLetters(user.firstName + ' ' + user.lastName) +
         user.id
       );
     }
@@ -60,35 +62,40 @@ const Card = ({
           card.id,
           {
             replaceStoryId: null,
-            sprintId: card.status === "backlog" ? sprintId : null,
-            status: card.status === "backlog" ? "todo" : "backlog",
+            sprintId: card.status === 'backlog' ? sprintId : null,
+            status: card.status === 'backlog' ? 'todo' : 'backlog',
           },
           {
             isDragged: true,
           }
         );
         if (response) {
-          toast({
-            title: "Update story successfully!",
-            status: "success",
+          await toast({
+            title: 'Update story successfully!',
+            status: 'success',
             duration: 1500,
             isClosable: true,
           });
+
+          await router.reload(router.asPath);
         }
       } catch (error) {
         console.log(error);
-        toast({
-          title: "Update story failed!",
-          status: "error",
+
+        await toast({
+          title: 'Update story failed!',
+          status: 'error',
           duration: 1500,
           isClosable: true,
         });
+
+        await router.reload(router.asPath);
       }
     }
   };
 
   return (
-    <Draggable draggableId={"" + card.id} index={props.index}>
+    <Draggable draggableId={'' + card.id} index={props.index}>
       {(provided) => (
         <>
           <Box
@@ -107,13 +114,13 @@ const Card = ({
             p={4}
             boxShadow="base"
             _hover={{
-              boxShadow: "0 0 5px 5px #e6e6e7",
-              transition: "all 0.4s linear",
+              boxShadow: '0 0 5px 5px #e6e6e7',
+              transition: 'all 0.4s linear',
             }}
             minH="6rem"
             minW="250px"
           >
-            <Flex alignItems={"center"} justifyContent={"space-between"}>
+            <Flex alignItems={'center'} justifyContent={'space-between'}>
               <Heading fontSize="lg" isTruncated>
                 {card.userStory}
               </Heading>
@@ -122,15 +129,15 @@ const Card = ({
                 <WrapItem>
                   <Tooltip
                     label={
-                      card.status === "backlog"
-                        ? "Add to sprint"
-                        : "Remove from sprint"
+                      card.status === 'backlog'
+                        ? 'Add to sprint'
+                        : 'Remove from sprint'
                     }
-                    placement={"left-start"}
+                    placement={'left-start'}
                   >
                     <IconButton
                       isRound={true}
-                      size={"xs"}
+                      size={'xs'}
                       // eslint-disable-next-line react-hooks/rules-of-hooks
                       bgColor={btnBg}
                       _hover={{ opacity: 0.8 }}
@@ -140,7 +147,7 @@ const Card = ({
                       }}
                       aria-label="Search database"
                       icon={
-                        card.status === "backlog" ? (
+                        card.status === 'backlog' ? (
                           <AddIcon color="green" />
                         ) : (
                           <MinusIcon color="red" />
@@ -156,16 +163,16 @@ const Card = ({
             <Flex
               mt={3}
               justifyContent="space-between"
-              alignItems={"center"}
-              alignContent={"center"}
+              alignItems={'center'}
+              alignContent={'center'}
               gap={3}
             >
-              <Flex alignItems={"center"}>
+              <Flex alignItems={'center'}>
                 <Text paddingRight={2}>Assignees:</Text>
                 <WrapItem>
                   <Tooltip
                     label={getUserInfoFull(card.assignId)}
-                    placement={"right-start"}
+                    placement={'right-start'}
                   >
                     <Box>
                       <Avvvatars
@@ -176,16 +183,16 @@ const Card = ({
                   </Tooltip>
                 </WrapItem>
               </Flex>
-              <Flex alignItems={"center"}>
+              <Flex alignItems={'center'}>
                 <Badge
                   colorScheme={BadgeColor[card.category]}
-                  borderRadius={"4px"}
+                  borderRadius={'4px'}
                   marginRight={2}
                 >
                   {Category[card.category]}
                 </Badge>
 
-                <Circle size="25px" bg="red.500" color="white" p={"10px"}>
+                <Circle size="25px" bg="red.500" color="white" p={'10px'}>
                   {card.point}
                 </Circle>
               </Flex>

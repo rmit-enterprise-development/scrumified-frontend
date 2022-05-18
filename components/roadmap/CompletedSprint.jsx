@@ -48,10 +48,11 @@ const CompletedSprint = ({ sprint }) => {
 				cursor="pointer"
 				display="flex"
 				alignItems="center"
-				p={2}
+        paddingX={5}
+        paddingY={2}
 				borderColor="#2d4046"
 				justifyContent="space-between"
-				borderRadius={'4px'}
+				borderRadius={'6px'}
 			>
 				<Flex alignItems="center">
 					<Heading fontSize="lg" color={textColor} isTruncated>
@@ -97,11 +98,11 @@ const CompletedSprint = ({ sprint }) => {
 							'linear(blue.800 0%, blue.900 100%)'
 						)}
 						boxShadow="base"
-						py={2.5}
 						transition="all 0.5s linear"
 						px={4}
 						gap={2}
-						borderRadius={'4px'}
+						borderRadius={'6px'}
+            paddingY={5}
 					>
 						{completedStories.length === 0 ? (
 							<Flex

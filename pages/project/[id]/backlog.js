@@ -95,21 +95,6 @@ const Backlog = ({ authToken }) => {
     }
   };
 
-  // const getCards = async () => {
-  //   setIsLoading(true);
-  //   try {
-  //     const response = await projectAPI.getAllStories(projectId, {
-  //       isBacklog: true,
-  //       returnArray: false,
-  //     });
-  //     const json = response.data;
-  //     setCards(json);
-  //     setIsLoading(false);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
   useEffect(() => {
     setWinReady(true);
     getParticipants(); // Always get participants first
@@ -121,7 +106,7 @@ const Backlog = ({ authToken }) => {
     const uri = `https://scrumified-dev-bakend.herokuapp.com/backlog?projectId=${projectId}`;
     let eventSource = new EventSource(uri);
     eventSource.onopen = (e) => {
-      console.log("Open Backlog Event Source!");
+      console.log("Open Event Source!");
     };
     eventSource.addEventListener("update", getCurrentSprint);
     return () => {
@@ -212,6 +197,7 @@ const Backlog = ({ authToken }) => {
               storyList={filteredCard.cardList}
               participants={participants}
               sprintId={currentSprint.id}
+              isActive={isActive}
             />
           ) : winReady ? (
             <Board

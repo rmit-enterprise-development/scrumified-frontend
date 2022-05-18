@@ -10,7 +10,8 @@ import {
   Tooltip,
   useColorModeValue,
   useDisclosure,
-  WrapItem
+  useToast,
+  WrapItem,
 } from "@chakra-ui/react";
 import Avvvatars from "avvvatars-react";
 import Router from "next/router";
@@ -22,7 +23,9 @@ import textUtils from "../../../../utils/text";
 import CardModal from "../../../workspace/CardModal";
 import { LoggedUserContext } from "../../LoggedUserProvider";
 
-const StaticCardBacklog = ({ card, participants, sprintId }) => {
+const StaticCardBacklog = ({ card, participants, sprintId, isActive }) => {
+  const toast = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const getUserInfoValue = (id) => {
     if (participants.length > 0) {
       const user = Object.values(participants).find((p) => p.id === id);
@@ -46,22 +49,36 @@ const StaticCardBacklog = ({ card, participants, sprintId }) => {
   const [isAdded, setIsAdded] = useState(false);
   const handleUpdateStatus = async () => {
     if (sprintId) {
+      setIsSubmitting(true);
       try {
         const response = await storyAPI.putStory(
           // Specialized params for add/remove story from sprint
           card.id,
           {
             replaceStoryId: null,
-            sprintId: sprintId,
-            status: "todo",
+            sprintId: card.status === "backlog" ? sprintId : null,
+            status: card.status === "backlog" ? "todo" : "backlog",
           },
           {
             isDragged: true,
           }
         );
-        console.log(response);
+        if (response) {
+          toast({
+            title: "Update story successfully!",
+            status: "success",
+            duration: 1500,
+            isClosable: true,
+          });
+        }
       } catch (error) {
         console.log(error);
+        toast({
+          title: "Update story failed!",
+          status: "error",
+          duration: 1500,
+          isClosable: true,
+        });
       }
     }
   };
@@ -91,29 +108,36 @@ const StaticCardBacklog = ({ card, participants, sprintId }) => {
           {card.userStory}
         </Heading>
 
-        <WrapItem>
-          <Tooltip
-            label={!isAdded ? "Add to sprint" : "Remove from sprint"}
-            placement={"left-start"}
-          >
-            <IconButton
-              isRound={true}
-              size={"xs"}
-              // eslint-disable-next-line react-hooks/rules-of-hooks
-              bgColor={useColorModeValue("gray.200", "#fffdfe")}
-              _hover={{ opacity: 0.8 }}
-              onClick={(e) => {
-                e.stopPropagation();
-                setIsAdded(!isAdded);
-                handleUpdateStatus();
-              }}
-              aria-label="Search database"
-              icon={
-                !isAdded ? <AddIcon color="green" /> : <MinusIcon color="red" />
-              }
-            />
-          </Tooltip>
-        </WrapItem>
+        {sprintId && !isActive && (
+          <WrapItem>
+            <Tooltip
+              label={!isAdded ? "Add to sprint" : "Remove from sprint"}
+              placement={"left-start"}
+            >
+              <IconButton
+                isRound={true}
+                size={"xs"}
+                // eslint-disable-next-line react-hooks/rules-of-hooks
+                bgColor={useColorModeValue("gray.200", "#fffdfe")}
+                _hover={{ opacity: 0.8 }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsAdded(!isAdded);
+                  handleUpdateStatus();
+                }}
+                aria-label="Search database"
+                icon={
+                  !isAdded ? (
+                    <AddIcon color="green" />
+                  ) : (
+                    <MinusIcon color="red" />
+                  )
+                }
+                disabled={isSubmitting}
+              />
+            </Tooltip>
+          </WrapItem>
+        )}
       </Flex>
       <Flex
         mt={3}

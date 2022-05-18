@@ -86,7 +86,7 @@ const Sprint = ({ authToken }) => {
     const uri = `https://scrumified-dev-bakend.herokuapp.com/backlog?projectId=${projectId}`;
     let eventSource = new EventSource(uri);
     eventSource.onopen = (e) => {
-      console.log("Open Sprint Event Source!");
+      console.log("Open Event Source!");
     };
     eventSource.addEventListener("update", getCurrentSprint);
     return () => {

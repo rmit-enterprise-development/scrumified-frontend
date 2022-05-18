@@ -7,7 +7,11 @@ import {
   Heading,
   IconButton,
   Text,
-  Tooltip, useColorModeValue, useDisclosure, useToast, WrapItem
+  Tooltip,
+  useColorModeValue,
+  useDisclosure,
+  useToast,
+  WrapItem,
 } from "@chakra-ui/react";
 import Avvvatars from "avvvatars-react";
 import { useState } from "react";

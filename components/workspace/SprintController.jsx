@@ -7,7 +7,7 @@ import {
   useBreakpointValue,
   useColorModeValue,
   useToast,
-  WrapItem
+  WrapItem,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import sprintAPI from '../../api/services/sprintAPI';
@@ -18,6 +18,7 @@ const SprintController = ({
   isActive,
   points,
   getCurrentSprint,
+  isCard,
 }) => {
   let color = useColorModeValue('#031d46', '#fffdfe');
   let bg = useColorModeValue('gray.100', '#405A7D');
@@ -120,14 +121,10 @@ const SprintController = ({
             </Tooltip>
           </WrapItem>
         </Flex>
-        {isSprint && (
+        {isSprint && isCard && (
           <Button
             colorScheme={isActive ? 'teal' : 'telegram'}
-            // color={useColorModeValue("#FFFDFE", "#2d4046")}
             onClick={isActive ? handleCompleteSprint : handleStartSprint}
-            // style={{
-            //   display: isActive ? "none" : "flex",
-            // }}
             disabled={!isSprint}
           >
             {isActive ? 'Complete Sprint' : 'Start Sprint'}

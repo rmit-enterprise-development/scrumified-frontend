@@ -266,7 +266,7 @@ const CreateProjectModal = () => {
               ) : (
                 selectedItems.length === 0 && (
                   <FormHelperText>
-                    You can left this empty for now and edit later in Dashboard.
+                    You can leave this empty for now and edit later in Dashboard.
                   </FormHelperText>
                 )
               )}

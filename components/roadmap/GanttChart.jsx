@@ -75,8 +75,8 @@ const GanttChart = ({ data }) => {
   console.log(data);
 
   const chartData = [];
-  const progress = sprint.completePercentage ? sprint.completePercentage : 0;
   data.forEach((sprint) => {
+    const progress = sprint.completePercentage ? sprint.completePercentage : 0;
     let row = [
       '' + sprint.id,
       'Sprint ' + sprint.goal + ' | ' + progress + '%',

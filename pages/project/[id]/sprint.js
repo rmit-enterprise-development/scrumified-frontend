@@ -1,25 +1,25 @@
-import Head from "next/head";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import SectionHeader from "../../../components/common/SectionHeader/SectionHeader";
-import MainContainer from "../../../components/layout/MainContainer";
-import Board from "../../../components/workspace/Board";
-import Column from "../../../components/workspace/Column";
+import Head from 'next/head';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import SectionHeader from '../../../components/common/SectionHeader/SectionHeader';
+import MainContainer from '../../../components/layout/MainContainer';
+import Board from '../../../components/workspace/Board';
+import Column from '../../../components/workspace/Column';
 
-import { Box, Flex, Skeleton, Tag } from "@chakra-ui/react";
-import cookies from "next-cookies";
-import projectAPI from "../../../api/services/projectAPI";
-import { LoggedUserProvider } from "../../../components/common/LoggedUserProvider";
-import SprintController from "../../../components/workspace/SprintController";
-import linkCards from "../../../utils/card/card";
-import { SprintColor } from "../../../config/constants";
-import sprintAPI from "../../../api/services/sprintAPI";
-import calculatePointsAllColumn from "../../../utils/card/point";
+import { Box, Flex, Skeleton, Tag } from '@chakra-ui/react';
+import cookies from 'next-cookies';
+import projectAPI from '../../../api/services/projectAPI';
+import { LoggedUserProvider } from '../../../components/common/LoggedUserProvider';
+import SprintController from '../../../components/workspace/SprintController';
+import linkCards from '../../../utils/card/card';
+import { SprintColor } from '../../../config/constants';
+import sprintAPI from '../../../api/services/sprintAPI';
+import calculatePointsAllColumn from '../../../utils/card/point';
 
 const Sprint = ({ authToken }) => {
   const { asPath } = useRouter();
 
-  const projectId = asPath.split("/")[2];
+  const projectId = asPath.split('/')[2];
   const [cards, setCards] = useState([]);
   const [cardListTodo, setCardListTodo] = useState([]);
   const [cardListInProgress, setCardListInProgress] = useState([]);
@@ -30,6 +30,7 @@ const Sprint = ({ authToken }) => {
   const [currentSprint, setCurrentSprint] = useState({});
   const [isSprint, setIsSprint] = useState(false);
   const [isActive, setIsActive] = useState(false);
+  const [isCard, setIsCard] = useState(false);
 
   const getParticipants = async () => {
     setIsLoading(true);
@@ -59,11 +60,13 @@ const Sprint = ({ authToken }) => {
 
       // Tear down
       if (json) {
-        setIsActive(json.status === "inProgress");
+        setIsActive(json.status === 'inProgress');
         const responseStories = await sprintAPI.getAllStories(json.id);
         setCards(responseStories.data);
+        setIsCard(true);
       } else {
         setCards([]);
+        setIsCard(false);
       }
 
       setIsLoading(false);
@@ -86,9 +89,9 @@ const Sprint = ({ authToken }) => {
     const uri = `https://scrumified-dev-bakend.herokuapp.com/backlog?projectId=${projectId}`;
     let eventSource = new EventSource(uri);
     eventSource.onopen = (e) => {
-      console.log("Open Event Source!");
+      console.log('Open Event Source!');
     };
-    eventSource.addEventListener("update", getCurrentSprint);
+    eventSource.addEventListener('update', getCurrentSprint);
     return () => {
       eventSource.close();
     };
@@ -97,12 +100,12 @@ const Sprint = ({ authToken }) => {
 
   useEffect(() => {
     setCardListTodo(
-      linkCards(cards, "todo", participants, true, currentSprint.id, isActive)
+      linkCards(cards, 'todo', participants, true, currentSprint.id, isActive)
     );
     setCardListInProgress(
       linkCards(
         cards,
-        "inProgress",
+        'inProgress',
         participants,
         true,
         currentSprint.id,
@@ -110,7 +113,7 @@ const Sprint = ({ authToken }) => {
       )
     );
     setCardListDone(
-      linkCards(cards, "done", participants, true, currentSprint.id, isActive)
+      linkCards(cards, 'done', participants, true, currentSprint.id, isActive)
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cards, currentSprint]);
@@ -146,7 +149,7 @@ const Sprint = ({ authToken }) => {
                       : SprintColor.PENDING_SPRINT
                   }
                 >
-                  {isActive ? "ACTIVE" : "NOT STARTED"}
+                  {isActive ? 'ACTIVE' : 'NOT STARTED'}
                 </Tag>
               )}
             </Skeleton>
@@ -158,6 +161,7 @@ const Sprint = ({ authToken }) => {
             points={points}
             getCurrentSprint={getCurrentSprint}
             setCards={setCards}
+            isCard={isCard}
           />
           {winReady ? (
             <Board
@@ -172,36 +176,36 @@ const Sprint = ({ authToken }) => {
             >
               <Column
                 key={0}
-                title={"Todo"}
-                id={"todo"}
+                title={'Todo'}
+                id={'todo'}
                 cards={cards}
                 setCards={setCards}
                 cardList={cardListTodo}
-                columnColor={"red.500"}
+                columnColor={'red.500'}
                 isLoading={isLoading}
                 sprintStatus={currentSprint.status}
                 isDragDisabled={false}
               />
               <Column
                 key={1}
-                title={"In Progress"}
-                id={"inProgress"}
+                title={'In Progress'}
+                id={'inProgress'}
                 cards={cards}
                 setCards={setCards}
                 cardList={cardListInProgress}
-                columnColor={"blue.500"}
+                columnColor={'blue.500'}
                 isLoading={isLoading}
                 sprintStatus={currentSprint.status}
                 isDragDisabled={!isSprint || !isActive}
               />
               <Column
                 key={2}
-                title={"Done"}
-                id={"done"}
+                title={'Done'}
+                id={'done'}
                 cards={cards}
                 setCards={setCards}
                 cardList={cardListDone}
-                columnColor={"green.500"}
+                columnColor={'green.500'}
                 isLoading={isLoading}
                 sprintStatus={currentSprint.status}
                 isDragDisabled={!isSprint || !isActive}
@@ -216,7 +220,7 @@ const Sprint = ({ authToken }) => {
 
 export async function getServerSideProps(ctx) {
   const { auth } = cookies(ctx);
-  return { props: { authToken: auth || "" } };
+  return { props: { authToken: auth || '' } };
 }
 
 export default Sprint;

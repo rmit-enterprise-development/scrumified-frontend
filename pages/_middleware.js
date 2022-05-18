@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-const FE_BASE_URL = 'http://localhost:3000/';
+const FE_BASE_URL = 'https://scrumified.vercel.app/';
 
 export default function Middleware(req) {
   // get cookie from request

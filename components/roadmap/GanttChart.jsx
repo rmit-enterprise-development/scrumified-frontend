@@ -88,12 +88,12 @@ const GanttChart = ({ data }) => {
     ];
     chartData.push(row);
   });
-  const chartHeight = data ? (data.length + 1) * 40 : 500;
+  const chartHeight = data ? (data.length + 1) * 60 : 500;
 
   const options = {
     height: chartHeight,
     gantt: {
-      trackHeight: 40,
+      trackHeight: 60,
       criticalPathEnabled: false,
       innerGridTrack: { fill: useColorModeValue("white", "#031d46") },
       palette: palette,

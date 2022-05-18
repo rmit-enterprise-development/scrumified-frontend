@@ -1,4 +1,4 @@
-import NextLink from "next/link";
+import NextLink from 'next/link';
 import {
   chakra,
   Flex,
@@ -7,14 +7,14 @@ import {
   Text,
   Container,
   useColorModeValue,
-} from "@chakra-ui/react";
-import { CloseIcon } from "@chakra-ui/icons";
-import { motion, useAnimation } from "framer-motion";
-import { useEffect } from "react";
+} from '@chakra-ui/react';
+import { CloseIcon } from '@chakra-ui/icons';
+import { motion, useAnimation } from 'framer-motion';
+import { useEffect } from 'react';
 
 const MotionFlex = motion(Flex);
 
-const BelowMediumNavBar = ({
+const BelowMedium = ({
   isOpen,
   initNavBg,
   onToggle,
@@ -26,7 +26,7 @@ const BelowMediumNavBar = ({
   // methods to handle navbar display
   const openHidNav = async () => {
     await hidNavControls.start({
-      display: "flex",
+      display: 'flex',
       transition: {
         duration: 0.1,
       },
@@ -44,7 +44,7 @@ const BelowMediumNavBar = ({
     e.preventDefault();
     const targetHref = e.target.firstChild.hash || e.target.hash;
     const location = document.querySelector(targetHref).offsetTop;
-    const offsetFinal = targetHref === "#features" ? 120 : 64;
+    const offsetFinal = targetHref === '#features' ? 120 : 64;
     window.scrollTo({
       left: 0,
       top: location - offsetFinal,
@@ -61,7 +61,7 @@ const BelowMediumNavBar = ({
     });
 
     await hidNavControls.start({
-      display: "none",
+      display: 'none',
       transition: {
         duration: 0.1,
       },
@@ -78,7 +78,7 @@ const BelowMediumNavBar = ({
   return (
     <MotionFlex
       w="100vw"
-      initial={{ display: "none", opacity: 0.2 }}
+      initial={{ display: 'none', opacity: 0.2 }}
       animate={hidNavControls}
       bg={`${initNavBg}, 1)`}
       zIndex={201}
@@ -98,9 +98,9 @@ const BelowMediumNavBar = ({
           fontSize="lg"
           size="lg"
           bg="none"
-          _hover={{ backgroundColor: "none" }}
+          _hover={{ backgroundColor: 'none' }}
           onClick={onToggle}
-          icon={<CloseIcon color="#4599fe" _hover={{ color: "#eb0546" }} />}
+          icon={<CloseIcon color="#4599fe" _hover={{ color: '#eb0546' }} />}
         />
       </Flex>
 
@@ -117,14 +117,14 @@ const BelowMediumNavBar = ({
         >
           <chakra.a
             href="#home"
-            style={{ transition: "all 0.5s" }}
+            style={{ transition: 'all 0.5s' }}
             color="gray.500"
             _hover={{
-              color: "#eb0546",
-              textDecoration: "underline",
-              textDecorationStyle: "wavy",
-              textUnderlineOffset: "8px",
-              textDecorationThickness: "1.5px",
+              color: '#eb0546',
+              textDecoration: 'underline',
+              textDecorationStyle: 'wavy',
+              textUnderlineOffset: '8px',
+              textDecorationThickness: '1.5px',
             }}
             aria-label="Home"
             fontSize="lg"
@@ -143,14 +143,14 @@ const BelowMediumNavBar = ({
         >
           <chakra.a
             href="#features"
-            style={{ transition: "all 0.5s" }}
+            style={{ transition: 'all 0.5s' }}
             color="gray.500"
             _hover={{
-              color: "#eb0546",
-              textDecoration: "underline",
-              textDecorationStyle: "wavy",
-              textUnderlineOffset: "8px",
-              textDecorationThickness: "1.5px",
+              color: '#eb0546',
+              textDecoration: 'underline',
+              textDecorationStyle: 'wavy',
+              textUnderlineOffset: '8px',
+              textDecorationThickness: '1.5px',
             }}
             aria-label="Features"
             fontSize="lg"
@@ -219,7 +219,7 @@ const BelowMediumNavBar = ({
             bg="#fff"
             borderRadius="40px"
             cursor="pointer"
-            border={useColorModeValue("2px solid #eb0546", "")}
+            border={useColorModeValue('2px solid #eb0546', '')}
           >
             <Text
               fontWeight="bold"
@@ -236,4 +236,4 @@ const BelowMediumNavBar = ({
   );
 };
 
-export default BelowMediumNavBar;
+export default BelowMedium;

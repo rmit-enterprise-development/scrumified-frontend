@@ -15,7 +15,7 @@ import { HamburgerIcon } from '@chakra-ui/icons';
 import Images from '../../../assets/images';
 import { motion } from 'framer-motion';
 
-const AboveMediumNavbar = ({
+const AboveMedium = ({
   isOpen,
   onToggle,
   initNavBg,
@@ -223,4 +223,4 @@ const AboveMediumNavbar = ({
   );
 };
 
-export default AboveMediumNavbar;
+export default AboveMedium;

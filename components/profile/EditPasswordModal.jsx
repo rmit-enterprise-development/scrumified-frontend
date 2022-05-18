@@ -55,16 +55,11 @@ const EditPasswordModal = ({ id, email }) => {
 
       await toast({
         title: 'Update Password',
-        description: 'Your password has been updated. Please log in again!',
+        description: 'Your password has been updated.',
         status: 'success',
         duration: 3000,
         isClosable: true,
       });
-
-      // redirect home
-      setTimeout(() => {
-        router.replace('/');
-      }, 2000);
     } catch (error) {
       await toast({
         title: 'Update Password',

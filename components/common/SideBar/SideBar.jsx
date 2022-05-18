@@ -11,9 +11,9 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { FiMenu } from "react-icons/fi";
-import { SidebarContent } from "./SidebarContent";
+import { SideBarContent } from "./SideBarContent";
 
-export default function Sidebar({ children }) {
+export default function SideBar({ children }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { toggleColorMode } = useColorMode();
 
@@ -22,7 +22,7 @@ export default function Sidebar({ children }) {
       minH={useBreakpointValue({ base: "0.5rem", md: "100vh" })}
       bg={useColorModeValue("#FFFDFE", "#031E49")}
     >
-      <SidebarContent
+      <SideBarContent
         onClose={() => onClose}
         toggleColorMode={toggleColorMode}
         display={{ base: "none", md: "block" }}
@@ -37,7 +37,7 @@ export default function Sidebar({ children }) {
         bg="#031d46"
       >
         <DrawerContent>
-          <SidebarContent toggleColorMode={toggleColorMode} onClose={onClose} />
+          <SideBarContent toggleColorMode={toggleColorMode} onClose={onClose} />
         </DrawerContent>
       </Drawer>
 

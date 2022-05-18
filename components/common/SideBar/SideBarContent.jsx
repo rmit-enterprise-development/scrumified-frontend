@@ -18,7 +18,7 @@ import { SideBarItem } from "./SideBarItem";
 import { LoggedUserContext } from "../LoggedUserProvider";
 import textUtils from "../../../utils/text";
 
-export function SidebarContent({ onClose, toggleColorMode, ...rest }) {
+export function SideBarContent({ onClose, toggleColorMode, ...rest }) {
   const SwitchIcon = useColorModeValue(FaSun, FaMoon);
   const user = useContext(LoggedUserContext);
   const avatarValue =

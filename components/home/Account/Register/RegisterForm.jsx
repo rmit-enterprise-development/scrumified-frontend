@@ -16,6 +16,7 @@ import InputLabel from './InputLabel';
 import FormButton from './FormButton';
 import React, { useState } from 'react';
 import userAPI from '../../../../api/services/userAPI';
+import { sha512_256 } from 'js-sha512';
 
 const MotionText = motion(Text);
 const MotionFlex = motion(Flex);
@@ -64,7 +65,10 @@ const RegisterForm = ({
     // call method to fetch POST API and create new user on database
     try {
       // sign up service usage
-      const signupServiceStatus = await userAPI.register(registerData);
+      const signupServiceStatus = await userAPI.register({
+        ...registerData,
+        password: sha512_256(registerData.password),
+      });
 
       // if login service failed
       if (signupServiceStatus.status !== 200)

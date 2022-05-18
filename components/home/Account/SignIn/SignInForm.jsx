@@ -17,6 +17,7 @@ import { motion } from 'framer-motion';
 import { sign } from 'jsonwebtoken';
 import userAPI from '../../../../api/services/userAPI';
 import md5 from 'md5';
+import { sha512_256 } from 'js-sha512';
 
 // integrate Chakra Components with framer motion
 const MotionText = motion(Text);
@@ -102,7 +103,7 @@ const SignInForm = ({
     setIsSignInLoading(true);
 
     // sign in data container
-    const finalData = { email: signInEmail, password: signInPwd };
+    const finalData = { email: signInEmail, password: sha512_256(signInPwd) };
 
     try {
       const { firstName, lastName } = await loginCreateToken(finalData);

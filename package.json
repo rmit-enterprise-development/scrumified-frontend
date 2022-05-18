@@ -21,6 +21,7 @@
     "formik": "^2.2.9",
     "formik-chakra-ui": "^1.6.0",
     "framer-motion": "^6.2.8",
+    "js-sha512": "^0.8.0",
     "jsonwebtoken": "^8.5.1",
     "match-sorter": "^6.3.1",
     "md5": "^2.3.0",

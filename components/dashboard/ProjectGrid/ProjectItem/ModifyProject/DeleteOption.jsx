@@ -80,7 +80,7 @@ const DeleteOption = ({ id, fetchUpdatedProject }) => {
 
             <AlertDialogFooter>
               {isSubmitting && (
-                <CircularProgress isIndeterminate color="green.300" />
+                <CircularProgress isIndeterminate color="green.300" mr={3} />
               )}
               <Button
                 ref={cancelRef}

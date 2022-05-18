@@ -275,7 +275,7 @@ const CreateProjectModal = () => {
 
           <ModalFooter>
             {isSubmitting && (
-              <CircularProgress isIndeterminate color="green.300" />
+              <CircularProgress isIndeterminate color="green.300" mr={3} />
             )}
             <Button onClick={onClose} disabled={isSubmitting} mr={3}>
               Cancel

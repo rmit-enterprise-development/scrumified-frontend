@@ -34,7 +34,7 @@ const ProjectItem = ({
   const [openTask, setOpenTask] = useState(0);
   const getNumberOfStories = async () => {
     try {
-      const params = { projectId: project.id };
+      const params = { projectId: project.id, exceptStatus: "completed" };
       const response = await userAPI.getAllStories(user.logUserId, params);
       const data = response.data;
       setOpenTask(data.totalElements);

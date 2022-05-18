@@ -224,7 +224,9 @@ const BacklogController = ({
             md: "flex-start",
           })}
         >
-          <Text as="span">Total points: </Text>
+          <Text as="span" color={useColorModeValue("#031d46", "#fffdfe")}>
+            Total points:{" "}
+          </Text>
           <SkeletonCircle isLoaded={!isLoading}>
             <Circle size={8} color="white" bgColor="gray">
               {totalPoints}

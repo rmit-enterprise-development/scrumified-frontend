@@ -143,6 +143,7 @@ const Dashboard = ({ authToken }) => {
 
   // Filter
   const [filterStory, setFilterStory] = useState({
+    exceptStatus: "completed",
     key: "",
     page: currentStoryPage - 1,
     limit: PAGE_LIMIT_STORY,

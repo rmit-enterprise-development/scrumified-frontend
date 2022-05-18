@@ -36,6 +36,8 @@ const SprintDrawer = ({
   isSprint,
   refetchCurrentSprint,
 }) => {
+  console.log("HELLOOOOOOOOOO");
+  console.log("currentSprint: ", currentSprint);
   const toast = useToast();
   const router = useRouter();
   const TWO_WEEKS_TIME = 12096e5;
@@ -51,17 +53,18 @@ const SprintDrawer = ({
   };
 
   const [sprint, setSprint] = useState(isSprint ? currentSprint : initSprint);
+  console.log("sprint: ", sprint);
   const [isValidGoal, setIsValidGoal] = useState(isSprint);
   const [isValidDoneDefinition, setIsValidDoneDefinition] = useState(isSprint);
 
   const [startDate, setStartDate] = useState(
-    isSprint && currentSprint
+    currentSprint.startDate
       ? new Date(currentSprint.startDate * 1000)
       : new Date()
   );
 
   const [endDate, setEndDate] = useState(
-    isSprint && currentSprint
+    currentSprint.endDate
       ? new Date(currentSprint.endDate * 1000)
       : new Date(Date.now() + TWO_WEEKS_TIME)
   );
@@ -159,19 +162,21 @@ const SprintDrawer = ({
   };
 
   useEffect(() => {
-    setSprint(isSprint ? currentSprint : initSprint);
+    setSprint(currentSprint.id ? currentSprint : initSprint);
     setIsValidGoal(isSprint);
     setIsValidDoneDefinition(isSprint);
     setStartDate(
-      isSprint ? new Date(currentSprint.startDate * 1000) : new Date()
+      currentSprint.startDate
+        ? new Date(currentSprint.startDate * 1000)
+        : new Date()
     );
     setEndDate(
-      isSprint
+      currentSprint.endDate
         ? new Date(currentSprint.endDate * 1000)
         : new Date(Date.now() + TWO_WEEKS_TIME)
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isSprint]);
+  }, [currentSprint]);
 
   return (
     <Drawer onClose={onClose} isOpen={isOpen} size={'md'}>
@@ -297,13 +302,14 @@ const SprintDrawer = ({
 
         <DrawerFooter>
           {isSubmitting && (
-            <CircularProgress isIndeterminate color="green.300" />
+            <CircularProgress isIndeterminate color="green.300" mr={3} />
           )}
           {isSprint && (
             <Button
               colorScheme={'red'}
               variant={'outline'}
               onClick={() => {
+                setIsSubmitting(true);
                 deleteSprint(sprint.id);
               }}
               mr={4}
@@ -335,8 +341,8 @@ const SprintDrawer = ({
                 isSprint ? updateSprint(result) : createSprint(result);
                 if (!isSprint) {
                   setSprint(initSprint);
-                  setIsValidDoneDefinition(false);
-                  setIsValidGoal(false);
+                  // setIsValidDoneDefinition(false);
+                  // setIsValidGoal(false);
                 }
               }
             }}

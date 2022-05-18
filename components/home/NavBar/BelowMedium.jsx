@@ -167,7 +167,7 @@ const BelowMedium = ({
           cursor="pointer"
         >
           <chakra.a
-            href="#tutorial" // TODO: insert tutorial video link here
+            href="https://shorturl.at/iotMP" // TODO: insert tutorial video link here
             style={{ transition: 'all 0.5s' }}
             color="gray.500"
             _hover={{

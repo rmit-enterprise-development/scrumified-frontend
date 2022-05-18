@@ -64,7 +64,7 @@ const Column = ({
             ref={provided.innerRef}
             {...provided.droppableProps}
             padding={"2"}
-            overflow="scroll"
+            overflow="auto"
           >
             {cardList &&
               cardList.length === 0 &&

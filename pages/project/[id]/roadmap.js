@@ -26,7 +26,7 @@ const Roadmap = ({ authToken }) => {
         includePercentage: true,
       });
       const data = await response.data;
-      setAllSprints(data);
+      setAllSprints(data.filter((sprint) => sprint.status !== "todo"));
       setIsLoading(false);
     } catch (error) {
       toast({

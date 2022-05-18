@@ -171,7 +171,6 @@ const AboveMedium = ({
 
         <chakra.a
           href="#tutorial" // TODO: insert tutorial video link here
-          onClick={handleSectionClick}
           style={{ transition: 'all 0.5s' }}
           cursor="pointer"
           color={useColorModeValue('gray.500', '#fff')}

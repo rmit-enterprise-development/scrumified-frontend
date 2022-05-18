@@ -165,7 +165,6 @@ const BelowMedium = ({
           bg="gray.100"
           borderRadius="40px"
           cursor="pointer"
-          onClick={handleSectionClick}
         >
           <chakra.a
             href="#tutorial" // TODO: insert tutorial video link here

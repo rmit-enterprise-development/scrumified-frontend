@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { EditIcon } from "@chakra-ui/icons";
+import { EditIcon } from '@chakra-ui/icons';
 import {
   Button,
   Flex,
@@ -15,15 +15,16 @@ import {
   ModalOverlay,
   useColorModeValue,
   useDisclosure,
-  useToast,
-} from "@chakra-ui/react";
-import { Field, Form, Formik } from "formik";
-import { useRef } from "react";
-import * as Yup from "yup";
-import userAPI from "../../api/services/userAPI";
-import { sign } from "jsonwebtoken";
-import md5 from "md5";
-import { useRouter } from "next/router";
+  useToast
+} from '@chakra-ui/react';
+import { Field, Form, Formik } from 'formik';
+import { sha512_256 } from 'js-sha512';
+import { sign } from 'jsonwebtoken';
+import md5 from 'md5';
+import { useRouter } from 'next/router';
+import { useRef } from 'react';
+import * as Yup from 'yup';
+import userAPI from '../../api/services/userAPI';
 
 const EditProfileModal = ({ id, fname, lname, email, description }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -36,13 +37,16 @@ const EditProfileModal = ({ id, fname, lname, email, description }) => {
     lname: lname,
     email: email,
     description: description,
-    password: "",
+    password: '',
   };
 
   const onSubmit = async (values, actions) => {
     try {
       // get password confirm value from user -> verify with login method
-      const verifyData = { email: email, password: values.password };
+      const verifyData = {
+        email: email,
+        password: sha512_256(values.password),
+      };
       const loginServiceStatus = await userAPI.login(verifyData);
 
       // successfully verify password
@@ -70,23 +74,23 @@ const EditProfileModal = ({ id, fname, lname, email, description }) => {
         email: values.email,
         description: values.description,
       };
-      const jwt = await sign(claims, md5("EmChiXemAnhLa_#BanNhauMaThoi"), {
-        expiresIn: "1h",
+      const jwt = await sign(claims, md5('EmChiXemAnhLa_#BanNhauMaThoi'), {
+        expiresIn: '1h',
       });
 
       // login with current sign in data
-      await fetch("/api/update", {
-        method: "POST",
+      await fetch('/api/update', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({ token: jwt }),
       });
 
       await toast({
-        title: "Update Profile",
-        description: "Your profile has been updated. Refreshing ...",
-        status: "success",
+        title: 'Update Profile',
+        description: 'Your profile has been updated. Refreshing ...',
+        status: 'success',
         duration: 3000,
         isClosable: true,
       });
@@ -97,12 +101,12 @@ const EditProfileModal = ({ id, fname, lname, email, description }) => {
       }, 2000);
     } catch (error) {
       await toast({
-        title: "Update Profile",
+        title: 'Update Profile',
         description:
-          typeof error !== "string"
-            ? "Server error, cannot update profile info"
+          typeof error !== 'string'
+            ? 'Server error, cannot update profile info'
             : error,
-        status: "error",
+        status: 'error',
         duration: 3000,
         isClosable: true,
       });
@@ -111,24 +115,24 @@ const EditProfileModal = ({ id, fname, lname, email, description }) => {
 
   const validationSchema = Yup.object({
     fname: Yup.string()
-      .min(2, "Must be more than 1 character")
-      .required("Required")
+      .min(2, 'Must be more than 1 character')
+      .required('Required')
       .matches(
         /^[A-Z]+[a-z]+$/,
-        "Only letters, capitalize first letter (only)"
+        'Only letters, capitalize first letter (only)'
       ),
     lname: Yup.string()
-      .min(2, "Must be more than 1 character")
-      .required("Required")
+      .min(2, 'Must be more than 1 character')
+      .required('Required')
       .matches(
         /^[A-Z]+[a-z]+$/,
-        "Only letters, capitalize first letter (only)"
+        'Only letters, capitalize first letter (only)'
       ),
     email: Yup.string()
-      .min(2, "Must be more than 1 character")
-      .required("Required")
-      .email("Invalid email"),
-    password: Yup.string().required("Please confirm your password"),
+      .min(2, 'Must be more than 1 character')
+      .required('Required')
+      .email('Invalid email'),
+    password: Yup.string().required('Please confirm your password'),
   });
 
   return (
@@ -151,10 +155,10 @@ const EditProfileModal = ({ id, fname, lname, email, description }) => {
       >
         <ModalOverlay backdropFilter="blur(10px)" />
         <ModalContent>
-          <ModalHeader color={useColorModeValue("#031e49", "gray.200")}>
+          <ModalHeader color={useColorModeValue('#031e49', 'gray.200')}>
             Edit Profile
           </ModalHeader>
-          <ModalCloseButton color={useColorModeValue("#031e49", "gray.200")} />
+          <ModalCloseButton color={useColorModeValue('#031e49', 'gray.200')} />
           <ModalBody pb={6}>
             <Formik
               initialValues={initialValues}
@@ -171,7 +175,7 @@ const EditProfileModal = ({ id, fname, lname, email, description }) => {
                         <FormLabel
                           htmlFor="fname"
                           pt={2}
-                          color={useColorModeValue("#031d46", "#fffdfe")}
+                          color={useColorModeValue('#031d46', '#fffdfe')}
                         >
                           First Name
                         </FormLabel>
@@ -179,7 +183,7 @@ const EditProfileModal = ({ id, fname, lname, email, description }) => {
                           {...field}
                           id="fname"
                           placeholder="Name"
-                          color={useColorModeValue("#031e49", "#fffdfe")}
+                          color={useColorModeValue('#031e49', '#fffdfe')}
                         />
                         <FormErrorMessage>{form.errors.fname}</FormErrorMessage>
                       </FormControl>
@@ -194,7 +198,7 @@ const EditProfileModal = ({ id, fname, lname, email, description }) => {
                         <FormLabel
                           htmlFor="lname"
                           pt={2}
-                          color={useColorModeValue("#031e49", "#fffdfe")}
+                          color={useColorModeValue('#031e49', '#fffdfe')}
                         >
                           Last Name
                         </FormLabel>
@@ -202,7 +206,7 @@ const EditProfileModal = ({ id, fname, lname, email, description }) => {
                           {...field}
                           id="lname"
                           placeholder="Last Name"
-                          color={useColorModeValue("#031e49", "#fffdfe")}
+                          color={useColorModeValue('#031e49', '#fffdfe')}
                         />
                         <FormErrorMessage>{form.errors.lname}</FormErrorMessage>
                       </FormControl>
@@ -217,7 +221,7 @@ const EditProfileModal = ({ id, fname, lname, email, description }) => {
                         <FormLabel
                           htmlFor="email"
                           pt={2}
-                          color={useColorModeValue("#031e49", "#fffdfe")}
+                          color={useColorModeValue('#031e49', '#fffdfe')}
                         >
                           Email
                         </FormLabel>
@@ -225,7 +229,7 @@ const EditProfileModal = ({ id, fname, lname, email, description }) => {
                           {...field}
                           id="email"
                           placeholder="Email"
-                          color={useColorModeValue("#031e49", "#fffdfe")}
+                          color={useColorModeValue('#031e49', '#fffdfe')}
                         />
                         <FormErrorMessage>{form.errors.email}</FormErrorMessage>
                       </FormControl>
@@ -238,7 +242,7 @@ const EditProfileModal = ({ id, fname, lname, email, description }) => {
                         <FormLabel
                           htmlFor="lname"
                           pt={2}
-                          color={useColorModeValue("#031e49", "#fffdfe")}
+                          color={useColorModeValue('#031e49', '#fffdfe')}
                         >
                           Biography
                         </FormLabel>
@@ -246,7 +250,7 @@ const EditProfileModal = ({ id, fname, lname, email, description }) => {
                           {...field}
                           id="Description"
                           placeholder="Biography"
-                          color={useColorModeValue("#031e49", "#fffdfe")}
+                          color={useColorModeValue('#031e49', '#fffdfe')}
                         />
                       </FormControl>
                     )}
@@ -261,7 +265,7 @@ const EditProfileModal = ({ id, fname, lname, email, description }) => {
                       >
                         <FormLabel
                           pt={2}
-                          color={useColorModeValue("#031e49", "#fffdfe")}
+                          color={useColorModeValue('#031e49', '#fffdfe')}
                         >
                           Current Password
                         </FormLabel>
@@ -270,7 +274,7 @@ const EditProfileModal = ({ id, fname, lname, email, description }) => {
                           type="password"
                           id="password"
                           placeholder="Password"
-                          color={useColorModeValue("#031e49", "#fffdfe")}
+                          color={useColorModeValue('#031e49', '#fffdfe')}
                         />
                         <FormErrorMessage>
                           {form.errors.password}

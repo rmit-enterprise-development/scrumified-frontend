@@ -18,10 +18,11 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import { Field, Form, Formik } from 'formik';
+import { useRouter } from 'next/router';
 import { useRef } from 'react';
 import * as Yup from 'yup';
 import userAPI from '../../api/services/userAPI';
-import { useRouter } from 'next/router';
+import { sha512_256 } from 'js-sha512';
 
 const EditPasswordModal = ({ id, email }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -34,7 +35,10 @@ const EditPasswordModal = ({ id, email }) => {
   const onSubmit = async (values, actions) => {
     try {
       // get password confirm value from user -> verify with login method
-      const verifyData = { email: email, password: values.oldPassword };
+      const verifyData = {
+        email: email,
+        password: sha512_256(values.oldPassword),
+      };
       const loginServiceStatus = await userAPI.login(verifyData);
 
       // successfully verify password
@@ -42,7 +46,7 @@ const EditPasswordModal = ({ id, email }) => {
         throw `Incorrect confirm password`;
 
       // update new user info
-      const updateData = { password: values.newPassword };
+      const updateData = { password: sha512_256(values.newPassword) };
       const updateServiceStatus = await userAPI.putUser(id, updateData);
 
       // update data failure

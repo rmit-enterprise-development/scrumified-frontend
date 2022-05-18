@@ -78,7 +78,7 @@ const GanttChart = ({ data }) => {
   data.forEach((sprint) => {
     let row = [
       "" + sprint.id,
-      "Sprint " + sprint.goal,
+      "Sprint " + sprint.goal + " | " + sprint.completePercentage + "%",
       "Color palette " + (sprint.id % 11),
       new Date(sprint.startDate * 1000),
       new Date(sprint.endDate * 1000),

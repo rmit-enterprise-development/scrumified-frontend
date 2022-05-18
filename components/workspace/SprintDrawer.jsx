@@ -53,11 +53,13 @@ const SprintDrawer = ({
   const [isValidDoneDefinition, setIsValidDoneDefinition] = useState(isSprint);
 
   const [startDate, setStartDate] = useState(
-    isSprint ? new Date(currentSprint.startDate * 1000) : new Date()
+    isSprint && currentSprint
+      ? new Date(currentSprint.startDate * 1000)
+      : new Date()
   );
 
   const [endDate, setEndDate] = useState(
-    isSprint
+    isSprint && currentSprint
       ? new Date(currentSprint.endDate * 1000)
       : new Date(Date.now() + TWO_WEEKS_TIME)
   );

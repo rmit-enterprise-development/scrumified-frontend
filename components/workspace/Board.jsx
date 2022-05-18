@@ -91,7 +91,6 @@ const Board = ({
     };
 
     const { destination, source, draggableId } = result;
-    console.log(destination, source, draggableId);
     if (!destination) {
       return;
     }

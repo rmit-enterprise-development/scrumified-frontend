@@ -30,7 +30,7 @@
 You can choose to ignore it.
 ## Authors (@rmit.edu.vn)
 
-- Nguyen Vy Thuy Duong - s3865443
+- Nguyen Vu Thuy Duong - s3865443
 - Ho Le Minh Thach - s3877980
 - Le Nguyen Truong An - S3820098 
 - Pham Cong Minh - s3818102
